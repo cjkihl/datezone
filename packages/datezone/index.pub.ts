@@ -7,6 +7,8 @@ export * from "./iana";
 export * from "./format";
 export * from "./cache";
 export * from "./constants";
+export * from "./offset";
+export * from "./format-parts";
 
 /**
  * Get the current local timezone,

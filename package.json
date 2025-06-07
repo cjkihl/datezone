@@ -14,16 +14,19 @@
 		"format": "biome format .",
 		"type-check": "turbo type-check",
 		"bench": "bun -F benchmark run",
-		"bench:compare": "bun -F benchmark compare"
+		"bench:compare": "bun -F benchmark compare",
+		"bench:comprehensive": "bun tools/benchmark/comprehensive-compare.ts"
 	},
 	"devDependencies": {
+		"@date-fns/tz": "^1.2.0",
 		"@types/bun": "latest",
-		"mitata": "^1.0.10",
 		"date-fns": "^4.1.0",
-		"date-fns-tz": "^3.2.0"
+		"date-fns-tz": "^3.2.0",
+		"mitata": "^1.0.10"
 	},
 	"peerDependencies": {
 		"typescript": "^5"
 	},
+	"packageManager": "bun@1.2.16",
 	"workspaces": ["apps/*", "packages/*", "shared/*", "tools/*"]
 }
