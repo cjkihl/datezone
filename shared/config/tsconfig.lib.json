@@ -1,0 +1,12 @@
+{
+	"extends": ["./tsconfig.base.json"],
+	// https://www.totaltypescript.com/how-to-create-an-npm-package#32-set-up-a-tsconfigjson
+	"compilerOptions": {
+		// Optimizations for declaration files
+		"declaration": true,
+		"composite": true,
+		"sourceMap": true,
+		"declarationMap": true,
+		"declarationDir": "${configDir}/.dist/types"
+	}
+}

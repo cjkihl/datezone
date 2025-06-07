@@ -1,0 +1,10 @@
+{
+	"extends": "@cj/config/tsconfig.lib",
+	"compilerOptions": {
+		"module": "NodeNext",
+		"allowJs": true,
+		"checkJs": true,
+		"moduleResolution": "nodenext"
+	},
+	"include": ["index.ts"]
+}

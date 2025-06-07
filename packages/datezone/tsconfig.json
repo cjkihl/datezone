@@ -1,0 +1,4 @@
+{
+	"extends": "@cj/config/tsconfig.lib",
+	"include": ["**/*.ts"]
+}

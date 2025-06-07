@@ -1,0 +1,51 @@
+{
+	// https://www.totaltypescript.com/how-to-create-an-npm-package#32-set-up-a-tsconfigjson
+	"compilerOptions": {
+		// Base
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"target": "es2022",
+		"moduleDetection": "force",
+		"isolatedModules": true,
+		"verbatimModuleSyntax": true,
+
+		// If javascript and json files are imported
+		"allowJs": true,
+		"resolveJsonModule": true,
+		"checkJs": true,
+
+		// Strictness
+		"strict": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noImplicitAny": true,
+
+		// Module for bundler
+		"module": "Preserve",
+		"moduleResolution": "bundler",
+
+		// For Node without bundler
+		// "module": "NodeNext",
+		// "moduleResolution": "nodenext"
+
+		// Outputs
+		"outDir": "${configDir}/.dist/output",
+		"tsBuildInfoFile": "${configDir}/.dist/tsbuildinfo.json",
+
+		// Lib Node
+		"lib": ["es2022"]
+
+		// For browser
+		// "lib": ["es2022", "dom", "dom.iterable"]
+
+		// "paths": {
+		// 	"@/*": ["./apps/site/src/*"]
+		// }
+	},
+	"include": ["${configDir}/**/*.ts"],
+	"exclude": ["node_modules", ".dist"]
+}
