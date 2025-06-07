@@ -1,0 +1,33 @@
+{
+	"$schema": "https://turbo.build/schema.json",
+	"globalDependencies": ["**/.env.*local"],
+	"globalEnv": ["NODE_ENV"],
+	"globalPassThroughEnv": ["CI", "VERCEL", "GITHUB_TOKEN", "NPMTOKEN"],
+	"tasks": {
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": ["dist"]
+		},
+		"format": {
+			"cache": false,
+			"outputs": []
+		},
+		"lint": {
+			"cache": false,
+			"outputs": []
+		},
+		"lint-fix": {
+			"cache": false,
+			"outputs": []
+		},
+		"test": {
+			"cache": false,
+			"dependsOn": ["^build"]
+		},
+		"type-check": {
+			"cache": false,
+			"outputs": []
+		}
+	},
+	"ui": "stream"
+}

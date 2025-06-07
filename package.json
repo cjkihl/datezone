@@ -1,17 +1,60 @@
 {
-  "name": "datezone",
-  "module": "index.ts",
-  "type": "module",
-  "private": true,
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
-  "workspaces": [
-		"apps/*",
+	"name": "@datezone/monorepo",
+	"module": "index.ts",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"test": "bun test",
+		"dev": "bun run -F docs dev",
+		"build": "turbo build --filter=./packages/*",
+		"build-docs": "turbo build --filter=./apps/docs",
+		"changeset": "changeset",
+		"fix-examples": "bun tools/fix-examples.ts",
+		"resolve": "bun run resolve-deps resolve",
+		"restore": "bun run resolve-deps restore",
+		"release": "bun run resolve && bun run build && changeset publish",
+		"clean": "git clean -fxd -e .env.local",
+		"lint": "biome check . && manypkg check",
+		"lint-fix": "biome check --write --unsafe --verbose . && manypkg fix",
+		"format": "biome format .",
+		"type-check": "turbo type-check",
+		"up": "bunx npm-check-updates -ws --root --format group -u",
+		"bench": "bun run tools/benchmark/run.ts",
+		"bench-report": "bun run tools/benchmark/report.ts"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.1.1",
+		"@changesets/cli": "^2.29.5",
+		"@cjkihl/changeset-dep-resolver": "^1.0.3",
+		"@cjkihl/create-exports": "^1.0.2",
+		"@cjkihl/tsconfig": "^1.0.2",
+		"@date-fns/tz": "^1.2.0",
+		"@manypkg/cli": "^0.24.0",
+		"@testing-library/react": "^16.3.0",
+		"@types/bun": "latest",
+		"@types/semver": "^7.7.0",
+		"date-fns": "^4.1.0",
+		"date-fns-tz": "^3.2.0",
+		"fast-glob": "^3.3.3",
+		"fumadocs-core": "^15.6.2",
+		"fumadocs-mdx": "^11.6.10",
+		"fumadocs-ui": "^15.6.2",
+		"jsdom": "^26.1.0",
+		"luxon": "^3.6.1",
+		"mitata": "^1.0.34",
+		"mysql2": "^3.14.2",
+		"semver": "^7.7.2",
+		"turbo": "^2.5.4",
+		"typescript": "^5",
+		"zod": "^3.25.76"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"packageManager": "bun@1.2.18",
+	"workspaces": [
 		"packages/*",
+		"apps/*",
 		"shared/*",
 		"tools/*"
 	]

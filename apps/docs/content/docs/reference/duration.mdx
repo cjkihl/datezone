@@ -1,0 +1,48 @@
+---
+title: Duration
+---
+
+## `intervalToDuration`
+
+Calculates a human-readable duration between two UTC timestamps, expressed
+as calendar components (years, months, days … milliseconds) in the
+specified time-zone.
+
+Internally the function converts both instants to `Calendar` structures in
+the target zone and then delegates the heavy-lifting to
+.
+
+The **sign** of the interval does not matter – if `start` is after `end`
+the arguments are swapped so the returned duration is always positive.
+
+<CodeExample file="reference/duration/intervalToDuration.ts" name="intervalToDuration" />
+
+## `intervalToDurationBase`
+
+Low-level counterpart to . Both arguments MUST be
+in the **same time-zone context** – normally produced with
+`timestampToCalendar`.
+
+It performs a calendar subtraction using a classic borrow-chain so that the
+result components are always non-negative.
+
+<CodeExample file="reference/duration/intervalToDurationBase.ts" name="intervalToDurationBase" />
+
+## `areIntervalsOverlapping`
+
+Checks whether two half-open intervals overlap.
+
+Mathematically the function answers whether
+`[start1, end1) ∩ [start2, end2) ≠ ∅`.
+Border-touching intervals (e.g. `end1 == start2`) are **not** considered an
+overlap.
+
+<CodeExample file="reference/duration/areIntervalsOverlapping.ts" name="areIntervalsOverlapping" />
+
+## `clamp`
+
+Restricts a numeric `value` to the [min, max] range.
+Equivalent to `Math.min(Math.max(value, min), max)` but without the extra
+function calls.
+
+<CodeExample file="reference/duration/clamp.ts" name="clamp" />

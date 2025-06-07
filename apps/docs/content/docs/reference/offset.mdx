@@ -1,0 +1,34 @@
+---
+title: Offset
+---
+
+## `getUTCtoTimezoneOffsetMinutes`
+
+Returns the offset in minutes between UTC and the given time-zone at the given date.
+Positive if the zone is ahead of UTC, negative if behind.
+Uses a per-hour cache for performance.
+If no time-zone is specified, defaults to local system time-zone.
+
+<CodeExample file="reference/offset/getUTCtoTimezoneOffsetMinutes.ts" name="getUTCtoTimezoneOffsetMinutes" />
+
+
+
+## `getTimezoneOffsetMinutes`
+
+Returns the offset in minutes from fromZone to toZone at the given date.
+Fast path for UTC zones to avoid extra formatToParts calls.
+If time-zone parameters are not specified, defaults to local system time-zone.
+
+<CodeExample file="reference/offset/getTimezoneOffsetMinutes.ts" name="getTimezoneOffsetMinutes" />
+
+## `getFixedOffsetCacheInfo`
+
+Returns information about the fixed offset cache for debugging purposes.
+
+<CodeExample file="reference/offset/getFixedOffsetCacheInfo.ts" name="getFixedOffsetCacheInfo" />
+
+## `clearFixedOffsetCache`
+
+Clears the fixed offset cache. Useful for testing or memory management.
+
+<CodeExample file="reference/offset/clearFixedOffsetCache.ts" name="clearFixedOffsetCache" />

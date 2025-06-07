@@ -1,8 +1,0 @@
-{
-	"extends": "@cj/config/tsconfig.lib",
-	"compilerOptions": {
-		"module": "NodeNext",
-		"moduleResolution": "nodenext"
-	},
-	"include": ["**/*.ts"]
-}

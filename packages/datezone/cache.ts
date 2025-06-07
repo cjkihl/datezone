@@ -2,7 +2,7 @@ export const dtfCache = new Map<string, Map<string, Intl.DateTimeFormat>>();
 
 export function getOptionsKey(opts: Intl.DateTimeFormatOptions) {
 	// remove timeZone, sort remaining keys
-	const { timeZone, ...rest } = opts;
+	const { timeZone: _, ...rest } = opts;
 	const ks = Object.keys(rest).sort() as Array<keyof typeof rest>;
 	return ks.map((k) => `${k}:${rest[k]}`).join("|");
 }

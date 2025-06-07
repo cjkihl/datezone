@@ -1,0 +1,11 @@
+{
+	"pages": [
+		"introduction",
+		"installation",
+		"basic-usage",
+		"api-reference",
+		"comparison"
+	],
+	"root": true,
+	"title": "Datezone Documentation"
+}

@@ -1,0 +1,7 @@
+[test]
+# always enable coverage
+coverage = true
+coverageReporter = ["text", "lcov"]
+coverageDir = "tools/coverage"
+coverageThreshold = 0.10
+coverageSkipTestFiles = true 

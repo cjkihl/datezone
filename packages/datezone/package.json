@@ -1,22 +1,122 @@
 {
   "name": "datezone",
+  "version": "1.0.5",
+  "description": "A lightweight and comprehensive date and timeZone utility library for JavaScript.",
+  "keywords": [
+    "date",
+    "timeZone",
+    "utilities",
+    "javascript",
+    "typescript",
+    "intl",
+    "date-fns",
+    "performance",
+    "tree-shakeable"
+  ],
+  "homepage": "https://datezone.dev",
+  "bugs": {
+    "url": "https://github.com/cjkihl/datezone/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cjkihl/datezone.git"
+  },
+  "license": "MIT",
+  "author": "CJ Kihl",
   "sideEffects": false,
-  "version": "0.0.0",
+  "type": "module",
   "exports": {
     ".": {
-      "types": "./.dist/types/index.pub.d.ts",
-      "default": "./.dist/output/index.pub.js"
+      "default": "./dist/output/index.pub.js",
+      "types": "./dist/types/index.pub.d.ts"
+    },
+    "./calendar": {
+      "default": "./dist/output/calendar.pub.js",
+      "types": "./dist/types/calendar.pub.d.ts"
+    },
+    "./compare": {
+      "default": "./dist/output/compare.pub.js",
+      "types": "./dist/types/compare.pub.d.ts"
+    },
+    "./constants": {
+      "default": "./dist/output/constants.pub.js",
+      "types": "./dist/types/constants.pub.d.ts"
+    },
+    "./day": {
+      "default": "./dist/output/day.pub.js",
+      "types": "./dist/types/day.pub.d.ts"
+    },
+    "./duration": {
+      "default": "./dist/output/duration.pub.js",
+      "types": "./dist/types/duration.pub.d.ts"
+    },
+    "./format": {
+      "default": "./dist/output/format/index.pub.js",
+      "types": "./dist/types/format/index.pub.d.ts"
+    },
+    "./format-parts": {
+      "default": "./dist/output/format-parts.pub.js",
+      "types": "./dist/types/format-parts.pub.d.ts"
+    },
+    "./hour": {
+      "default": "./dist/output/hour.pub.js",
+      "types": "./dist/types/hour.pub.d.ts"
+    },
+    "./iso": {
+      "default": "./dist/output/iso.pub.js",
+      "types": "./dist/types/iso.pub.d.ts"
+    },
+    "./minute": {
+      "default": "./dist/output/minute.pub.js",
+      "types": "./dist/types/minute.pub.d.ts"
+    },
+    "./month": {
+      "default": "./dist/output/month.pub.js",
+      "types": "./dist/types/month.pub.d.ts"
+    },
+    "./offset": {
+      "default": "./dist/output/offset.pub.js",
+      "types": "./dist/types/offset.pub.d.ts"
+    },
+    "./ordinal": {
+      "default": "./dist/output/ordinal.pub.js",
+      "types": "./dist/types/ordinal.pub.d.ts"
+    },
+    "./second": {
+      "default": "./dist/output/second.pub.js",
+      "types": "./dist/types/second.pub.d.ts"
+    },
+    "./timezone": {
+      "default": "./dist/output/timezone.pub.js",
+      "types": "./dist/types/timezone.pub.d.ts"
+    },
+    "./week": {
+      "default": "./dist/output/week.pub.js",
+      "types": "./dist/types/week.pub.d.ts"
+    },
+    "./year": {
+      "default": "./dist/output/year.pub.js",
+      "types": "./dist/types/year.pub.d.ts"
     }
   },
-  "type": "module",
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc && create-exports",
-    "ts": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@cj/config": "workspace:*"
+    "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@cj/mono": "workspace:*"
+    "@cjkihl/tsconfig": "^1.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

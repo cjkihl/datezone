@@ -1,13 +1,14 @@
 # Dependencies
 node_modules
 
-# All dot files and directories
-.*
+.turbo
 
-# Whitelist specific dot files/directories we want to track
-!.gitignore
-!.github
-!.vscode
+*.tmp
+*.gen.*
+*.bench
+# Build output
+dist
+tools/benchmark/output
 
 # Logs
 *-debug.log*

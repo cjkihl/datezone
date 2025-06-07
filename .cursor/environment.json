@@ -1,0 +1,48 @@
+{
+	"$schema": "https://www.cursor.com/schemas/environment.schema.json",
+	"build": {
+		"context": ".",
+		"dockerfile": "./Dockerfile"
+	},
+	"name": "Datezone Development Environment",
+	"ports": [
+		{
+			"name": "Next.js Docs Site",
+			"port": 3000
+		}
+	],
+	"start": "bun install && bun run build",
+	"terminals": [
+		{
+			"command": "bun install",
+			"description": "Install all dependencies",
+			"name": "Install Dependencies"
+		},
+		{
+			"command": "bun run build",
+			"description": "Builds the datezone package",
+			"name": "Build"
+		},
+		{
+			"command": "bun run dev",
+			"description": "Runs the Next.js documentation site in development mode",
+			"name": "Development Server"
+		},
+		{
+			"command": "bun test",
+			"description": "Runs tests and calculates coverage",
+			"name": "Test Runner"
+		},
+		{
+			"command": "bun run type-check",
+			"description": "Runs Turbo type checking across all packages",
+			"name": "Type Checker"
+		},
+		{
+			"command": "bun run lint-fix",
+			"description": "Runs Biome linting and formatting with auto-fix, plus manypkg fix",
+			"name": "Lint & Format"
+		}
+	],
+	"user": "developer"
+}

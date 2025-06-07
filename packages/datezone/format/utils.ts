@@ -1,14 +1,14 @@
-import type { PlainDateTime } from "../types";
+import type { DT } from "./formatters.js";
 
 /**
- * Formats a timezone offset according to the given pattern.
- * @param offset - The timezone offset in minutes.
+ * Formats a timeZone offset according to the given pattern.
+ * @param offset - The timeZone offset in minutes.
  * @param pattern - The pattern string (e.g., "X", "XX", "XXX", etc.).
- * @returns The formatted timezone string.
+ * @returns The formatted timeZone string.
  */
 export function formatTimezone(offset: number, pattern: string): string {
 	if (offset === 0 && pattern[0]!.toUpperCase() === "X") return "Z";
-	const sign = offset <= 0 ? "+" : "-";
+	const sign = offset < 0 ? "-" : "+";
 	const abs = Math.abs(offset);
 	const h = Math.floor(abs / 60);
 	const m = abs % 60;
@@ -29,13 +29,13 @@ export function formatTimezone(offset: number, pattern: string): string {
 }
 
 /**
- * Formats a timezone offset as a GMT string.
- * @param offset - The timezone offset in minutes.
+ * Formats a timeZone offset as a GMT string.
+ * @param offset - The timeZone offset in minutes.
  * @param long - Whether to use the long format (with zero-padded hours and minutes).
  * @returns The formatted GMT string.
  */
 export function formatGMT(offset: number, long: boolean): string {
-	const sign = offset <= 0 ? "+" : "-";
+	const sign = offset < 0 ? "-" : "+";
 	const abs = Math.abs(offset);
 	const h = Math.floor(abs / 60);
 	const m = abs % 60;
@@ -46,12 +46,12 @@ export function formatGMT(offset: number, long: boolean): string {
 }
 
 /**
- * Formats a PlainDateTime object as a timestamp string.
- * @param dt - The PlainDateTime object.
+ * Formats a DT object as a timestamp string.
+ * @param dt - The DT object.
  * @param ms - Whether to include milliseconds (true for ms, false for seconds).
  * @returns The formatted timestamp string.
  */
-export function formatTimestamp(dt: PlainDateTime, ms: boolean): string {
+export function formatTimestamp(dt: DT, ms: boolean): string {
 	const d = Date.UTC(
 		dt.year,
 		dt.month - 1,

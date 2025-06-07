@@ -1,0 +1,24 @@
+{
+	"name": "benchmarks",
+	"version": "0.0.5",
+	"private": true,
+	"description": "Performance benchmarks for Datezone",
+	"type": "module",
+	"scripts": {
+		"comprehensive": "bun run comprehensive-compare.ts",
+		"debug": "bun run comprehensive-compare.ts --debug",
+		"report": "bun run format-results.ts",
+		"cache": "bun run cache-test.ts",
+		"clean": "rm -rf output/*.json reports/*.md",
+		"type-check": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@date-fns/tz": "^1.2.0",
+		"date-fns": "^4.1.0",
+		"datezone": "workspace:*",
+		"mitata": "^1.0.34"
+	},
+	"devDependencies": {
+		"@cjkihl/tsconfig": "^1.0.2"
+	}
+}

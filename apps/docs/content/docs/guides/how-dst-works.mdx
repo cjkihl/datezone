@@ -1,0 +1,174 @@
+---
+title: How Daylight Saving Time Works
+description: Understanding DST transitions and why they're the biggest source of hard-to-find date bugs in applications
+---
+
+
+
+Daylight Saving Time (DST) is one of the most common sources of subtle, hard-to-reproduce bugs in software applications. These bugs often only manifest twice a year, making them incredibly difficult to catch during development and testing.
+
+## The main problem
+
+<Callout type="error">
+Not All Days Are 24 Hours!
+</Callout>
+ 
+
+The fundamental assumption that "a day is always 24 hours" is **wrong** in most time-zones that observe DST.
+
+<CodeExample tabs={[{ name: "Example 1", file: "guides/how-dst-works/this-assumption-is-dangerous.ts" }]} />
+
+During DST transitions:
+- **Spring forward**: Days are 23 hours long (lose 1 hour)
+- **Fall back**: Days are 25 hours long (gain 1 hour)
+
+### The "Twice a Year" Bug
+
+DST bugs are particularly insidious because they only happen during the two DST transition periods each year. This means:
+
+- Your tests might pass 363 days of the year
+- Your application works fine in production most of the time
+- But twice a year, a critical bug, might happen: A calendar event is set to the wrong time.
+
+<Callout type="info">
+**Production nightmare**: DST bugs often appear suddenly in production, typically in the middle of the night when you are asleep.
+</Callout>
+
+## Common DST Bug Examples
+
+### Spring Forward (Losing an Hour)
+
+On March 10, 2024, in the `America/New_York` time-zone:
+
+<CodeExample tabs={[{ name: "Example 2", file: "guides/how-dst-works/at-200-am-est-clocks-spring-forward-to-300-am-edt.ts" }]} />
+
+<Callout type="error">
+**What went wrong?***
+1. Two local timestamps span the DST “spring-forward” gap: “2024-03-10 01:59” (EST, UTC-5) is immediately followed by “2024-03-10 03:00” (EDT, UTC-4); the entire 2 o’clock hour never occurs.
+2. A naive subtraction therefore returns 1, under-reporting the elapsed wall-clock time by an hour.
+🐞 Bug: 61 calendar minutes passed on the wall clock, but our application reports only 1 minute
+</Callout>
+
+### Fall Back (Gaining an Hour)
+
+On November 3, 2024, in the `America/New_York` time-zone:
+
+<CodeExample tabs={[{ name: "Example 3", file: "guides/how-dst-works/at-200-am-edt-clocks-fall-back-to-100-am-est.ts" }]} />
+
+<Callout type="error">
+**What went wrong?***
+1. Two wall-clock timestamps look identical: “2024-11-03 01:30” in New York occurs twice—once as EDT (UTC-4) and again an hour later as EST (UTC-5).
+2. A substracting them returns 60, even though, from a local-time perspective, you expected the difference between identical wall-clock moments to be 0.
+🐞 Bug: The calculations ignores the DST “fall-back” hour silently introducing a ­one-hour error.
+</Callout>
+
+### Different time-zones on browser and server
+
+It get's worse when your server and users are in different time-zones.
+
+<CodeExample tabs={[{ name: "Example 4", file: "guides/how-dst-works/this-breaks-during-dst-transitions.ts" }]} />
+
+<Callout type="error">
+**What went wrong?***
+1. New York moved clocks forward at 2 AM on 2024-03-10, making the day only 23 hours long.
+2. addDays adds exactly 24 hours, so the wall-clock time shifts forward by +1 hour.
+3. The client expected 18:00 SGT on the next day, but would see 19:00 when the server response is converted back.
+
+🐞 Bug summary: Even with an explicit time-zone offset in the input, server-side date math that relies on
+   the server's local time-zone can silently drift during DST transitions.
+</Callout>
+
+## How Datezone Handles DST
+
+Datezone is always explicit about the time-zone when you are doing Date & Time operations. 
+Every operation that is prone to DST bugs have a `time-zone` parameter that is **required**.
+This might feel overkill at first but it sets you as a developer up for success and hels you avoid DST bugs.
+Always ask yourself: In which **Timezone** am I doing this calendar calculation?:
+
+<CodeExample tabs={[
+  { name: "DST Handling", file: "reference/faq/daylight-saving-time.ts" }
+]} />
+
+<Callout type="info">
+**Correct**
+Datezone uses IANA Timezones and knows when to do the DST transitions accordingly
+</Callout>
+
+
+<CodeExample tabs={[
+  { name: "DST Handling", file: "reference/faq/daylight-saving-time-2.ts" }
+]} />
+
+
+<Callout type="info">
+**Correct**
+Notice how we added one hour, but the clock jumps from **1:30** to **3:30**, skipping the nonexistent 2 AM hour due to DST.
+</Callout>
+
+### Safe Calendar Date Arithmetic
+
+<CodeExample tabs={[{ name: "Calendar Date Arithmetic", file: "guides/how-dst-works/calendar-date-arithmetic.ts" }]} />
+
+<Callout type="info">
+**Correct**
+Here we simulate a spring forward transition in New York. 
+- From **2024-03-10 01:30 GMT-5** to **2024-03-11 01:30 GMT-4**
+- The difference in actual hours is **23 hours**
+- But on the Calendar it's **1 day and 0 hours** later.
+</Callout>
+
+
+### Timezone-Sensitive Operations
+
+Some operations break not only during DST transitions. but all the time.
+
+You want start of day? 
+
+Ok but start of day where? Is it start of day in Tokio or in New York?
+This is very critical information for your application.
+
+`Datezone` forces you to Specify a timezone if you want start of day, end of day etc.
+
+<CodeExample tabs={[{ name: "Example 8", file: "guides/how-dst-works/always-returns-the-correct-startend-of-day-regardless-of-dst.ts" }]} />
+
+## DST Best Practices
+
+### 1. Always Specify Timezones
+
+Having a system the behaves differently depending where your user is based or where your server is deployed is **bad**.
+This leads to hard to find bugs in production that you can't reproduce locally.
+
+By always being explicit with timezonen in your application makes your code predictable and easy to test. 
+
+### 2. Use Calendar Arithmetic, Not Time Arithmetic
+
+Before doing any date & time editing. Think twice: Do I want to move forward x amount of milliseconds or do I want to jump to the next day?.
+In most cases you want to use Calendar Arithmetic when building user facing applications. Humans think in calendar dates, not timestamps.
+
+### 3. Store in timestamps
+
+Calendar Arithmetic is good for interacting with the user but it's prone to timezone errors. 
+Always store your date and time in Timestamps that are universial.
+
+## DST Around the World
+
+DST rules vary significantly by country and region:
+
+- **Northern Hemisphere**: Spring forward in March/April, fall back in October/November
+- **Southern Hemisphere**: Opposite schedule (spring forward in September/October)
+- **No DST**: Many countries/regions don't observe DST at all
+- **Different Rules**: Some countries have unique DST schedules
+
+<Callout type="info">
+**IANA Timezone Database**: Datezone uses the IANA time-zone database, which contains the complete history and future predictions of DST rules for all time-zones worldwide.
+</Callout>
+
+## Summary
+
+DST transitions are a major source of bugs in date-handling code. By understanding how DST works and using time-zone-aware functions like those provided by datezone, you can avoid these pitfalls entirely.
+
+<Callout type="success">
+**Key takeaway**: Never assume a day is 24 hours. Always use calendar-based arithmetic with explicit time-zone handling for reliable date operations.
+</Callout>
+
+Next, learn about [best practices](/docs/guides/best-practices) for building robust date and time handling in your applications.

@@ -1,4 +1,10 @@
 {
-	"extends": "@cj/config/tsconfig.lib",
-	"include": ["**/*.ts"]
+	"exclude": [
+		"node_modules",
+		"dist",
+		"${configDir}/dist",
+		"${configDir}/**/*.test.ts",
+		"${configDir}/**/*.bench.ts"
+	],
+	"extends": "@cjkihl/tsconfig/lib"
 }
