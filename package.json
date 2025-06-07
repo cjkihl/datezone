@@ -15,7 +15,8 @@
 		"type-check": "turbo type-check",
 		"bench": "bun -F benchmark run",
 		"bench:compare": "bun -F benchmark compare",
-		"bench:comprehensive": "bun tools/benchmark/comprehensive-compare.ts"
+		"bench:comprehensive": "bun tools/benchmark/comprehensive-compare.ts",
+		"bench:cache": "bun tools/benchmark/cache-test.ts"
 	},
 	"devDependencies": {
 		"@date-fns/tz": "^1.2.0",

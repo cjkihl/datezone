@@ -29,7 +29,7 @@ import {
 } from "date-fns";
 
 // Import date-fns v4 timezone support
-import { TZDate, tz } from "@date-fns/tz";
+import { TZDate } from "@date-fns/tz";
 
 // Helper function for datezone
 const dzAddDays = (ts: number, days: number, _timeZone: string): number => {
