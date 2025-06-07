@@ -10,9 +10,13 @@
 			"**/.git/**",
 			"**/.vscode/**",
 			"**/.dist/**",
-			"**/.turbo/**",
-			"**/package.json"
+			"**/.turbo/**"
 		]
+	},
+	"json": {
+		"parser": {
+			"allowComments": true
+		}
 	},
 	"linter": {
 		"enabled": true,

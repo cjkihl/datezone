@@ -1,18 +1,18 @@
 {
-  "name": "benchmark",
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "type-check": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@date-fns/tz": "^1.2.0",
-    "@date-fns/utc": "^2.1.0",
-    "date-fns": "^4.1.0",
-    "datezone": "workspace:*"
-  },
-  "devDependencies": {
-    "@cj/config": "workspace:*",
-    "@cj/mono": "workspace:*"
-  }
+	"name": "benchmark",
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"type-check": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@date-fns/tz": "^1.2.0",
+		"@date-fns/utc": "^2.1.0",
+		"date-fns": "^4.1.0",
+		"datezone": "workspace:*"
+	},
+	"devDependencies": {
+		"@cj/config": "workspace:*",
+		"@cj/mono": "workspace:*"
+	}
 }

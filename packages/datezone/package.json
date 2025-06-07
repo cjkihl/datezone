@@ -1,19 +1,17 @@
 {
-  "name": "datezone",
-  "sideEffects": false,
-  "version": "0.0.0",
-  "exports": {
-   
-  },
-  "type": "module",
-  "scripts": {
-    "build": "tsc && create-exports",
-    "ts": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@cj/config": "workspace:*"
-  },
-  "devDependencies": {
-    "@cj/mono": "workspace:*"
-  }
+	"name": "datezone",
+	"sideEffects": false,
+	"version": "0.0.0",
+	"exports": {},
+	"type": "module",
+	"scripts": {
+		"build": "tsc && create-exports",
+		"ts": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@cj/config": "workspace:*"
+	},
+	"devDependencies": {
+		"@cj/mono": "workspace:*"
+	}
 }

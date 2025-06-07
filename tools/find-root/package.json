@@ -10,15 +10,8 @@
 			"types": "./index.ts"
 		}
 	},
-	"files": [
-		"index.ts"
-	],
-	"keywords": [
-		"monorepo",
-		"root",
-		"find-root",
-		"workspace"
-	],
+	"files": ["index.ts"],
+	"keywords": ["monorepo", "root", "find-root", "workspace"],
 	"type": "module",
 	"dependencies": {
 		"find-up": "7.0.0"

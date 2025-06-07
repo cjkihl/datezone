@@ -1,34 +1,29 @@
 {
-  "name": "datezone",
-  "module": "index.ts",
-  "type": "module",
-  "private": true,
-  "scripts": {
-    "test": "bun test",
-    "build": "turbo build",
+	"name": "datezone",
+	"module": "index.ts",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"test": "bun test",
+		"build": "turbo build",
 		"build-pkg": "turbo build --filter=./packages/*",
-    "turbo-env": "turbo-env",
+		"turbo-env": "turbo-env",
 		"clean": "git clean -fxd -e .env.local",
-    "lint": "biome check . && manypkg check ",
+		"lint": "biome check . && manypkg check ",
 		"lint-fix": "biome check --write --unsafe .",
 		"format": "biome format .",
 		"type-check": "turbo type-check",
-    "bench": "bun -F benchmark run",
-    "bench:compare": "bun -F benchmark compare"
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "mitata": "^1.0.10",
-    "date-fns": "^4.1.0",
-    "date-fns-tz": "^3.2.0"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
-  "workspaces": [
-		"apps/*",
-		"packages/*",
-		"shared/*",
-		"tools/*"
-	]
+		"bench": "bun -F benchmark run",
+		"bench:compare": "bun -F benchmark compare"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"mitata": "^1.0.10",
+		"date-fns": "^4.1.0",
+		"date-fns-tz": "^3.2.0"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"workspaces": ["apps/*", "packages/*", "shared/*", "tools/*"]
 }
