@@ -3,10 +3,7 @@
   "sideEffects": false,
   "version": "0.0.0",
   "exports": {
-    ".": {
-      "types": "./.dist/types/index.pub.d.ts",
-      "default": "./.dist/output/index.pub.js"
-    }
+   
   },
   "type": "module",
   "scripts": {

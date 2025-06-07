@@ -125,10 +125,13 @@ const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
  * @returns The number of days in the month.
  */
 export function daysInMonth(month: number, year: number): number {
-	let maxDay = DAYS_IN_MONTH[month - 1]!;
+	const maxDay = DAYS_IN_MONTH[month - 1];
+	if (maxDay === undefined) {
+		throw new RangeError(`Invalid month: ${month}`);
+	}
 	// Leap year check for February
 	if (month === 2 && isLeapYear(year)) {
-		maxDay = 29;
+		return 29;
 	}
 	return maxDay;
 }

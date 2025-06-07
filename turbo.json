@@ -1,0 +1,23 @@
+{
+	"$schema": "https://turbo.build/schema.json",
+	"globalDependencies": ["**/.env.*local"],
+	"ui": "stream",
+	"tasks": {
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": [".dist"]
+		},
+		"type-check": {
+			"cache": false,
+			"dependsOn": ["^type-check"]
+		},
+		"//#lint": {},
+		"//#lint-fix": {
+			"cache": false
+		},
+		"//#format": {
+			"cache": false
+		}
+	},
+	"globalPassThroughEnv": []
+}
