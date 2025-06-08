@@ -1,5 +1,23 @@
 import { describe, expect, it } from "bun:test";
-import { get12Hour, get24Hour, getHour, addHours, subHours } from "./hour";
+import { 
+	get12Hour, 
+	get24Hour, 
+	getHour, 
+	addHours, 
+	subHours,
+	startOfHour,
+	endOfHour,
+	startOfMinute,
+	endOfMinute,
+	startOfSecond,
+	endOfSecond,
+	addMinutes,
+	subMinutes,
+	addSeconds,
+	subSeconds,
+	addMilliseconds,
+	subMilliseconds
+} from "./hour";
 
 describe("Hour Functions", () => {
 	describe("get12Hour", () => {
@@ -180,6 +198,416 @@ describe("Hour Functions", () => {
 		});
 	});
 
+	describe("startOfHour", () => {
+		it("should return start of hour (00:00.000)", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42, 123)).getTime();
+			const result = startOfHour(timestamp, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCHours()).toBe(14);
+			expect(resultDate.getUTCMinutes()).toBe(0);
+			expect(resultDate.getUTCSeconds()).toBe(0);
+			expect(resultDate.getUTCMilliseconds()).toBe(0);
+		});
+
+		it("should handle different timezones", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42)).getTime();
+			const result = startOfHour(timestamp, "Asia/Tokyo");
+			const parts = new Intl.DateTimeFormat("en-US", {
+				timeZone: "Asia/Tokyo",
+				hour: "2-digit",
+				minute: "2-digit",
+				second: "2-digit",
+				hour12: false
+			}).formatToParts(result);
+			
+			const minute = parts.find(p => p.type === "minute")?.value;
+			const second = parts.find(p => p.type === "second")?.value;
+			expect(minute).toBe("00");
+			expect(second).toBe("00");
+		});
+
+		it("should work with HourOptions", () => {
+			const result = startOfHour({ hour: 14 }, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCHours()).toBe(14);
+			expect(resultDate.getUTCMinutes()).toBe(0);
+			expect(resultDate.getUTCSeconds()).toBe(0);
+			expect(resultDate.getUTCMilliseconds()).toBe(0);
+		});
+	});
+
+	describe("endOfHour", () => {
+		it("should return end of hour (59:59.999)", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42, 123)).getTime();
+			const result = endOfHour(timestamp, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCHours()).toBe(14);
+			expect(resultDate.getUTCMinutes()).toBe(59);
+			expect(resultDate.getUTCSeconds()).toBe(59);
+			expect(resultDate.getUTCMilliseconds()).toBe(999);
+		});
+
+		it("should handle different timezones", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42)).getTime();
+			const result = endOfHour(timestamp, "Asia/Tokyo");
+			const parts = new Intl.DateTimeFormat("en-US", {
+				timeZone: "Asia/Tokyo",
+				hour: "2-digit",
+				minute: "2-digit",
+				second: "2-digit",
+				hour12: false
+			}).formatToParts(result);
+			
+			const minute = parts.find(p => p.type === "minute")?.value;
+			const second = parts.find(p => p.type === "second")?.value;
+			expect(minute).toBe("59");
+			expect(second).toBe("59");
+		});
+
+		it("should work with HourOptions", () => {
+			const result = endOfHour({ hour: 14 }, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCHours()).toBe(14);
+			expect(resultDate.getUTCMinutes()).toBe(59);
+			expect(resultDate.getUTCSeconds()).toBe(59);
+			expect(resultDate.getUTCMilliseconds()).toBe(999);
+		});
+	});
+
+	describe("startOfMinute", () => {
+		it("should return start of minute (00.000)", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42, 123)).getTime();
+			const result = startOfMinute(timestamp, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCHours()).toBe(14);
+			expect(resultDate.getUTCMinutes()).toBe(35);
+			expect(resultDate.getUTCSeconds()).toBe(0);
+			expect(resultDate.getUTCMilliseconds()).toBe(0);
+		});
+
+		it("should handle different timezones", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42)).getTime();
+			const result = startOfMinute(timestamp, "Asia/Tokyo");
+			const parts = new Intl.DateTimeFormat("en-US", {
+				timeZone: "Asia/Tokyo",
+				hour: "2-digit",
+				minute: "2-digit",
+				second: "2-digit",
+				hour12: false
+			}).formatToParts(result);
+			
+			const second = parts.find(p => p.type === "second")?.value;
+			expect(second).toBe("00");
+		});
+	});
+
+	describe("endOfMinute", () => {
+		it("should return end of minute (59.999)", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42, 123)).getTime();
+			const result = endOfMinute(timestamp, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCHours()).toBe(14);
+			expect(resultDate.getUTCMinutes()).toBe(35);
+			expect(resultDate.getUTCSeconds()).toBe(59);
+			expect(resultDate.getUTCMilliseconds()).toBe(999);
+		});
+
+		it("should handle different timezones", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42)).getTime();
+			const result = endOfMinute(timestamp, "Asia/Tokyo");
+			const parts = new Intl.DateTimeFormat("en-US", {
+				timeZone: "Asia/Tokyo",
+				hour: "2-digit",
+				minute: "2-digit",
+				second: "2-digit",
+				hour12: false
+			}).formatToParts(result);
+			
+			const second = parts.find(p => p.type === "second")?.value;
+			expect(second).toBe("59");
+		});
+	});
+
+	describe("startOfSecond", () => {
+		it("should return start of second (000ms)", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42, 123)).getTime();
+			const result = startOfSecond(timestamp, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCHours()).toBe(14);
+			expect(resultDate.getUTCMinutes()).toBe(35);
+			expect(resultDate.getUTCSeconds()).toBe(42);
+			expect(resultDate.getUTCMilliseconds()).toBe(0);
+		});
+
+		it("should handle different timezones", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42, 123)).getTime();
+			const result = startOfSecond(timestamp, "Asia/Tokyo");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCMilliseconds()).toBe(0);
+		});
+	});
+
+	describe("endOfSecond", () => {
+		it("should return end of second (999ms)", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42, 123)).getTime();
+			const result = endOfSecond(timestamp, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCHours()).toBe(14);
+			expect(resultDate.getUTCMinutes()).toBe(35);
+			expect(resultDate.getUTCSeconds()).toBe(42);
+			expect(resultDate.getUTCMilliseconds()).toBe(999);
+		});
+
+		it("should handle different timezones", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42, 123)).getTime();
+			const result = endOfSecond(timestamp, "Asia/Tokyo");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCMilliseconds()).toBe(999);
+		});
+	});
+
+	describe("addMinutes", () => {
+		it("should add minutes correctly within the same hour", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 0)).getTime();
+			const result = addMinutes(timestamp, 15, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCHours()).toBe(14);
+			expect(resultDate.getUTCMinutes()).toBe(45);
+		});
+
+		it("should handle hour overflow correctly", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 45, 0)).getTime();
+			const result = addMinutes(timestamp, 30, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCHours()).toBe(15);
+			expect(resultDate.getUTCMinutes()).toBe(15);
+		});
+
+		it("should handle negative minutes", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 0)).getTime();
+			const result = addMinutes(timestamp, -15, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCHours()).toBe(14);
+			expect(resultDate.getUTCMinutes()).toBe(15);
+		});
+
+		it("should handle day overflow", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 23, 45, 0)).getTime();
+			const result = addMinutes(timestamp, 30, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCDate()).toBe(2);
+			expect(resultDate.getUTCHours()).toBe(0);
+			expect(resultDate.getUTCMinutes()).toBe(15);
+		});
+
+		it("should preserve seconds and milliseconds", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 123)).getTime();
+			const result = addMinutes(timestamp, 15, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCSeconds()).toBe(45);
+			expect(resultDate.getUTCMilliseconds()).toBe(123);
+		});
+
+		it("should handle DST transitions", () => {
+			// Test during DST transition
+			const beforeDST = new Date(Date.UTC(2024, 2, 10, 6, 30, 0)).getTime(); // 1:30 AM EST
+			const result = addMinutes(beforeDST, 90, "America/New_York"); // Add 90 minutes
+			
+			const parts = new Intl.DateTimeFormat("en-US", {
+				timeZone: "America/New_York",
+				hour: "2-digit",
+				minute: "2-digit",
+				hour12: false
+			}).formatToParts(result);
+			
+			const hour = parts.find(p => p.type === "hour")?.value;
+			const minute = parts.find(p => p.type === "minute")?.value;
+			expect(hour).toBe("04"); // Should account for DST
+			expect(minute).toBe("00");
+		});
+	});
+
+	describe("subMinutes", () => {
+		it("should subtract minutes correctly", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 0)).getTime();
+			const result = subMinutes(timestamp, 15, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCHours()).toBe(14);
+			expect(resultDate.getUTCMinutes()).toBe(15);
+		});
+
+		it("should be equivalent to addMinutes with negative value", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 0)).getTime();
+			const subResult = subMinutes(timestamp, 15, "Etc/UTC");
+			const addResult = addMinutes(timestamp, -15, "Etc/UTC");
+			expect(subResult).toBe(addResult);
+		});
+
+		it("should handle hour underflow", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 15, 0)).getTime();
+			const result = subMinutes(timestamp, 30, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCHours()).toBe(13);
+			expect(resultDate.getUTCMinutes()).toBe(45);
+		});
+	});
+
+	describe("addSeconds", () => {
+		it("should add seconds correctly within the same minute", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 15)).getTime();
+			const result = addSeconds(timestamp, 30, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCHours()).toBe(14);
+			expect(resultDate.getUTCMinutes()).toBe(30);
+			expect(resultDate.getUTCSeconds()).toBe(45);
+		});
+
+		it("should handle minute overflow correctly", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45)).getTime();
+			const result = addSeconds(timestamp, 30, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCHours()).toBe(14);
+			expect(resultDate.getUTCMinutes()).toBe(31);
+			expect(resultDate.getUTCSeconds()).toBe(15);
+		});
+
+		it("should handle negative seconds", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 30)).getTime();
+			const result = addSeconds(timestamp, -15, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCSeconds()).toBe(15);
+		});
+
+		it("should preserve milliseconds", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 15, 123)).getTime();
+			const result = addSeconds(timestamp, 30, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCMilliseconds()).toBe(123);
+		});
+
+		it("should handle large second additions", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 23, 59, 30)).getTime();
+			const result = addSeconds(timestamp, 60, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCDate()).toBe(2);
+			expect(resultDate.getUTCHours()).toBe(0);
+			expect(resultDate.getUTCMinutes()).toBe(0);
+			expect(resultDate.getUTCSeconds()).toBe(30);
+		});
+	});
+
+	describe("subSeconds", () => {
+		it("should subtract seconds correctly", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45)).getTime();
+			const result = subSeconds(timestamp, 30, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCSeconds()).toBe(15);
+		});
+
+		it("should be equivalent to addSeconds with negative value", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45)).getTime();
+			const subResult = subSeconds(timestamp, 30, "Etc/UTC");
+			const addResult = addSeconds(timestamp, -30, "Etc/UTC");
+			expect(subResult).toBe(addResult);
+		});
+
+		it("should handle minute underflow", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 15)).getTime();
+			const result = subSeconds(timestamp, 30, "Etc/UTC");
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCMinutes()).toBe(29);
+			expect(resultDate.getUTCSeconds()).toBe(45);
+		});
+	});
+
+	describe("addMilliseconds", () => {
+		it("should add milliseconds correctly", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 123)).getTime();
+			const result = addMilliseconds(timestamp, 500);
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCMilliseconds()).toBe(623);
+		});
+
+		it("should handle second overflow", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 800)).getTime();
+			const result = addMilliseconds(timestamp, 500);
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCSeconds()).toBe(46);
+			expect(resultDate.getUTCMilliseconds()).toBe(300);
+		});
+
+		it("should handle negative milliseconds", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 500)).getTime();
+			const result = addMilliseconds(timestamp, -200);
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCMilliseconds()).toBe(300);
+		});
+
+		it("should handle large millisecond additions", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 0)).getTime();
+			const result = addMilliseconds(timestamp, 75000); // 1 minute 15 seconds
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCMinutes()).toBe(32); // 30 + 1 minute 15 seconds = 32:00
+			expect(resultDate.getUTCSeconds()).toBe(0);
+		});
+
+		it("should work with HourOptions input", () => {
+			const result = addMilliseconds({ hour: 14 }, 1000);
+			expect(typeof result).toBe("number");
+			expect(result).toBeGreaterThan(0);
+		});
+
+		it("should be performant (no timezone calculation)", () => {
+			const timestamp = Date.now();
+			const start = performance.now();
+			
+			// Run multiple operations
+			for (let i = 0; i < 1000; i++) {
+				addMilliseconds(timestamp, i);
+			}
+			
+			const end = performance.now();
+			expect(end - start).toBeLessThan(10); // Should be very fast since no timezone calc
+		});
+	});
+
+	describe("subMilliseconds", () => {
+		it("should subtract milliseconds correctly", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 623)).getTime();
+			const result = subMilliseconds(timestamp, 500);
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCMilliseconds()).toBe(123);
+		});
+
+		it("should be equivalent to addMilliseconds with negative value", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 500)).getTime();
+			const subResult = subMilliseconds(timestamp, 200);
+			const addResult = addMilliseconds(timestamp, -200);
+			expect(subResult).toBe(addResult);
+		});
+
+		it("should handle second underflow", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 200)).getTime();
+			const result = subMilliseconds(timestamp, 500);
+			const resultDate = new Date(result);
+			expect(resultDate.getUTCSeconds()).toBe(44);
+			expect(resultDate.getUTCMilliseconds()).toBe(700);
+		});
+
+		it("should be performant (no timezone calculation)", () => {
+			const timestamp = Date.now();
+			const start = performance.now();
+			
+			// Run multiple operations
+			for (let i = 0; i < 1000; i++) {
+				subMilliseconds(timestamp, i);
+			}
+			
+			const end = performance.now();
+			expect(end - start).toBeLessThan(10); // Should be very fast since no timezone calc
+		});
+	});
+
 	describe("Edge Cases", () => {
 		it("should handle large hour additions", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 0, 0, 0)).getTime();
@@ -214,6 +642,27 @@ describe("Hour Functions", () => {
 			// Pacific/Midway is UTC-11 (furthest behind)
 			const pastResult = addHours(timestamp, 1, "Pacific/Midway");
 			expect(typeof pastResult).toBe("number");
+		});
+
+		it("should handle zero additions for all functions", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 123)).getTime();
+			
+			expect(addHours(timestamp, 0, "Etc/UTC")).toBe(timestamp);
+			expect(addMinutes(timestamp, 0, "Etc/UTC")).toBe(timestamp);
+			expect(addSeconds(timestamp, 0, "Etc/UTC")).toBe(timestamp);
+			expect(addMilliseconds(timestamp, 0)).toBe(timestamp);
+		});
+
+		it("should handle very large time units", () => {
+			const timestamp = new Date(Date.UTC(2024, 0, 1, 0, 0, 0)).getTime();
+			
+			// Test large minute addition (365 days * 24 hours * 60 minutes = 525600, but 2024 is leap year)
+			const minuteResult = addMinutes(timestamp, 527040, "Etc/UTC"); // 1 leap year in minutes (366 * 24 * 60)
+			expect(new Date(minuteResult).getUTCFullYear()).toBe(2025);
+			
+			// Test large second addition
+			const secondResult = addSeconds(timestamp, 31622400, "Etc/UTC"); // 1 leap year in seconds (366 * 24 * 60 * 60)
+			expect(new Date(secondResult).getUTCFullYear()).toBe(2025);
 		});
 	});
 });

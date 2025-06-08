@@ -21,3 +21,19 @@ export function isLeapYear(ts: OptionsOrTimestamp, timeZone: TimeZone): boolean 
 	const { year } = getOptions(ts, timeZone);
 	return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
 }
+
+export function startOfYear(date: OptionsOrTimestamp, timeZone: TimeZone) {
+    // TODO: Implement
+}
+export function endOfYear(date: OptionsOrTimestamp, timeZone: TimeZone) {
+    // TODO: Implement
+}
+export function addYears(date: OptionsOrTimestamp, amount: number, timeZone: TimeZone) {
+    // TODO: Implement
+}
+export function subYears(date: OptionsOrTimestamp, amount: number, timeZone: TimeZone) {
+    // TODO: Implement
+}
+export function getDaysInYear(date: OptionsOrTimestamp, timeZone: TimeZone) {
+    // TODO: Implement
+}

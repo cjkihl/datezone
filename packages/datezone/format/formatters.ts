@@ -2,10 +2,9 @@ import {
 	dayOfWeek,
 	dayOfYear,
 	getDayPeriod,
-	getISOWeekYear,
-	getWeek,
 	weekDayName,
 } from "../day";
+import { getISOWeekYear, getWeek } from "../week";
 import type { TimeZone } from "../iana";
 import { getMonthName } from "../month";
 import { formatOrdinal } from "../ordinal";

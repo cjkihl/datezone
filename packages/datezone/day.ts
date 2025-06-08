@@ -161,34 +161,3 @@ export function getDayPeriod(locale: string, hour: number): string {
 		(hour < 12 ? "AM" : "PM")
 	);
 }
-
-/**
- * Returns the ISO week number for the given PlainDateTime and time zone.
- * @param ts - The PlainDateTime object.
- * @param timeZone - The time zone.
- * @returns The ISO week number (1-53).
- */
-export function getWeek(ts: DayOptions | number, timeZone: TimeZone): number {
-	const dt = getOptions(ts, timeZone);
-	const date = new Date(Date.UTC(dt.year, dt.month - 1, dt.day));
-	const dayNum = dayOfWeek(dt, timeZone);
-	date.setUTCDate(date.getUTCDate() + 4 - dayNum);
-	const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
-	return Math.ceil(((date.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
-}
-
-/**
- * Returns the ISO week-numbering year for the given PlainDateTime and time zone.
- * @param dt - The PlainDateTime object.
- * @param timeZone - The time zone.
- * @returns The ISO week-numbering year.
- */
-export function getISOWeekYear(
-	ts: DayOptions | number,
-	timeZone: TimeZone,
-): number {
-	const dt = getOptions(ts, timeZone);
-	const date = new Date(Date.UTC(dt.year, dt.month - 1, dt.day));
-	date.setUTCDate(date.getUTCDate() + 4 - dayOfWeek(dt, timeZone));
-	return date.getUTCFullYear();
-}

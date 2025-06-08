@@ -10,6 +10,7 @@ export * from "./cache";
 export * from "./constants";
 export * from "./offset";
 export * from "./format-parts";
+export * from "./compare";
 
 /**
  * Get the current local timezone,
