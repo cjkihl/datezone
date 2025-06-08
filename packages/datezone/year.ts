@@ -1,21 +1,23 @@
-export function isLeapYear(year: number): boolean {
+import { formatToParts, type TimeZone } from "./index.pub";
+
+
+const YEAR_OPTS = { year: "numeric" } as const;
+type YearOptions = { year: number };
+type OptionsOrTimestamp = YearOptions | number;
+
+function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): YearOptions {
+	const dt =
+		typeof ts === "number" ? formatToParts(ts, timeZone, YEAR_OPTS) : ts;
+	return dt;
+}
+
+
+export function getYear(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
+	const { year } = getOptions(ts, timeZone);
+	return year ?? 0;
+}
+
+export function isLeapYear(ts: OptionsOrTimestamp, timeZone: TimeZone): boolean {
+	const { year } = getOptions(ts, timeZone);
 	return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
-}
-
-/**
- * Returns the quarter of the year (1-4) for the given month.
- * @param month 1-12
- */
-export function getQuarter(month: number): number {
-	return Math.floor((month - 1) / 3) + 1;
-}
-
-/**
- * Converts a 24-hour time to a 12-hour time.
- * @param hour
- * @returns
- */
-export function get12Hour(hour: number): number {
-	const h = hour % 12;
-	return h === 0 ? 12 : h;
 }

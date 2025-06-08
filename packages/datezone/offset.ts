@@ -15,7 +15,7 @@ let lastOffsetCache: OffsetCache | null = null;
  * Positive if the zone is ahead of UTC, negative if behind.
  * Uses a per-hour cache for performance.
  */
-export function getZoneOffsetMinutes(ts: number, zone: TimeZone): number {
+export function getUTCtoTimezoneOffsetMinutes(ts: number, zone: TimeZone): number {
 	if (zone === "Etc/UTC" || zone === "UTC") return 0;
 
 	const hourStart = Math.floor(ts / HOUR_MS) * HOUR_MS;
@@ -52,18 +52,18 @@ export function getZoneOffsetMinutes(ts: number, zone: TimeZone): number {
  * Returns the offset in minutes from fromZone to toZone at the given date.
  * Fast path for UTC zones to avoid extra formatToParts calls.
  */
-export function getOffset(
+export function getTimezoneOffsetMinutes(
 	ts: number,
 	fromZone: TimeZone,
 	toZone: TimeZone,
 ): number {
 	if (fromZone === "Etc/UTC" || fromZone === "UTC") {
-		return getZoneOffsetMinutes(ts, toZone);
+		return getUTCtoTimezoneOffsetMinutes(ts, toZone);
 	}
 	if (toZone === "Etc/UTC" || toZone === "UTC") {
-		return -getZoneOffsetMinutes(ts, fromZone);
+		return -getUTCtoTimezoneOffsetMinutes(ts, fromZone);
 	}
-	const fromOffset = getZoneOffsetMinutes(ts, fromZone);
-	const toOffset = getZoneOffsetMinutes(ts, toZone);
+	const fromOffset = getUTCtoTimezoneOffsetMinutes(ts, fromZone);
+	const toOffset = getUTCtoTimezoneOffsetMinutes(ts, toZone);
 	return toOffset - fromOffset;
 }

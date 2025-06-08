@@ -190,19 +190,19 @@ describe("endOfMonth additional cases", () => {
 // Tests for daysInMonth
 describe("daysInMonth", () => {
 	it("returns 31 for January", () => {
-		expect(daysInMonth(1, 2024)).toBe(31);
+		expect(daysInMonth({ year: 2024, month: 1 }, "UTC")).toBe(31);
 	});
 	it("returns 28 for February in non-leap year", () => {
-		expect(daysInMonth(2, 2023)).toBe(28);
+		expect(daysInMonth({ year: 2023, month: 2 }, "UTC")).toBe(28);
 	});
 	it("returns 29 for February in leap year", () => {
-		expect(daysInMonth(2, 2024)).toBe(29);
+		expect(daysInMonth({ year: 2024, month: 2 }, "UTC")).toBe(29);
 	});
 	it("returns 30 for April", () => {
-		expect(daysInMonth(4, 2024)).toBe(30);
+		expect(daysInMonth({ year: 2024, month: 4 }, "UTC")).toBe(30);
 	});
 	it("returns 31 for December", () => {
-		expect(daysInMonth(12, 2024)).toBe(31);
+		expect(daysInMonth({ year: 2024, month: 12 }, "UTC")).toBe(31);
 	});
 });
 

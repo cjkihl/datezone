@@ -6,12 +6,32 @@ import { wallTimeToUTC } from "./utils";
 import { isLeapYear } from "./year";
 
 const DAY_OPTS = { year: "numeric", month: "2-digit", day: "2-digit" } as const;
-
+type DayOptions = { year: number; month: number; day: number };
 type OptionsOrTimestamp = DayOptions | number;
+
 function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): DayOptions {
 	const dt =
 		typeof ts === "number" ? formatToParts(ts, timeZone, DAY_OPTS) : ts;
 	return dt;
+}
+
+
+export function addDays(
+	ts: OptionsOrTimestamp,
+	days: number,
+	timeZone: TimeZone,
+): number {
+	const { year, month, day } = getOptions(ts, timeZone);
+	return wallTimeToUTC(year, month, day + days, 0, 0, 0, 0, timeZone);
+}
+
+export function subDays(
+	ts: OptionsOrTimestamp,
+	days: number,
+	timeZone: TimeZone,
+): number {
+	const { year, month, day } = getOptions(ts, timeZone);
+	return wallTimeToUTC(year, month, day - days, 0, 0, 0, 0, timeZone);
 }
 
 /**
@@ -49,8 +69,6 @@ export function previousDay(
 	const start = startOfDay(ts, timeZone);
 	return startOfDay(start - DAY, timeZone);
 }
-
-type DayOptions = { year: number; month: number; day: number };
 
 /**
  * Returns the ISO day of week (1=Monday, 7=Sunday) in the given timezone.
@@ -91,7 +109,7 @@ export function dayOfYear(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
 	const { year, month, day } = getOptions(ts, timeZone);
 	const monthDays = [
 		31,
-		isLeapYear(year) ? 29 : 28,
+		isLeapYear({ year }, timeZone) ? 29 : 28,
 		31,
 		30,
 		31,

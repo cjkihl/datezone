@@ -8,7 +8,7 @@ import {
 	endOfDay,
 	endOfMonth,
 	formatToParts,
-	getZoneOffsetMinutes,
+	getTimezoneOffsetMinutes,
 	nextDay,
 	previousDay,
 	startOfDay,
@@ -141,11 +141,11 @@ group("Core Utilities", () => {
 			do_not_optimize(wallTimeToUTC(2024, 6, 15, 12, 30, 45, 123, tz));
 	}).args("timezone", testTimezones);
 
-	bench("getZoneOffsetMinutes", function* (ctx: BenchContext) {
+	bench("getTimezoneOffsetMinutes", function* (ctx: BenchContext) {
 		const ts = ctx.get("timestamp");
 		const tz = ctx.get("timezone");
 
-		yield () => do_not_optimize(getZoneOffsetMinutes(ts, tz));
+		yield () => do_not_optimize(getTimezoneOffsetMinutes(ts, tz));
 	})
 		.args("timestamp", testTimestamps)
 		.args("timezone", testTimezones);

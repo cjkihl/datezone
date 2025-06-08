@@ -3,6 +3,7 @@ import type { TimeZone } from "./iana";
 export * from "./utils";
 export * from "./day";
 export * from "./month";
+export * from "./hour";
 export * from "./iana";
 export * from "./format";
 export * from "./cache";

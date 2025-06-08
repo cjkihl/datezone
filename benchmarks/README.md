@@ -38,7 +38,7 @@ Compares datezone performance against date-fns v4 for equivalent operations.
 ### Core Utilities
 - `formatToParts` - Parse timestamp into date parts for specific timezone
 - `wallTimeToUTC` - Convert wall time to UTC timestamp
-- `getZoneOffsetMinutes` - Get timezone offset
+- `getTimezoneOffsetMinutes` - Get timezone offset
 
 ### High-Frequency Operations
 - Simulates render loop scenarios with rapid date formatting

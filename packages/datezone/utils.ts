@@ -1,6 +1,6 @@
 import { FULL_TS, formatToParts } from "./format-parts";
 import type { TimeZone } from "./iana";
-import { getZoneOffsetMinutes } from "./offset";
+import { getUTCtoTimezoneOffsetMinutes } from "./offset";
 
 /**
  * Converts a local date to UTC.
@@ -44,7 +44,7 @@ export function utcToTimeZone(ts: number, timeZone: TimeZone): number {
 	}
 
 	// Only one offset calculation needed (from UTC to target zone)
-	const offsetMin = getZoneOffsetMinutes(utcTs, timeZone);
+	const offsetMin = getUTCtoTimezoneOffsetMinutes(utcTs, timeZone);
 	return utcTs - offsetMin * 60_000;
 }
 
@@ -65,6 +65,6 @@ export function wallTimeToUTC(
 		return utcTs;
 	}
 
-	const offsetMin = getZoneOffsetMinutes(utcTs, timeZone);
+	const offsetMin = getUTCtoTimezoneOffsetMinutes(utcTs, timeZone);
 	return utcTs - offsetMin * 60_000;
 }

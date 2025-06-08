@@ -10,8 +10,24 @@ import type { TimeZone } from "../iana";
 import { getMonthName } from "../month";
 import { formatOrdinal } from "../ordinal";
 import type { PlainDateTime } from "../types";
-import { get12Hour, getQuarter } from "../year";
 import { formatGMT, formatTimestamp, formatTimezone, padZeros } from "./utils";
+
+/**
+ * Returns the quarter of the year (1-4) for the given month.
+ * @param month 1-12
+ */
+function getQuarter(month: number): number {
+	return Math.floor((month - 1) / 3) + 1;
+}
+
+/**
+ * Converts 24-hour format to 12-hour format
+ * @param hour 0-23
+ */
+function get12Hour(hour: number): number {
+	const h = hour % 12;
+	return h === 0 ? 12 : h;
+}
 
 /**
  * Options passed to each formatter function.
