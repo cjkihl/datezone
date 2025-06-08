@@ -9,10 +9,19 @@ import {
     startOfISOWeek,
     endOfISOWeek,
     getWeeksInMonth,
+    WeekStartsOn,
 } from "./week";
 import { formatToParts } from "./format-parts";
 
 describe("Week functions", () => {
+    describe("WeekStartsOn enum", () => {
+        it("should have correct enum values", () => {
+            expect(WeekStartsOn.SUNDAY).toBe(0);
+            expect(WeekStartsOn.MONDAY).toBe(1);
+            expect(WeekStartsOn.SATURDAY).toBe(6);
+        });
+    });
+
     describe("getWeek", () => {
         it("should return correct ISO week number for various dates", () => {
             // Test with known ISO week numbers
@@ -61,7 +70,7 @@ describe("Week functions", () => {
     });
 
     describe("startOfWeek", () => {
-        it("should return start of week (Monday) for various days", () => {
+        it("should return start of week (Monday) by default", () => {
             // Test Monday (should return same day at 00:00)
             const monday = startOfWeek({ year: 2023, month: 6, day: 5 }, "UTC"); // June 5, 2023 is Monday
             const mondayParts = formatToParts(monday, "UTC", { 
@@ -87,6 +96,31 @@ describe("Week functions", () => {
                 year: "numeric", month: "2-digit", day: "2-digit" 
             });
             expect(fridayParts.day).toBe(5); // Should be June 5 (Monday of same week)
+        });
+
+        it("should handle different week start days", () => {
+            const thursday = { year: 2023, month: 6, day: 8 }; // June 8, 2023 is Thursday
+
+            // Sunday start (US style)
+            const sundayStart = startOfWeek(thursday, "UTC", WeekStartsOn.SUNDAY);
+            const sundayParts = formatToParts(sundayStart, "UTC", { 
+                year: "numeric", month: "2-digit", day: "2-digit" 
+            });
+            expect(sundayParts.day).toBe(4); // Should be June 4 (Sunday)
+
+            // Monday start (ISO style)
+            const mondayStart = startOfWeek(thursday, "UTC", WeekStartsOn.MONDAY);
+            const mondayParts = formatToParts(mondayStart, "UTC", { 
+                year: "numeric", month: "2-digit", day: "2-digit" 
+            });
+            expect(mondayParts.day).toBe(5); // Should be June 5 (Monday)
+
+            // Saturday start (Middle East style)
+            const saturdayStart = startOfWeek(thursday, "UTC", WeekStartsOn.SATURDAY);
+            const saturdayParts = formatToParts(saturdayStart, "UTC", { 
+                year: "numeric", month: "2-digit", day: "2-digit" 
+            });
+            expect(saturdayParts.day).toBe(3); // Should be June 3 (Saturday)
         });
 
         it("should handle DST transitions correctly", () => {
@@ -116,7 +150,7 @@ describe("Week functions", () => {
     });
 
     describe("endOfWeek", () => {
-        it("should return end of week (Sunday) for various days", () => {
+        it("should return end of week (Sunday) by default", () => {
             // Test Monday (should return Sunday of same week)
             const monday = endOfWeek({ year: 2023, month: 6, day: 5 }, "UTC"); // June 5, 2023 is Monday
             const mondayParts = formatToParts(monday, "UTC", { 
@@ -135,6 +169,31 @@ describe("Week functions", () => {
                 year: "numeric", month: "2-digit", day: "2-digit" 
             });
             expect(sundayParts.day).toBe(11); // Should be same day
+        });
+
+        it("should handle different week start days", () => {
+            const thursday = { year: 2023, month: 6, day: 8 }; // June 8, 2023 is Thursday
+
+            // Sunday start (US style) - week ends on Saturday
+            const sundayStart = endOfWeek(thursday, "UTC", WeekStartsOn.SUNDAY);
+            const sundayParts = formatToParts(sundayStart, "UTC", { 
+                year: "numeric", month: "2-digit", day: "2-digit" 
+            });
+            expect(sundayParts.day).toBe(10); // Should be June 10 (Saturday)
+
+            // Monday start (ISO style) - week ends on Sunday
+            const mondayStart = endOfWeek(thursday, "UTC", WeekStartsOn.MONDAY);
+            const mondayParts = formatToParts(mondayStart, "UTC", { 
+                year: "numeric", month: "2-digit", day: "2-digit" 
+            });
+            expect(mondayParts.day).toBe(11); // Should be June 11 (Sunday)
+
+            // Saturday start (Middle East style) - week ends on Friday
+            const saturdayStart = endOfWeek(thursday, "UTC", WeekStartsOn.SATURDAY);
+            const saturdayParts = formatToParts(saturdayStart, "UTC", { 
+                year: "numeric", month: "2-digit", day: "2-digit" 
+            });
+            expect(saturdayParts.day).toBe(9); // Should be June 9 (Friday)
         });
 
         it("should handle month boundaries", () => {
@@ -252,11 +311,18 @@ describe("Week functions", () => {
     });
 
     describe("startOfISOWeek", () => {
-        it("should return same result as startOfWeek", () => {
+        it("should return same result as startOfWeek with Monday", () => {
             const date = { year: 2023, month: 6, day: 15 };
             const isoStart = startOfISOWeek(date, "UTC");
-            const regularStart = startOfWeek(date, "UTC");
+            const regularStart = startOfWeek(date, "UTC", WeekStartsOn.MONDAY);
             expect(isoStart).toBe(regularStart);
+        });
+
+        it("should be different from Sunday-based week", () => {
+            const date = { year: 2023, month: 6, day: 15 };
+            const isoStart = startOfISOWeek(date, "UTC");
+            const sundayStart = startOfWeek(date, "UTC", WeekStartsOn.SUNDAY);
+            expect(isoStart).not.toBe(sundayStart);
         });
 
         it("should work with different timezones", () => {
@@ -278,11 +344,18 @@ describe("Week functions", () => {
     });
 
     describe("endOfISOWeek", () => {
-        it("should return same result as endOfWeek", () => {
+        it("should return same result as endOfWeek with Monday", () => {
             const date = { year: 2023, month: 6, day: 15 };
             const isoEnd = endOfISOWeek(date, "UTC");
-            const regularEnd = endOfWeek(date, "UTC");
+            const regularEnd = endOfWeek(date, "UTC", WeekStartsOn.MONDAY);
             expect(isoEnd).toBe(regularEnd);
+        });
+
+        it("should be different from Sunday-based week", () => {
+            const date = { year: 2023, month: 6, day: 15 };
+            const isoEnd = endOfISOWeek(date, "UTC");
+            const sundayEnd = endOfWeek(date, "UTC", WeekStartsOn.SUNDAY);
+            expect(isoEnd).not.toBe(sundayEnd);
         });
 
         it("should handle timestamp input", () => {
@@ -301,7 +374,7 @@ describe("Week functions", () => {
     });
 
     describe("getWeeksInMonth", () => {
-        it("should return correct number of weeks for various months", () => {
+        it("should return correct number of weeks for various months with Monday start", () => {
             // February 2023 (28 days, starts on Wednesday)
             expect(getWeeksInMonth({ year: 2023, month: 2, day: 1 }, "UTC")).toBe(5);
             
@@ -318,8 +391,25 @@ describe("Week functions", () => {
             expect(getWeeksInMonth({ year: 2023, month: 5, day: 1 }, "UTC")).toBe(5);
         });
 
+        it("should handle different week start days", () => {
+            // January 2023 starts on Sunday
+            const date = { year: 2023, month: 1, day: 1 };
+            
+            // With Sunday start, January 2023 should need fewer weeks
+            const sundayWeeks = getWeeksInMonth(date, "UTC", WeekStartsOn.SUNDAY);
+            expect(sundayWeeks).toBe(5);
+            
+            // With Monday start, January 2023 should need more weeks  
+            const mondayWeeks = getWeeksInMonth(date, "UTC", WeekStartsOn.MONDAY);
+            expect(mondayWeeks).toBe(6);
+            
+            // With Saturday start (January starts on Sunday, which is day 1 of Saturday-based week)
+            const saturdayWeeks = getWeeksInMonth(date, "UTC", WeekStartsOn.SATURDAY);
+            expect(saturdayWeeks).toBe(5);
+        });
+
         it("should work with any day of the month", () => {
-            // All days in June 2023 should return 5 weeks
+            // All days in June 2023 should return same number of weeks
             expect(getWeeksInMonth({ year: 2023, month: 6, day: 1 }, "UTC")).toBe(5);
             expect(getWeeksInMonth({ year: 2023, month: 6, day: 15 }, "UTC")).toBe(5);
             expect(getWeeksInMonth({ year: 2023, month: 6, day: 30 }, "UTC")).toBe(5);
@@ -331,14 +421,10 @@ describe("Week functions", () => {
         });
 
         it("should handle edge cases", () => {
-            // Test months that definitely need 6 weeks
+            // Test months that definitely need 6 weeks with Monday start
             expect(getWeeksInMonth({ year: 2023, month: 1, day: 1 }, "UTC")).toBe(6); // January 2023
             expect(getWeeksInMonth({ year: 2023, month: 7, day: 1 }, "UTC")).toBe(6); // July 2023
             expect(getWeeksInMonth({ year: 2023, month: 10, day: 1 }, "UTC")).toBe(6); // October 2023
-            
-            // Test months that only need 4 weeks (rare but possible)
-            // February with 28 days starting on Monday would only need 4 weeks
-            // This is very rare in practice
         });
 
         it("should work with different timezones", () => {
@@ -365,12 +451,15 @@ describe("Week functions", () => {
             // Test various months to ensure result is always 4-6
             const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
             const years = [2022, 2023, 2024, 2025];
+            const weekStarts = [WeekStartsOn.SUNDAY, WeekStartsOn.MONDAY, WeekStartsOn.SATURDAY];
             
             for (const year of years) {
                 for (const month of months) {
-                    const weeks = getWeeksInMonth({ year, month, day: 1 }, "UTC");
-                    expect(weeks).toBeGreaterThanOrEqual(4);
-                    expect(weeks).toBeLessThanOrEqual(6);
+                    for (const weekStart of weekStarts) {
+                        const weeks = getWeeksInMonth({ year, month, day: 1 }, "UTC", weekStart);
+                        expect(weeks).toBeGreaterThanOrEqual(4);
+                        expect(weeks).toBeLessThanOrEqual(6);
+                    }
                 }
             }
         });

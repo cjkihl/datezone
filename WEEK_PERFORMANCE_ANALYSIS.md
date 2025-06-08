@@ -31,20 +31,21 @@ This document analyzes the performance characteristics of the implemented week f
 - **Performance improvement**: 2-10x faster for UTC operations
 
 ### `startOfISOWeek(date, timeZone)` and `endOfISOWeek(date, timeZone)`
-- **Timezone dependency**: Delegates to `startOfWeek()` and `endOfWeek()`
+- **Timezone dependency**: Delegates to `startOfWeek()` and `endOfWeek()` with Monday start
 - **Performance**: Same as underlying functions
-- **Optimization**: Zero overhead delegation since ISO weeks use Monday-Sunday
+- **Optimization**: Zero overhead delegation to main functions with `WeekStartsOn.MONDAY`
 - **Complexity**: O(1) with timezone overhead
 
-### `getWeeksInMonth(date, timeZone)`
+### `getWeeksInMonth(date, timeZone, weekStartsOn)`
 - **Timezone dependency**: Minimized to essential calculations only
 - **Performance optimizations**:
-  - Uses `dayOfWeek()` only twice (first and last day of month)
+  - Uses `dayOfWeek()` only once (first day of month)
   - Avoids creating Date objects for each day
   - Uses efficient month length calculation via Date constructor
-  - Pure arithmetic for week counting
+  - Pure arithmetic for week counting based on configurable week start
 - **Complexity**: O(1) with minimal timezone overhead
 - **Optimization strategy**: Calculates mathematically rather than iterating
+- **Flexibility**: Supports all 7 possible week start days with same performance
 
 ## Performance Test Results
 
@@ -99,6 +100,19 @@ Based on the test suite:
 - **Graceful handling**: Functions don't throw but may return unexpected results
 - **Performance**: No additional overhead for validation
 
+## New Features
+
+### WeekStartsOn Enum
+- **Comprehensive support**: All 7 possible week start days (Sunday through Saturday)
+- **Named constants**: `SUNDAY`, `MONDAY`, `TUESDAY`, `WEDNESDAY`, `THURSDAY`, `FRIDAY`, `SATURDAY`
+- **Cultural support**: Common styles like US (Sunday), ISO (Monday), Middle East (Saturday)
+- **Performance**: No overhead for different week start options
+
+### Function Consolidation
+- **Unified API**: Single functions with optional `weekStartsOn` parameter
+- **Backward compatibility**: ISO functions remain as convenience wrappers
+- **Flexibility**: Users can choose any week start style without separate functions
+
 ## Conclusion
 
 The implemented week functions achieve optimal performance by:
@@ -106,5 +120,6 @@ The implemented week functions achieve optimal performance by:
 2. **Providing fast paths** for common UTC operations  
 3. **Using efficient algorithms** for mathematical calculations
 4. **Avoiding unnecessary iterations** in favor of direct calculation
+5. **Supporting flexible week definitions** without performance penalty
 
-The performance optimizations provide significant speed improvements while maintaining full timezone accuracy and DST handling. 
+The performance optimizations provide significant speed improvements while maintaining full timezone accuracy, DST handling, and cultural week preferences. 
