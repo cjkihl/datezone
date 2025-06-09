@@ -26,9 +26,9 @@ interface BenchContext {
 }
 
 // Helper function to add days (since it doesn't exist in datezone yet)
-const addDays = (ts: number, days: number, timeZone: string): number => {
-	return ts + days * DAY;
-};
+		const addDays = (ts: number, days: number, _timeZone: string): number => {
+			return ts + days * DAY;
+		};
 
 // Test data - using realistic timestamps and timezones
 const testTimestamps = [
@@ -145,7 +145,7 @@ group("Core Utilities", () => {
 		const ts = ctx.get("timestamp");
 		const tz = ctx.get("timezone");
 
-		yield () => do_not_optimize(getTimezoneOffsetMinutes(ts, tz));
+		yield () => do_not_optimize(getTimezoneOffsetMinutes(ts, "UTC", tz));
 	})
 		.args("timestamp", testTimestamps)
 		.args("timezone", testTimezones);

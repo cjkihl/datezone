@@ -4,8 +4,8 @@
 	"type": "module",
 	"scripts": {
 		"type-check": "tsc --noEmit",
-		"run": "bun run run.ts",
-		"compare": "bun run compare.ts"
+		"cache-test": "bun run cache-test.ts",
+		"run": "bun run run.ts"
 	},
 	"dependencies": {
 		"@date-fns/tz": "^1.2.0",

@@ -11,7 +11,7 @@ import {
 	startOfDay as dzStartOfDay,
 	startOfMonth as dzStartOfMonth,
 	wallTimeToUTC as dzWallTimeToUTC,
-	getTimezoneOffsetMinutes as dzgetTimezoneOffsetMinutes,
+	getTimezoneOffsetMinutes as dzGetTimezoneOffsetMinutes,
 } from "datezone";
 
 // Import date-fns v4 functions
@@ -446,7 +446,7 @@ group("Datezone-Specific Operations", () => {
 	});
 
 	bench("datezone: getTimezoneOffsetMinutes", function* () {
-		yield () => do_not_optimize(dzgetTimezoneOffsetMinutes(testTimestamp, testTimezone));
+		yield () => do_not_optimize(dzGetTimezoneOffsetMinutes(testTimestamp, "UTC", testTimezone));
 	});
 
 	bench("date-fns: timezone offset equivalent", function* () {
