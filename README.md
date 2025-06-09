@@ -1,101 +1,24 @@
-# DateZone
+# DateZone Monorepo
 
 A lightweight and comprehensive date and timezone utility library for JavaScript and TypeScript.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Overview
 
-DateZone is a modern date and timezone utility library built with performance and developer experience in mind. It provides a comprehensive set of tools for working with dates, times, and timezones in JavaScript/TypeScript applications.
-
-## Features
-
-- 🌍 **Timezone Support**: Full IANA timezone database support
-- 📅 **Date Utilities**: Comprehensive date manipulation and formatting
-- ⚡ **Performance**: Optimized for speed with built-in benchmarking
-- 🔧 **TypeScript**: Full TypeScript support with type safety
-- 📦 **Tree-shakable**: Import only what you need
-- 🧪 **Well-tested**: Extensive test coverage
-
-## Workspace Structure
-
-This is a monorepo managed with [Turbo](https://turbo.build/) and [Bun](https://bun.sh/). The workspace is organized as follows:
-
-```
-datezone/
-├── packages/
-│   └── datezone/          # Main library package
-│       ├── format/        # Date formatting utilities
-│       ├── *.ts          # Core library modules (year, month, day, hour, etc.)
-│       └── *.test.ts     # Test files
-├── shared/
-│   └── config/           # Shared configuration packages
-├── tools/
-│   ├── benchmark/        # Performance benchmarking tools
-│   ├── coverage/         # Code coverage utilities
-│   ├── find-root/        # Monorepo utilities
-│   └── mono/             # Monorepo management tools
-├── biome.json           # Code formatting and linting config
-├── turbo.json           # Turbo build configuration
-└── package.json         # Root package configuration
-```
-
-## Getting Started
-
-### Prerequisites
-
-- [Bun](https://bun.sh/) 1.2.16+
-- [Node.js](https://nodejs.org/) 18+ (if not using Bun runtime)
-
-### Installation
+## Installation
 
 ```bash
 # Install dependencies
 bun install
 
-# Build all packages
+# Build the library
 bun run build
-
-# Build only library packages
-bun run build-pkg
 ```
 
-### Development
+### Prerequisites
 
-```bash
-# Run tests
-bun test
+- [Bun](https://bun.sh/) 1.2.16+
 
-# Type checking
-bun run type-check
-
-# Linting
-bun run lint
-
-# Format code
-bun run format
-
-# Fix linting issues
-bun run lint-fix
-```
-
-### Benchmarking
-
-The project includes comprehensive benchmarking tools to ensure optimal performance:
-
-```bash
-# Run benchmarks
-bun run bench
-
-# Compare performance
-bun run bench:compare
-
-# Comprehensive comparison
-bun run bench:comprehensive
-
-# Generate benchmark reports
-bun run bench:report
-```
 
 ## Usage
 
@@ -105,36 +28,33 @@ import { /* your imports */ } from 'datezone';
 // Example usage will be added as the API stabilizes
 ```
 
-## Core Modules
+## Development
 
-The library is organized into several core modules:
+### Quick Start
 
-- **`year.ts`** - Year-based operations and utilities
-- **`month.ts`** - Month manipulation and calculations
-- **`day.ts`** - Day-level date operations
-- **`hour.ts`** - Hour and time-based utilities
-- **`week.ts`** - Week calculations and operations
-- **`ordinal.ts`** - Ordinal date utilities
-- **`compare.ts`** - Date comparison utilities
-- **`offset.ts`** - Timezone offset handling
-- **`format/`** - Date formatting and parsing
-- **`iana.ts`** - IANA timezone database integration
+```bash
+# Run tests
+bun test
 
-## Contributing
+# Type checking and linting
+bun run type-check
+bun run lint
 
-We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+# Format code
+bun run format
+```
 
-### Development Workflow
+### Benchmarking
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Run the test suite: `bun test`
-6. Run benchmarks to ensure performance: `bun run bench`
-7. Submit a pull request
+```bash
+# Run performance benchmarks
+bun run bench
 
-## Scripts Reference
+# Generate detailed reports
+bun run bench:report
+```
+
+### Available Scripts
 
 | Script | Description |
 |--------|-------------|
@@ -147,6 +67,40 @@ We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for gu
 | `bun run type-check` | Run TypeScript type checking |
 | `bun run bench` | Run performance benchmarks |
 | `bun run clean` | Clean build artifacts |
+
+## Project Structure
+
+This monorepo contains:
+
+```
+datezone/
+├── packages/datezone/     # Main library with core modules:
+│   ├── format/           # Date formatting utilities
+│   ├── year.ts          # Year operations
+│   ├── month.ts         # Month manipulation  
+│   ├── day.ts           # Day operations
+│   ├── hour.ts          # Time utilities
+│   ├── week.ts          # Week calculations
+│   ├── ordinal.ts       # Ordinal dates
+│   ├── compare.ts       # Date comparisons
+│   ├── offset.ts        # Timezone offsets
+│   └── iana.ts          # IANA timezone database
+├── tools/               # Development utilities
+│   ├── benchmark/       # Performance tools
+│   ├── coverage/        # Test coverage
+│   └── mono/           # Monorepo management
+└── shared/config/       # Shared configurations
+```
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
+
+**Quick workflow:**
+1. Fork and create a feature branch
+2. Make changes and add tests
+3. Run `bun test` and `bun run bench`
+4. Submit a pull request
 
 ## License
 
