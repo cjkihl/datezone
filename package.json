@@ -16,6 +16,7 @@
 		"bench": "bun tools/benchmark/run.ts",
 		"bench:compare": "bun tools/benchmark/compare.ts",
 		"bench:comprehensive": "bun tools/benchmark/comprehensive-compare.ts",
+		"bench:report": "bun tools/benchmark/format-results.ts",
 		"bench:cache": "bun tools/benchmark/run-with-output.ts cache-test.ts"
 	},
 	"devDependencies": {

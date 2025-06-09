@@ -1,224 +1,101 @@
-# Datezone Benchmarking Suite
+# 🚀 Datezone Benchmark Suite
 
-A comprehensive benchmarking suite for the Datezone library, providing performance analysis across various date/time operations and comparisons with other popular libraries.
+Beautiful performance comparisons between Datezone and Date-fns with clean, readable reports.
 
-## 🚀 Quick Start
+## Quick Start
+
+Generate a beautiful comparison report:
 
 ```bash
-# Run all benchmarks
-npm run bench
+# From workspace root
+bun run bench:report
 
-# Run specific benchmark suites
-npm run bench:compare          # Datezone vs Date-fns comparison
-npm run bench:comprehensive    # Comprehensive comparison with timezone operations
-npm run bench:cache           # Cache performance tests
+# From tools/benchmark directory  
+bun run report
 ```
 
-## 📊 Available Benchmark Suites
+## 📊 What You Get
 
-### 1. Performance Benchmarks (`run.ts`)
-**Command:** `npm run bench`  
-**Report:** Console output (comprehensive performance data)
+Instead of raw mitata output that looks like this:
+```
+┌─ Month Operations ──────────────────────────────────────────────────┐
+│ datezone: startOfMonth     │    45.2ns │ 22.1M ops/sec │  ± 2.3% │
+│ date-fns: startOfMonth     │   127.8ns │  7.8M ops/sec │  ± 1.8% │
+└──────────────────────────────────────────────────────────────────────┘
+```
 
-Comprehensive performance benchmarks for core Datezone operations:
+You get beautiful markdown tables like this:
 
-- **Month Operations**: `startOfMonth`, `endOfMonth`, `addMonths`
-- **Day Operations**: `startOfDay`, `endOfDay`, `addDays`
-- **Core Utilities**: `formatToParts`, `wallTimeToUTC`, `getTimezoneOffsetMinutes`
-- **High-Frequency Operations**: Simulating render loops and rapid operations
-- **Memory Patterns**: Testing allocation patterns and garbage collection
-- **Cache Performance**: Testing formatter caching effectiveness
-- **Real-World Scenarios**: Calendar apps, dashboards, scheduling systems
+| Operation | Datezone | Date-fns | Performance |
+|-----------|----------|----------|-------------|
+| startOfMonth | **45.2ns**<br/><sub>22.1M ops/sec</sub> | **127.8ns**<br/><sub>7.8M ops/sec</sub> | 🚀 183% faster |
 
-### 2. Comparison Benchmarks (`compare.ts`)
-**Command:** `npm run bench:compare`  
-**Report:** Console output (detailed comparison data)
+## 🏆 Available Commands
 
-Direct performance comparison between Datezone and Date-fns v4:
+| Command | Description | Output Format |
+|---------|-------------|---------------|
+| `bun run bench:report` | 🌟 **Recommended** - Formatted comparison | Beautiful markdown tables |
+| `bun run bench:comprehensive` | Full timezone-aware comparison | Raw mitata output |
+| `bun run bench:compare` | Quick library comparison | Raw mitata output |
+| `bun run bench` | Datezone-only benchmarks | Raw mitata output |
 
-- Side-by-side performance metrics
-- Equivalent operations where possible
-- Highlights timezone-aware vs timezone-naive operations
-- Memory usage comparisons
+## 📁 Output Files
 
-### 3. Comprehensive Comparison (`comprehensive-compare.ts`)
-**Command:** `npm run bench:comprehensive`  
-**Report:** Console output (extended comparison data)
+- `reports/sample-comparison-report.md` - Example of formatted output
+- `reports/comparison-report.md` - Real benchmark results (when available)
+- `reports/performance-benchmarks.md` - Documentation
 
-Extended comparison including:
+## 🎯 Report Features
 
-- Timezone-aware operations
-- Complex workflows
-- Multi-timezone operations
-- Real-world timezone scenarios
-- Datezone-specific operations
+### Performance Icons
+- 🚀 **Datezone dominates** (>100% faster)
+- ⚡ **Datezone wins** (25-100% faster)  
+- ✅ **Datezone leads** (10-25% faster)
+- 🤝 **Close match** (<10% difference)
+- ⚠️ **Date-fns leads** (10-25% faster)
+- 🔥 **Datezone only** (no equivalent)
 
-### 4. Cache Performance Tests (`cache-test.ts`)
-**Command:** `npm run bench:cache`  
-**Report:** [`reports/cache-performance.md`](./reports/cache-performance.md) ✅
+### Summary Statistics
+- Win/loss ratios between libraries
+- Performance improvement percentages
+- Unique operation counts
 
-Focused testing of caching mechanisms:
-
-- Formatter cache effectiveness
-- Memory allocation patterns
-- Cache hit/miss scenarios
-- Performance with different timezone patterns
-
-> **Note:** The cache performance test generates a complete markdown report with captured benchmark output. Other benchmarks output directly to the console for real-time viewing.
-
-## 📈 Understanding the Results
-
-### Benchmark Metrics
-
-- **Time (avg)**: Average execution time per operation
-- **Operations/sec**: Number of operations per second (higher is better)
-- **Margin**: Statistical margin of error
-- **Summary**: Relative performance comparisons
-
-### Performance Categories
-
-| Time Range | Performance Level | Description |
-|------------|------------------|-------------|
-| < 1ns | Excellent | Near-native performance |
-| 1-10ns | Very Good | Highly optimized |
-| 10-100ns | Good | Acceptable for most use cases |
-| 100ns-1μs | Moderate | May impact high-frequency operations |
-| > 1μs | Slow | Consider optimization for critical paths |
-
-### Key Performance Indicators
-
-1. **Timezone Operations**: How well the library handles timezone-aware calculations
-2. **Cache Effectiveness**: Performance improvement from internal caching
-3. **Memory Allocation**: Garbage collection impact and memory usage patterns
-4. **Real-World Scenarios**: Performance in typical application use cases
+### Methodology Details
+- System information
+- Test data descriptions
+- Fair comparison approach
+- Measurement techniques
 
 ## 🔧 Technical Details
 
-### Test Environment
+### What's Benchmarked
+- **Timezone-aware operations** (fair comparison)
+- **Month/day/time manipulations** 
+- **Formatting and parsing**
+- **Unique Datezone utilities**
 
-The benchmarks run on the current system and capture:
-- CPU information
-- Runtime version (Node.js/Bun)
-- System architecture
-- Timestamp of execution
+### Libraries Tested
+- **Datezone**: Built-in timezone support
+- **Date-fns v4**: With `@date-fns/tz` package
 
-### Test Data
+### Benchmark Tool
+- [Mitata](https://github.com/evanwashere/mitata) - High-precision JavaScript benchmarking
+- Multiple samples with statistical significance
+- Memory allocation tracking
 
-- **Timestamps**: Various dates including edge cases (DST transitions, year boundaries)
-- **Timezones**: Global coverage including major cities and UTC
-- **Operations**: Both simple and complex multi-step workflows
+## 🚧 Current Status
 
-### Methodology
+The `format-results.ts` script is a work-in-progress that attempts to parse raw mitata output. For now, `simple-format.ts` provides a working example with sample data.
 
-- Uses [Mitata](https://github.com/evanwashere/mitata) for accurate benchmarking
-- Multiple iterations to ensure statistical significance
-- Garbage collection control for memory-sensitive tests
-- Realistic data patterns and usage scenarios
+### To improve the system:
+1. Fix mitata output parsing in `format-results.ts`
+2. Add more comprehensive benchmark scenarios
+3. Integrate with CI for automated reporting
 
-## 📋 Benchmark Reports
+## 🎨 Example Output
 
-### Generated Reports
+See [sample-comparison-report.md](reports/sample-comparison-report.md) for a complete example of the formatted output.
 
-- [`cache-performance.md`](./reports/cache-performance.md) ✅ - Cache behavior analysis with complete output
+---
 
-### Console Output
-
-Most benchmarks output directly to the console for immediate viewing:
-- **Performance benchmarks** - Run `npm run bench` to see comprehensive performance data
-- **Comparison benchmarks** - Run `npm run bench:compare` for Datezone vs Date-fns comparison  
-- **Comprehensive comparison** - Run `npm run bench:comprehensive` for extended analysis
-
-### Report Features
-
-The cache performance report includes:
-- System information (CPU, runtime, clock speed)
-- Formatted benchmark results in tables
-- Complete raw mitata output with performance graphs
-- Running instructions for reproduction
-- Timestamp and metadata
-
-## 🛠 Development
-
-### Adding New Benchmarks
-
-1. Create benchmark functions using Mitata's API:
-```typescript
-import { bench, group } from "mitata";
-import { runWithMarkdownOutput } from "./output-utils.js";
-
-group("My Benchmark Group", () => {
-  bench("my operation", function* () {
-    yield () => {
-      // Your operation here
-      return do_not_optimize(result);
-    };
-  });
-});
-
-await runWithMarkdownOutput(
-  "My Benchmark Title",
-  "Description of what this benchmark tests",
-  "tools/benchmark/reports/my-benchmark.md"
-);
-```
-
-2. Add npm script to `package.json`:
-```json
-{
-  "scripts": {
-    "bench:my-test": "bun tools/benchmark/my-test.ts"
-  }
-}
-```
-
-### Best Practices
-
-- Use `do_not_optimize()` to prevent compiler optimizations
-- Test with realistic data patterns
-- Include both simple and complex scenarios
-- Add appropriate garbage collection controls for memory tests
-- Document what each benchmark measures
-
-### Dependencies
-
-- **Mitata**: High-precision benchmarking framework
-- **Datezone**: The library being tested
-- **Date-fns**: For comparison benchmarks
-- **@date-fns/tz**: For timezone-aware Date-fns operations
-
-## 📊 Interpreting Results
-
-### Performance Trends
-
-Look for these patterns in the results:
-
-1. **Consistent Performance**: Operations should have predictable timing
-2. **Cache Benefits**: Repeated operations should show improvement
-3. **Timezone Impact**: Timezone-aware operations may be slower but more accurate
-4. **Memory Efficiency**: Lower allocation rates indicate better memory usage
-
-### Common Optimizations
-
-Based on benchmark results, consider:
-
-- Caching formatters for repeated operations
-- Batching timezone operations
-- Using UTC for internal calculations when possible
-- Minimizing object allocations in hot paths
-
-## 🤝 Contributing
-
-When contributing benchmarks:
-
-1. Ensure benchmarks are representative of real-world usage
-2. Include both positive and edge cases
-3. Document the purpose and expected outcomes
-4. Update this README with new benchmark descriptions
-5. Verify benchmarks run successfully in CI environment
-
-## 📚 Resources
-
-- [Mitata Documentation](https://github.com/evanwashere/mitata)
-- [Datezone Documentation](../../packages/datezone/README.md)
-- [Performance Best Practices](../../docs/performance.md)
-- [Timezone Handling Guide](../../docs/timezones.md)
+*Made with ❤️ to make benchmark results actually readable*

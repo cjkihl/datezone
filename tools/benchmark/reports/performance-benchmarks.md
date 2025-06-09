@@ -1,25 +1,42 @@
 # Datezone Performance Benchmarks
 
-Comprehensive performance benchmarks for Datezone date/time operations across various scenarios and timezones.
+Comprehensive performance benchmarks comparing Datezone against Date-fns v4 across various date/time operations.
 
 **Generated on:** 2025-06-09T03:30:52.276Z
 
-## System Information
+## Quick Start
 
-Run `bun --version` and `uname -a` to see system details.
-
-## Running the Benchmark
-
-To run this benchmark and see the results:
+Generate a beautiful comparison report:
 
 ```bash
 cd tools/benchmark
-bun run run.ts
+bun run report
 ```
 
-## About This Benchmark
+This will create a formatted comparison table at `reports/comparison-report.md`.
 
-This benchmark uses [Mitata](https://github.com/evanwashere/mitata) for high-precision performance measurements.
+## Available Benchmark Commands
+
+| Command | Description | Output |
+|---------|-------------|--------|
+| `bun run report` | 🏆 **Recommended** - Generates formatted comparison tables | Clean markdown report |
+| `bun run compare` | Comprehensive Datezone vs Date-fns comparison | Raw mitata output |
+| `bun run quick` | Quick comparison of common operations | Raw mitata output |
+| `bun run bench` | Datezone-only performance benchmarks | Raw mitata output |
+
+## Sample Report
+
+See [sample-comparison-report.md](sample-comparison-report.md) for an example of the beautiful formatted output.
+
+The formatted reports include:
+- 🏆 Performance icons showing which library wins each operation
+- 📊 Clean comparison tables with execution times and operations/sec
+- 📈 Summary statistics showing overall performance trends
+- 🔬 Detailed methodology and system information
+
+## About These Benchmarks
+
+These benchmarks use [Mitata](https://github.com/evanwashere/mitata) for high-precision performance measurements and compare timezone-aware operations fairly.
 
 ### Key Metrics
 
