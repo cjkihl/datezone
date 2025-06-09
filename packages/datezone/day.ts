@@ -15,7 +15,6 @@ function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): DayOptions {
 	return dt;
 }
 
-
 export function addDays(
 	ts: OptionsOrTimestamp,
 	days: number,

@@ -1,14 +1,9 @@
-import {
-	dayOfWeek,
-	dayOfYear,
-	getDayPeriod,
-	weekDayName,
-} from "../day";
-import { getISOWeekYear, getWeek } from "../week";
+import { dayOfWeek, dayOfYear, getDayPeriod, weekDayName } from "../day";
 import type { TimeZone } from "../iana";
 import { getMonthName } from "../month";
 import { formatOrdinal } from "../ordinal";
 import type { PlainDateTime } from "../types";
+import { getISOWeekYear, getWeek } from "../week";
 import { formatGMT, formatTimestamp, formatTimezone, padZeros } from "./utils";
 
 /**

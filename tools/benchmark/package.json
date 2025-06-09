@@ -6,8 +6,8 @@
 	"scripts": {
 		"bench": "bun run run.ts",
 		"compare": "bun run comprehensive-compare.ts",
-		    "report": "bun run format-results.ts",
-    "sample": "bun run simple-format.ts",
+		"report": "bun run format-results.ts",
+		"sample": "bun run simple-format.ts",
 		"quick": "bun run compare.ts"
 	},
 	"dependencies": {

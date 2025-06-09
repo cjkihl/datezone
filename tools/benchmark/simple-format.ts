@@ -3,127 +3,211 @@ import { writeFileSync } from "node:fs";
 // Sample benchmark data (what you'd get from parsing mitata output)
 const sampleResults = {
 	"Month Operations": [
-		{ name: "datezone: startOfMonth", time: "45.2ns", ops: "22.1M ops/sec", samples: 100 },
-		{ name: "date-fns: startOfMonth", time: "127.8ns", ops: "7.8M ops/sec", samples: 100 },
-		{ name: "datezone: endOfMonth", time: "52.1ns", ops: "19.2M ops/sec", samples: 100 },
-		{ name: "date-fns: endOfMonth", time: "134.5ns", ops: "7.4M ops/sec", samples: 100 },
-		{ name: "datezone: addMonths", time: "89.3ns", ops: "11.2M ops/sec", samples: 100 },
-		{ name: "date-fns: addMonths", time: "156.7ns", ops: "6.4M ops/sec", samples: 100 }
+		{
+			name: "datezone: startOfMonth",
+			time: "45.2ns",
+			ops: "22.1M ops/sec",
+			samples: 100,
+		},
+		{
+			name: "date-fns: startOfMonth",
+			time: "127.8ns",
+			ops: "7.8M ops/sec",
+			samples: 100,
+		},
+		{
+			name: "datezone: endOfMonth",
+			time: "52.1ns",
+			ops: "19.2M ops/sec",
+			samples: 100,
+		},
+		{
+			name: "date-fns: endOfMonth",
+			time: "134.5ns",
+			ops: "7.4M ops/sec",
+			samples: 100,
+		},
+		{
+			name: "datezone: addMonths",
+			time: "89.3ns",
+			ops: "11.2M ops/sec",
+			samples: 100,
+		},
+		{
+			name: "date-fns: addMonths",
+			time: "156.7ns",
+			ops: "6.4M ops/sec",
+			samples: 100,
+		},
 	],
 	"Day Operations": [
-		{ name: "datezone: startOfDay", time: "38.4ns", ops: "26.0M ops/sec", samples: 100 },
-		{ name: "date-fns: startOfDay", time: "98.2ns", ops: "10.2M ops/sec", samples: 100 },
-		{ name: "datezone: endOfDay", time: "41.7ns", ops: "24.0M ops/sec", samples: 100 },
-		{ name: "date-fns: endOfDay", time: "103.5ns", ops: "9.7M ops/sec", samples: 100 }
+		{
+			name: "datezone: startOfDay",
+			time: "38.4ns",
+			ops: "26.0M ops/sec",
+			samples: 100,
+		},
+		{
+			name: "date-fns: startOfDay",
+			time: "98.2ns",
+			ops: "10.2M ops/sec",
+			samples: 100,
+		},
+		{
+			name: "datezone: endOfDay",
+			time: "41.7ns",
+			ops: "24.0M ops/sec",
+			samples: 100,
+		},
+		{
+			name: "date-fns: endOfDay",
+			time: "103.5ns",
+			ops: "9.7M ops/sec",
+			samples: 100,
+		},
 	],
 	"Timezone-Specific Operations": [
-		{ name: "datezone: wallTimeToUTC", time: "67.8ns", ops: "14.7M ops/sec", samples: 100 },
-		{ name: "datezone: getTimezoneOffsetMinutes", time: "23.1ns", ops: "43.3M ops/sec", samples: 100 }
-	]
+		{
+			name: "datezone: wallTimeToUTC",
+			time: "67.8ns",
+			ops: "14.7M ops/sec",
+			samples: 100,
+		},
+		{
+			name: "datezone: getTimezoneOffsetMinutes",
+			time: "23.1ns",
+			ops: "43.3M ops/sec",
+			samples: 100,
+		},
+	],
 };
 
 function parseOps(opsString: string): number {
-	const cleaned = opsString.replace(/[^\d.,KMB]/g, '');
-	
-	if (cleaned.includes('M')) {
-		return Number.parseFloat(cleaned.replace('M', '')) * 1_000_000;
-	} 
-	if (cleaned.includes('K')) {
-		return Number.parseFloat(cleaned.replace('K', '')) * 1_000;
-	} 
-	if (cleaned.includes('B')) {
-		return Number.parseFloat(cleaned.replace('B', '')) * 1_000_000_000;
+	const cleaned = opsString.replace(/[^\d.,KMB]/g, "");
+
+	if (cleaned.includes("M")) {
+		return Number.parseFloat(cleaned.replace("M", "")) * 1_000_000;
 	}
-	return Number.parseFloat(cleaned.replace(/,/g, ''));
+	if (cleaned.includes("K")) {
+		return Number.parseFloat(cleaned.replace("K", "")) * 1_000;
+	}
+	if (cleaned.includes("B")) {
+		return Number.parseFloat(cleaned.replace("B", "")) * 1_000_000_000;
+	}
+	return Number.parseFloat(cleaned.replace(/,/g, ""));
 }
 
-function createComparisons(benchmarks: any[]) {
-	const comparisons: any[] = [];
-	const operationMap = new Map();
-	
+interface Benchmark {
+	name: string;
+	time: string;
+	ops: string;
+	samples: number;
+}
+
+interface Comparison {
+	operation: string;
+	datezone?: Benchmark;
+	dateFns?: Benchmark;
+	icon?: string;
+	improvement?: string;
+}
+
+function createComparisons(benchmarks: Benchmark[]): Comparison[] {
+	const comparisons: Comparison[] = [];
+	const operationMap = new Map<
+		string,
+		{ datezone?: Benchmark; dateFns?: Benchmark }
+	>();
+
 	// Group benchmarks by operation
 	for (const bench of benchmarks) {
-		let operation = '';
-		let library = '';
-		
-		if (bench.name.includes('datezone:')) {
-			operation = bench.name.replace(/.*datezone:\s*/, '').replace(/\s*\(.*\)/, '');
-			library = 'datezone';
-		} else if (bench.name.includes('date-fns:')) {
-			operation = bench.name.replace(/.*date-fns:\s*/, '').replace(/\s*\(.*\)/, '');
-			library = 'date-fns';
+		let operation = "";
+		let library = "";
+
+		if (bench.name.includes("datezone:")) {
+			operation = bench.name
+				.replace(/.*datezone:\s*/, "")
+				.replace(/\s*\(.*\)/, "");
+			library = "datezone";
+		} else if (bench.name.includes("date-fns:")) {
+			operation = bench.name
+				.replace(/.*date-fns:\s*/, "")
+				.replace(/\s*\(.*\)/, "");
+			library = "date-fns";
 		}
-		
+
 		if (operation) {
 			if (!operationMap.has(operation)) {
 				operationMap.set(operation, {});
 			}
-			
+
 			const entry = operationMap.get(operation);
-			if (library === 'datezone') {
+			if (!entry) continue;
+
+			if (library === "datezone") {
 				entry.datezone = bench;
-			} else if (library === 'date-fns') {
+			} else if (library === "date-fns") {
 				entry.dateFns = bench;
 			}
 		}
 	}
-	
+
 	// Create comparisons
 	for (const [operation, { datezone, dateFns }] of operationMap) {
 		if (datezone && !dateFns) {
 			comparisons.push({
 				operation,
 				datezone,
-				icon: '🔥',
-				improvement: 'Datezone only'
+				icon: "🔥",
+				improvement: "Datezone only",
 			});
 			continue;
 		}
-		
+
 		if (!datezone || !dateFns) continue;
-		
+
 		const dzOps = parseOps(datezone.ops);
 		const fnOps = parseOps(dateFns.ops);
 		const improvement = ((dzOps - fnOps) / fnOps) * 100;
-		
+
 		let icon: string;
 		let improvementText: string;
-		
+
 		if (improvement > 100) {
-			icon = '🚀';
+			icon = "🚀";
 			improvementText = `${improvement.toFixed(0)}% faster`;
 		} else if (improvement > 25) {
-			icon = '⚡';
+			icon = "⚡";
 			improvementText = `${improvement.toFixed(0)}% faster`;
 		} else if (improvement > 10) {
-			icon = '✅';
+			icon = "✅";
 			improvementText = `${improvement.toFixed(0)}% faster`;
 		} else if (improvement > -10) {
-			icon = '🤝';
+			icon = "🤝";
 			improvementText = `${Math.abs(improvement).toFixed(0)}% difference`;
 		} else if (improvement > -25) {
-			icon = '⚠️';
+			icon = "⚠️";
 			improvementText = `${Math.abs(improvement).toFixed(0)}% slower`;
 		} else {
-			icon = '🐌';
+			icon = "🐌";
 			improvementText = `${Math.abs(improvement).toFixed(0)}% slower`;
 		}
-		
+
 		comparisons.push({
 			operation,
 			datezone,
 			dateFns,
 			icon,
-			improvement: improvementText
+			improvement: improvementText,
 		});
 	}
-	
+
 	return comparisons.sort((a, b) => a.operation.localeCompare(b.operation));
 }
 
 function generateReport() {
 	const timestamp = new Date().toISOString();
-	
+
 	let markdown = `# 🏁 Datezone vs Date-fns Performance Comparison
 
 **Generated:** ${timestamp}  
@@ -152,33 +236,38 @@ This report compares **Datezone** against **Date-fns v4** with timezone support 
 	for (const [groupName, benchmarks] of Object.entries(sampleResults)) {
 		const comparisons = createComparisons(benchmarks);
 		if (comparisons.length === 0) continue;
-		
+
 		markdown += `## ${groupName}\n\n`;
-		markdown += `| Operation | Datezone | Date-fns | Performance |\n`;
-		markdown += `|-----------|----------|----------|-------------|\n`;
-		
+		markdown += "| Operation | Datezone | Date-fns | Performance |\n";
+		markdown += "|-----------|----------|----------|-------------|\n";
+
 		for (const comp of comparisons) {
-			const dzCell = comp.datezone 
+			const dzCell = comp.datezone
 				? `**${comp.datezone.time}**<br/><sub>${comp.datezone.ops}</sub>`
-				: '—';
-			const fnCell = comp.dateFns 
+				: "—";
+			const fnCell = comp.dateFns
 				? `**${comp.dateFns.time}**<br/><sub>${comp.dateFns.ops}</sub>`
-				: '—';
-			
+				: "—";
+
 			markdown += `| ${comp.operation} | ${dzCell} | ${fnCell} | ${comp.icon} ${comp.improvement} |\n`;
 		}
-		
-		markdown += '\n';
+
+		markdown += "\n";
 	}
 
 	// Summary statistics
-	const allComparisons = Object.values(sampleResults).flatMap(benchmarks => createComparisons(benchmarks));
+	const allComparisons = Object.values(sampleResults).flatMap((benchmarks) =>
+		createComparisons(benchmarks),
+	);
 	const stats = {
 		total: allComparisons.length,
-		datezoneWins: allComparisons.filter(c => c.icon === '🚀' || c.icon === '⚡' || c.icon === '✅').length,
-		dateFnsWins: allComparisons.filter(c => c.icon === '⚠️' || c.icon === '🐌').length,
-		ties: allComparisons.filter(c => c.icon === '🤝').length,
-		datezoneOnly: allComparisons.filter(c => c.icon === '🔥').length
+		datezoneWins: allComparisons.filter(
+			(c) => c.icon === "🚀" || c.icon === "⚡" || c.icon === "✅",
+		).length,
+		dateFnsWins: allComparisons.filter((c) => c.icon === "⚠️" || c.icon === "🐌")
+			.length,
+		ties: allComparisons.filter((c) => c.icon === "🤝").length,
+		datezoneOnly: allComparisons.filter((c) => c.icon === "🔥").length,
 	};
 
 	markdown += `## 📈 Summary
@@ -236,6 +325,8 @@ const reportPath = "./reports/sample-comparison-report.md";
 writeFileSync(reportPath, markdown);
 
 console.log(`🎯 Sample comparison report generated: ${reportPath}`);
-console.log("\nThis demonstrates the formatting that the real benchmark tool will produce!");
+console.log(
+	"\nThis demonstrates the formatting that the real benchmark tool will produce!",
+);
 console.log("Run 'bun run compare' to see the actual mitata output, then");
-console.log("run 'bun run report' to generate a formatted version like this."); 
+console.log("run 'bun run report' to generate a formatted version like this.");

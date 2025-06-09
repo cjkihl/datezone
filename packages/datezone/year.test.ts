@@ -1,12 +1,12 @@
 import { describe, expect, test } from "bun:test";
 import {
+	addYears,
+	endOfYear,
+	getDaysInYear,
 	getYear,
 	isLeapYear,
 	startOfYear,
-	endOfYear,
-	addYears,
 	subYears,
-	getDaysInYear,
 } from "./year";
 
 const TEST_TIMEZONE = "America/New_York";
@@ -25,8 +25,8 @@ describe("year functions", () => {
 			const timestamp = 1672513200000; // Dec 31, 2022 19:00:00 UTC
 			expect(getYear(timestamp, TEST_TIMEZONE)).toBe(2022);
 			expect(getYear(timestamp, UTC_TIMEZONE)).toBe(2022);
-			
-			// Jan 1, 2023 06:00:00 UTC = Jan 1, 2023 01:00:00 EST  
+
+			// Jan 1, 2023 06:00:00 UTC = Jan 1, 2023 01:00:00 EST
 			const timestampNewYear = 1672549200000;
 			expect(getYear(timestampNewYear, TEST_TIMEZONE)).toBe(2023);
 			expect(getYear(timestampNewYear, UTC_TIMEZONE)).toBe(2023);
@@ -47,7 +47,7 @@ describe("year functions", () => {
 			expect(isLeapYear({ year: 2020 }, UTC_TIMEZONE)).toBe(true);
 			expect(isLeapYear({ year: 2000 }, UTC_TIMEZONE)).toBe(true);
 			expect(isLeapYear({ year: 1600 }, UTC_TIMEZONE)).toBe(true);
-			
+
 			// Non-leap years
 			expect(isLeapYear({ year: 2021 }, UTC_TIMEZONE)).toBe(false);
 			expect(isLeapYear({ year: 1900 }, UTC_TIMEZONE)).toBe(false);
@@ -58,7 +58,7 @@ describe("year functions", () => {
 			// Feb 29, 2020 (leap year)
 			const leapYearTs = 1583020800000;
 			expect(isLeapYear(leapYearTs, UTC_TIMEZONE)).toBe(true);
-			
+
 			// Feb 28, 2021 (non-leap year)
 			const nonLeapYearTs = 1614470400000;
 			expect(isLeapYear(nonLeapYearTs, UTC_TIMEZONE)).toBe(false);
@@ -139,7 +139,7 @@ describe("year functions", () => {
 	describe("addYears", () => {
 		test("should add years to timestamp", () => {
 			// Jan 15, 2020 10:30:45.123 UTC
-			const timestamp = 1579087845123; 
+			const timestamp = 1579087845123;
 			const result = addYears(timestamp, 3, UTC_TIMEZONE);
 			const date = new Date(result);
 			expect(date.getUTCFullYear()).toBe(2023);
@@ -227,8 +227,8 @@ describe("year functions", () => {
 			// Some date in 2020 (leap year)
 			const timestamp2020 = 1583020800000;
 			expect(getDaysInYear(timestamp2020, UTC_TIMEZONE)).toBe(366);
-			
-			// Some date in 2021 (non-leap year)  
+
+			// Some date in 2021 (non-leap year)
 			const timestamp2021 = 1614470400000;
 			expect(getDaysInYear(timestamp2021, UTC_TIMEZONE)).toBe(365);
 		});
@@ -266,7 +266,7 @@ describe("year functions", () => {
 			// instead of making expensive timezone calculations
 			const year2000 = { year: 2000 };
 			const year1900 = { year: 1900 };
-			
+
 			// Both should work correctly without expensive timezone operations
 			expect(getDaysInYear(year2000, UTC_TIMEZONE)).toBe(366); // Leap year
 			expect(getDaysInYear(year1900, UTC_TIMEZONE)).toBe(365); // Not leap year

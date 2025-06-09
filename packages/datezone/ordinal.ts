@@ -49,13 +49,13 @@ function getOrdinalSuffix(locale: string, rule: string): string {
 	if (ordinalSuffixes[locale]?.[rule]) {
 		return ordinalSuffixes[locale][rule];
 	}
-	
+
 	// Try language part of locale (e.g., 'en' from 'en-US')
-	const language = locale.split('-')[0];
+	const language = locale.split("-")[0];
 	if (language && language !== locale && ordinalSuffixes[language]?.[rule]) {
 		return ordinalSuffixes[language][rule];
 	}
-	
+
 	// Fall back to empty string for unsupported locales
 	return "";
 }

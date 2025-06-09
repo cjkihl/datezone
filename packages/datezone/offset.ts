@@ -15,7 +15,10 @@ let lastOffsetCache: OffsetCache | null = null;
  * Positive if the zone is ahead of UTC, negative if behind.
  * Uses a per-hour cache for performance.
  */
-export function getUTCtoTimezoneOffsetMinutes(ts: number, zone: TimeZone): number {
+export function getUTCtoTimezoneOffsetMinutes(
+	ts: number,
+	zone: TimeZone,
+): number {
 	if (zone === "Etc/UTC" || zone === "UTC") return 0;
 
 	const hourStart = Math.floor(ts / HOUR_MS) * HOUR_MS;

@@ -1,4 +1,4 @@
-import { describe, it, expect } from "bun:test";
+import { describe, expect, it } from "bun:test";
 import { formatOrdinal } from "./ordinal";
 
 describe("formatOrdinal", () => {
@@ -179,7 +179,9 @@ describe("formatOrdinal", () => {
 			for (let i = 11; i <= 13; i++) {
 				expect(formatOrdinal(i, "en")).toBe(`${i}th`);
 				expect(formatOrdinal(i + 100, "en")).toBe(`${i + 100}th`);
-				expect(formatOrdinal(i + 1000, "en")).toBe(`${(i + 1000).toLocaleString("en")}th`);
+				expect(formatOrdinal(i + 1000, "en")).toBe(
+					`${(i + 1000).toLocaleString("en")}th`,
+				);
 			}
 		});
 	});
@@ -196,15 +198,15 @@ describe("formatOrdinal", () => {
 			}
 
 			// All results should be consistent
-			expect(results.filter(r => r === "1st")).toHaveLength(5);
-			expect(results.filter(r => r === "2e")).toHaveLength(5);
-			expect(results.filter(r => r === "3.")).toHaveLength(5);
+			expect(results.filter((r) => r === "1st")).toHaveLength(5);
+			expect(results.filter((r) => r === "2e")).toHaveLength(5);
+			expect(results.filter((r) => r === "3.")).toHaveLength(5);
 		});
 
 		it("should work with multiple different locales", () => {
 			const locales = ["en", "fr", "es", "de", "it", "pt", "nl"];
-			const results = locales.map(locale => formatOrdinal(1, locale));
-			
+			const results = locales.map((locale) => formatOrdinal(1, locale));
+
 			expect(results).toEqual(["1st", "1er", "1º", "1.", "1º", "1º", "1e"]);
 		});
 	});

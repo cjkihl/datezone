@@ -494,7 +494,8 @@ group("Formatting Operations", () => {
 // Comparison operations
 group("Date Comparison Operations", () => {
 	bench("datezone: isBefore", function* () {
-		yield () => do_not_optimize(dzIsBefore(testTimestamp, testTimestamp2, testTimezone));
+		yield () =>
+			do_not_optimize(dzIsBefore(testTimestamp, testTimestamp2, testTimezone));
 	});
 
 	bench("date-fns: isBefore (no timezone)", function* () {
@@ -504,7 +505,8 @@ group("Date Comparison Operations", () => {
 	});
 
 	bench("datezone: isAfter", function* () {
-		yield () => do_not_optimize(dzIsAfter(testTimestamp, testTimestamp2, testTimezone));
+		yield () =>
+			do_not_optimize(dzIsAfter(testTimestamp, testTimestamp2, testTimezone));
 	});
 
 	bench("date-fns: isAfter (no timezone)", function* () {
@@ -514,7 +516,8 @@ group("Date Comparison Operations", () => {
 	});
 
 	bench("datezone: isEqual", function* () {
-		yield () => do_not_optimize(dzIsEqual(testTimestamp, testTimestamp, testTimezone));
+		yield () =>
+			do_not_optimize(dzIsEqual(testTimestamp, testTimestamp, testTimezone));
 	});
 
 	bench("date-fns: isEqual (no timezone)", function* () {
@@ -524,7 +527,8 @@ group("Date Comparison Operations", () => {
 	});
 
 	bench("datezone: isSameDay", function* () {
-		yield () => do_not_optimize(dzIsSameDay(testTimestamp, testTimestamp2, testTimezone));
+		yield () =>
+			do_not_optimize(dzIsSameDay(testTimestamp, testTimestamp2, testTimezone));
 	});
 
 	bench("date-fns: isSameDay (no timezone)", function* () {
@@ -534,7 +538,10 @@ group("Date Comparison Operations", () => {
 	});
 
 	bench("datezone: isSameWeek", function* () {
-		yield () => do_not_optimize(dzIsSameWeek(testTimestamp, testTimestamp2, testTimezone));
+		yield () =>
+			do_not_optimize(
+				dzIsSameWeek(testTimestamp, testTimestamp2, testTimezone),
+			);
 	});
 
 	bench("date-fns: isSameWeek (no timezone)", function* () {
@@ -544,7 +551,10 @@ group("Date Comparison Operations", () => {
 	});
 
 	bench("datezone: isSameMonth", function* () {
-		yield () => do_not_optimize(dzIsSameMonth(testTimestamp, testTimestamp2, testTimezone));
+		yield () =>
+			do_not_optimize(
+				dzIsSameMonth(testTimestamp, testTimestamp2, testTimezone),
+			);
 	});
 
 	bench("date-fns: isSameMonth (no timezone)", function* () {
@@ -554,7 +564,10 @@ group("Date Comparison Operations", () => {
 	});
 
 	bench("datezone: isSameYear", function* () {
-		yield () => do_not_optimize(dzIsSameYear(testTimestamp, testTimestamp2, testTimezone));
+		yield () =>
+			do_not_optimize(
+				dzIsSameYear(testTimestamp, testTimestamp2, testTimezone),
+			);
 	});
 
 	bench("date-fns: isSameYear (no timezone)", function* () {

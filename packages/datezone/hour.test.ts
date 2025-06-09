@@ -1,22 +1,22 @@
 import { describe, expect, it } from "bun:test";
-import { 
-	get12Hour, 
-	get24Hour, 
-	getHour, 
-	addHours, 
-	subHours,
-	startOfHour,
-	endOfHour,
-	startOfMinute,
-	endOfMinute,
-	startOfSecond,
-	endOfSecond,
-	addMinutes,
-	subMinutes,
-	addSeconds,
-	subSeconds,
+import {
+	addHours,
 	addMilliseconds,
-	subMilliseconds
+	addMinutes,
+	addSeconds,
+	endOfHour,
+	endOfMinute,
+	endOfSecond,
+	get12Hour,
+	get24Hour,
+	getHour,
+	startOfHour,
+	startOfMinute,
+	startOfSecond,
+	subHours,
+	subMilliseconds,
+	subMinutes,
+	subSeconds,
 } from "./hour";
 
 describe("Hour Functions", () => {
@@ -59,7 +59,9 @@ describe("Hour Functions", () => {
 	describe("getHour", () => {
 		it("should return same as get24Hour", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 0)).getTime();
-			expect(getHour(timestamp, "Etc/UTC")).toBe(get24Hour(timestamp, "Etc/UTC"));
+			expect(getHour(timestamp, "Etc/UTC")).toBe(
+				get24Hour(timestamp, "Etc/UTC"),
+			);
 		});
 	});
 
@@ -98,16 +100,16 @@ describe("Hour Functions", () => {
 			// Test adding hours across timezone boundaries
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 20, 0, 0)).getTime(); // 8:00 PM UTC
 			const result = addHours(timestamp, 3, "Asia/Tokyo"); // Add 3 hours in Tokyo time
-			
+
 			// In Tokyo, 8:00 PM UTC is 5:00 AM the next day (UTC+9)
 			// Adding 3 hours makes it 8:00 AM Tokyo time
 			const parts = new Intl.DateTimeFormat("en-US", {
 				timeZone: "Asia/Tokyo",
 				hour: "2-digit",
-				hour12: false
+				hour12: false,
 			}).formatToParts(result);
-			
-			const hour = parts.find(p => p.type === "hour")?.value;
+
+			const hour = parts.find((p) => p.type === "hour")?.value;
 			expect(hour).toBe("08");
 		});
 
@@ -116,15 +118,15 @@ describe("Hour Functions", () => {
 			// 2024-03-10 is when DST starts in US
 			const beforeDST = new Date(Date.UTC(2024, 2, 10, 6, 0, 0)).getTime(); // 1:00 AM EST (UTC-5)
 			const result = addHours(beforeDST, 2, "America/New_York");
-			
+
 			// Should be 4:00 AM EDT (UTC-4) due to DST transition
 			const parts = new Intl.DateTimeFormat("en-US", {
 				timeZone: "America/New_York",
 				hour: "2-digit",
-				hour12: false
+				hour12: false,
 			}).formatToParts(result);
-			
-			const hour = parts.find(p => p.type === "hour")?.value;
+
+			const hour = parts.find((p) => p.type === "hour")?.value;
 			expect(hour).toBe("04");
 		});
 
@@ -139,7 +141,9 @@ describe("Hour Functions", () => {
 		});
 
 		it("should preserve minutes and seconds", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 10, 30, 45, 123)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 10, 30, 45, 123),
+			).getTime();
 			const result = addHours(timestamp, 2, "Etc/UTC");
 			const resultDate = new Date(result);
 			expect(resultDate.getUTCMinutes()).toBe(30);
@@ -185,22 +189,24 @@ describe("Hour Functions", () => {
 			// 2024-11-03 is when DST ends in US
 			const beforeDSTEnd = new Date(Date.UTC(2024, 10, 3, 7, 0, 0)).getTime(); // 3:00 AM EST (UTC-5)
 			const result = subHours(beforeDSTEnd, 2, "America/New_York");
-			
+
 			// Should be 12:00 AM EST (UTC-5) due to DST transition
 			const parts = new Intl.DateTimeFormat("en-US", {
 				timeZone: "America/New_York",
 				hour: "2-digit",
-				hour12: false
+				hour12: false,
 			}).formatToParts(result);
-			
-			const hour = parts.find(p => p.type === "hour")?.value;
+
+			const hour = parts.find((p) => p.type === "hour")?.value;
 			expect(hour).toBe("00");
 		});
 	});
 
 	describe("startOfHour", () => {
 		it("should return start of hour (00:00.000)", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42, 123)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 35, 42, 123),
+			).getTime();
 			const result = startOfHour(timestamp, "Etc/UTC");
 			const resultDate = new Date(result);
 			expect(resultDate.getUTCHours()).toBe(14);
@@ -217,11 +223,11 @@ describe("Hour Functions", () => {
 				hour: "2-digit",
 				minute: "2-digit",
 				second: "2-digit",
-				hour12: false
+				hour12: false,
 			}).formatToParts(result);
-			
-			const minute = parts.find(p => p.type === "minute")?.value;
-			const second = parts.find(p => p.type === "second")?.value;
+
+			const minute = parts.find((p) => p.type === "minute")?.value;
+			const second = parts.find((p) => p.type === "second")?.value;
 			expect(minute).toBe("00");
 			expect(second).toBe("00");
 		});
@@ -238,7 +244,9 @@ describe("Hour Functions", () => {
 
 	describe("endOfHour", () => {
 		it("should return end of hour (59:59.999)", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42, 123)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 35, 42, 123),
+			).getTime();
 			const result = endOfHour(timestamp, "Etc/UTC");
 			const resultDate = new Date(result);
 			expect(resultDate.getUTCHours()).toBe(14);
@@ -255,11 +263,11 @@ describe("Hour Functions", () => {
 				hour: "2-digit",
 				minute: "2-digit",
 				second: "2-digit",
-				hour12: false
+				hour12: false,
 			}).formatToParts(result);
-			
-			const minute = parts.find(p => p.type === "minute")?.value;
-			const second = parts.find(p => p.type === "second")?.value;
+
+			const minute = parts.find((p) => p.type === "minute")?.value;
+			const second = parts.find((p) => p.type === "second")?.value;
 			expect(minute).toBe("59");
 			expect(second).toBe("59");
 		});
@@ -276,7 +284,9 @@ describe("Hour Functions", () => {
 
 	describe("startOfMinute", () => {
 		it("should return start of minute (00.000)", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42, 123)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 35, 42, 123),
+			).getTime();
 			const result = startOfMinute(timestamp, "Etc/UTC");
 			const resultDate = new Date(result);
 			expect(resultDate.getUTCHours()).toBe(14);
@@ -293,17 +303,19 @@ describe("Hour Functions", () => {
 				hour: "2-digit",
 				minute: "2-digit",
 				second: "2-digit",
-				hour12: false
+				hour12: false,
 			}).formatToParts(result);
-			
-			const second = parts.find(p => p.type === "second")?.value;
+
+			const second = parts.find((p) => p.type === "second")?.value;
 			expect(second).toBe("00");
 		});
 	});
 
 	describe("endOfMinute", () => {
 		it("should return end of minute (59.999)", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42, 123)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 35, 42, 123),
+			).getTime();
 			const result = endOfMinute(timestamp, "Etc/UTC");
 			const resultDate = new Date(result);
 			expect(resultDate.getUTCHours()).toBe(14);
@@ -320,17 +332,19 @@ describe("Hour Functions", () => {
 				hour: "2-digit",
 				minute: "2-digit",
 				second: "2-digit",
-				hour12: false
+				hour12: false,
 			}).formatToParts(result);
-			
-			const second = parts.find(p => p.type === "second")?.value;
+
+			const second = parts.find((p) => p.type === "second")?.value;
 			expect(second).toBe("59");
 		});
 	});
 
 	describe("startOfSecond", () => {
 		it("should return start of second (000ms)", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42, 123)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 35, 42, 123),
+			).getTime();
 			const result = startOfSecond(timestamp, "Etc/UTC");
 			const resultDate = new Date(result);
 			expect(resultDate.getUTCHours()).toBe(14);
@@ -340,7 +354,9 @@ describe("Hour Functions", () => {
 		});
 
 		it("should handle different timezones", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42, 123)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 35, 42, 123),
+			).getTime();
 			const result = startOfSecond(timestamp, "Asia/Tokyo");
 			const resultDate = new Date(result);
 			expect(resultDate.getUTCMilliseconds()).toBe(0);
@@ -349,7 +365,9 @@ describe("Hour Functions", () => {
 
 	describe("endOfSecond", () => {
 		it("should return end of second (999ms)", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42, 123)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 35, 42, 123),
+			).getTime();
 			const result = endOfSecond(timestamp, "Etc/UTC");
 			const resultDate = new Date(result);
 			expect(resultDate.getUTCHours()).toBe(14);
@@ -359,7 +377,9 @@ describe("Hour Functions", () => {
 		});
 
 		it("should handle different timezones", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42, 123)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 35, 42, 123),
+			).getTime();
 			const result = endOfSecond(timestamp, "Asia/Tokyo");
 			const resultDate = new Date(result);
 			expect(resultDate.getUTCMilliseconds()).toBe(999);
@@ -401,7 +421,9 @@ describe("Hour Functions", () => {
 		});
 
 		it("should preserve seconds and milliseconds", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 123)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 30, 45, 123),
+			).getTime();
 			const result = addMinutes(timestamp, 15, "Etc/UTC");
 			const resultDate = new Date(result);
 			expect(resultDate.getUTCSeconds()).toBe(45);
@@ -412,16 +434,16 @@ describe("Hour Functions", () => {
 			// Test during DST transition
 			const beforeDST = new Date(Date.UTC(2024, 2, 10, 6, 30, 0)).getTime(); // 1:30 AM EST
 			const result = addMinutes(beforeDST, 90, "America/New_York"); // Add 90 minutes
-			
+
 			const parts = new Intl.DateTimeFormat("en-US", {
 				timeZone: "America/New_York",
 				hour: "2-digit",
 				minute: "2-digit",
-				hour12: false
+				hour12: false,
 			}).formatToParts(result);
-			
-			const hour = parts.find(p => p.type === "hour")?.value;
-			const minute = parts.find(p => p.type === "minute")?.value;
+
+			const hour = parts.find((p) => p.type === "hour")?.value;
+			const minute = parts.find((p) => p.type === "minute")?.value;
 			expect(hour).toBe("04"); // Should account for DST
 			expect(minute).toBe("00");
 		});
@@ -479,7 +501,9 @@ describe("Hour Functions", () => {
 		});
 
 		it("should preserve milliseconds", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 15, 123)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 30, 15, 123),
+			).getTime();
 			const result = addSeconds(timestamp, 30, "Etc/UTC");
 			const resultDate = new Date(result);
 			expect(resultDate.getUTCMilliseconds()).toBe(123);
@@ -522,14 +546,18 @@ describe("Hour Functions", () => {
 
 	describe("addMilliseconds", () => {
 		it("should add milliseconds correctly", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 123)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 30, 45, 123),
+			).getTime();
 			const result = addMilliseconds(timestamp, 500);
 			const resultDate = new Date(result);
 			expect(resultDate.getUTCMilliseconds()).toBe(623);
 		});
 
 		it("should handle second overflow", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 800)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 30, 45, 800),
+			).getTime();
 			const result = addMilliseconds(timestamp, 500);
 			const resultDate = new Date(result);
 			expect(resultDate.getUTCSeconds()).toBe(46);
@@ -537,7 +565,9 @@ describe("Hour Functions", () => {
 		});
 
 		it("should handle negative milliseconds", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 500)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 30, 45, 500),
+			).getTime();
 			const result = addMilliseconds(timestamp, -200);
 			const resultDate = new Date(result);
 			expect(resultDate.getUTCMilliseconds()).toBe(300);
@@ -560,12 +590,12 @@ describe("Hour Functions", () => {
 		it("should be performant (no timezone calculation)", () => {
 			const timestamp = Date.now();
 			const start = performance.now();
-			
+
 			// Run multiple operations
 			for (let i = 0; i < 1000; i++) {
 				addMilliseconds(timestamp, i);
 			}
-			
+
 			const end = performance.now();
 			expect(end - start).toBeLessThan(10); // Should be very fast since no timezone calc
 		});
@@ -573,21 +603,27 @@ describe("Hour Functions", () => {
 
 	describe("subMilliseconds", () => {
 		it("should subtract milliseconds correctly", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 623)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 30, 45, 623),
+			).getTime();
 			const result = subMilliseconds(timestamp, 500);
 			const resultDate = new Date(result);
 			expect(resultDate.getUTCMilliseconds()).toBe(123);
 		});
 
 		it("should be equivalent to addMilliseconds with negative value", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 500)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 30, 45, 500),
+			).getTime();
 			const subResult = subMilliseconds(timestamp, 200);
 			const addResult = addMilliseconds(timestamp, -200);
 			expect(subResult).toBe(addResult);
 		});
 
 		it("should handle second underflow", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 200)).getTime();
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 30, 45, 200),
+			).getTime();
 			const result = subMilliseconds(timestamp, 500);
 			const resultDate = new Date(result);
 			expect(resultDate.getUTCSeconds()).toBe(44);
@@ -597,12 +633,12 @@ describe("Hour Functions", () => {
 		it("should be performant (no timezone calculation)", () => {
 			const timestamp = Date.now();
 			const start = performance.now();
-			
+
 			// Run multiple operations
 			for (let i = 0; i < 1000; i++) {
 				subMilliseconds(timestamp, i);
 			}
-			
+
 			const end = performance.now();
 			expect(end - start).toBeLessThan(10); // Should be very fast since no timezone calc
 		});
@@ -634,19 +670,21 @@ describe("Hour Functions", () => {
 		it("should handle different timezone edge cases", () => {
 			// Test with extreme timezones
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 12, 0, 0)).getTime();
-			
+
 			// Pacific/Apia is UTC+13 (far ahead)
 			const futureResult = addHours(timestamp, 1, "Pacific/Apia");
 			expect(typeof futureResult).toBe("number");
-			
+
 			// Pacific/Midway is UTC-11 (furthest behind)
 			const pastResult = addHours(timestamp, 1, "Pacific/Midway");
 			expect(typeof pastResult).toBe("number");
 		});
 
 		it("should handle zero additions for all functions", () => {
-			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 45, 123)).getTime();
-			
+			const timestamp = new Date(
+				Date.UTC(2024, 0, 1, 14, 30, 45, 123),
+			).getTime();
+
 			expect(addHours(timestamp, 0, "Etc/UTC")).toBe(timestamp);
 			expect(addMinutes(timestamp, 0, "Etc/UTC")).toBe(timestamp);
 			expect(addSeconds(timestamp, 0, "Etc/UTC")).toBe(timestamp);
@@ -655,11 +693,11 @@ describe("Hour Functions", () => {
 
 		it("should handle very large time units", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 0, 0, 0)).getTime();
-			
+
 			// Test large minute addition (365 days * 24 hours * 60 minutes = 525600, but 2024 is leap year)
 			const minuteResult = addMinutes(timestamp, 527040, "Etc/UTC"); // 1 leap year in minutes (366 * 24 * 60)
 			expect(new Date(minuteResult).getUTCFullYear()).toBe(2025);
-			
+
 			// Test large second addition
 			const secondResult = addSeconds(timestamp, 31622400, "Etc/UTC"); // 1 leap year in seconds (366 * 24 * 60 * 60)
 			expect(new Date(secondResult).getUTCFullYear()).toBe(2025);

@@ -10,13 +10,21 @@ describe("getOffset", () => {
 
 	it("returns positive for UTC to Asia/Tokyo", () => {
 		const d = new Date(Date.UTC(2024, 0, 1, 0, 0, 0));
-		const offset = getTimezoneOffsetMinutes(d.getTime(), "Etc/UTC", "Asia/Tokyo");
+		const offset = getTimezoneOffsetMinutes(
+			d.getTime(),
+			"Etc/UTC",
+			"Asia/Tokyo",
+		);
 		expect(offset).toBeGreaterThan(0);
 	});
 
 	it("returns negative for Asia/Tokyo to UTC", () => {
 		const d = new Date(Date.UTC(2024, 0, 1, 0, 0, 0));
-		const offset = getTimezoneOffsetMinutes(d.getTime(), "Asia/Tokyo", "Etc/UTC");
+		const offset = getTimezoneOffsetMinutes(
+			d.getTime(),
+			"Asia/Tokyo",
+			"Etc/UTC",
+		);
 		expect(offset).toBeLessThan(0);
 	});
 

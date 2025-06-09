@@ -8,10 +8,10 @@ import {
 	endOfDay as dzEndOfDay,
 	endOfMonth as dzEndOfMonth,
 	formatToParts as dzFormatToParts,
+	getTimezoneOffsetMinutes as dzGetTimezoneOffsetMinutes,
 	startOfDay as dzStartOfDay,
 	startOfMonth as dzStartOfMonth,
 	wallTimeToUTC as dzWallTimeToUTC,
-	getTimezoneOffsetMinutes as dzGetTimezoneOffsetMinutes,
 } from "datezone";
 
 // Import date-fns v4 functions
@@ -44,10 +44,17 @@ const dzAddYears = (ts: number, years: number, timeZone: TimeZone): number => {
 const testTimestamp = new Date("2024-06-15T15:45:30.123Z").getTime();
 const testDate = new Date(testTimestamp);
 const testTimezone: TimeZone = "America/New_York";
-const testTimezones: TimeZone[] = ["UTC", "America/New_York", "Europe/London", "Asia/Tokyo"];
+const testTimezones: TimeZone[] = [
+	"UTC",
+	"America/New_York",
+	"Europe/London",
+	"Asia/Tokyo",
+];
 
 console.log("🚀 Comprehensive Datezone vs Date-fns v4 Comparison");
-console.log(`Test timestamp: ${testTimestamp} (${new Date(testTimestamp).toISOString()})`);
+console.log(
+	`Test timestamp: ${testTimestamp} (${new Date(testTimestamp).toISOString()})`,
+);
 console.log(`Test timezone: ${testTimezone}`);
 console.log("Date-fns version: ^4.1.0 with @date-fns/tz ^1.2.0\n");
 
@@ -446,7 +453,10 @@ group("Datezone-Specific Operations", () => {
 	});
 
 	bench("datezone: getTimezoneOffsetMinutes", function* () {
-		yield () => do_not_optimize(dzGetTimezoneOffsetMinutes(testTimestamp, "UTC", testTimezone));
+		yield () =>
+			do_not_optimize(
+				dzGetTimezoneOffsetMinutes(testTimestamp, "UTC", testTimezone),
+			);
 	});
 
 	bench("date-fns: timezone offset equivalent", function* () {
@@ -459,4 +469,4 @@ group("Datezone-Specific Operations", () => {
 });
 
 // Run the comprehensive benchmark
-await run(); 
+await run();

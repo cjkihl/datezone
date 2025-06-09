@@ -9,7 +9,10 @@ const YEAR_MONTH_OPTS = { year: "numeric", month: "2-digit" } as const;
 
 type OptionsOrTimestamp = YearMonthOptions | number;
 
-function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): YearMonthOptions {
+function getOptions(
+	ts: OptionsOrTimestamp,
+	timeZone: TimeZone,
+): YearMonthOptions {
 	const dt =
 		typeof ts === "number" ? formatToParts(ts, timeZone, YEAR_MONTH_OPTS) : ts;
 	return dt;
@@ -21,7 +24,10 @@ function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): YearMonthOption
  * @param {TimeZone} timeZone - The timezone to use.
  * @returns {number} The timestamp representing the start of the month in UTC.
  */
-export function startOfMonth(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
+export function startOfMonth(
+	ts: OptionsOrTimestamp,
+	timeZone: TimeZone,
+): number {
 	const { year, month } = getOptions(ts, timeZone);
 	return wallTimeToUTC(year, month, 1, 0, 0, 0, 0, timeZone);
 }
@@ -134,7 +140,10 @@ export function endOfNthMonth(
  * @param timeZone - The timezone to use.
  * @returns The timestamp representing the start of the next month in UTC.
  */
-export function startOfNextMonth(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
+export function startOfNextMonth(
+	ts: OptionsOrTimestamp,
+	timeZone: TimeZone,
+): number {
 	return startOfNthMonth(ts, 1, timeZone);
 }
 
@@ -144,7 +153,10 @@ export function startOfNextMonth(ts: OptionsOrTimestamp, timeZone: TimeZone): nu
  * @param timeZone - The timezone to use.
  * @returns The timestamp representing the end of the next month in UTC.
  */
-export function endOfNextMonth(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
+export function endOfNextMonth(
+	ts: OptionsOrTimestamp,
+	timeZone: TimeZone,
+): number {
 	return startOfNthMonth(ts, 2, timeZone) - 1;
 }
 
@@ -154,11 +166,17 @@ export function endOfNextMonth(ts: OptionsOrTimestamp, timeZone: TimeZone): numb
  * @param timeZone - The timezone to use.
  * @returns The timestamp representing the start of the previous month in UTC.
  */
-export function startOfPrevMonth(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
+export function startOfPrevMonth(
+	ts: OptionsOrTimestamp,
+	timeZone: TimeZone,
+): number {
 	return startOfNthMonth(ts, -1, timeZone);
 }
 
-export function endOfPrevMonth(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
+export function endOfPrevMonth(
+	ts: OptionsOrTimestamp,
+	timeZone: TimeZone,
+): number {
 	return startOfNthMonth(ts, 0, timeZone) - 1;
 }
 
@@ -171,7 +189,10 @@ const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
  * @param year The year.
  * @returns The number of days in the month.
  */
-export function daysInMonth(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
+export function daysInMonth(
+	ts: OptionsOrTimestamp,
+	timeZone: TimeZone,
+): number {
 	const { year, month } = getOptions(ts, timeZone);
 	const maxDay = DAYS_IN_MONTH[month - 1];
 	if (maxDay === undefined) {
@@ -231,7 +252,6 @@ export function getMonthName(
 	});
 	return fmt.format(new Date(Date.UTC(2000, month, 1)));
 }
-
 
 /**
  * Returns the quarter of the year (1-4) for the given month.

@@ -1,8 +1,12 @@
-import { dayOfWeek, formatToParts, type TimeZone } from "./index.pub";
 import { WEEK } from "./constants";
+import { type TimeZone, dayOfWeek, formatToParts } from "./index.pub";
 import { wallTimeToUTC } from "./utils";
 
-const WEEK_OPTS = { year: "numeric", month: "2-digit", day: "2-digit" } as const;
+const WEEK_OPTS = {
+	year: "numeric",
+	month: "2-digit",
+	day: "2-digit",
+} as const;
 type OptionsOrTimestamp = { year: number; month: number; day: number } | number;
 type WeekOptions = { year: number; month: number; day: number };
 
@@ -10,15 +14,15 @@ type WeekOptions = { year: number; month: number; day: number };
  * Enum for week start days
  */
 export enum WeekStartsOn {
-    SUNDAY = 0,    // US style
-    MONDAY = 1,    // ISO 8601 / Europe style
-    SATURDAY = 6   // Middle East style
+	SUNDAY = 0, // US style
+	MONDAY = 1, // ISO 8601 / Europe style
+	SATURDAY = 6, // Middle East style
 }
 
 function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): WeekOptions {
-    const dt =
-        typeof ts === "number" ? formatToParts(ts, timeZone, WEEK_OPTS) : ts;
-    return dt;
+	const dt =
+		typeof ts === "number" ? formatToParts(ts, timeZone, WEEK_OPTS) : ts;
+	return dt;
 }
 
 /**
@@ -60,20 +64,29 @@ export function getISOWeekYear(
  * @returns The timestamp of the start of the week
  */
 export function startOfWeek(
-    date: OptionsOrTimestamp, 
-    timeZone: TimeZone, 
-    weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY
+	date: OptionsOrTimestamp,
+	timeZone: TimeZone,
+	weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY,
 ): number {
-    const dt = getOptions(date, timeZone);
-    const dayNum = dayOfWeek(dt, timeZone); // 1=Monday, 7=Sunday
-    
-    // Convert ISO day number (1=Monday, 7=Sunday) to JS day number (0=Sunday, 6=Saturday)
-    const jsDay = dayNum === 7 ? 0 : dayNum;
-    
-    // Calculate days to subtract to reach the week start
-    const daysFromWeekStart = (jsDay - weekStartsOn + 7) % 7;
-    
-    return wallTimeToUTC(dt.year, dt.month, dt.day - daysFromWeekStart, 0, 0, 0, 0, timeZone);
+	const dt = getOptions(date, timeZone);
+	const dayNum = dayOfWeek(dt, timeZone); // 1=Monday, 7=Sunday
+
+	// Convert ISO day number (1=Monday, 7=Sunday) to JS day number (0=Sunday, 6=Saturday)
+	const jsDay = dayNum === 7 ? 0 : dayNum;
+
+	// Calculate days to subtract to reach the week start
+	const daysFromWeekStart = (jsDay - weekStartsOn + 7) % 7;
+
+	return wallTimeToUTC(
+		dt.year,
+		dt.month,
+		dt.day - daysFromWeekStart,
+		0,
+		0,
+		0,
+		0,
+		timeZone,
+	);
 }
 
 /**
@@ -84,21 +97,30 @@ export function startOfWeek(
  * @returns The timestamp of the end of the week
  */
 export function endOfWeek(
-    date: OptionsOrTimestamp, 
-    timeZone: TimeZone, 
-    weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY
+	date: OptionsOrTimestamp,
+	timeZone: TimeZone,
+	weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY,
 ): number {
-    const dt = getOptions(date, timeZone);
-    const dayNum = dayOfWeek(dt, timeZone); // 1=Monday, 7=Sunday
-    
-    // Convert ISO day number (1=Monday, 7=Sunday) to JS day number (0=Sunday, 6=Saturday)
-    const jsDay = dayNum === 7 ? 0 : dayNum;
-    
-    // Calculate days to add to reach the week end
-    const weekEnd = (weekStartsOn + 6) % 7; // Last day of week
-    const daysToWeekEnd = (weekEnd - jsDay + 7) % 7;
-    
-    return wallTimeToUTC(dt.year, dt.month, dt.day + daysToWeekEnd, 23, 59, 59, 999, timeZone);
+	const dt = getOptions(date, timeZone);
+	const dayNum = dayOfWeek(dt, timeZone); // 1=Monday, 7=Sunday
+
+	// Convert ISO day number (1=Monday, 7=Sunday) to JS day number (0=Sunday, 6=Saturday)
+	const jsDay = dayNum === 7 ? 0 : dayNum;
+
+	// Calculate days to add to reach the week end
+	const weekEnd = (weekStartsOn + 6) % 7; // Last day of week
+	const daysToWeekEnd = (weekEnd - jsDay + 7) % 7;
+
+	return wallTimeToUTC(
+		dt.year,
+		dt.month,
+		dt.day + daysToWeekEnd,
+		23,
+		59,
+		59,
+		999,
+		timeZone,
+	);
 }
 
 /**
@@ -109,15 +131,31 @@ export function endOfWeek(
  * @param timeZone - The time zone
  * @returns The new timestamp
  */
-export function addWeeks(date: OptionsOrTimestamp, amount: number, timeZone: TimeZone): number {
-    // Performance optimization: if input is already a timestamp and timezone is UTC, 
-    // we can avoid expensive timezone calculations
-    if (typeof date === "number" && (timeZone === "UTC" || timeZone === "Etc/UTC")) {
-        return date + (amount * WEEK);
-    }
-    
-    const dt = getOptions(date, timeZone);
-    return wallTimeToUTC(dt.year, dt.month, dt.day + (amount * 7), 0, 0, 0, 0, timeZone);
+export function addWeeks(
+	date: OptionsOrTimestamp,
+	amount: number,
+	timeZone: TimeZone,
+): number {
+	// Performance optimization: if input is already a timestamp and timezone is UTC,
+	// we can avoid expensive timezone calculations
+	if (
+		typeof date === "number" &&
+		(timeZone === "UTC" || timeZone === "Etc/UTC")
+	) {
+		return date + amount * WEEK;
+	}
+
+	const dt = getOptions(date, timeZone);
+	return wallTimeToUTC(
+		dt.year,
+		dt.month,
+		dt.day + amount * 7,
+		0,
+		0,
+		0,
+		0,
+		timeZone,
+	);
 }
 
 /**
@@ -128,8 +166,12 @@ export function addWeeks(date: OptionsOrTimestamp, amount: number, timeZone: Tim
  * @param timeZone - The time zone
  * @returns The new timestamp
  */
-export function subWeeks(date: OptionsOrTimestamp, amount: number, timeZone: TimeZone): number {
-    return addWeeks(date, -amount, timeZone);
+export function subWeeks(
+	date: OptionsOrTimestamp,
+	amount: number,
+	timeZone: TimeZone,
+): number {
+	return addWeeks(date, -amount, timeZone);
 }
 
 /**
@@ -139,8 +181,11 @@ export function subWeeks(date: OptionsOrTimestamp, amount: number, timeZone: Tim
  * @param timeZone - The time zone
  * @returns The timestamp of the start of the ISO week
  */
-export function startOfISOWeek(date: OptionsOrTimestamp, timeZone: TimeZone): number {
-    return startOfWeek(date, timeZone, WeekStartsOn.MONDAY);
+export function startOfISOWeek(
+	date: OptionsOrTimestamp,
+	timeZone: TimeZone,
+): number {
+	return startOfWeek(date, timeZone, WeekStartsOn.MONDAY);
 }
 
 /**
@@ -150,8 +195,11 @@ export function startOfISOWeek(date: OptionsOrTimestamp, timeZone: TimeZone): nu
  * @param timeZone - The time zone
  * @returns The timestamp of the end of the ISO week
  */
-export function endOfISOWeek(date: OptionsOrTimestamp, timeZone: TimeZone): number {
-    return endOfWeek(date, timeZone, WeekStartsOn.MONDAY);
+export function endOfISOWeek(
+	date: OptionsOrTimestamp,
+	timeZone: TimeZone,
+): number {
+	return endOfWeek(date, timeZone, WeekStartsOn.MONDAY);
 }
 
 /**
@@ -164,32 +212,32 @@ export function endOfISOWeek(date: OptionsOrTimestamp, timeZone: TimeZone): numb
  * @returns The number of weeks (4-6) needed to display the month
  */
 export function getWeeksInMonth(
-    date: OptionsOrTimestamp, 
-    timeZone: TimeZone, 
-    weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY
+	date: OptionsOrTimestamp,
+	timeZone: TimeZone,
+	weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY,
 ): number {
-    const dt = getOptions(date, timeZone);
-    
-    // Get first day of month and its day of week
-    const firstOfMonth = { year: dt.year, month: dt.month, day: 1 };
-    const firstDayOfWeek = dayOfWeek(firstOfMonth, timeZone); // 1=Monday, 7=Sunday
-    
-    // Convert ISO day number to JS day number
-    const firstJsDay = firstDayOfWeek === 7 ? 0 : firstDayOfWeek;
-    
-    // Get last day of month
-    const daysInMonth = new Date(dt.year, dt.month, 0).getDate(); // Using Date constructor trick
-    
-    // Calculate weeks needed
-    // Days from week start (0-6) for first day
-    const daysFromWeekStart = (firstJsDay - weekStartsOn + 7) % 7;
-    const firstWeekDays = 7 - daysFromWeekStart; // How many days in first week
-    
-    // Days after first week
-    const remainingDays = daysInMonth - firstWeekDays;
-    const fullWeeks = Math.floor(remainingDays / 7);
-    const extraDays = remainingDays % 7;
-    
-    // Total weeks = first partial week + full weeks + (optional final partial week)
-    return 1 + fullWeeks + (extraDays > 0 ? 1 : 0);
+	const dt = getOptions(date, timeZone);
+
+	// Get first day of month and its day of week
+	const firstOfMonth = { year: dt.year, month: dt.month, day: 1 };
+	const firstDayOfWeek = dayOfWeek(firstOfMonth, timeZone); // 1=Monday, 7=Sunday
+
+	// Convert ISO day number to JS day number
+	const firstJsDay = firstDayOfWeek === 7 ? 0 : firstDayOfWeek;
+
+	// Get last day of month
+	const daysInMonth = new Date(dt.year, dt.month, 0).getDate(); // Using Date constructor trick
+
+	// Calculate weeks needed
+	// Days from week start (0-6) for first day
+	const daysFromWeekStart = (firstJsDay - weekStartsOn + 7) % 7;
+	const firstWeekDays = 7 - daysFromWeekStart; // How many days in first week
+
+	// Days after first week
+	const remainingDays = daysInMonth - firstWeekDays;
+	const fullWeeks = Math.floor(remainingDays / 7);
+	const extraDays = remainingDays % 7;
+
+	// Total weeks = first partial week + full weeks + (optional final partial week)
+	return 1 + fullWeeks + (extraDays > 0 ? 1 : 0);
 }

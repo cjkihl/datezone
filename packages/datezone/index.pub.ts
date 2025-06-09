@@ -14,7 +14,6 @@ export * from "./offset";
 export * from "./format-parts";
 export * from "./compare";
 
-
 /**
  * Get the current local timezone,
  * This is the timezone of the browser or the server.

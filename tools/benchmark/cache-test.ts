@@ -1,16 +1,18 @@
-import { bench, do_not_optimize, group, run } from "mitata";
-import { formatToParts } from "datezone";
 import { TZDate } from "@date-fns/tz";
 import { format as fnsFormat } from "date-fns";
+import { formatToParts } from "datezone";
+import { bench, do_not_optimize, group, run } from "mitata";
 
 console.log("🎯 Datezone Cache Effectiveness Analysis");
-console.log("Testing if the formatter cache is actually utilized during benchmarks\n");
+console.log(
+	"Testing if the formatter cache is actually utilized during benchmarks\n",
+);
 
 const testTimestamp = new Date("2024-06-15T15:45:30.123Z").getTime();
 const testTimezone = "America/New_York";
 const formatOptions = {
 	year: "numeric" as const,
-	month: "2-digit" as const, 
+	month: "2-digit" as const,
 	day: "2-digit" as const,
 	hour: "2-digit" as const,
 	minute: "2-digit" as const,
@@ -27,16 +29,26 @@ console.timeEnd("First call (cache miss)");
 
 // Subsequent calls should hit cache
 console.time("Second call (cache hit)");
-const result2 = formatToParts(testTimestamp + 1000, testTimezone, formatOptions);
+const result2 = formatToParts(
+	testTimestamp + 1000,
+	testTimezone,
+	formatOptions,
+);
 console.timeEnd("Second call (cache hit)");
 
 console.time("Third call (cache hit)");
-const result3 = formatToParts(testTimestamp + 2000, testTimezone, formatOptions);
+const result3 = formatToParts(
+	testTimestamp + 2000,
+	testTimezone,
+	formatOptions,
+);
 console.timeEnd("Third call (cache hit)");
 
-console.log("Results are consistent:", 
-	JSON.stringify(result1) === JSON.stringify(result2) && 
-	JSON.stringify(result2) === JSON.stringify(result3));
+console.log(
+	"Results are consistent:",
+	JSON.stringify(result1) === JSON.stringify(result2) &&
+		JSON.stringify(result2) === JSON.stringify(result3),
+);
 
 console.log("\n=== Performance Comparison: Cold vs Warm Cache ===");
 
@@ -56,9 +68,11 @@ group("Cache Impact on Performance", () => {
 	bench("Warm: datezone formatToParts (cached)", function* () {
 		// Pre-warm the cache
 		formatToParts(testTimestamp, testTimezone, formatOptions);
-		
+
 		yield () => {
-			return do_not_optimize(formatToParts(testTimestamp, testTimezone, formatOptions));
+			return do_not_optimize(
+				formatToParts(testTimestamp, testTimezone, formatOptions),
+			);
 		};
 	});
 
@@ -77,11 +91,13 @@ group("High-Frequency Operations (Cache Benefits)", () => {
 	bench("datezone: 100 calls same format (cached)", function* () {
 		// Pre-warm
 		formatToParts(testTimestamp, testTimezone, formatOptions);
-		
+
 		yield () => {
 			const results = [];
 			for (let i = 0; i < 100; i++) {
-				results.push(formatToParts(testTimestamp + i * 1000, testTimezone, formatOptions));
+				results.push(
+					formatToParts(testTimestamp + i * 1000, testTimezone, formatOptions),
+				);
 			}
 			return do_not_optimize(results);
 		};
@@ -123,12 +139,14 @@ group("Multi-Timezone Cache Test", () => {
 		for (const tz of timezones) {
 			formatToParts(testTimestamp, tz, formatOptions);
 		}
-		
+
 		yield () => {
 			const results = [];
 			for (let i = 0; i < 25; i++) {
 				for (const tz of timezones) {
-					results.push(formatToParts(testTimestamp + i * 1000, tz, formatOptions));
+					results.push(
+						formatToParts(testTimestamp + i * 1000, tz, formatOptions),
+					);
 				}
 			}
 			return do_not_optimize(results);
@@ -160,6 +178,10 @@ await run();
 console.log(`\n${"=".repeat(60)}`);
 console.log("🎯 Cache Analysis Summary:");
 console.log("If datezone's cache is working effectively, you should see:");
-console.log("  • 'datezone cached' significantly faster than 'native no cache'");
-console.log("  • Bigger performance gap in high-frequency and multi-timezone tests");
-console.log("  • datezone competitive with or faster than date-fns"); 
+console.log(
+	"  • 'datezone cached' significantly faster than 'native no cache'",
+);
+console.log(
+	"  • Bigger performance gap in high-frequency and multi-timezone tests",
+);
+console.log("  • datezone competitive with or faster than date-fns");

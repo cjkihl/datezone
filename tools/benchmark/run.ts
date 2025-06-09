@@ -26,9 +26,9 @@ interface BenchContext {
 }
 
 // Helper function to add days (since it doesn't exist in datezone yet)
-		const addDays = (ts: number, days: number, _timeZone: string): number => {
-			return ts + days * DAY;
-		};
+const addDays = (ts: number, days: number, _timeZone: string): number => {
+	return ts + days * DAY;
+};
 
 // Test data - using realistic timestamps and timezones
 const testTimestamps = [
