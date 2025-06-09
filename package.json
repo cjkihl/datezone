@@ -30,5 +30,5 @@
 		"typescript": "^5"
 	},
 	"packageManager": "bun@1.2.16",
-	"workspaces": ["apps/*", "packages/*", "shared/*", "tools/*"]
+	"workspaces": ["packages/*", "shared/*", "tools/*"]
 }

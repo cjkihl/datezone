@@ -8,7 +8,7 @@ Current coverage: **91%** (above 90% threshold ✅)
 # Run tests with coverage (console output)
 bun test --coverage
 
-# Coverage reports are automatically generated in /coverage/ directory:
+# Coverage reports are automatically generated in /tools/coverage/ directory:
 # - lcov.info: Standard LCOV format for CI/tooling integration
 # - Text report: Displayed in console
 ```
@@ -23,7 +23,7 @@ Configured in `bunfig.toml`:
 
 ## Using Coverage Data
 
-The `coverage/lcov.info` file can be used with:
+The `tools/coverage/lcov.info` file can be used with:
 - CI/CD systems for coverage tracking
 - IDE extensions for coverage visualization  
 - Online coverage services (Codecov, Coveralls)

@@ -1,6 +1,6 @@
 # datezone
 
-[![Coverage](https://img.shields.io/badge/Coverage-91%25-brightgreen?style=flat-square)](../../coverage)
+[![Coverage](https://img.shields.io/badge/Coverage-91%25-brightgreen?style=flat-square)](../../tools/coverage)
 [![Performance](https://img.shields.io/badge/Perf-Up%20to%201700000%25%20faster-success?style=flat-square)](../../tools/benchmark/reports/comparison-report.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-First-blue?style=flat-square)](https://www.typescriptlang.org/)
 

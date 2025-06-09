@@ -81,7 +81,7 @@ Run tests with coverage:
 bun test --coverage
 ```
 
-The project maintains 90%+ code coverage. Coverage reports are generated in the `coverage/` directory.
+The project maintains 90%+ code coverage. Coverage reports are generated in the `tools/coverage/` directory.
 
 ### 4. Benchmarking
 

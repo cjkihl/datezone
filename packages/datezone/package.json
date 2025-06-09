@@ -1,40 +1,40 @@
 {
-	"name": "datezone",
-	"sideEffects": false,
-	"version": "0.1.0",
-	"description": "A lightweight and comprehensive date and timezone utility library for JavaScript.",
-	"keywords": [
-		"date",
-		"timezone",
-		"utilities",
-		"javascript",
-		"typescript"
-	],
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/cjkihl/datezone.git"
-	},
-	"bugs": {
-		"url": "https://github.com/cjkihl/datezone/issues"
-	},
-	"homepage": "https://github.com/cjkihl/datezone#readme",
-	"author": "CJ Kihl",
-	"exports": {
-		".": {
-			"types": "./.dist/types/index.pub.d.ts",
-			"default": "./.dist/output/index.pub.js"
-		}
-	},
-	"type": "module",
-	"scripts": {
-		"build": "tsc && create-exports",
-		"ts": "tsc --noEmit"
-	},
-	"dependencies": {
-		"@cj/config": "workspace:*"
-	},
-	"devDependencies": {
-		"@cj/mono": "workspace:*"
-	}
+  "name": "datezone",
+  "sideEffects": false,
+  "version": "0.1.0",
+  "description": "A lightweight and comprehensive date and timezone utility library for JavaScript.",
+  "keywords": [
+    "date",
+    "timezone",
+    "utilities",
+    "javascript",
+    "typescript"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cjkihl/datezone.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cjkihl/datezone/issues"
+  },
+  "homepage": "https://github.com/cjkihl/datezone#readme",
+  "author": "CJ Kihl",
+  "exports": {
+    ".": {
+      "types": "./.dist/types/index.pub.d.ts",
+      "default": "./.dist/output/index.pub.js"
+    }
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsc && create-exports",
+    "ts": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cj/config": "workspace:*"
+  },
+  "devDependencies": {
+    "@cj/mono": "workspace:*"
+  }
 }
