@@ -23,7 +23,7 @@ const TOKYO_TZ: TimeZone = "Asia/Tokyo";
 // Fixed test dates to ensure consistent results
 const TEST_DATE_2024_01_15 = new Date("2024-01-15T12:00:00.000Z").getTime(); // Monday
 const TEST_DATE_2024_01_16 = new Date("2024-01-16T12:00:00.000Z").getTime(); // Tuesday
-const TEST_DATE_2024_01_17 = new Date("2024-01-17T12:00:00.000Z").getTime(); // Wednesday
+// const TEST_DATE_2024_01_17 = new Date("2024-01-17T12:00:00.000Z").getTime(); // Wednesday
 const TEST_DATE_2024_01_13 = new Date("2024-01-13T12:00:00.000Z").getTime(); // Saturday
 const TEST_DATE_2024_01_14 = new Date("2024-01-14T12:00:00.000Z").getTime(); // Sunday
 
