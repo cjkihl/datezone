@@ -8,35 +8,18 @@ A **blazingly fast**, pure, and fully-typed TypeScript library for working with 
 
 ## 🚀 Why Datezone?
 
-### Performance That Matters
+**Performance That Matters**: Datezone dramatically outperforms date-fns in timezone-aware operations - up to **1,700,000% faster** for `addDays` operations and **517% faster** for `startOfMonth` with timezone support.
 
-Datezone **dramatically outperforms** date-fns in timezone-aware operations:
-
-- **🚀 Up to 1,700,000% faster** for timezone-aware `addDays` operations
-- **🚀 517% faster** for `startOfMonth` with timezone support  
-- **🚀 444% faster** for `endOfMonth` with timezone support
-- **🚀 397% faster** for complex timezone workflows
-
-*[See full performance benchmarks →](../../tools/benchmark/reports/comparison-report.md)*
-
-### Why the Intl API Instead of JavaScript Date?
-
-Datezone leverages the **modern Intl API** instead of relying solely on JavaScript's `Date` object for several key advantages:
-
-1. **🌍 True Timezone Support**: The Intl API provides accurate, IANA timezone database-backed operations, while `Date` objects are timezone-naive and rely on system settings.
-
-2. **⚡ Performance**: Intl formatters can be cached and reused, avoiding expensive `Date` object creation. Datezone creates `Date` objects only when absolutely necessary.
-
-3. **🎯 Precision**: Operations like "start of day in New York" are calculated correctly across DST transitions, which is complex and error-prone with pure `Date` math.
-
-4. **🔒 Consistency**: Results are deterministic regardless of the server/client's local timezone, eliminating a major source of timezone-related bugs.
-
-5. **📅 Calendar-Aware**: The Intl API handles calendar systems, locales, and cultural date conventions that `Date` objects cannot address.
+**Modern Architecture**: Built on the **Intl API** instead of legacy `Date` manipulation for:
+- 🌍 **True timezone support** with IANA database accuracy
+- ⚡ **Better performance** through cached formatters and minimal object creation  
+- 🎯 **Precision** across DST transitions and calendar systems
+- 🔒 **Consistency** regardless of local timezone settings
 
 ## Features
 
-- **🔥 Extreme Performance**: Up to 1700000% faster than date-fns for timezone operations
-- **🌍 Timezone-First**: All functions accept optional `timeZone` parameter with no assumptions about local timezone
+- **🔥 Extreme Performance**: Up to 1,700,000% faster than date-fns for timezone operations
+- **🌍 Timezone-First**: All functions accept optional `timeZone` parameter 
 - **⚡ Zero Unnecessary Objects**: Avoids creating `Date` objects unless absolutely necessary
 - **📦 Tree-Shakeable**: Import only what you need for optimal bundle size
 - **🎯 Pure Functions**: No side effects, no global state, predictable behavior
@@ -60,18 +43,15 @@ import { startOfDay, endOfDay, startOfMonth, endOfMonth, localToUTC, utcToTimeZo
 
 const now = new Date();
 
-// Timezone-aware operations (the fast path!)
-const startNY = startOfDay(now, "America/New_York");     // 🚀 205% faster than date-fns
-const endNY = endOfDay(now, "America/New_York");         // 🚀 206% faster than date-fns
-const monthStart = startOfMonth(now, "Europe/London");   // 🚀 517% faster than date-fns
-const monthEnd = endOfMonth(now, "Asia/Tokyo");          // 🚀 444% faster than date-fns
+// Timezone-aware operations
+const startNY = startOfDay(now, "America/New_York");
+const endNY = endOfDay(now, "America/New_York");
+const monthStart = startOfMonth(now, "Europe/London");
+const monthEnd = endOfMonth(now, "Asia/Tokyo");
 
 // Timezone conversions
 const utc = localToUTC(now);
 const singapore = utcToTimeZone(utc, "Asia/Singapore");
-
-// Complex workflows are much faster
-// Multi-timezone dashboard updates: 🚀 189% faster than date-fns
 ```
 
 ## API Reference
@@ -96,58 +76,43 @@ const singapore = utcToTimeZone(utc, "Asia/Singapore");
 
 *...and more (see source files)*
 
-## Performance Philosophy
+## Performance
 
-Datezone is architected for **real-world performance**:
-
-### 🎯 High-Frequency Usage
-- Designed for 60fps+ applications
-- Optimized for render loops and animation frames
-- Minimal memory allocation and garbage collection pressure
-
-### 🚀 Smart Caching
-- Intl formatters are cached and reused
-- Timezone offset calculations are memoized
-- Expensive operations are computed once and reused
-
-### ⚡ Efficient Algorithms
-- Direct mathematical operations where possible
-- Avoids string parsing and serialization
-- Leverages browser/Node.js optimizations
-
-## Benchmarks
-
-Our comprehensive benchmarks show dramatic performance improvements:
+Comprehensive benchmarks show dramatic improvements over date-fns:
 
 | Operation | Datezone | Date-fns | Improvement |
 |-----------|----------|----------|-------------|
-| `addDays` (timezone) | 405 ps | 6.84 µs | 🚀 **1,700,000% faster** |
-| `startOfMonth` (timezone) | 1.57 µs | 9.68 µs | 🚀 **517% faster** |
-| `endOfMonth` (timezone) | 1.44 µs | 7.84 µs | 🚀 **444% faster** |
-| Complex timezone workflow | 3.46 µs | 17.17 µs | 🚀 **397% faster** |
+| `addDays` (timezone) | 405 ps | 6.84 µs | **1,700,000% faster** |
+| `startOfMonth` (timezone) | 1.57 µs | 9.68 µs | **517% faster** |
+| `endOfMonth` (timezone) | 1.44 µs | 7.84 µs | **444% faster** |
+| Complex timezone workflow | 3.46 µs | 17.17 µs | **397% faster** |
 
 **📊 [View Full Performance Report →](../../tools/benchmark/reports/comparison-report.md)**
 
-### Run Benchmarks Yourself
+### Run Benchmarks
 
 ```bash
 # Quick comparison
 bun run bench:compare
 
-# Generate beautiful formatted report  
+# Generate detailed report  
 bun run bench:report
-
-# Comprehensive benchmarks
-bun run bench:comprehensive
 ```
+
+## Why Choose Datezone?
+
+| vs. date-fns | vs. Luxon/Day.js | vs. Temporal (future) |
+|--------------|------------------|----------------------|
+| ✅ Much faster timezone ops | ✅ No object wrappers | ✅ Available today |
+| ✅ Explicit timezone handling | ✅ Tree-shakeable | ✅ Proven performance |
+| ✅ Modern Intl API | ✅ Performance-first | ✅ Works with existing code |
+| ✅ Better TypeScript | ✅ Smaller bundle size | |
 
 ## Contributing
 
 We welcome contributions! Datezone maintains **90%+ code coverage** using Bun's built-in coverage reporting.
 
 **📖 [Read the Contributing Guide →](../../CONTRIBUTING.md)**
-
-### Development Quick Start
 
 ```bash
 # Install dependencies
@@ -165,31 +130,12 @@ bun run format
 
 ## Roadmap
 
-- [x] **🚀 Core timezone-aware operations** - Dramatically faster than alternatives
-- [x] **📊 Comprehensive benchmarking** - Prove performance claims with data
-- [x] **✅ 90%+ test coverage** - Reliability through thorough testing
-- [ ] **📚 Complete date-fns API parity** - ([see issues/PRs](https://github.com/your-repo/datezone/issues))
-- [ ] **🌐 Locale-aware formatting** - Beyond basic timezone support
-- [ ] **📱 React Native optimization** - Platform-specific performance tuning
-
-## Why Choose Datezone?
-
-### 🆚 vs. date-fns
-- **Much faster** for timezone operations (up to 1700000% improvement)
-- **Explicit timezone handling** (no hidden local timezone assumptions)  
-- **Modern Intl API** instead of legacy Date manipulation
-- **Better TypeScript support** with stricter types
-
-### 🆚 vs. Luxon/Day.js
-- **No object wrappers** - work directly with native `Date` objects
-- **Tree-shakeable** - import only what you need
-- **Performance-first** - designed for high-frequency usage
-- **Smaller bundle size** for equivalent functionality
-
-### 🆚 vs. Temporal (future)
-- **Available today** - no waiting for browser support
-- **Proven performance** - real-world benchmarks
-- **Incremental adoption** - works alongside existing Date code
+- [x] Core timezone-aware operations
+- [x] Comprehensive benchmarking  
+- [x] 90%+ test coverage
+- [ ] Complete date-fns API parity ([see issues/PRs](https://github.com/your-repo/datezone/issues))
+- [ ] Locale-aware formatting
+- [ ] React Native optimization
 
 ## License
 
