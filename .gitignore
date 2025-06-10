@@ -9,6 +9,7 @@ node_modules
 !.github
 !.vscode
 !.npmrc
+!.changeset
 
 # Logs
 *-debug.log*

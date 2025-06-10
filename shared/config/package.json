@@ -3,8 +3,7 @@
 	"version": "0.0.0",
 	"exports": {
 		"./tsconfig.base": "./tsconfig.base.json",
-		"./tsconfig.lib": "./tsconfig.lib.json",
-		"./knip": "./knip.config.ts"
+		"./tsconfig.lib": "./tsconfig.lib.json"
 	},
 	"type": "module",
 	"scripts": {

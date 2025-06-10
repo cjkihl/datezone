@@ -97,7 +97,6 @@ describe("Coverage Tests - Missing Lines", () => {
 
 	describe("Hour functions with HourOptions", () => {
 		const hourOptions = { hour: 14 };
-		const timestamp = Date.now();
 
 		test("addHours with HourOptions", () => {
 			const result = addHours(hourOptions, 2, "UTC");
