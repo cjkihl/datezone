@@ -113,3 +113,39 @@ MIT License - see [LICENSE](./LICENSE) for details.
 ---
 
 *Built with ❤️ using [Bun](https://bun.sh/), [Turbo](https://turbo.build/), and [Biome](https://biomejs.dev/)*
+
+## 🚀 CI/CD & Publishing
+
+This monorepo uses a **hybrid approach** for optimal release management:
+
+- **📦 Changesets** - Version management & dependency coordination
+- **⚡ Bun** - Fast publishing with workspace protocol resolution  
+- **🤖 GitHub Actions** - Automated testing & releasing
+
+### Quick Start
+
+```bash
+# 1. Make your changes
+# 2. Document the change
+bunx changeset
+
+# 3. Commit and push (CI handles the rest!)
+git add . && git commit -m "feat: new feature" && git push
+```
+
+When merged to `main`, GitHub Actions will:
+1. ✅ Run tests, lint, type-check, build
+2. 🔄 Create a "Version Packages" PR with updated versions & changelog  
+3. 📦 Auto-publish to npm when the Version PR is merged
+
+### Manual Publishing
+
+```bash
+bun run release          # Build + publish
+bun run release:bun      # Publish only
+bun run release:bun --dry-run  # Test without publishing
+```
+
+**📚 Documentation:**
+- [SETUP.md](./SETUP.md) - Quick setup guide  
+- [RELEASE.md](./RELEASE.md) - Detailed workflow documentation

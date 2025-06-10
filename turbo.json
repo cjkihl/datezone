@@ -7,6 +7,9 @@
 			"dependsOn": ["^build"],
 			"outputs": [".dist"]
 		},
+		"publish": {
+			"dependsOn": ["^build", "^publish"]
+		},
 		"type-check": {
 			"cache": false,
 			"dependsOn": ["^type-check"]

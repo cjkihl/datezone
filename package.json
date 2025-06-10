@@ -1,5 +1,5 @@
 {
-	"name": "datezone",
+	"name": "@datezone/monorepo",
 	"module": "index.ts",
 	"type": "module",
 	"private": true,
@@ -7,7 +7,9 @@
 		"test": "bun test",
 		"build": "turbo build",
 		"build-pkg": "turbo build --filter=./packages/*",
-		"turbo-env": "turbo-env",
+		"release": "bun run build-pkg && bun run release:bun",
+		"release:bun": "bun tools/release.ts",
+		"changeset:version": "changeset version",
 		"clean": "git clean -fxd -e .env.local",
 		"lint": "biome check . && manypkg check ",
 		"lint-fix": "biome check --write --unsafe .",
@@ -20,6 +22,8 @@
 		"bench:cache": "bun tools/benchmark/run-with-output.ts cache-test.ts"
 	},
 	"devDependencies": {
+		"@changesets/changelog-github": "^0.5.1",
+		"@changesets/cli": "^2.29.4",
 		"@date-fns/tz": "^1.2.0",
 		"@types/bun": "latest",
 		"date-fns": "^4.1.0",

@@ -8,6 +8,7 @@ node_modules
 !.gitignore
 !.github
 !.vscode
+!.npmrc
 
 # Logs
 *-debug.log*
