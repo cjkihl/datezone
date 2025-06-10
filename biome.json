@@ -10,7 +10,8 @@
 			"**/.git/**",
 			"**/.vscode/**",
 			"**/.dist/**",
-			"**/.turbo/**"
+			"**/.turbo/**",
+			"**/package.json"
 		]
 	},
 	"json": {
