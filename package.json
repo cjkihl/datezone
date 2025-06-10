@@ -22,6 +22,7 @@
 		"bench:cache": "bun tools/benchmark/run-with-output.ts cache-test.ts"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
 		"@changesets/changelog-github": "^0.5.1",
 		"@changesets/cli": "^2.29.4",
 		"@date-fns/tz": "^1.2.0",
