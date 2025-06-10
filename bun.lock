@@ -11,6 +11,7 @@
         "date-fns": "^4.1.0",
         "date-fns-tz": "^3.2.0",
         "mitata": "^1.0.10",
+        "typescript": "^5",
       },
       "peerDependencies": {
         "typescript": "^5",

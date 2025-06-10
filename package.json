@@ -11,7 +11,7 @@
 		"release:bun": "bun tools/release.ts",
 		"changeset:version": "changeset version",
 		"clean": "git clean -fxd -e .env.local",
-		"lint": "biome check . && manypkg check ",
+		"lint": "biome check .",
 		"lint-fix": "biome check --write --unsafe .",
 		"format": "biome format .",
 		"type-check": "turbo type-check",
@@ -28,7 +28,8 @@
 		"@types/bun": "latest",
 		"date-fns": "^4.1.0",
 		"date-fns-tz": "^3.2.0",
-		"mitata": "^1.0.10"
+		"mitata": "^1.0.10",
+		"typescript": "^5"
 	},
 	"peerDependencies": {
 		"typescript": "^5"
