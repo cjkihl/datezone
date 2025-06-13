@@ -35,7 +35,9 @@ function getPluralRules(locale: string): Intl.PluralRules {
 function getNumberFormat(locale: string): Intl.NumberFormat {
 	if (!numberFormatCache.has(locale)) {
 		try {
-			numberFormatCache.set(locale, new Intl.NumberFormat(locale));
+			// For unsupported locales, use Western numerals
+			const numberingSystem = ["ar", "fa", "ur"].includes(locale) ? "latn" : undefined;
+			numberFormatCache.set(locale, new Intl.NumberFormat(locale, { numberingSystem }));
 		} catch {
 			// Fall back to English for invalid locales
 			numberFormatCache.set(locale, new Intl.NumberFormat("en"));
