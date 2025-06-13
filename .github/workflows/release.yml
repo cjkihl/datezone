@@ -34,8 +34,7 @@ jobs:
           npm whoami
 
       - name: Publish to NPM
-        working-directory: packages/datezone
-        run: bun publish --access public
+        run: cd packages/datezone && bun publish --access public
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
