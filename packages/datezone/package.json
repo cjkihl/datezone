@@ -1,7 +1,7 @@
 {
 	"name": "datezone",
 	"sideEffects": false,
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"description": "A lightweight and comprehensive date and timezone utility library for JavaScript.",
 	"main": "./.dist/output/index.pub.js",
 	"types": "./.dist/types/index.pub.d.ts",
