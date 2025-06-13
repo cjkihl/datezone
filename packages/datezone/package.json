@@ -46,8 +46,8 @@
 	},
 	"scripts": {
 		"build": "tsc && create-exports",
-		"ts": "tsc --noEmit",
-		"prepublishOnly": "npm run build"
+		"publish": "bun publish",
+		"ts": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@cj/config": "workspace:*"

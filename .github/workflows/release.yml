@@ -26,15 +26,8 @@ jobs:
       - name: Build packages
         run: bun run build-pkg
 
-      - name: Setup NPM for publishing
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-          echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
-          echo "always-auth=true" >> ~/.npmrc
-          npm whoami
-
       - name: Publish to NPM
-        run: cd packages/datezone && bun publish --access public
+        run: bun run publish
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
