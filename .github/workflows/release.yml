@@ -24,16 +24,38 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Build packages
-        run: bun run build-pkg
+        run:  turbo build --filter=./packages/*
+
+      - name: Run linting
+        run: turbo lint --filter=./packages/*
+
+      - name: Run tests
+        run: turbo test --filter=./packages/*
+
+      - name: Configure npm
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+          echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish to NPM
-        run: bun run publish
+        id: publish
         env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+        run: turbo publish-npm --filter=./packages/*
 
       - name: Create deployment summary
         run: |
-          echo "## 🚀 Packages Published Successfully!" >> $GITHUB_STEP_SUMMARY
-          echo "Release: ${{ github.event.release.tag_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "Packages have been published to npm with the new version." >> $GITHUB_STEP_SUMMARY 
+          echo "## 🚀 Release Summary" >> $GITHUB_STEP_SUMMARY
+          echo "### Release Details" >> $GITHUB_STEP_SUMMARY
+          echo "- **Release Tag:** ${{ github.event.release.tag_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Release Name:** ${{ github.event.release.name }}" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### Build Status" >> $GITHUB_STEP_SUMMARY
+          echo "✅ All checks passed successfully" >> $GITHUB_STEP_SUMMARY
+          echo "- Build completed" >> $GITHUB_STEP_SUMMARY
+          echo "- Tests passed" >> $GITHUB_STEP_SUMMARY
+          echo "- Linting passed" >> $GITHUB_STEP_SUMMARY
+          echo "- Packages published" >> $GITHUB_STEP_SUMMARY 

@@ -1,27 +1,33 @@
 {
 	"$schema": "https://turbo.build/schema.json",
 	"globalDependencies": ["**/.env.*local"],
+	"globalEnv": ["NODE_ENV"],
+	"globalPassThroughEnv": ["CI", "VERCEL", "GITHUB_TOKEN", "NPM_TOKEN"],
 	"ui": "stream",
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
 			"outputs": [".dist"]
 		},
-		"publish": {
+		"publish-npm": {
 			"cache": false,
-			"dependsOn": ["^build", "^publish"]
+			"dependsOn": ["^build", "^lint", "^test"]
 		},
-		"type-check": {
+		"test": {
 			"cache": false,
-			"dependsOn": ["^type-check"]
+			"dependsOn": ["^build"]
 		},
-		"//#lint": {},
-		"//#lint-fix": {
-			"cache": false
+		"lint": {
+			"cache": false,
+			"outputs": []
 		},
-		"//#format": {
-			"cache": false
+		"lint-fix": {
+			"cache": false,
+			"outputs": []
+		},
+		"format": {
+			"cache": false,
+			"outputs": []
 		}
-	},
-	"globalPassThroughEnv": []
+	}
 }

@@ -1,4 +1,4 @@
-name: Buil and Test main
+name: Build, Test, and Lint main
 
 on:
   push:
@@ -21,7 +21,10 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Build packages
-        run: bun run build-pkg
+        run: turbo build
+
+      - name: Run lint
+        run: turbo lint
 
       - name: Run tests
-        run: bun run test
+        run: turbo test
