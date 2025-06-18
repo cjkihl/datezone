@@ -83,7 +83,7 @@ class BenchmarkFormatter {
 			// Remove ANSI color codes for parsing
 			const cleanLine =
 				line?.replace(
-					// biome-ignore lint/suspicious/noControlCharactersInRegex: <explanation>
+					// biome-ignore lint/suspicious/noControlCharactersInRegex: Its just a test
 					/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
 					"",
 				) || "";
@@ -148,9 +148,9 @@ class BenchmarkFormatter {
 
 				const result: BenchmarkResult = {
 					name: name.trim(),
-					time: time.trim(),
 					ops: opsString,
-					samples: 100, // Default since we can't easily extract this
+					samples: 100,
+					time: time.trim(), // Default since we can't easily extract this
 				};
 
 				const groupResults = this.results.get(currentGroup) || [];
@@ -188,7 +188,7 @@ This report compares **Datezone** against **Date-fns v4** with timezone support 
 `;
 
 		// Generate comparison tables for each group
-		for (const [groupName, benchmarks] of this.results) {
+		for (const [groupName, benchmarks] of Array.from(this.results)) {
 			if (benchmarks.length === 0) continue;
 
 			const comparisons = this.createComparisons(benchmarks);
@@ -265,7 +265,7 @@ This report compares **Datezone** against **Date-fns v4** with timezone support 
 		}
 
 		// Create comparisons
-		for (const [operation, { datezone, dateFns }] of operationMap) {
+		for (const [operation, { datezone, dateFns }] of Array.from(operationMap)) {
 			const comparison = this.compareResults(operation, datezone, dateFns);
 			comparisons.push(comparison);
 		}
@@ -280,32 +280,32 @@ This report compares **Datezone** against **Date-fns v4** with timezone support 
 	): ComparisonRow {
 		if (!datezone && dateFns) {
 			return {
-				operation,
 				dateFns,
-				winner: "date-fns",
-				improvement: "Date-fns only",
 				icon: "📚",
+				improvement: "Date-fns only",
+				operation,
+				winner: "date-fns",
 			};
 		}
 
 		if (datezone && !dateFns) {
 			return {
-				operation,
 				datezone,
-				winner: "datezone-only",
-				improvement: "Datezone only",
 				icon: "🔥",
+				improvement: "Datezone only",
+				operation,
+				winner: "datezone-only",
 			};
 		}
 
 		if (!datezone || !dateFns) {
 			return {
-				operation,
-				datezone,
 				dateFns,
-				winner: "tie",
-				improvement: "No comparison",
+				datezone,
 				icon: "❓",
+				improvement: "No comparison",
+				operation,
+				winner: "tie",
 			};
 		}
 
@@ -315,12 +315,12 @@ This report compares **Datezone** against **Date-fns v4** with timezone support 
 
 		if (!dzOps || !fnOps) {
 			return {
-				operation,
-				datezone,
 				dateFns,
-				winner: "tie",
-				improvement: "Unable to compare",
+				datezone,
 				icon: "❓",
+				improvement: "Unable to compare",
+				operation,
+				winner: "tie",
 			};
 		}
 
@@ -357,12 +357,12 @@ This report compares **Datezone** against **Date-fns v4** with timezone support 
 		}
 
 		return {
-			operation,
-			datezone,
 			dateFns,
-			winner,
-			improvement: improvementText,
+			datezone,
 			icon,
+			improvement: improvementText,
+			operation,
+			winner,
 		};
 	}
 
@@ -385,18 +385,18 @@ This report compares **Datezone** against **Date-fns v4** with timezone support 
 	private generateSummary(): string {
 		const allComparisons: ComparisonRow[] = [];
 
-		for (const [, benchmarks] of this.results) {
+		for (const [, benchmarks] of Array.from(this.results)) {
 			allComparisons.push(...this.createComparisons(benchmarks));
 		}
 
 		const stats = {
-			total: allComparisons.length,
-			datezoneWins: allComparisons.filter((c) => c.winner === "datezone")
-				.length,
 			dateFnsWins: allComparisons.filter((c) => c.winner === "date-fns").length,
-			ties: allComparisons.filter((c) => c.winner === "tie").length,
 			datezoneOnly: allComparisons.filter((c) => c.winner === "datezone-only")
 				.length,
+			datezoneWins: allComparisons.filter((c) => c.winner === "datezone")
+				.length,
+			ties: allComparisons.filter((c) => c.winner === "tie").length,
+			total: allComparisons.length,
 		};
 
 		return `## 📈 Summary

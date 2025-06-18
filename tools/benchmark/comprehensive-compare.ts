@@ -1,19 +1,5 @@
-import { bench, do_not_optimize, group, run } from "mitata";
-
-// Import datezone functions
-import {
-	DAY,
-	type TimeZone,
-	addMonths as dzAddMonths,
-	endOfDay as dzEndOfDay,
-	endOfMonth as dzEndOfMonth,
-	formatToParts as dzFormatToParts,
-	getTimezoneOffsetMinutes as dzGetTimezoneOffsetMinutes,
-	startOfDay as dzStartOfDay,
-	startOfMonth as dzStartOfMonth,
-	wallTimeToUTC as dzWallTimeToUTC,
-} from "datezone";
-
+// Import date-fns v4 timezone support
+import { TZDate } from "@date-fns/tz";
 // Import date-fns v4 functions
 import {
 	addDays as fnsAddDays,
@@ -27,9 +13,20 @@ import {
 	startOfMonth as fnsStartOfMonth,
 	startOfYear as fnsStartOfYear,
 } from "date-fns";
-
-// Import date-fns v4 timezone support
-import { TZDate } from "@date-fns/tz";
+// Import datezone functions
+import {
+	DAY,
+	addMonths as dzAddMonths,
+	endOfDay as dzEndOfDay,
+	endOfMonth as dzEndOfMonth,
+	formatToParts as dzFormatToParts,
+	getTimezoneOffsetMinutes as dzGetTimezoneOffsetMinutes,
+	startOfDay as dzStartOfDay,
+	startOfMonth as dzStartOfMonth,
+	wallTimeToUTC as dzWallTimeToUTC,
+	type TimeZone,
+} from "datezone";
+import { bench, do_not_optimize, group, run } from "mitata";
 
 // Helper function for datezone
 const dzAddDays = (ts: number, days: number, _timeZone: string): number => {
@@ -157,12 +154,12 @@ group("Timezone-Aware: Formatting Operations", () => {
 		yield () =>
 			do_not_optimize(
 				dzFormatToParts(testTimestamp, testTimezone, {
-					year: "numeric",
-					month: "2-digit",
 					day: "2-digit",
 					hour: "2-digit",
 					minute: "2-digit",
+					month: "2-digit",
 					second: "2-digit",
+					year: "numeric",
 				}),
 			);
 	});
@@ -178,13 +175,13 @@ group("Timezone-Aware: Formatting Operations", () => {
 	bench("native: Intl.DateTimeFormat (with timezone)", function* () {
 		yield () => {
 			const formatter = new Intl.DateTimeFormat("en-US", {
-				timeZone: testTimezone,
-				year: "numeric",
-				month: "2-digit",
 				day: "2-digit",
 				hour: "2-digit",
 				minute: "2-digit",
+				month: "2-digit",
 				second: "2-digit",
+				timeZone: testTimezone,
+				year: "numeric",
 			});
 			return do_not_optimize(formatter.formatToParts(testTimestamp));
 		};
@@ -281,9 +278,9 @@ group("Complex Timezone Workflows", () => {
 			const monthStart = dzStartOfMonth(testTimestamp, testTimezone);
 			const adjusted = dzAddDays(monthStart, 15, testTimezone);
 			const parts = dzFormatToParts(adjusted, testTimezone, {
-				year: "numeric",
-				month: "2-digit",
 				day: "2-digit",
+				month: "2-digit",
+				year: "numeric",
 			});
 			return do_not_optimize(parts);
 		};
@@ -333,9 +330,9 @@ group("Multi-Timezone Operations", () => {
 		yield () => {
 			const results = testTimezones.map((timeZone) => {
 				const formatter = new Intl.DateTimeFormat("en-US", {
-					timeZone,
 					hour: "2-digit",
 					minute: "2-digit",
+					timeZone,
 					timeZoneName: "short",
 				});
 				return formatter.formatToParts(testTimestamp);
@@ -363,9 +360,9 @@ group("Real-World Timezone Scenarios", () => {
 				const dayTs = dzAddDays(monthStart, i - 7, timezone);
 				const dayStart = dzStartOfDay(dayTs, timezone);
 				const parts = dzFormatToParts(dayStart, timezone, {
-					year: "numeric",
-					month: "2-digit",
 					day: "2-digit",
+					month: "2-digit",
+					year: "numeric",
 				});
 				results.push(parts);
 			}
@@ -432,7 +429,7 @@ group("Real-World Timezone Scenarios", () => {
 			const clocks = timezones.map((timeZone) => {
 				const tzDate = new TZDate(now, timeZone);
 				const formatted = fnsFormat(tzDate, "HH:mm:ss zzz");
-				return { timezone: timeZone, formatted };
+				return { formatted, timezone: timeZone };
 			});
 
 			return do_not_optimize(clocks);

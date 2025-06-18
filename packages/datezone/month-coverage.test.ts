@@ -13,40 +13,40 @@ import {
 describe("Month function coverage tests", () => {
 	describe("Nth month functions", () => {
 		test("startOfNthMonth with MonthOptions", () => {
-			const result = startOfNthMonth({ year: 2024, month: 3 }, 2, "UTC");
+			const result = startOfNthMonth({ month: 3, year: 2024 }, 2, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
 		test("endOfNthMonth with MonthOptions", () => {
-			const result = endOfNthMonth({ year: 2024, month: 3 }, 2, "UTC");
+			const result = endOfNthMonth({ month: 3, year: 2024 }, 2, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
 		test("startOfNextMonth with MonthOptions", () => {
-			const result = startOfNextMonth({ year: 2024, month: 3 }, "UTC");
+			const result = startOfNextMonth({ month: 3, year: 2024 }, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
 		test("endOfNextMonth with MonthOptions", () => {
-			const result = endOfNextMonth({ year: 2024, month: 3 }, "UTC");
+			const result = endOfNextMonth({ month: 3, year: 2024 }, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
 		test("startOfPrevMonth with MonthOptions", () => {
-			const result = startOfPrevMonth({ year: 2024, month: 3 }, "UTC");
+			const result = startOfPrevMonth({ month: 3, year: 2024 }, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
 		test("endOfPrevMonth with MonthOptions", () => {
-			const result = endOfPrevMonth({ year: 2024, month: 3 }, "UTC");
+			const result = endOfPrevMonth({ month: 3, year: 2024 }, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
 		test("getQuarter with MonthOptions", () => {
-			expect(getQuarter({ year: 2024, month: 1 }, "UTC")).toBe(1);
-			expect(getQuarter({ year: 2024, month: 4 }, "UTC")).toBe(2);
-			expect(getQuarter({ year: 2024, month: 7 }, "UTC")).toBe(3);
-			expect(getQuarter({ year: 2024, month: 10 }, "UTC")).toBe(4);
+			expect(getQuarter({ month: 1, year: 2024 }, "UTC")).toBe(1);
+			expect(getQuarter({ month: 4, year: 2024 }, "UTC")).toBe(2);
+			expect(getQuarter({ month: 7, year: 2024 }, "UTC")).toBe(3);
+			expect(getQuarter({ month: 10, year: 2024 }, "UTC")).toBe(4);
 		});
 
 		test("getQuarter with timestamp", () => {

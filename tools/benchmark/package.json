@@ -17,6 +17,6 @@
 		"@date-fns/tz": "^1.2.0"
 	},
 	"devDependencies": {
-		"@cjkihl/tsconfig": "^0.1.15"
+		"@cjkihl/tsconfig": "^0.1.17"
 	}
 }

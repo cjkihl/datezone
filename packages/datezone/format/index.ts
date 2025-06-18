@@ -1,7 +1,8 @@
-import { FULL_TS, formatToParts } from "../format-parts";
-import type { TimeZone } from "../iana";
-import type { PlainDateTime } from "../types";
-import { formatters } from "./formatters";
+import { FULL_TS, formatToParts } from "../format-parts.js";
+import type { TimeZone } from "../iana.js";
+import type { PlainDateTime } from "../types.js";
+import { formatters } from "./formatters.js";
+
 type FormatOptions = {
 	locale: string;
 	timeZone: TimeZone;
@@ -295,14 +296,14 @@ export function format(
 	function getOffsetMinutes(ts: number, timeZone: string): number {
 		// Get the local time in the target timeZone using Intl
 		const dtf = new Intl.DateTimeFormat("en-US", {
-			timeZone,
-			year: "numeric",
-			month: "2-digit",
 			day: "2-digit",
 			hour: "2-digit",
-			minute: "2-digit",
-			second: "2-digit",
 			hour12: false,
+			minute: "2-digit",
+			month: "2-digit",
+			second: "2-digit",
+			timeZone,
+			year: "numeric",
 		});
 		const partsArr = dtf.formatToParts(ts);
 		const get = (type: string) => {
@@ -338,14 +339,14 @@ export function format(
 	const millisecond = Math.floor(ts % 1000);
 
 	const dt: PlainDateTime = {
-		year,
-		month: parts.month,
 		day: parts.day,
 		hour: parts.hour,
-		minute: parts.minute,
-		second: parts.second,
 		millisecond,
+		minute: parts.minute,
+		month: parts.month,
+		second: parts.second,
 		timezoneOffsetMinutes,
+		year,
 	};
 
 	const ctx = {

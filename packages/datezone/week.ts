@@ -1,11 +1,11 @@
-import { WEEK } from "./constants";
-import { type TimeZone, dayOfWeek, formatToParts } from "./index.pub";
-import { wallTimeToUTC } from "./utils";
+import { WEEK } from "./constants.js";
+import { dayOfWeek, formatToParts, type TimeZone } from "./index.pub.js";
+import { wallTimeToUTC } from "./utils.js";
 
 const WEEK_OPTS = {
-	year: "numeric",
-	month: "2-digit",
 	day: "2-digit",
+	month: "2-digit",
+	year: "numeric",
 } as const;
 type OptionsOrTimestamp = { year: number; month: number; day: number } | number;
 type WeekOptions = { year: number; month: number; day: number };
@@ -219,7 +219,7 @@ export function getWeeksInMonth(
 	const dt = getOptions(date, timeZone);
 
 	// Get first day of month and its day of week
-	const firstOfMonth = { year: dt.year, month: dt.month, day: 1 };
+	const firstOfMonth = { day: 1, month: dt.month, year: dt.year };
 	const firstDayOfWeek = dayOfWeek(firstOfMonth, timeZone); // 1=Monday, 7=Sunday
 
 	// Convert ISO day number to JS day number

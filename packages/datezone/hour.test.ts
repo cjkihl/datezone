@@ -104,9 +104,9 @@ describe("Hour Functions", () => {
 			// In Tokyo, 8:00 PM UTC is 5:00 AM the next day (UTC+9)
 			// Adding 3 hours makes it 8:00 AM Tokyo time
 			const parts = new Intl.DateTimeFormat("en-US", {
-				timeZone: "Asia/Tokyo",
 				hour: "2-digit",
 				hour12: false,
+				timeZone: "Asia/Tokyo",
 			}).formatToParts(result);
 
 			const hour = parts.find((p) => p.type === "hour")?.value;
@@ -121,9 +121,9 @@ describe("Hour Functions", () => {
 
 			// Should be 4:00 AM EDT (UTC-4) due to DST transition
 			const parts = new Intl.DateTimeFormat("en-US", {
-				timeZone: "America/New_York",
 				hour: "2-digit",
 				hour12: false,
+				timeZone: "America/New_York",
 			}).formatToParts(result);
 
 			const hour = parts.find((p) => p.type === "hour")?.value;
@@ -192,9 +192,9 @@ describe("Hour Functions", () => {
 
 			// Should be 12:00 AM EST (UTC-5) due to DST transition
 			const parts = new Intl.DateTimeFormat("en-US", {
-				timeZone: "America/New_York",
 				hour: "2-digit",
 				hour12: false,
+				timeZone: "America/New_York",
 			}).formatToParts(result);
 
 			const hour = parts.find((p) => p.type === "hour")?.value;
@@ -219,11 +219,11 @@ describe("Hour Functions", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42)).getTime();
 			const result = startOfHour(timestamp, "Asia/Tokyo");
 			const parts = new Intl.DateTimeFormat("en-US", {
-				timeZone: "Asia/Tokyo",
 				hour: "2-digit",
+				hour12: false,
 				minute: "2-digit",
 				second: "2-digit",
-				hour12: false,
+				timeZone: "Asia/Tokyo",
 			}).formatToParts(result);
 
 			const minute = parts.find((p) => p.type === "minute")?.value;
@@ -259,11 +259,11 @@ describe("Hour Functions", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42)).getTime();
 			const result = endOfHour(timestamp, "Asia/Tokyo");
 			const parts = new Intl.DateTimeFormat("en-US", {
-				timeZone: "Asia/Tokyo",
 				hour: "2-digit",
+				hour12: false,
 				minute: "2-digit",
 				second: "2-digit",
-				hour12: false,
+				timeZone: "Asia/Tokyo",
 			}).formatToParts(result);
 
 			const minute = parts.find((p) => p.type === "minute")?.value;
@@ -299,11 +299,11 @@ describe("Hour Functions", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42)).getTime();
 			const result = startOfMinute(timestamp, "Asia/Tokyo");
 			const parts = new Intl.DateTimeFormat("en-US", {
-				timeZone: "Asia/Tokyo",
 				hour: "2-digit",
+				hour12: false,
 				minute: "2-digit",
 				second: "2-digit",
-				hour12: false,
+				timeZone: "Asia/Tokyo",
 			}).formatToParts(result);
 
 			const second = parts.find((p) => p.type === "second")?.value;
@@ -328,11 +328,11 @@ describe("Hour Functions", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42)).getTime();
 			const result = endOfMinute(timestamp, "Asia/Tokyo");
 			const parts = new Intl.DateTimeFormat("en-US", {
-				timeZone: "Asia/Tokyo",
 				hour: "2-digit",
+				hour12: false,
 				minute: "2-digit",
 				second: "2-digit",
-				hour12: false,
+				timeZone: "Asia/Tokyo",
 			}).formatToParts(result);
 
 			const second = parts.find((p) => p.type === "second")?.value;
@@ -436,10 +436,10 @@ describe("Hour Functions", () => {
 			const result = addMinutes(beforeDST, 90, "America/New_York"); // Add 90 minutes
 
 			const parts = new Intl.DateTimeFormat("en-US", {
-				timeZone: "America/New_York",
 				hour: "2-digit",
-				minute: "2-digit",
 				hour12: false,
+				minute: "2-digit",
+				timeZone: "America/New_York",
 			}).formatToParts(result);
 
 			const hour = parts.find((p) => p.type === "hour")?.value;

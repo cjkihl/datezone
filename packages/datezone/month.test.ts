@@ -190,35 +190,35 @@ describe("endOfMonth additional cases", () => {
 // Tests for daysInMonth
 describe("daysInMonth", () => {
 	it("returns 31 for January", () => {
-		expect(daysInMonth({ year: 2024, month: 1 }, "UTC")).toBe(31);
+		expect(daysInMonth({ month: 1, year: 2024 }, "UTC")).toBe(31);
 	});
 	it("returns 28 for February in non-leap year", () => {
-		expect(daysInMonth({ year: 2023, month: 2 }, "UTC")).toBe(28);
+		expect(daysInMonth({ month: 2, year: 2023 }, "UTC")).toBe(28);
 	});
 	it("returns 29 for February in leap year", () => {
-		expect(daysInMonth({ year: 2024, month: 2 }, "UTC")).toBe(29);
+		expect(daysInMonth({ month: 2, year: 2024 }, "UTC")).toBe(29);
 	});
 	it("returns 30 for April", () => {
-		expect(daysInMonth({ year: 2024, month: 4 }, "UTC")).toBe(30);
+		expect(daysInMonth({ month: 4, year: 2024 }, "UTC")).toBe(30);
 	});
 	it("returns 31 for December", () => {
-		expect(daysInMonth({ year: 2024, month: 12 }, "UTC")).toBe(31);
+		expect(daysInMonth({ month: 12, year: 2024 }, "UTC")).toBe(31);
 	});
 });
 
 // Tests for calculateYearMonth
 describe("calculateYearMonth", () => {
 	it("adds months within same year", () => {
-		expect(calculateYearMonth(2024, 5, 3)).toEqual({ year: 2024, month: 8 });
+		expect(calculateYearMonth(2024, 5, 3)).toEqual({ month: 8, year: 2024 });
 	});
 	it("adds months across year boundary", () => {
-		expect(calculateYearMonth(2024, 11, 2)).toEqual({ year: 2025, month: 1 });
+		expect(calculateYearMonth(2024, 11, 2)).toEqual({ month: 1, year: 2025 });
 	});
 	it("subtracts months within same year", () => {
-		expect(calculateYearMonth(2024, 5, -3)).toEqual({ year: 2024, month: 2 });
+		expect(calculateYearMonth(2024, 5, -3)).toEqual({ month: 2, year: 2024 });
 	});
 	it("subtracts months across year boundary", () => {
-		expect(calculateYearMonth(2024, 2, -3)).toEqual({ year: 2023, month: 11 });
+		expect(calculateYearMonth(2024, 2, -3)).toEqual({ month: 11, year: 2023 });
 	});
 	it("handles negative months resulting in negative year", () => {
 		expect(() => calculateYearMonth(1, 1, -13)).toThrow(RangeError);

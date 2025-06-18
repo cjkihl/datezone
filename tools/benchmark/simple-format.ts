@@ -2,82 +2,82 @@ import { writeFileSync } from "node:fs";
 
 // Sample benchmark data (what you'd get from parsing mitata output)
 const sampleResults = {
-	"Month Operations": [
-		{
-			name: "datezone: startOfMonth",
-			time: "45.2ns",
-			ops: "22.1M ops/sec",
-			samples: 100,
-		},
-		{
-			name: "date-fns: startOfMonth",
-			time: "127.8ns",
-			ops: "7.8M ops/sec",
-			samples: 100,
-		},
-		{
-			name: "datezone: endOfMonth",
-			time: "52.1ns",
-			ops: "19.2M ops/sec",
-			samples: 100,
-		},
-		{
-			name: "date-fns: endOfMonth",
-			time: "134.5ns",
-			ops: "7.4M ops/sec",
-			samples: 100,
-		},
-		{
-			name: "datezone: addMonths",
-			time: "89.3ns",
-			ops: "11.2M ops/sec",
-			samples: 100,
-		},
-		{
-			name: "date-fns: addMonths",
-			time: "156.7ns",
-			ops: "6.4M ops/sec",
-			samples: 100,
-		},
-	],
 	"Day Operations": [
 		{
 			name: "datezone: startOfDay",
-			time: "38.4ns",
 			ops: "26.0M ops/sec",
 			samples: 100,
+			time: "38.4ns",
 		},
 		{
 			name: "date-fns: startOfDay",
-			time: "98.2ns",
 			ops: "10.2M ops/sec",
 			samples: 100,
+			time: "98.2ns",
 		},
 		{
 			name: "datezone: endOfDay",
-			time: "41.7ns",
 			ops: "24.0M ops/sec",
 			samples: 100,
+			time: "41.7ns",
 		},
 		{
 			name: "date-fns: endOfDay",
-			time: "103.5ns",
 			ops: "9.7M ops/sec",
 			samples: 100,
+			time: "103.5ns",
+		},
+	],
+	"Month Operations": [
+		{
+			name: "datezone: startOfMonth",
+			ops: "22.1M ops/sec",
+			samples: 100,
+			time: "45.2ns",
+		},
+		{
+			name: "date-fns: startOfMonth",
+			ops: "7.8M ops/sec",
+			samples: 100,
+			time: "127.8ns",
+		},
+		{
+			name: "datezone: endOfMonth",
+			ops: "19.2M ops/sec",
+			samples: 100,
+			time: "52.1ns",
+		},
+		{
+			name: "date-fns: endOfMonth",
+			ops: "7.4M ops/sec",
+			samples: 100,
+			time: "134.5ns",
+		},
+		{
+			name: "datezone: addMonths",
+			ops: "11.2M ops/sec",
+			samples: 100,
+			time: "89.3ns",
+		},
+		{
+			name: "date-fns: addMonths",
+			ops: "6.4M ops/sec",
+			samples: 100,
+			time: "156.7ns",
 		},
 	],
 	"Timezone-Specific Operations": [
 		{
 			name: "datezone: wallTimeToUTC",
-			time: "67.8ns",
 			ops: "14.7M ops/sec",
 			samples: 100,
+			time: "67.8ns",
 		},
 		{
 			name: "datezone: getTimezoneOffsetMinutes",
-			time: "23.1ns",
 			ops: "43.3M ops/sec",
 			samples: 100,
+			time: "23.1ns",
 		},
 	],
 };
@@ -156,10 +156,10 @@ function createComparisons(benchmarks: Benchmark[]): Comparison[] {
 	for (const [operation, { datezone, dateFns }] of operationMap) {
 		if (datezone && !dateFns) {
 			comparisons.push({
-				operation,
 				datezone,
 				icon: "🔥",
 				improvement: "Datezone only",
+				operation,
 			});
 			continue;
 		}
@@ -194,11 +194,11 @@ function createComparisons(benchmarks: Benchmark[]): Comparison[] {
 		}
 
 		comparisons.push({
-			operation,
-			datezone,
 			dateFns,
+			datezone,
 			icon,
 			improvement: improvementText,
+			operation,
 		});
 	}
 
@@ -260,14 +260,14 @@ This report compares **Datezone** against **Date-fns v4** with timezone support 
 		createComparisons(benchmarks),
 	);
 	const stats = {
-		total: allComparisons.length,
+		dateFnsWins: allComparisons.filter((c) => c.icon === "⚠️" || c.icon === "🐌")
+			.length,
+		datezoneOnly: allComparisons.filter((c) => c.icon === "🔥").length,
 		datezoneWins: allComparisons.filter(
 			(c) => c.icon === "🚀" || c.icon === "⚡" || c.icon === "✅",
 		).length,
-		dateFnsWins: allComparisons.filter((c) => c.icon === "⚠️" || c.icon === "🐌")
-			.length,
 		ties: allComparisons.filter((c) => c.icon === "🤝").length,
-		datezoneOnly: allComparisons.filter((c) => c.icon === "🔥").length,
+		total: allComparisons.length,
 	};
 
 	markdown += `## 📈 Summary

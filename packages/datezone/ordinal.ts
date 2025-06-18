@@ -1,13 +1,13 @@
 type OrdinalSuffixes = Record<string, string>;
 
 const ordinalSuffixes: Record<string, OrdinalSuffixes> = {
-	en: { one: "st", two: "nd", few: "rd", other: "th" },
-	fr: { one: "er", other: "e" },
+	de: { other: "." },
+	en: { few: "rd", one: "st", other: "th", two: "nd" },
 	es: { other: "º" }, // Spanish uses º for ordinals
-	de: { other: "." }, // German uses period
+	fr: { one: "er", other: "e" }, // German uses period
 	it: { one: "º", other: "º" }, // Italian
-	pt: { one: "º", other: "º" }, // Portuguese
-	nl: { other: "e" }, // Dutch
+	nl: { other: "e" }, // Portuguese
+	pt: { one: "º", other: "º" }, // Dutch
 	// Languages without suffixes (ru, ja, zh, etc.) are omitted and will return empty string
 };
 
@@ -36,8 +36,13 @@ function getNumberFormat(locale: string): Intl.NumberFormat {
 	if (!numberFormatCache.has(locale)) {
 		try {
 			// For unsupported locales, use Western numerals
-			const numberingSystem = ["ar", "fa", "ur"].includes(locale) ? "latn" : undefined;
-			numberFormatCache.set(locale, new Intl.NumberFormat(locale, { numberingSystem }));
+			const numberingSystem = ["ar", "fa", "ur"].includes(locale)
+				? "latn"
+				: undefined;
+			numberFormatCache.set(
+				locale,
+				new Intl.NumberFormat(locale, { numberingSystem }),
+			);
 		} catch {
 			// Fall back to English for invalid locales
 			numberFormatCache.set(locale, new Intl.NumberFormat("en"));

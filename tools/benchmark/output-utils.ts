@@ -34,7 +34,7 @@ let currentGroup: GroupResult | null = null;
 const originalConsoleLog = console.log;
 let isCapturing = false;
 
-function startCapturing() {
+function _startCapturing() {
 	isCapturing = true;
 	capturedOutput = "";
 	capturedGroups = [];
@@ -50,7 +50,7 @@ function startCapturing() {
 	};
 }
 
-function stopCapturing() {
+function _stopCapturing() {
 	isCapturing = false;
 	console.log = originalConsoleLog;
 }
@@ -63,8 +63,8 @@ function parseBenchmarkOutput(output: string) {
 			capturedGroups.push(currentGroup);
 		}
 		currentGroup = {
-			name: groupName,
 			benchmarks: [],
+			name: groupName,
 		};
 		return;
 	}
@@ -78,10 +78,10 @@ function parseBenchmarkOutput(output: string) {
 		const time = benchmarkMatch[2];
 		if (name && time) {
 			currentGroup.benchmarks.push({
-				name: name.trim(),
-				time: time.trim(),
-				ops: "", // Will be calculated if needed
 				margin: "",
+				name: name.trim(),
+				ops: "", // Will be calculated if needed
+				time: time.trim(),
 			});
 		}
 	}
@@ -92,7 +92,7 @@ function parseBenchmarkOutput(output: string) {
 	}
 }
 
-function generateMarkdownReport(title: string, description: string): string {
+function _generateMarkdownReport(title: string, description: string): string {
 	if (currentGroup) {
 		capturedGroups.push(currentGroup);
 	}
@@ -180,8 +180,8 @@ function extractBenchmarkSections(output: string): BenchmarkSection[] {
 				);
 				currentSection.results.push({
 					name: name.trim(),
-					time: time.trim(),
 					performance: performanceMatch ? performanceMatch[1] : "",
+					time: time.trim(),
 				});
 			}
 		}
@@ -215,7 +215,7 @@ export async function runWithMarkdownOutput(
 	return markdownReport;
 }
 
-function generateMarkdownReportWithOutput(
+function _generateMarkdownReportWithOutput(
 	title: string,
 	description: string,
 	capturedOutput: string,

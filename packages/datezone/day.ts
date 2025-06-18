@@ -1,11 +1,11 @@
-import { getCachedFormatterLocale } from "./cache";
-import { DAY } from "./constants";
-import { formatToParts } from "./format-parts";
-import type { TimeZone } from "./iana";
-import { wallTimeToUTC } from "./utils";
-import { isLeapYear } from "./year";
+import { getCachedFormatterLocale } from "./cache.js";
+import { DAY } from "./constants.js";
+import { formatToParts } from "./format-parts.js";
+import type { TimeZone } from "./iana.js";
+import { wallTimeToUTC } from "./utils.js";
+import { isLeapYear } from "./year.js";
 
-const DAY_OPTS = { year: "numeric", month: "2-digit", day: "2-digit" } as const;
+const DAY_OPTS = { day: "2-digit", month: "2-digit", year: "numeric" } as const;
 type DayOptions = { year: number; month: number; day: number };
 type OptionsOrTimestamp = DayOptions | number;
 
@@ -134,8 +134,8 @@ export function weekDayName(
 	day: number,
 ): string {
 	const fmt = getCachedFormatterLocale(locale, {
-		weekday: type,
 		timeZone: "UTC",
+		weekday: type,
 	});
 	// Convert from ISO (1=Monday) to JS (0=Sunday)
 	const jsDay = (day - 1 + 7) % 7;

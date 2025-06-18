@@ -1,14 +1,14 @@
-import { type TimeZone, formatToParts, wallTimeToUTC } from "./index.pub";
+import { formatToParts, type TimeZone, wallTimeToUTC } from "./index.pub.js";
 
 const HOUR_OPTS = { hour: "2-digit", hour12: false } as const;
 const FULL_HOUR_OPTS = {
-	year: "numeric",
-	month: "2-digit",
 	day: "2-digit",
 	hour: "2-digit",
-	minute: "2-digit",
-	second: "2-digit",
 	hour12: false,
+	minute: "2-digit",
+	month: "2-digit",
+	second: "2-digit",
+	year: "numeric",
 } as const;
 
 type HourOptions = { hour: number };

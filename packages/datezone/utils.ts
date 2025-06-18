@@ -1,6 +1,6 @@
-import { FULL_TS, formatToParts } from "./format-parts";
-import type { TimeZone } from "./iana";
-import { getUTCtoTimezoneOffsetMinutes } from "./offset";
+import { FULL_TS, formatToParts } from "./format-parts.js";
+import type { TimeZone } from "./iana.js";
+import { getUTCtoTimezoneOffsetMinutes } from "./offset.js";
 
 /**
  * Converts a local date to UTC.

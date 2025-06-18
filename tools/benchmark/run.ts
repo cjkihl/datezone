@@ -1,20 +1,17 @@
-import { bench, do_not_optimize, group, run } from "mitata";
-
 // Import datezone functions and types
 import {
-	DAY,
-	type TimeZone,
 	addMonths,
+	DAY,
 	endOfDay,
 	endOfMonth,
 	formatToParts,
 	getTimezoneOffsetMinutes,
-	nextDay,
-	previousDay,
 	startOfDay,
 	startOfMonth,
+	type TimeZone,
 	wallTimeToUTC,
 } from "datezone";
+import { bench, do_not_optimize, group, run } from "mitata";
 
 // Mitata context interface
 interface BenchContext {
@@ -122,12 +119,12 @@ group("Core Utilities", () => {
 		yield () =>
 			do_not_optimize(
 				formatToParts(ts, tz, {
-					year: "numeric",
-					month: "2-digit",
 					day: "2-digit",
 					hour: "2-digit",
 					minute: "2-digit",
+					month: "2-digit",
 					second: "2-digit",
+					year: "numeric",
 				}),
 			);
 	})
@@ -193,9 +190,9 @@ group("Memory Patterns", () => {
 			for (let i = 0; i < 100; i++) {
 				results.push(
 					formatToParts(ts + i * 1000, tz, {
-						year: "numeric",
-						month: "2-digit",
 						day: "2-digit",
+						month: "2-digit",
+						year: "numeric",
 					}),
 				);
 			}
@@ -222,9 +219,9 @@ group("Cache Performance", () => {
 			for (let i = 0; i < 50; i++) {
 				results.push(
 					formatToParts(ts + i * 3600000, "America/New_York", {
-						year: "numeric",
-						month: "2-digit",
 						day: "2-digit",
+						month: "2-digit",
+						year: "numeric",
 					}),
 				);
 			}
@@ -255,9 +252,9 @@ group("Cache Performance", () => {
 				}
 				results.push(
 					formatToParts(ts + i * 3600000, tz, {
-						year: "numeric",
-						month: "2-digit",
 						day: "2-digit",
+						month: "2-digit",
+						year: "numeric",
 					}),
 				);
 			}
@@ -281,10 +278,10 @@ group("Real-World Scenarios", () => {
 				const dayTs = addDays(monthStart, i - 7, timezone); // Include prev/next month days
 				const dayStart = startOfDay(dayTs, timezone);
 				const parts = formatToParts(dayStart, timezone, {
-					year: "numeric",
-					month: "2-digit",
 					day: "2-digit",
+					month: "2-digit",
 					weekday: "short",
+					year: "numeric",
 				});
 				results.push(parts);
 			}
@@ -332,9 +329,9 @@ group("Real-World Scenarios", () => {
 
 				// 9 AM to 5 PM working hours
 				const dateParts = formatToParts(dayStart, timezone, {
-					year: "numeric",
-					month: "2-digit",
 					day: "2-digit",
+					month: "2-digit",
+					year: "numeric",
 				});
 
 				const workStart = wallTimeToUTC(
@@ -359,7 +356,7 @@ group("Real-World Scenarios", () => {
 					timezone,
 				);
 
-				results.push({ day, workStart, workEnd });
+				results.push({ day, workEnd, workStart });
 			}
 
 			return do_not_optimize(results);

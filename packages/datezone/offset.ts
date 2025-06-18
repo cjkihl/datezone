@@ -1,5 +1,5 @@
-import { FULL_TS, formatToParts } from "./format-parts";
-import type { TimeZone } from "./iana";
+import { FULL_TS, formatToParts } from "./format-parts.js";
+import type { TimeZone } from "./iana.js";
 
 const HOUR_MS = 60 * 60 * 1000;
 
@@ -47,7 +47,7 @@ export function getUTCtoTimezoneOffsetMinutes(
 	);
 	const offset = (wall - ts) / 60000;
 
-	lastOffsetCache = { zone, hourStart, offset };
+	lastOffsetCache = { hourStart, offset, zone };
 	return offset;
 }
 

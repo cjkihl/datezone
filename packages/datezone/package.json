@@ -1,15 +1,7 @@
 {
   "name": "datezone",
-  "sideEffects": false,
   "version": "0.5.1",
   "description": "A lightweight and comprehensive date and timezone utility library for JavaScript.",
-  "main": "./.dist/output/index.pub.js",
-  "types": "./.dist/types/index.pub.d.ts",
-  "files": [
-    ".dist/**/*",
-    "README.md",
-    "LICENSE"
-  ],
   "keywords": [
     "date",
     "timezone",
@@ -21,34 +13,42 @@
     "performance",
     "tree-shakeable"
   ],
-  "license": "MIT",
+  "homepage": "https://github.com/cjkihl/datezone#readme",
+  "bugs": {
+    "url": "https://github.com/cjkihl/datezone/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/cjkihl/datezone.git"
   },
-  "bugs": {
-    "url": "https://github.com/cjkihl/datezone/issues"
-  },
-  "homepage": "https://github.com/cjkihl/datezone#readme",
+  "license": "MIT",
   "author": "CJ Kihl",
+  "sideEffects": false,
+  "type": "module",
   "exports": {
     ".": {
-      "types": "./.dist/types/index.pub.d.ts",
-      "default": "./.dist/output/index.pub.js"
+      "default": "./dist/output/index.pub.js",
+      "types": "./dist/types/index.pub.d.ts"
     }
   },
-  "type": "module",
-  "engines": {
-    "node": ">=16.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
+  "main": "./.dist/output/index.pub.js",
+  "types": "./.dist/types/index.pub.d.ts",
+  "files": [
+    ".dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc && create-exports",
     "ts": "tsc --noEmit"
   },
   "devDependencies": {
-    "@cjkihl/tsconfig": "^0.1.15"
+    "@cjkihl/tsconfig": "^0.1.17"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

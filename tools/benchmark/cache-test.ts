@@ -11,12 +11,12 @@ console.log(
 const testTimestamp = new Date("2024-06-15T15:45:30.123Z").getTime();
 const testTimezone = "America/New_York";
 const formatOptions = {
-	year: "numeric" as const,
-	month: "2-digit" as const,
 	day: "2-digit" as const,
 	hour: "2-digit" as const,
 	minute: "2-digit" as const,
+	month: "2-digit" as const,
 	second: "2-digit" as const,
+	year: "numeric" as const,
 };
 
 // First, let's test cache behavior manually

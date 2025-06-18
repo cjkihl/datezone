@@ -1,4 +1,4 @@
-import type { PlainDateTime } from "../types";
+import type { PlainDateTime } from "../types.js";
 
 /**
  * Formats a timezone offset according to the given pattern.

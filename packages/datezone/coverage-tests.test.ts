@@ -18,22 +18,22 @@ import { getTimezoneOffsetMinutes } from "./offset";
 describe("Coverage Tests - Missing Lines", () => {
 	describe("Day functions with DayOptions input", () => {
 		test("addDays with DayOptions object", () => {
-			const result = addDays({ year: 2024, month: 3, day: 15 }, 5, "UTC");
+			const result = addDays({ day: 15, month: 3, year: 2024 }, 5, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
 		test("subDays with DayOptions object", () => {
-			const result = subDays({ year: 2024, month: 3, day: 15 }, 5, "UTC");
+			const result = subDays({ day: 15, month: 3, year: 2024 }, 5, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
 		test("startOfDay with DayOptions object", () => {
-			const result = startOfDay({ year: 2024, month: 3, day: 15 }, "UTC");
+			const result = startOfDay({ day: 15, month: 3, year: 2024 }, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
 		test("endOfDay with DayOptions object", () => {
-			const result = endOfDay({ year: 2024, month: 3, day: 15 }, "UTC");
+			const result = endOfDay({ day: 15, month: 3, year: 2024 }, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 	});
@@ -66,14 +66,14 @@ describe("Coverage Tests - Missing Lines", () => {
 
 		test("formatTimestamp", () => {
 			const dt = {
-				year: 2024,
-				month: 3,
 				day: 15,
 				hour: 14,
-				minute: 30,
-				second: 45,
 				millisecond: 123,
+				minute: 30,
+				month: 3,
+				second: 45,
 				timezoneOffsetMinutes: 0,
+				year: 2024,
 			};
 
 			// Test milliseconds format
@@ -147,7 +147,7 @@ describe("Coverage Tests - Missing Lines", () => {
 		});
 
 		test("daysInMonth with MonthOptions", () => {
-			const result = daysInMonth({ year: 2024, month: 2 }, "UTC");
+			const result = daysInMonth({ month: 2, year: 2024 }, "UTC");
 			expect(result).toBe(29); // 2024 is a leap year
 		});
 

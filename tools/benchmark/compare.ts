@@ -1,12 +1,52 @@
-import { bench, do_not_optimize, group, run } from "mitata";
+// Import date-fns functions (without timezone extensions for now)
+import {
+	addDays as fnsAddDays,
+	addHours as fnsAddHours,
+	addMinutes as fnsAddMinutes,
+	addMonths as fnsAddMonths,
+	addSeconds as fnsAddSeconds,
+	addWeeks as fnsAddWeeks,
+	endOfDay as fnsEndOfDay,
+	endOfHour as fnsEndOfHour,
+	endOfMinute as fnsEndOfMinute,
+	endOfMonth as fnsEndOfMonth,
+	endOfSecond as fnsEndOfSecond,
+	endOfWeek as fnsEndOfWeek,
+	format as fnsFormat,
+	getDay as fnsGetDay,
+	getDayOfYear as fnsGetDayOfYear,
+	getHours as fnsGetHours,
+	getISOWeek as fnsGetISOWeek,
+	getYear as fnsGetYear,
+	isAfter as fnsIsAfter,
+	isBefore as fnsIsBefore,
+	isEqual as fnsIsEqual,
+	isFuture as fnsIsFuture,
+	isPast as fnsIsPast,
+	isSameDay as fnsIsSameDay,
+	isSameMonth as fnsIsSameMonth,
+	isSameWeek as fnsIsSameWeek,
+	isSameYear as fnsIsSameYear,
+	isToday as fnsIsToday,
+	isTomorrow as fnsIsTomorrow,
+	isWeekend as fnsIsWeekend,
+	isYesterday as fnsIsYesterday,
+	startOfDay as fnsStartOfDay,
+	startOfHour as fnsStartOfHour,
+	startOfMinute as fnsStartOfMinute,
+	startOfMonth as fnsStartOfMonth,
+	startOfSecond as fnsStartOfSecond,
+	startOfWeek as fnsStartOfWeek,
+	subDays as fnsSubDays,
+	subHours as fnsSubHours,
+	subMinutes as fnsSubMinutes,
+	subMonths as fnsSubMonths,
+	subSeconds as fnsSubSeconds,
+	subWeeks as fnsSubWeeks,
+} from "date-fns";
 
 // Import datezone functions
 import {
-	DAY,
-	HOUR,
-	MINUTE,
-	SECOND,
-	WEEK,
 	addDays as dzAddDays,
 	addHours as dzAddHours,
 	addMinutes as dzAddMinutes,
@@ -55,60 +95,7 @@ import {
 	subWeeks as dzSubWeeks,
 	wallTimeToUTC as dzWallTimeToUTC,
 } from "datezone";
-
-// Import date-fns functions (without timezone extensions for now)
-import {
-	addDays as fnsAddDays,
-	addHours as fnsAddHours,
-	addMinutes as fnsAddMinutes,
-	addMonths as fnsAddMonths,
-	addSeconds as fnsAddSeconds,
-	addWeeks as fnsAddWeeks,
-	addYears as fnsAddYears,
-	endOfDay as fnsEndOfDay,
-	endOfHour as fnsEndOfHour,
-	endOfMinute as fnsEndOfMinute,
-	endOfMonth as fnsEndOfMonth,
-	endOfSecond as fnsEndOfSecond,
-	endOfWeek as fnsEndOfWeek,
-	endOfYear as fnsEndOfYear,
-	format as fnsFormat,
-	getDay as fnsGetDay,
-	getDayOfYear as fnsGetDayOfYear,
-	getHours as fnsGetHours,
-	getISOWeek as fnsGetISOWeek,
-	getYear as fnsGetYear,
-	isAfter as fnsIsAfter,
-	isBefore as fnsIsBefore,
-	isEqual as fnsIsEqual,
-	isFuture as fnsIsFuture,
-	isPast as fnsIsPast,
-	isSameDay as fnsIsSameDay,
-	isSameHour as fnsIsSameHour,
-	isSameMinute as fnsIsSameMinute,
-	isSameMonth as fnsIsSameMonth,
-	isSameSecond as fnsIsSameSecond,
-	isSameWeek as fnsIsSameWeek,
-	isSameYear as fnsIsSameYear,
-	isToday as fnsIsToday,
-	isTomorrow as fnsIsTomorrow,
-	isWeekend as fnsIsWeekend,
-	isYesterday as fnsIsYesterday,
-	startOfDay as fnsStartOfDay,
-	startOfHour as fnsStartOfHour,
-	startOfMinute as fnsStartOfMinute,
-	startOfMonth as fnsStartOfMonth,
-	startOfSecond as fnsStartOfSecond,
-	startOfWeek as fnsStartOfWeek,
-	startOfYear as fnsStartOfYear,
-	subDays as fnsSubDays,
-	subHours as fnsSubHours,
-	subMinutes as fnsSubMinutes,
-	subMonths as fnsSubMonths,
-	subSeconds as fnsSubSeconds,
-	subWeeks as fnsSubWeeks,
-	subYears as fnsSubYears,
-} from "date-fns";
+import { bench, do_not_optimize, group, run } from "mitata";
 
 // Test data
 const testTimestamp = new Date("2024-06-15T15:45:30.123Z").getTime();
@@ -458,12 +445,12 @@ group("Formatting Operations", () => {
 		yield () =>
 			do_not_optimize(
 				dzFormatToParts(testTimestamp, testTimezone, {
-					year: "numeric",
-					month: "2-digit",
 					day: "2-digit",
 					hour: "2-digit",
 					minute: "2-digit",
+					month: "2-digit",
 					second: "2-digit",
+					year: "numeric",
 				}),
 			);
 	});
@@ -478,13 +465,13 @@ group("Formatting Operations", () => {
 	bench("native: Intl.DateTimeFormat", function* () {
 		yield () => {
 			const formatter = new Intl.DateTimeFormat("en-US", {
-				timeZone: testTimezone,
-				year: "numeric",
-				month: "2-digit",
 				day: "2-digit",
 				hour: "2-digit",
 				minute: "2-digit",
+				month: "2-digit",
 				second: "2-digit",
+				timeZone: testTimezone,
+				year: "numeric",
 			});
 			return do_not_optimize(formatter.formatToParts(testTimestamp));
 		};
@@ -661,9 +648,9 @@ group("Complex Operations", () => {
 			const monthStart = dzStartOfMonth(testTimestamp, testTimezone);
 			const adjusted = dzAddDays(monthStart, 15, testTimezone);
 			const parts = dzFormatToParts(adjusted, testTimezone, {
-				year: "numeric",
-				month: "2-digit",
 				day: "2-digit",
+				month: "2-digit",
+				year: "numeric",
 			});
 			return do_not_optimize(parts);
 		};
@@ -782,9 +769,9 @@ group("Timezone Operations (Datezone Advantage)", () => {
 			];
 			const results = timezones.map((tz) => {
 				const formatter = new Intl.DateTimeFormat("en-US", {
-					timeZone: tz,
 					hour: "2-digit",
 					minute: "2-digit",
+					timeZone: tz,
 					timeZoneName: "short",
 				});
 				return formatter.formatToParts(testTimestamp);
@@ -809,9 +796,9 @@ group("Real-World Scenarios", () => {
 				const dayTs = dzAddDays(monthStart, i - 7, timezone);
 				const dayStart = dzStartOfDay(dayTs, timezone);
 				const parts = dzFormatToParts(dayStart, timezone, {
-					year: "numeric",
-					month: "2-digit",
 					day: "2-digit",
+					month: "2-digit",
+					year: "numeric",
 				});
 				results.push(parts);
 			}
@@ -849,9 +836,9 @@ group("Real-World Scenarios", () => {
 			ts = dzAddDays(ts, 5, testTimezone); // Next weekday
 			const isWeekendDay = dzIsWeekend(ts, testTimezone);
 			const parts = dzFormatToParts(ts, testTimezone, {
-				weekday: "long",
 				hour: "2-digit",
 				minute: "2-digit",
+				weekday: "long",
 			});
 			return do_not_optimize({ isWeekendDay, parts });
 		};
@@ -866,7 +853,7 @@ group("Real-World Scenarios", () => {
 			date = fnsAddDays(date, 5); // Next weekday
 			const isWeekendDay = fnsIsWeekend(date);
 			const formatted = fnsFormat(date, "EEEE HH:mm");
-			return do_not_optimize({ isWeekendDay, formatted });
+			return do_not_optimize({ formatted, isWeekendDay });
 		};
 	});
 });

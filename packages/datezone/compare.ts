@@ -1,15 +1,15 @@
-import type { TimeZone } from "./index.pub";
+import type { TimeZone } from "./index.pub.js";
 import {
 	dayOfWeek,
 	formatToParts,
 	startOfDay,
 	wallTimeToUTC,
-} from "./index.pub";
+} from "./index.pub.js";
 
 type OptionsOrTimestamp = { year: number; month: number; day: number } | number;
 type DateOptions = { year: number; month: number; day: number };
 
-const DAY_OPTS = { year: "numeric", month: "2-digit", day: "2-digit" } as const;
+const DAY_OPTS = { day: "2-digit", month: "2-digit", year: "numeric" } as const;
 
 function getDateOptions(
 	ts: OptionsOrTimestamp,

@@ -1,11 +1,11 @@
-import { getCachedFormatterLocale } from "./cache";
-import { formatToParts } from "./format-parts";
-import type { TimeZone } from "./iana";
-import { wallTimeToUTC } from "./utils";
-import { isLeapYear } from "./year";
+import { getCachedFormatterLocale } from "./cache.js";
+import { formatToParts } from "./format-parts.js";
+import type { TimeZone } from "./iana.js";
+import { wallTimeToUTC } from "./utils.js";
+import { isLeapYear } from "./year.js";
 
 type YearMonthOptions = { year: number; month: number };
-const YEAR_MONTH_OPTS = { year: "numeric", month: "2-digit" } as const;
+const YEAR_MONTH_OPTS = { month: "2-digit", year: "numeric" } as const;
 
 type OptionsOrTimestamp = YearMonthOptions | number;
 
@@ -56,13 +56,13 @@ export function addMonths(
 		minute = 0,
 		second = 0,
 	} = formatToParts(ts, timeZone, {
-		year: "numeric",
-		month: "2-digit",
 		day: "2-digit",
+		fractionalSecondDigits: 3,
 		hour: "2-digit",
 		minute: "2-digit",
+		month: "2-digit",
 		second: "2-digit",
-		fractionalSecondDigits: 3,
+		year: "numeric",
 	} as const);
 
 	const { year: newYear, month: newMonth } = calculateYearMonth(
@@ -71,7 +71,7 @@ export function addMonths(
 		months,
 	);
 
-	const maxDay = daysInMonth({ year: newYear, month: newMonth }, timeZone);
+	const maxDay = daysInMonth({ month: newMonth, year: newYear }, timeZone);
 	const newDay = day > maxDay ? maxDay : day;
 
 	return wallTimeToUTC(
@@ -231,7 +231,7 @@ export function calculateYearMonth(
 	if (newMonth < 1 || newMonth > 12) {
 		throw new RangeError(`Invalid month: ${newMonth}`);
 	}
-	return { year: newYear, month: newMonth };
+	return { month: newMonth, year: newYear };
 }
 
 /**

@@ -13,32 +13,32 @@ interface BenchmarkConfig {
 
 const benchmarkConfigs: Record<string, BenchmarkConfig> = {
 	"cache-test.ts": {
-		title: "Cache Performance Tests",
 		description:
 			"Performance tests focused on caching behavior and memory allocation patterns in Datezone.",
-		scriptPath: "cache-test.ts",
 		outputPath: "reports/cache-performance.md",
-	},
-	"run.ts": {
-		title: "Datezone Performance Benchmarks",
-		description:
-			"Comprehensive performance benchmarks for Datezone date/time operations across various scenarios and timezones.",
-		scriptPath: "run.ts",
-		outputPath: "reports/performance-benchmarks.md",
+		scriptPath: "cache-test.ts",
+		title: "Cache Performance Tests",
 	},
 	"compare.ts": {
-		title: "Datezone vs Date-fns Performance Comparison",
 		description:
 			"Detailed performance comparison between Datezone and Date-fns v4 across common date/time operations.",
-		scriptPath: "compare.ts",
 		outputPath: "reports/comparison-benchmarks.md",
+		scriptPath: "compare.ts",
+		title: "Datezone vs Date-fns Performance Comparison",
 	},
 	"comprehensive-compare.ts": {
-		title: "Comprehensive Datezone vs Date-fns Comparison",
 		description:
 			"Comprehensive performance comparison between Datezone and Date-fns including timezone-aware operations.",
-		scriptPath: "comprehensive-compare.ts",
 		outputPath: "reports/comprehensive-comparison.md",
+		scriptPath: "comprehensive-compare.ts",
+		title: "Comprehensive Datezone vs Date-fns Comparison",
+	},
+	"run.ts": {
+		description:
+			"Comprehensive performance benchmarks for Datezone date/time operations across various scenarios and timezones.",
+		outputPath: "reports/performance-benchmarks.md",
+		scriptPath: "run.ts",
+		title: "Datezone Performance Benchmarks",
 	},
 };
 
@@ -150,8 +150,8 @@ function extractBenchmarkSections(output: string): BenchmarkSection[] {
 				);
 				currentSection.results.push({
 					name: name.trim(),
-					time: time.trim(),
 					performance: performanceMatch ? performanceMatch[1] : "",
+					time: time.trim(),
 				});
 			}
 		}
