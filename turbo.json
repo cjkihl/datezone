@@ -23,6 +23,10 @@
 		"test": {
 			"cache": false,
 			"dependsOn": ["^build"]
+		},
+		"type-check": {
+			"cache": false,
+			"outputs": []
 		}
 	},
 	"ui": "stream"

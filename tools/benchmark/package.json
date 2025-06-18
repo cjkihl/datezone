@@ -3,18 +3,20 @@
 	"version": "1.0.0",
 	"private": true,
 	"description": "Performance benchmarks for Datezone",
+	"type": "module",
 	"scripts": {
 		"bench": "bun run run.ts",
+		"type-check": "tsc --noEmit",
 		"compare": "bun run comprehensive-compare.ts",
+		"quick": "bun run compare.ts",
 		"report": "bun run format-results.ts",
-		"sample": "bun run simple-format.ts",
-		"quick": "bun run compare.ts"
+		"sample": "bun run simple-format.ts"
 	},
 	"dependencies": {
-		"mitata": "^1.0.34",
-		"datezone": "workspace:*",
+		"@date-fns/tz": "^1.2.0",
 		"date-fns": "^4.1.0",
-		"@date-fns/tz": "^1.2.0"
+		"datezone": "workspace:*",
+		"mitata": "^1.0.34"
 	},
 	"devDependencies": {
 		"@cjkihl/tsconfig": "^0.1.17"

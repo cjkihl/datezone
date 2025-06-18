@@ -40,7 +40,7 @@
   ],
   "scripts": {
     "build": "tsc && create-exports",
-    "ts": "tsc --noEmit"
+    "type-check": "tsc --noEmit"
   },
   "devDependencies": {
     "@cjkihl/tsconfig": "^0.1.17"
