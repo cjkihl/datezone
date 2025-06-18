@@ -12,8 +12,8 @@
 		"restore": "bun run resolve-deps restore",
 		"release": "bun run resolve && bun run build && changeset publish",
 		"clean": "git clean -fxd -e .env.local",
-		"lint": "biome check .",
-		"lint-fix": "biome check --write --unsafe .",
+		"lint": "biome check . && manypkg check",
+		"lint-fix": "biome check --write --unsafe . && manypkg fix",
 		"format": "biome format .",
 		"type-check": "turbo type-check",
 		"up": "bunx npm-check-updates -ws --root --format group -u",
@@ -25,10 +25,12 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.0.0",
+		"@changesets/cli": "^2.29.4",
 		"@cjkihl/changeset-dep-resolver": "^0.1.5",
-		"@cjkihl/tsconfig": "^0.1.17",
 		"@cjkihl/create-exports": "^0.1.17",
+		"@cjkihl/tsconfig": "^0.1.17",
 		"@date-fns/tz": "^1.2.0",
+		"@manypkg/cli": "^0.24.0",
 		"@types/bun": "latest",
 		"@types/semver": "^7.7.0",
 		"date-fns": "^4.1.0",
@@ -42,5 +44,9 @@
 		"typescript": "^5"
 	},
 	"packageManager": "bun@1.2.16",
-	"workspaces": ["packages/*", "shared/*", "tools/*"]
+	"workspaces": [
+		"packages/*",
+		"shared/*",
+		"tools/*"
+	]
 }
