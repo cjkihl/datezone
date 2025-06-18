@@ -1,61 +1,46 @@
-name: Release and Publish
+name: Release
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
-  publish:
+  release:
+    name: Release
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write  # Required for npm provenance
-
     steps:
-      - name: Checkout code
+      - name: Checkout Repo
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: bun install --frozen-lockfile
 
-      - name: Build packages
-        run:  turbo build --filter=./packages/*
-
-      - name: Run linting
-        run: turbo lint --filter=./packages/*
-
-      - name: Run tests
-        run: turbo test --filter=./packages/*
-
-      - name: Configure npm
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-          echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          # This expects you to have a script called release which does a build for your packages and calls changeset publish
+          publish: bun run release
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish to NPM
-        id: publish
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: turbo publish-npm --filter=./packages/*
-
-      - name: Create deployment summary
-        run: |
-          echo "## 🚀 Release Summary" >> $GITHUB_STEP_SUMMARY
-          echo "### Release Details" >> $GITHUB_STEP_SUMMARY
-          echo "- **Release Tag:** ${{ github.event.release.tag_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Release Name:** ${{ github.event.release.name }}" >> $GITHUB_STEP_SUMMARY
-          
-          echo "### Build Status" >> $GITHUB_STEP_SUMMARY
-          echo "✅ All checks passed successfully" >> $GITHUB_STEP_SUMMARY
-          echo "- Build completed" >> $GITHUB_STEP_SUMMARY
-          echo "- Tests passed" >> $GITHUB_STEP_SUMMARY
-          echo "- Linting passed" >> $GITHUB_STEP_SUMMARY
-          echo "- Packages published" >> $GITHUB_STEP_SUMMARY 
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPMTOKEN }}

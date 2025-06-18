@@ -46,11 +46,9 @@
   },
   "scripts": {
     "build": "tsc && create-exports",
-    "publish-npm": "bun safe-publish",
     "ts": "tsc --noEmit"
   },
   "devDependencies": {
-    "@cjkihl/tsconfig": "latest",
-    "@cjkihl/publish": "latest"
+    "@cjkihl/tsconfig": "^0.1.15"
   }
 }

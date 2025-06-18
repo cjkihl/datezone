@@ -2,20 +2,15 @@
 	"$schema": "https://turbo.build/schema.json",
 	"globalDependencies": ["**/.env.*local"],
 	"globalEnv": ["NODE_ENV"],
-	"globalPassThroughEnv": ["CI", "VERCEL", "GITHUB_TOKEN", "NPM_TOKEN"],
-	"ui": "stream",
+	"globalPassThroughEnv": ["CI", "VERCEL", "GITHUB_TOKEN", "NPMTOKEN"],
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
 			"outputs": [".dist"]
 		},
-		"publish-npm": {
+		"format": {
 			"cache": false,
-			"dependsOn": ["^build", "^lint", "^test"]
-		},
-		"test": {
-			"cache": false,
-			"dependsOn": ["^build"]
+			"outputs": []
 		},
 		"lint": {
 			"cache": false,
@@ -25,9 +20,10 @@
 			"cache": false,
 			"outputs": []
 		},
-		"format": {
+		"test": {
 			"cache": false,
-			"outputs": []
+			"dependsOn": ["^build"]
 		}
-	}
+	},
+	"ui": "stream"
 }

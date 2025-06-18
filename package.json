@@ -7,7 +7,8 @@
 		"test": "bun test",
 		"build": "turbo build",
 		"build-pkg": "turbo build --filter=./packages/*",
-		"publish-npm": "turbo publish-npm",
+		"resolve-deps": "bun run resolve-deps resolve",
+		"release": "bun run resolve-deps && bun run build && changeset publish",
 		"clean": "git clean -fxd -e .env.local",
 		"lint": "biome check .",
 		"lint-fix": "biome check --write --unsafe .",
@@ -21,7 +22,8 @@
 		"bench:cache": "bun tools/benchmark/run-with-output.ts cache-test.ts"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^1.9.4",
+		"@biomejs/biome": "^2.0.0",
+		"@cjkihl/changeset-dep-resolver": "^0.1.2",
 		"@date-fns/tz": "^1.2.0",
 		"@types/bun": "latest",
 		"@types/semver": "^7.7.0",

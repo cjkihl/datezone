@@ -1,18 +1,32 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.7.3/schema.json",
-	"organizeImports": {
-		"enabled": true
+	"$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on",
+				"useSortedAttributes": "on",
+				"useSortedKeys": "on",
+				"useSortedProperties": "on"
+			}
+		}
 	},
 	"files": {
-		"ignore": [
-			"**/node_modules/**",
-			"**/.next/**",
-			"**/.git/**",
-			"**/.vscode/**",
-			"**/.dist/**",
-			"**/.turbo/**",
-			"**/package.json"
+		"includes": [
+			"**",
+			"!**/node_modules/**",
+			"!**/.next/**",
+			"!**/.git/**",
+			"!**/.vscode/**",
+			"!**/dist/**",
+			"!**/.turbo/**",
+			"!**/package.json",
+			"!**/bun.lock"
 		]
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab",
+		"indentWidth": 2
 	},
 	"json": {
 		"parser": {
@@ -26,24 +40,29 @@
 				"noSvgWithoutTitle": "off",
 				"useButtonType": "off"
 			},
-			"recommended": true,
-			"style": {
-				"noNonNullAssertion": "off"
+			"correctness": {
+				"useExhaustiveDependencies": "error"
 			},
 			"nursery": {
 				"useSortedClasses": "off"
 			},
-			"correctness": {
-				"useExhaustiveDependencies": "error"
+			"recommended": true,
+			"style": {
+				"noInferrableTypes": "error",
+				"noNonNullAssertion": "off",
+				"noParameterAssign": "error",
+				"noUnusedTemplateLiteral": "error",
+				"noUselessElse": "error",
+				"useAsConstAssertion": "error",
+				"useDefaultParameterLast": "error",
+				"useEnumInitializers": "error",
+				"useNumberNamespace": "error",
+				"useSelfClosingElements": "error",
+				"useSingleVarDeclarator": "error"
 			},
 			"suspicious": {
 				"noArrayIndexKey": "off"
 			}
 		}
-	},
-	"formatter": {
-		"enabled": true,
-		"indentStyle": "tab",
-		"indentWidth": 2
 	}
 }

@@ -1,0 +1,11 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.action.useSortedKeys.biome": "explicit",
+        "source.action.useSortedProperties.biome": "explicit",
+        "source.action.useSortedAttributes.biome": "explicit",
+        "source.organizeImports.biome": "explicit",
+        "source.fixAll.biome": "explicit"
+    },
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "biomejs.biome"
+}
