@@ -87,7 +87,7 @@ Comprehensive benchmarks show dramatic improvements over date-fns:
 | `endOfMonth` (timezone) | 1.44 µs | 7.84 µs | **444% faster** |
 | Complex timezone workflow | 3.46 µs | 17.17 µs | **397% faster** |
 
-**📊 [View Full Performance Report →](../../tools/benchmark/reports/comparison-report.md)**
+**📊 [View Full Performance Report →](https://github.com/cjkihl/datezone/blob/main/tools/benchmark/reports/comparison-report.md)**
 
 ### Run Benchmarks
 
@@ -112,7 +112,7 @@ bun run bench:report
 
 We welcome contributions! Datezone maintains **90%+ code coverage** using Bun's built-in coverage reporting.
 
-**📖 [Read the Contributing Guide →](../../CONTRIBUTING.md)**
+**📖 [Read the Contributing Guide →](https://github.com/cjkihl/datezone/blob/main/CONTRIBUTING.md)**
 
 ```bash
 # Install dependencies
@@ -133,7 +133,7 @@ bun run format
 - [x] Core timezone-aware operations
 - [x] Comprehensive benchmarking  
 - [x] 90%+ test coverage
-- [ ] Complete date-fns API parity ([see issues/PRs](https://github.com/your-repo/datezone/issues))
+- [ ] Complete date-fns API parity ([see issues/PRs](https://github.com/cjkihl/datezone/issues))
 - [ ] Locale-aware formatting
 - [ ] React Native optimization
 

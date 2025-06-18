@@ -145,7 +145,3 @@ bun run release          # Build + publish
 bun run release:bun      # Publish only
 bun run release:bun --dry-run  # Test without publishing
 ```
-
-**📚 Documentation:**
-- [SETUP.md](./SETUP.md) - Quick setup guide  
-- [RELEASE.md](./RELEASE.md) - Detailed workflow documentation

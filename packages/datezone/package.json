@@ -31,11 +31,13 @@
       "types": "./dist/types/index.pub.d.ts"
     }
   },
-  "main": "./.dist/output/index.pub.js",
-  "types": "./.dist/types/index.pub.d.ts",
+  "main": "./dist/output/index.pub.js",
+  "types": "./dist/types/index.pub.d.ts",
   "files": [
-    ".dist/**/*",
+    "dist/**/*",
     "README.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
     "LICENSE"
   ],
   "scripts": {
