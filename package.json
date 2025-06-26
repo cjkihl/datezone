@@ -16,11 +16,9 @@
 		"format": "biome format .",
 		"type-check": "turbo type-check",
 		"up": "bunx npm-check-updates -ws --root --format group -u",
-		"bench": "bun tools/benchmark/run.ts",
-		"bench:compare": "bun tools/benchmark/compare.ts",
-		"bench:comprehensive": "bun tools/benchmark/comprehensive-compare.ts",
-		"bench:report": "bun tools/benchmark/format-results.ts",
-		"bench:cache": "bun tools/benchmark/run-with-output.ts cache-test.ts"
+		"bench-comprehensive": "bun run -F benchmarks comprehensive",
+		"bench-report": "bun run -F benchmarks report",
+		"bench-cache": "bun run -F benchmarks cache"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.0.5",

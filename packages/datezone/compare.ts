@@ -6,7 +6,9 @@ import {
 	wallTimeToUTC,
 } from "./index.pub.js";
 
-type OptionsOrTimestamp = { year: number; month: number; day: number } | number;
+export type OptionsOrTimestamp =
+	| { year: number; month: number; day: number }
+	| number;
 type DateOptions = { year: number; month: number; day: number };
 
 const DAY_OPTS = { day: "2-digit", month: "2-digit", year: "numeric" } as const;

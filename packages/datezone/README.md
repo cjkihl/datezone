@@ -29,6 +29,8 @@ A **blazingly fast**, pure, and fully-typed TypeScript library for working with 
 ## Installation
 
 ```sh
+bun add datezone
+# or (for non-monorepo users)
 pnpm add datezone
 # or
 yarn add datezone
@@ -39,7 +41,12 @@ npm install datezone
 ## Quick Start
 
 ```ts
-import { startOfDay, endOfDay, startOfMonth, endOfMonth, localToUTC, utcToTimeZone } from "datezone";
+import {
+  startOfDay, endOfDay, startOfMonth, endOfMonth,
+  addDays, addMonths, addYears,
+  localToUTC, utcToTimeZone, getTimezoneOffsetMinutes, wallTimeToUTC,
+  format, getLocalTimezone
+} from "datezone";
 
 const now = new Date();
 
@@ -52,29 +59,59 @@ const monthEnd = endOfMonth(now, "Asia/Tokyo");
 // Timezone conversions
 const utc = localToUTC(now);
 const singapore = utcToTimeZone(utc, "Asia/Singapore");
+
+// Advanced formatting
+import { format } from "datezone";
+const formatted = format(now.getTime(), "yyyy-MM-dd HH:mm:ss zzzz", { locale: "en", timeZone: "America/New_York" });
+//=> "2024-06-01 14:30:00 GMT-04:00"
 ```
 
 ## API Reference
 
-### Timezone-Aware Operations
-- `startOfDay(date: Date, timeZone?: string): Date`
-- `endOfDay(date: Date, timeZone?: string): Date`
-- `startOfMonth(date: Date, timeZone?: string): Date`
-- `endOfMonth(date: Date, timeZone?: string): Date`
-- `addDays(date: Date, amount: number, timeZone?: string): Date`
-- `addMonths(date: Date, amount: number, timeZone?: string): Date`
-- `addYears(date: Date, amount: number, timeZone?: string): Date`
+### Main Exports
+- `startOfDay`, `endOfDay`, `addDays`, `subDays`, `nextDay`, `previousDay`, `dayOfWeek`, `dayOfYear`, `weekDayName`, `getDayPeriod` (from `day`)
+- `startOfMonth`, `endOfMonth`, `addMonths`, `subMonths`, `daysInMonth`, `getMonthName`, `getQuarter` (from `month`)
+- `startOfYear`, `endOfYear`, `addYears`, `subYears`, `isLeapYear`, `getYear`, `getDaysInYear` (from `year`)
+- `startOfWeek`, `endOfWeek`, `addWeeks`, `subWeeks`, `getWeek`, `getISOWeekYear`, `getWeeksInMonth`, `WeekStartsOn` (from `week`)
+- `startOfHour`, `endOfHour`, `addHours`, `subHours`, `getHour`, `get12Hour`, `get24Hour`, `startOfMinute`, `endOfMinute`, `addMinutes`, `subMinutes`, `startOfSecond`, `endOfSecond`, `addSeconds`, `subSeconds`, `addMilliseconds`, `subMilliseconds` (from `hour`)
+- `localToUTC`, `utcToTimeZone`, `wallTimeToUTC` (from `utils`)
+- `getTimezoneOffsetMinutes`, `getUTCtoTimezoneOffsetMinutes`, `getLocalTimezoneOffsetMinutes` (from `offset`)
+- `format`, `formatToParts` (from `format` and `format-parts`)
+- `formatOrdinal` (from `ordinal`)
+- `TimeZone` type and helpers (from `iana`)
+- `getLocalTimezone` (utility)
+- `SECOND`, `MINUTE`, `HOUR`, `DAY`, `WEEK` (from `constants`)
 
-### Timezone Utilities
-- `localToUTC(date: Date): Date`
-- `utcToTimeZone(date: Date, timeZone: string): Date`
-- `getTimezoneOffsetMinutes(date: Date, timeZone: string): number`
-- `wallTimeToUTC(date: Date, timeZone: string): Date`
+### Advanced Formatting
 
-### Formatting & Parsing
-- `formatToParts(date: Date, options?: Intl.DateTimeFormatOptions, timeZone?: string): Intl.DateTimeFormatPart[]`
+Datezone provides a powerful formatting API inspired by Unicode Technical Standard #35 and date-fns:
 
-*...and more (see source files)*
+```ts
+import { format } from "datezone";
+const result = format(Date.now(), "yyyy-MM-dd HH:mm:ss zzzz", { locale: "en", timeZone: "America/New_York" });
+//=> "2024-06-01 14:30:00 GMT-04:00"
+```
+
+Supported tokens include:
+- Era: `G`, `GG`, `GGG`, `GGGG`, `GGGGG`
+- Year: `y`, `yy`, `yyy`, `yyyy`, `yyyyy`, `yo`
+- Month: `M`, `MM`, `MMM`, `MMMM`, `MMMMM`, `Mo`, `L`, `LL`, `LLL`, `LLLL`, `LLLLL`, `Lo`
+- Day: `d`, `dd`, `do`, `D`, `DD`, `DDD`, `DDDD`, `Do`
+- Week: `w`, `ww`, `wo`, `I`, `II`, `Io`, `R`, `RR`, `RRR`, `RRRR`, `RRRRR`
+- Day of week: `E`, `EE`, `EEE`, `EEEE`, `EEEEE`, `EEEEEE`, `e`, `ee`, `eee`, `eeee`, `eeeee`, `eeeeee`, `c`, `cc`, `ccc`, `cccc`, `ccccc`, `cccccc`, `i`, `ii`, `iii`, `iiii`, `iiiii`, `iiiiii`
+- AM/PM: `a`, `aa`, `aaa`, `aaaa`, `aaaaa`, `b`, `bb`, `bbb`, `bbbb`, `bbbbb`, `B`, `BB`, `BBB`, `BBBB`, `BBBBB`
+- Hour: `h`, `hh`, `ho`, `H`, `HH`, `Ho`, `K`, `KK`, `Ko`, `k`, `kk`, `ko`
+- Minute: `m`, `mm`, `mo`
+- Second: `s`, `ss`, `so`, `S`, `SS`, `SSS`, `SSSS`
+- Timezone: `X`, `XX`, `XXX`, `XXXX`, `XXXXX`, `x`, `xx`, `xxx`, `xxxx`, `xxxxx`, `O`, `OO`, `OOO`, `OOOO`, `z`, `zz`, `zzz`, `zzzz`
+- Timestamps: `t`, `tt`, `T`, `TT`
+- Localized date/time: `P`, `PP`, `PPP`, `PPPP`, `p`, `pp`, `ppp`, `pppp`, `Pp`, `PPpp`, `PPPppp`, `PPPPpppp`
+
+See the [source code](./format/index.ts) for the full list and details.
+
+### TypeScript Types
+- All APIs are fully typed. The `TimeZone` type is exported for strict typing.
+- The `PlainDateTime` type is exported for advanced use cases.
 
 ## Performance
 
@@ -112,7 +149,7 @@ bun run bench:report
 
 We welcome contributions! Datezone maintains **90%+ code coverage** using Bun's built-in coverage reporting.
 
-**📖 [Read the Contributing Guide →](https://github.com/cjkihl/datezone/blob/main/CONTRIBUTING.md)**
+**📖 [Read the Contributing Guide →](https://github.com/cjkihl/datezone/blob/main/CONTRIBUTING.md)** _(on GitHub)_
 
 ```bash
 # Install dependencies

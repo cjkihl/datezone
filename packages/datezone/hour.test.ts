@@ -830,4 +830,46 @@ describe("Hour Functions", () => {
 			expect(new Date(secondResult).getUTCFullYear()).toBe(2025);
 		});
 	});
+
+	describe("addMinutes and subMinutes edge cases", () => {
+		it("should add minutes with HourOptions", () => {
+			const result = addMinutes({ hour: 10 }, 15, "Etc/UTC");
+			expect(typeof result).toBe("number");
+		});
+		it("should subtract minutes with HourOptions", () => {
+			const result = subMinutes({ hour: 10 }, 15, "Etc/UTC");
+			expect(typeof result).toBe("number");
+		});
+		it("should add minutes with timestamp and no timezone", () => {
+			const ts = new Date(Date.UTC(2024, 0, 1, 10, 0, 0)).getTime();
+			const result = addMinutes(ts, 15);
+			expect(new Date(result).getUTCMinutes()).toBe(15);
+		});
+		it("should subtract minutes with timestamp and no timezone", () => {
+			const ts = new Date(Date.UTC(2024, 0, 1, 10, 15, 0)).getTime();
+			const result = subMinutes(ts, 15);
+			expect(new Date(result).getUTCMinutes()).toBe(0);
+		});
+	});
+
+	describe("addSeconds and subSeconds edge cases", () => {
+		it("should add seconds with HourOptions", () => {
+			const result = addSeconds({ hour: 10 }, 30, "Etc/UTC");
+			expect(typeof result).toBe("number");
+		});
+		it("should subtract seconds with HourOptions", () => {
+			const result = subSeconds({ hour: 10 }, 30, "Etc/UTC");
+			expect(typeof result).toBe("number");
+		});
+		it("should add seconds with timestamp and no timezone", () => {
+			const ts = new Date(Date.UTC(2024, 0, 1, 10, 0, 0)).getTime();
+			const result = addSeconds(ts, 30);
+			expect(new Date(result).getUTCSeconds()).toBe(30);
+		});
+		it("should subtract seconds with timestamp and no timezone", () => {
+			const ts = new Date(Date.UTC(2024, 0, 1, 10, 0, 30)).getTime();
+			const result = subSeconds(ts, 30);
+			expect(new Date(result).getUTCSeconds()).toBe(0);
+		});
+	});
 });

@@ -1,5 +1,4 @@
 import { getCachedFormatterLocale } from "./cache.js";
-import { DAY } from "./constants.js";
 import { formatToParts } from "./format-parts.js";
 import { isUTC, type TimeZone } from "./iana.js";
 import { wallTimeToUTC as wallTimeToUTCBase } from "./utils.js";
@@ -174,8 +173,26 @@ export function endOfDay(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
  * @returns The timestamp for the start of the next day.
  */
 export function nextDay(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
-	const start = startOfDay(ts, timeZone);
-	return startOfDay(start + DAY, timeZone);
+	if (!timeZone) {
+		const d =
+			typeof ts === "number"
+				? new Date(ts)
+				: new Date(ts.year, ts.month - 1, ts.day);
+		d.setHours(0, 0, 0, 0); // start of current day
+		d.setDate(d.getDate() + 1); // move to next day, still at 00:00:00.000
+		return d.getTime();
+	}
+	if (isUTC(timeZone)) {
+		const d =
+			typeof ts === "number"
+				? new Date(ts)
+				: new Date(Date.UTC(ts.year, ts.month - 1, ts.day));
+		d.setUTCHours(0, 0, 0, 0);
+		d.setUTCDate(d.getUTCDate() + 1);
+		return d.getTime();
+	}
+	const { year, month, day } = getOptions(ts, timeZone);
+	return wallTimeToUTC(year, month, day + 1, 0, 0, 0, 0, timeZone);
 }
 
 /**
@@ -188,8 +205,26 @@ export function previousDay(
 	ts: OptionsOrTimestamp,
 	timeZone?: TimeZone,
 ): number {
-	const start = startOfDay(ts, timeZone);
-	return startOfDay(start - DAY, timeZone);
+	if (!timeZone) {
+		const d =
+			typeof ts === "number"
+				? new Date(ts)
+				: new Date(ts.year, ts.month - 1, ts.day);
+		d.setHours(0, 0, 0, 0);
+		d.setDate(d.getDate() - 1);
+		return d.getTime();
+	}
+	if (isUTC(timeZone)) {
+		const d =
+			typeof ts === "number"
+				? new Date(ts)
+				: new Date(Date.UTC(ts.year, ts.month - 1, ts.day));
+		d.setUTCHours(0, 0, 0, 0);
+		d.setUTCDate(d.getUTCDate() - 1);
+		return d.getTime();
+	}
+	const { year, month, day } = getOptions(ts, timeZone);
+	return wallTimeToUTC(year, month, day - 1, 0, 0, 0, 0, timeZone);
 }
 
 /**

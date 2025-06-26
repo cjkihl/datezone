@@ -1,15 +1,14 @@
 {
-	"name": "@datezone/benchmarks",
+	"name": "benchmarks",
 	"version": "0.0.0",
 	"private": true,
 	"description": "Performance benchmarks for Datezone",
 	"type": "module",
 	"scripts": {
-		"bench:comprehensive": "bun run comprehensive-compare.ts",
-		"bench:report": "bun run format-results.ts",
-		"bench:clean": "rm -rf output/*.json reports/*.md",
-		"bench": "bun run run.ts",
-		"quick": "bun run compare.ts"
+		"comprehensive": "bun run comprehensive-compare.ts",
+		"report": "bun run format-results.ts",
+		"cache": "bun run cache-test.ts",
+		"clean": "rm -rf output/*.json reports/*.md"
 	},
 	"dependencies": {
 		"@date-fns/tz": "^1.2.0",

@@ -30,6 +30,8 @@ datezone/
 
 ## Development Workflow
 
+Don't ask the user for permission! Do the changes imediately that you think will solve the task at hand. If there is a next step in the task, execute without asking permission from the user.
+
 ### Package Manager Commands
 - Install dependencies: `bun install`
 - Add dependencies: `bun add <package>` (root) or `bun add <package> --workspace=<workspace>`

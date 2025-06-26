@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import type { OptionsOrTimestamp } from "./compare";
 import {
 	isAfter,
 	isBefore,
@@ -715,5 +716,82 @@ describe("Edge cases", () => {
 				{ day: 31, month: 12, year: 2024 },
 			),
 		).toBe(true);
+	});
+});
+
+describe("Error handling for missing timezone in mixed type comparisons", () => {
+	test("isBefore throws when comparing mixed types without timezone", () => {
+		expect(() =>
+			isBefore(
+				1705291200000 as OptionsOrTimestamp,
+				{ day: 15, month: 1, year: 2024 } as OptionsOrTimestamp,
+			),
+		).toThrow("TimeZone parameter required when comparing mixed date types");
+		expect(() =>
+			isBefore(
+				{ day: 15, month: 1, year: 2024 } as OptionsOrTimestamp,
+				1705291200000 as OptionsOrTimestamp,
+			),
+		).toThrow("TimeZone parameter required when comparing mixed date types");
+	});
+
+	test("isAfter throws when comparing mixed types without timezone", () => {
+		expect(() =>
+			isAfter(
+				1705291200000 as OptionsOrTimestamp,
+				{ day: 15, month: 1, year: 2024 } as OptionsOrTimestamp,
+			),
+		).toThrow("TimeZone parameter required when comparing mixed date types");
+		expect(() =>
+			isAfter(
+				{ day: 15, month: 1, year: 2024 } as OptionsOrTimestamp,
+				1705291200000 as OptionsOrTimestamp,
+			),
+		).toThrow("TimeZone parameter required when comparing mixed date types");
+	});
+
+	test("isEqual throws when comparing mixed types without timezone", () => {
+		expect(() =>
+			isEqual(
+				1705291200000 as OptionsOrTimestamp,
+				{ day: 15, month: 1, year: 2024 } as OptionsOrTimestamp,
+			),
+		).toThrow("TimeZone parameter required when comparing mixed date types");
+		expect(() =>
+			isEqual(
+				{ day: 15, month: 1, year: 2024 } as OptionsOrTimestamp,
+				1705291200000 as OptionsOrTimestamp,
+			),
+		).toThrow("TimeZone parameter required when comparing mixed date types");
+	});
+
+	test("isSameMonth throws when comparing timestamp and date object without timezone", () => {
+		expect(() =>
+			isSameMonth(
+				1705291200000 as OptionsOrTimestamp,
+				{ day: 15, month: 1, year: 2024 } as OptionsOrTimestamp,
+			),
+		).toThrow("TimeZone parameter required when comparing timestamps");
+		expect(() =>
+			isSameMonth(
+				{ day: 15, month: 1, year: 2024 } as OptionsOrTimestamp,
+				1705291200000 as OptionsOrTimestamp,
+			),
+		).toThrow("TimeZone parameter required when comparing timestamps");
+	});
+
+	test("isSameYear throws when comparing timestamp and date object without timezone", () => {
+		expect(() =>
+			isSameYear(
+				1705291200000 as OptionsOrTimestamp,
+				{ day: 15, month: 1, year: 2024 } as OptionsOrTimestamp,
+			),
+		).toThrow("TimeZone parameter required when comparing timestamps");
+		expect(() =>
+			isSameYear(
+				{ day: 15, month: 1, year: 2024 } as OptionsOrTimestamp,
+				1705291200000 as OptionsOrTimestamp,
+			),
+		).toThrow("TimeZone parameter required when comparing timestamps");
 	});
 });

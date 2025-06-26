@@ -1,5 +1,16 @@
 import { describe, expect, it } from "bun:test";
-import { endOfDay, nextDay, previousDay, startOfDay } from "./day";
+import {
+	addDays,
+	dayOfWeek,
+	dayOfYear,
+	endOfDay,
+	getDayPeriod,
+	nextDay,
+	previousDay,
+	startOfDay,
+	subDays,
+	weekDayName,
+} from "./day";
 import type { TimeZone } from "./iana";
 
 describe("startOfDay", () => {
@@ -243,5 +254,101 @@ describe("previousDay", () => {
 			const utcPrev = previousDay(d.getTime(), "UTC");
 			expect(prev).not.toBe(utcPrev);
 		}
+	});
+});
+
+describe("addDays", () => {
+	it("adds days to a timestamp (no timezone)", () => {
+		const d = new Date(Date.UTC(2024, 0, 15));
+		expect(new Date(addDays(d.getTime(), 5)).getUTCDate()).toBe(20);
+		expect(new Date(addDays(d.getTime(), -10)).getUTCDate()).toBe(5);
+	});
+	it("adds days to a DayOptions object (UTC)", () => {
+		const opts = { day: 15, month: 1, year: 2024 };
+		const ts = addDays(opts, 1, "UTC");
+		expect(new Date(ts).toISOString()).toBe("2024-01-16T00:00:00.000Z");
+	});
+	it("adds days with timezone (Asia/Singapore)", () => {
+		const opts = { day: 22, month: 5, year: 2024 };
+		const ts = addDays(opts, 2, "Asia/Singapore");
+		const result = new Date(ts);
+		expect(result.getUTCDate()).toBe(23);
+	});
+});
+
+describe("subDays", () => {
+	it("subtracts days from a timestamp (no timezone)", () => {
+		const d = new Date(Date.UTC(2024, 0, 15));
+		expect(new Date(subDays(d.getTime(), 5)).getUTCDate()).toBe(10);
+	});
+	it("subtracts days from a DayOptions object (UTC)", () => {
+		const opts = { day: 15, month: 1, year: 2024 };
+		const ts = subDays(opts, 1, "UTC");
+		expect(new Date(ts).toISOString()).toBe("2024-01-14T00:00:00.000Z");
+	});
+	it("subtracts days with timezone (Asia/Singapore)", () => {
+		const opts = { day: 22, month: 5, year: 2024 };
+		const ts = subDays(opts, 2, "Asia/Singapore");
+		const result = new Date(ts);
+		expect(result.getUTCDate()).toBe(19);
+	});
+});
+
+describe("dayOfWeek", () => {
+	it("returns ISO day of week for timestamp (no timezone)", () => {
+		const d = new Date(Date.UTC(2024, 0, 15)); // Monday
+		expect(dayOfWeek(d.getTime())).toBe(1);
+	});
+	it("returns ISO day of week for DayOptions (UTC)", () => {
+		const opts = { day: 14, month: 1, year: 2024 }; // Sunday
+		expect(dayOfWeek(opts, "UTC")).toBe(7);
+	});
+	it("returns ISO day of week with timezone (Asia/Singapore)", () => {
+		const opts = { day: 22, month: 5, year: 2024 }; // Wednesday
+		expect(dayOfWeek(opts, "Asia/Singapore")).toBe(3);
+	});
+});
+
+describe("dayOfYear", () => {
+	it("returns day of year for timestamp (no timezone)", () => {
+		const d = new Date(Date.UTC(2024, 2, 1)); // March 1, 2024 (leap year)
+		expect(dayOfYear(d.getTime())).toBe(61);
+	});
+	it("returns day of year for DayOptions (UTC)", () => {
+		const opts = { day: 31, month: 12, year: 2023 };
+		expect(dayOfYear(opts, "UTC")).toBe(365);
+	});
+	it("returns day of year with timezone (Asia/Singapore)", () => {
+		const opts = { day: 22, month: 5, year: 2024 };
+		expect(dayOfYear(opts, "Asia/Singapore")).toBe(143);
+	});
+});
+
+describe("weekDayName", () => {
+	it("returns localized weekday name (long)", () => {
+		expect(weekDayName("en-US", "long", 1)).toBe("Monday");
+		expect(weekDayName("en-US", "long", 7)).toBe("Sunday");
+	});
+	it("returns localized weekday name (short)", () => {
+		expect(weekDayName("en-US", "short", 2)).toBe("Tue");
+	});
+	it("returns localized weekday name (narrow)", () => {
+		expect(weekDayName("en-US", "narrow", 3)).toBe("W");
+	});
+});
+
+describe("getDayPeriod", () => {
+	it("returns AM/PM for en-US", () => {
+		expect(getDayPeriod("en-US", 0)).toMatch(/AM/i);
+		expect(getDayPeriod("en-US", 13)).toMatch(/PM/i);
+	});
+	it("returns localized day period for fr-FR", () => {
+		const am = getDayPeriod("fr-FR", 9);
+		const pm = getDayPeriod("fr-FR", 18);
+		expect(typeof am).toBe("string");
+		expect(typeof pm).toBe("string");
+		// Should not throw and should be non-empty
+		expect(am.length).toBeGreaterThan(0);
+		expect(pm.length).toBeGreaterThan(0);
 	});
 });

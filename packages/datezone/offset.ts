@@ -127,36 +127,3 @@ export function getTimezoneOffsetMinutes(
 	const toOffset = getUTCtoTimezoneOffsetMinutes(ts, to!);
 	return toOffset - fromOffset;
 }
-
-/**
- * Performance benchmark to compare local timezone vs regular timezone offset calculations.
- * This demonstrates the performance improvement when using the local timezone shortcut.
- */
-export function benchmarkLocalTimezonePerformance(iterations = 10000): {
-	localTime: number;
-	regularTime: number;
-	improvement: number;
-} {
-	const now = Date.now();
-
-	// Benchmark local timezone (fast path)
-	const localStart = performance.now();
-	for (let i = 0; i < iterations; i++) {
-		getLocalTimezoneOffsetMinutes(now + i * 1000);
-	}
-	const localTime = performance.now() - localStart;
-
-	// Benchmark regular timezone (slow path) - use local timezone for fair comparison
-	const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone as TimeZone;
-	const regularStart = performance.now();
-	for (let i = 0; i < iterations; i++) {
-		getUTCtoTimezoneOffsetMinutes(now + i * 1000, localTz);
-	}
-	const regularTime = performance.now() - regularStart;
-
-	return {
-		improvement: regularTime / localTime,
-		localTime,
-		regularTime,
-	};
-}
