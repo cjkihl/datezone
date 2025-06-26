@@ -352,3 +352,54 @@ describe("getDayPeriod", () => {
 		expect(pm.length).toBeGreaterThan(0);
 	});
 });
+
+describe("DST edge cases", () => {
+	it("nextDay and previousDay handle DST start (spring forward) in local time", () => {
+		// America/New_York DST starts 2024-03-10 at 2:00am (clocks go forward to 3:00am)
+		const tz = undefined; // local time
+		const beforeDST = new Date(2024, 2, 10, 0, 0, 0, 0).getTime();
+		const afterDST = nextDay(beforeDST, tz);
+		const prevDST = previousDay(afterDST, tz);
+		// Should be exactly 24h apart in local time, but not in UTC due to DST
+		expect(new Date(afterDST).getDate()).toBe(11);
+		expect(new Date(prevDST).getDate()).toBe(10);
+	});
+
+	it("nextDay and previousDay handle DST end (fall back) in local time", () => {
+		// America/New_York DST ends 2024-11-03 at 2:00am (clocks go back to 1:00am)
+		const tz = undefined; // local time
+		const beforeDST = new Date(2024, 10, 3, 0, 0, 0, 0).getTime();
+		const afterDST = nextDay(beforeDST, tz);
+		const prevDST = previousDay(afterDST, tz);
+		expect(new Date(afterDST).getDate()).toBe(4);
+		expect(new Date(prevDST).getDate()).toBe(3);
+	});
+
+	it("nextDay and previousDay handle DST in UTC (should always be 24h)", () => {
+		const tz = "UTC";
+		const beforeDST = Date.UTC(2024, 2, 10, 0, 0, 0, 0);
+		const afterDST = nextDay(beforeDST, tz);
+		const prevDST = previousDay(afterDST, tz);
+		// Always 24h apart in UTC
+		expect(new Date(afterDST).getUTCDate()).toBe(11);
+		expect(new Date(prevDST).getUTCDate()).toBe(10);
+	});
+
+	it("addDays handles DST transitions in local time", () => {
+		const tz = undefined;
+		const beforeDST = new Date(2024, 2, 9, 0, 0, 0, 0).getTime();
+		const plus2 = addDays(beforeDST, 2, tz);
+		const minus2 = addDays(plus2, -2, tz);
+		expect(new Date(plus2).getDate()).toBe(11);
+		expect(new Date(minus2).getDate()).toBe(9);
+	});
+
+	it("addDays handles DST transitions in UTC", () => {
+		const tz = "UTC";
+		const beforeDST = Date.UTC(2024, 2, 9, 0, 0, 0, 0);
+		const plus2 = addDays(beforeDST, 2, tz);
+		const minus2 = addDays(plus2, -2, tz);
+		expect(new Date(plus2).getUTCDate()).toBe(11);
+		expect(new Date(minus2).getUTCDate()).toBe(9);
+	});
+});

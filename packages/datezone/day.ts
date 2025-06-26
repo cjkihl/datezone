@@ -1,4 +1,5 @@
 import { getCachedFormatterLocale } from "./cache.js";
+import { DAY } from "./constants.js";
 import { formatToParts } from "./format-parts.js";
 import { isUTC, type TimeZone } from "./iana.js";
 import { wallTimeToUTC as wallTimeToUTCBase } from "./utils.js";
@@ -72,24 +73,20 @@ export function addDays(
 	days: number,
 	timeZone?: TimeZone,
 ): number {
-	const inputTs =
-		typeof ts === "number"
-			? ts
-			: timeZone && isUTC(timeZone)
-				? Date.UTC(ts.year, ts.month - 1, ts.day)
-				: new Date(ts.year, ts.month - 1, ts.day).getTime();
-
-	const d = new Date(inputTs);
-
 	if (!timeZone) {
-		d.setDate(d.getDate() + days);
-		return d.getTime();
+		if (typeof ts === "number") {
+			return ts + days * DAY;
+		}
+		// DayOptions: must use Date to get correct local time
+		return new Date(ts.year, ts.month - 1, ts.day + days).getTime();
 	}
 	if (isUTC(timeZone)) {
-		d.setUTCDate(d.getUTCDate() + days);
-		return d.getTime();
+		if (typeof ts === "number") {
+			return ts + days * DAY;
+		}
+		return Date.UTC(ts.year, ts.month - 1, ts.day + days);
 	}
-
+	// Fallback to existing logic for other timezones
 	const { year, month, day } = getOptions(ts, timeZone);
 	return wallTimeToUTC(year, month, day + days, 0, 0, 0, 0, timeZone);
 }
@@ -174,22 +171,19 @@ export function endOfDay(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
  */
 export function nextDay(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 	if (!timeZone) {
-		const d =
-			typeof ts === "number"
-				? new Date(ts)
-				: new Date(ts.year, ts.month - 1, ts.day);
-		d.setHours(0, 0, 0, 0); // start of current day
-		d.setDate(d.getDate() + 1); // move to next day, still at 00:00:00.000
-		return d.getTime();
+		if (typeof ts === "number") {
+			// Local time: must use Date to get correct start of day
+			const d = new Date(ts);
+			d.setHours(0, 0, 0, 0);
+			return d.getTime() + DAY;
+		}
+		return new Date(ts.year, ts.month - 1, ts.day + 1).setHours(0, 0, 0, 0);
 	}
 	if (isUTC(timeZone)) {
-		const d =
-			typeof ts === "number"
-				? new Date(ts)
-				: new Date(Date.UTC(ts.year, ts.month - 1, ts.day));
-		d.setUTCHours(0, 0, 0, 0);
-		d.setUTCDate(d.getUTCDate() + 1);
-		return d.getTime();
+		if (typeof ts === "number") {
+			return ts - (ts % DAY) + DAY;
+		}
+		return Date.UTC(ts.year, ts.month - 1, ts.day + 1);
 	}
 	const { year, month, day } = getOptions(ts, timeZone);
 	return wallTimeToUTC(year, month, day + 1, 0, 0, 0, 0, timeZone);
@@ -206,22 +200,18 @@ export function previousDay(
 	timeZone?: TimeZone,
 ): number {
 	if (!timeZone) {
-		const d =
-			typeof ts === "number"
-				? new Date(ts)
-				: new Date(ts.year, ts.month - 1, ts.day);
-		d.setHours(0, 0, 0, 0);
-		d.setDate(d.getDate() - 1);
-		return d.getTime();
+		if (typeof ts === "number") {
+			const d = new Date(ts);
+			d.setHours(0, 0, 0, 0);
+			return d.getTime() - DAY;
+		}
+		return new Date(ts.year, ts.month - 1, ts.day - 1).setHours(0, 0, 0, 0);
 	}
 	if (isUTC(timeZone)) {
-		const d =
-			typeof ts === "number"
-				? new Date(ts)
-				: new Date(Date.UTC(ts.year, ts.month - 1, ts.day));
-		d.setUTCHours(0, 0, 0, 0);
-		d.setUTCDate(d.getUTCDate() - 1);
-		return d.getTime();
+		if (typeof ts === "number") {
+			return ts - (ts % DAY) - DAY;
+		}
+		return Date.UTC(ts.year, ts.month - 1, ts.day - 1);
 	}
 	const { year, month, day } = getOptions(ts, timeZone);
 	return wallTimeToUTC(year, month, day - 1, 0, 0, 0, 0, timeZone);
