@@ -2,23 +2,41 @@ import { getCachedFormatterLocale } from "./cache.js";
 import { DAY } from "./constants.js";
 import { formatToParts } from "./format-parts.js";
 import type { TimeZone } from "./iana.js";
-import { wallTimeToUTC } from "./utils.js";
+import { wallTimeToUTC as wallTimeToUTCBase } from "./utils.js";
 import { isLeapYear } from "./year.js";
+
+function getSystemTimeZone(): TimeZone {
+	return Intl.DateTimeFormat().resolvedOptions().timeZone as TimeZone;
+}
 
 const DAY_OPTS = { day: "2-digit", month: "2-digit", year: "numeric" } as const;
 type DayOptions = { year: number; month: number; day: number };
 type OptionsOrTimestamp = DayOptions | number;
 
-function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): DayOptions {
-	const dt =
-		typeof ts === "number" ? formatToParts(ts, timeZone, DAY_OPTS) : ts;
+function getOptions(ts: OptionsOrTimestamp, timeZone?: TimeZone): DayOptions {
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	const dt = typeof ts === "number" ? formatToParts(ts, tz, DAY_OPTS) : ts;
 	return dt;
+}
+
+function wallTimeToUTC(
+	year: number,
+	month: number,
+	day: number,
+	hour: number,
+	minute: number,
+	second: number,
+	ms: number,
+	timeZone?: TimeZone,
+): number {
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	return wallTimeToUTCBase(year, month, day, hour, minute, second, ms, tz);
 }
 
 export function addDays(
 	ts: OptionsOrTimestamp,
 	days: number,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	const { year, month, day } = getOptions(ts, timeZone);
 	return wallTimeToUTC(year, month, day + days, 0, 0, 0, 0, timeZone);
@@ -27,7 +45,7 @@ export function addDays(
 export function subDays(
 	ts: OptionsOrTimestamp,
 	days: number,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	const { year, month, day } = getOptions(ts, timeZone);
 	return wallTimeToUTC(year, month, day - days, 0, 0, 0, 0, timeZone);
@@ -36,7 +54,10 @@ export function subDays(
 /**
  * Returns the start of the day (00:00:00.000) in the given timezone.
  */
-export function startOfDay(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
+export function startOfDay(
+	ts: OptionsOrTimestamp,
+	timeZone?: TimeZone,
+): number {
 	const { year, month, day } = getOptions(ts, timeZone);
 	return wallTimeToUTC(year, month, day, 0, 0, 0, 0, timeZone);
 }
@@ -44,7 +65,7 @@ export function startOfDay(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
 /**
  * Returns the end of the day (23:59:59.999) in the given timezone.
  */
-export function endOfDay(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
+export function endOfDay(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 	const { year, month, day } = getOptions(ts, timeZone);
 
 	return wallTimeToUTC(year, month, day, 23, 59, 59, 999, timeZone);
@@ -53,7 +74,7 @@ export function endOfDay(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
 /**
  * Returns the start of the next day (00:00:00.000) in the given timezone.
  */
-export function nextDay(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
+export function nextDay(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 	const start = startOfDay(ts, timeZone);
 	return startOfDay(start + DAY, timeZone);
 }
@@ -63,7 +84,7 @@ export function nextDay(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
  */
 export function previousDay(
 	ts: OptionsOrTimestamp,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	const start = startOfDay(ts, timeZone);
 	return startOfDay(start - DAY, timeZone);
@@ -75,7 +96,7 @@ export function previousDay(
  */
 export function dayOfWeek(
 	tsOrOptions: OptionsOrTimestamp,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	const { year, month, day } = getOptions(tsOrOptions, timeZone);
 
@@ -104,11 +125,12 @@ export function dayOfWeek(
 /**
  * Returns the day of year (1-366) in the given timezone.
  */
-export function dayOfYear(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
+export function dayOfYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 	const { year, month, day } = getOptions(ts, timeZone);
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
 	const monthDays = [
 		31,
-		isLeapYear({ year }, timeZone) ? 29 : 28,
+		isLeapYear({ year }, tz) ? 29 : 28,
 		31,
 		30,
 		31,

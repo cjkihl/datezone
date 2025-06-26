@@ -1,6 +1,9 @@
-import { WEEK } from "./constants.js";
 import { dayOfWeek, formatToParts, type TimeZone } from "./index.pub.js";
-import { wallTimeToUTC } from "./utils.js";
+import { wallTimeToUTC as wallTimeToUTCBase } from "./utils.js";
+
+function getSystemTimeZone(): TimeZone {
+	return Intl.DateTimeFormat().resolvedOptions().timeZone as TimeZone;
+}
 
 const WEEK_OPTS = {
 	day: "2-digit",
@@ -19,10 +22,24 @@ export enum WeekStartsOn {
 	SATURDAY = 6, // Middle East style
 }
 
-function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): WeekOptions {
-	const dt =
-		typeof ts === "number" ? formatToParts(ts, timeZone, WEEK_OPTS) : ts;
+function getOptions(ts: OptionsOrTimestamp, timeZone?: TimeZone): WeekOptions {
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	const dt = typeof ts === "number" ? formatToParts(ts, tz, WEEK_OPTS) : ts;
 	return dt;
+}
+
+function wallTimeToUTC(
+	year: number,
+	month: number,
+	day: number,
+	hour: number,
+	minute: number,
+	second: number,
+	ms: number,
+	timeZone?: TimeZone,
+): number {
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	return wallTimeToUTCBase(year, month, day, hour, minute, second, ms, tz);
 }
 
 /**
@@ -31,7 +48,7 @@ function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): WeekOptions {
  * @param timeZone - The time zone.
  * @returns The ISO week number (1-53).
  */
-export function getWeek(ts: WeekOptions | number, timeZone: TimeZone): number {
+export function getWeek(ts: WeekOptions | number, timeZone?: TimeZone): number {
 	const dt = getOptions(ts, timeZone);
 	const date = new Date(Date.UTC(dt.year, dt.month - 1, dt.day));
 	const dayNum = dayOfWeek(dt, timeZone);
@@ -48,7 +65,7 @@ export function getWeek(ts: WeekOptions | number, timeZone: TimeZone): number {
  */
 export function getISOWeekYear(
 	ts: WeekOptions | number,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	const dt = getOptions(ts, timeZone);
 	const date = new Date(Date.UTC(dt.year, dt.month - 1, dt.day));
@@ -65,7 +82,7 @@ export function getISOWeekYear(
  */
 export function startOfWeek(
 	date: OptionsOrTimestamp,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 	weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY,
 ): number {
 	const dt = getOptions(date, timeZone);
@@ -98,7 +115,7 @@ export function startOfWeek(
  */
 export function endOfWeek(
 	date: OptionsOrTimestamp,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 	weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY,
 ): number {
 	const dt = getOptions(date, timeZone);
@@ -134,17 +151,9 @@ export function endOfWeek(
 export function addWeeks(
 	date: OptionsOrTimestamp,
 	amount: number,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
-	// Performance optimization: if input is already a timestamp and timezone is UTC,
-	// we can avoid expensive timezone calculations
-	if (
-		typeof date === "number" &&
-		(timeZone === "UTC" || timeZone === "Etc/UTC")
-	) {
-		return date + amount * WEEK;
-	}
-
+	// Always use wallTimeToUTC for precision, regardless of timezone
 	const dt = getOptions(date, timeZone);
 	return wallTimeToUTC(
 		dt.year,
@@ -169,7 +178,7 @@ export function addWeeks(
 export function subWeeks(
 	date: OptionsOrTimestamp,
 	amount: number,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	return addWeeks(date, -amount, timeZone);
 }
@@ -183,7 +192,7 @@ export function subWeeks(
  */
 export function startOfISOWeek(
 	date: OptionsOrTimestamp,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	return startOfWeek(date, timeZone, WeekStartsOn.MONDAY);
 }
@@ -197,7 +206,7 @@ export function startOfISOWeek(
  */
 export function endOfISOWeek(
 	date: OptionsOrTimestamp,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	return endOfWeek(date, timeZone, WeekStartsOn.MONDAY);
 }
@@ -213,7 +222,7 @@ export function endOfISOWeek(
  */
 export function getWeeksInMonth(
 	date: OptionsOrTimestamp,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 	weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY,
 ): number {
 	const dt = getOptions(date, timeZone);

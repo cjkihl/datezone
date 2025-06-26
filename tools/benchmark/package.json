@@ -1,6 +1,6 @@
 {
 	"name": "@datezone/benchmarks",
-	"version": "2.0.0",
+	"version": "0.0.0",
 	"private": true,
 	"description": "Performance benchmarks for Datezone",
 	"type": "module",
@@ -19,6 +19,6 @@
 		"mitata": "^1.0.34"
 	},
 	"devDependencies": {
-		"@cjkihl/tsconfig": "^0.1.17"
+		"@cjkihl/tsconfig": "^1.0.1"
 	}
 }

@@ -45,7 +45,7 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@cjkihl/tsconfig": "^0.1.17"
+    "@cjkihl/tsconfig": "^1.0.1"
   },
   "engines": {
     "node": ">=16.0.0"

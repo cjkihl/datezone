@@ -18,6 +18,7 @@ import {
 	subMinutes,
 	subSeconds,
 } from "./hour";
+import type { TimeZone } from "./iana";
 
 describe("Hour Functions", () => {
 	describe("get12Hour", () => {
@@ -41,6 +42,24 @@ describe("Hour Functions", () => {
 			expect(get12Hour(timestamp, "Asia/Tokyo")).toBe(9); // 9 AM in Tokyo (UTC+9)
 			expect(get12Hour(timestamp, "America/New_York")).toBe(7); // 7 PM in NY (UTC-5 in winter)
 		});
+
+		it("defaults to local timezone when timezone is undefined", () => {
+			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
+			const hour12 = get12Hour(d.getTime(), undefined);
+
+			// Get the local timezone
+			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const localHour12 = get12Hour(d.getTime(), localTz as TimeZone);
+
+			// Should match local timezone behavior
+			expect(hour12).toBe(localHour12);
+
+			// If local timezone is not UTC, results should be different
+			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
+				const utcHour12 = get12Hour(d.getTime(), "UTC");
+				expect(hour12).not.toBe(utcHour12);
+			}
+		});
 	});
 
 	describe("get24Hour", () => {
@@ -54,6 +73,24 @@ describe("Hour Functions", () => {
 			expect(get24Hour(timestamp, "Asia/Tokyo")).toBe(9); // 9 AM in Tokyo
 			expect(get24Hour(timestamp, "America/New_York")).toBe(19); // 7 PM in NY
 		});
+
+		it("defaults to local timezone when timezone is undefined", () => {
+			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
+			const hour24 = get24Hour(d.getTime(), undefined);
+
+			// Get the local timezone
+			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const localHour24 = get24Hour(d.getTime(), localTz as TimeZone);
+
+			// Should match local timezone behavior
+			expect(hour24).toBe(localHour24);
+
+			// If local timezone is not UTC, results should be different
+			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
+				const utcHour24 = get24Hour(d.getTime(), "UTC");
+				expect(hour24).not.toBe(utcHour24);
+			}
+		});
 	});
 
 	describe("getHour", () => {
@@ -62,6 +99,24 @@ describe("Hour Functions", () => {
 			expect(getHour(timestamp, "Etc/UTC")).toBe(
 				get24Hour(timestamp, "Etc/UTC"),
 			);
+		});
+
+		it("defaults to local timezone when timezone is undefined", () => {
+			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
+			const hour = getHour(d.getTime(), undefined);
+
+			// Get the local timezone
+			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const localHour = getHour(d.getTime(), localTz as TimeZone);
+
+			// Should match local timezone behavior
+			expect(hour).toBe(localHour);
+
+			// If local timezone is not UTC, results should be different
+			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
+				const utcHour = getHour(d.getTime(), "UTC");
+				expect(hour).not.toBe(utcHour);
+			}
 		});
 	});
 
@@ -150,6 +205,24 @@ describe("Hour Functions", () => {
 			expect(resultDate.getUTCSeconds()).toBe(45);
 			expect(resultDate.getUTCMilliseconds()).toBe(123);
 		});
+
+		it("defaults to local timezone when timezone is undefined", () => {
+			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
+			const added = addHours(d.getTime(), 1, undefined);
+
+			// Get the local timezone
+			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const localAdded = addHours(d.getTime(), 1, localTz as TimeZone);
+
+			// Should match local timezone behavior
+			expect(added).toBe(localAdded);
+
+			// If local timezone is not UTC, results should be different
+			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
+				const utcAdded = addHours(d.getTime(), 1, "UTC");
+				expect(added).not.toBe(utcAdded);
+			}
+		});
 	});
 
 	describe("subHours", () => {
@@ -200,6 +273,24 @@ describe("Hour Functions", () => {
 			const hour = parts.find((p) => p.type === "hour")?.value;
 			expect(hour).toBe("00");
 		});
+
+		it("defaults to local timezone when timezone is undefined", () => {
+			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
+			const subbed = subHours(d.getTime(), 1, undefined);
+
+			// Get the local timezone
+			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const localSubbed = subHours(d.getTime(), 1, localTz as TimeZone);
+
+			// Should match local timezone behavior
+			expect(subbed).toBe(localSubbed);
+
+			// If local timezone is not UTC, results should be different
+			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
+				const utcSubbed = subHours(d.getTime(), 1, "UTC");
+				expect(subbed).not.toBe(utcSubbed);
+			}
+		});
 	});
 
 	describe("startOfHour", () => {
@@ -240,6 +331,24 @@ describe("Hour Functions", () => {
 			expect(resultDate.getUTCSeconds()).toBe(0);
 			expect(resultDate.getUTCMilliseconds()).toBe(0);
 		});
+
+		it("defaults to local timezone when timezone is undefined", () => {
+			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
+			const start = startOfHour(d.getTime(), undefined);
+
+			// Get the local timezone
+			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const localStart = startOfHour(d.getTime(), localTz as TimeZone);
+
+			// Should match local timezone behavior
+			expect(start).toBe(localStart);
+
+			// If local timezone is not UTC, results should be different
+			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
+				const utcStart = startOfHour(d.getTime(), "UTC");
+				expect(start).not.toBe(utcStart);
+			}
+		});
 	});
 
 	describe("endOfHour", () => {
@@ -279,6 +388,24 @@ describe("Hour Functions", () => {
 			expect(resultDate.getUTCMinutes()).toBe(59);
 			expect(resultDate.getUTCSeconds()).toBe(59);
 			expect(resultDate.getUTCMilliseconds()).toBe(999);
+		});
+
+		it("defaults to local timezone when timezone is undefined", () => {
+			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
+			const end = endOfHour(d.getTime(), undefined);
+
+			// Get the local timezone
+			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const localEnd = endOfHour(d.getTime(), localTz as TimeZone);
+
+			// Should match local timezone behavior
+			expect(end).toBe(localEnd);
+
+			// If local timezone is not UTC, results should be different
+			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
+				const utcEnd = endOfHour(d.getTime(), "UTC");
+				expect(end).not.toBe(utcEnd);
+			}
 		});
 	});
 

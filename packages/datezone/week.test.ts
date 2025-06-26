@@ -1,5 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { formatToParts } from "./format-parts";
+import type { TimeZone } from "./iana";
 import {
 	addWeeks,
 	endOfISOWeek,
@@ -47,6 +48,24 @@ describe("Week functions", () => {
 			expect(getWeek({ day: 1, month: 1, year: 2019 }, "UTC")).toBe(1);
 			expect(getWeek({ day: 1, month: 1, year: 2021 }, "UTC")).toBe(53); // 2021-01-01 is week 53 of 2020
 		});
+
+		it("defaults to local timezone when timezone is undefined", () => {
+			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
+			const week = getWeek(d.getTime(), undefined);
+
+			// Get the local timezone
+			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const localWeek = getWeek(d.getTime(), localTz as TimeZone);
+
+			// Should match local timezone behavior
+			expect(week).toBe(localWeek);
+
+			// If local timezone is not UTC, results should be different
+			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
+				const utcWeek = getWeek(d.getTime(), "UTC");
+				expect(week).not.toBe(utcWeek);
+			}
+		});
 	});
 
 	describe("getISOWeekYear", () => {
@@ -72,6 +91,24 @@ describe("Week functions", () => {
 			expect(getISOWeekYear(date, "UTC")).toBe(2022);
 			expect(getISOWeekYear(date, "America/New_York")).toBe(2022);
 			expect(getISOWeekYear(date, "Asia/Tokyo")).toBe(2022);
+		});
+
+		it("defaults to local timezone when timezone is undefined", () => {
+			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
+			const year = getISOWeekYear(d.getTime(), undefined);
+
+			// Get the local timezone
+			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const localYear = getISOWeekYear(d.getTime(), localTz as TimeZone);
+
+			// Should match local timezone behavior
+			expect(year).toBe(localYear);
+
+			// If local timezone is not UTC, results should be different
+			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
+				const utcYear = getISOWeekYear(d.getTime(), "UTC");
+				expect(year).not.toBe(utcYear);
+			}
 		});
 	});
 
@@ -179,6 +216,24 @@ describe("Week functions", () => {
 			});
 			expect(parts.day).toBe(12); // Should be June 12 (Monday)
 		});
+
+		it("defaults to local timezone when timezone is undefined", () => {
+			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
+			const start = startOfWeek(d.getTime(), undefined);
+
+			// Get the local timezone
+			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const localStart = startOfWeek(d.getTime(), localTz as TimeZone);
+
+			// Should match local timezone behavior
+			expect(start).toBe(localStart);
+
+			// If local timezone is not UTC, results should be different
+			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
+				const utcStart = startOfWeek(d.getTime(), "UTC");
+				expect(start).not.toBe(utcStart);
+			}
+		});
 	});
 
 	describe("endOfWeek", () => {
@@ -264,6 +319,24 @@ describe("Week functions", () => {
 			});
 			expect(parts.day).toBe(12); // Should be March 12 (Sunday of that week)
 		});
+
+		it("defaults to local timezone when timezone is undefined", () => {
+			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
+			const end = endOfWeek(d.getTime(), undefined);
+
+			// Get the local timezone
+			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const localEnd = endOfWeek(d.getTime(), localTz as TimeZone);
+
+			// Should match local timezone behavior
+			expect(end).toBe(localEnd);
+
+			// If local timezone is not UTC, results should be different
+			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
+				const utcEnd = endOfWeek(d.getTime(), "UTC");
+				expect(end).not.toBe(utcEnd);
+			}
+		});
 	});
 
 	describe("addWeeks", () => {
@@ -334,6 +407,28 @@ describe("Week functions", () => {
 			});
 			expect(parts.day).toBe(15); // Should be same day
 		});
+
+		it("defaults to local timezone when timezone is undefined", () => {
+			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
+			const added = addWeeks(d.getTime(), 1, undefined);
+
+			// Get the local timezone
+			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const localAdded = addWeeks(d.getTime(), 1, localTz as TimeZone);
+
+			// Should match local timezone behavior
+			expect(added).toBe(localAdded);
+
+			// If local timezone is not UTC, results should be different from UTC optimization
+			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
+				const utcAdded = addWeeks(d.getTime(), 1, "UTC");
+				expect(added).not.toBe(utcAdded);
+			} else {
+				// If local timezone is UTC, should use optimization and get same result
+				const utcAdded = addWeeks(d.getTime(), 1, "UTC");
+				expect(added).toBe(utcAdded);
+			}
+		});
 	});
 
 	describe("subWeeks", () => {
@@ -375,6 +470,28 @@ describe("Week functions", () => {
 			expect(parts.month).toBe(12);
 			expect(parts.day).toBe(24); // Should be December 24, 2022
 		});
+
+		it("defaults to local timezone when timezone is undefined", () => {
+			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
+			const subbed = subWeeks(d.getTime(), 1, undefined);
+
+			// Get the local timezone
+			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const localSubbed = subWeeks(d.getTime(), 1, localTz as TimeZone);
+
+			// Should match local timezone behavior
+			expect(subbed).toBe(localSubbed);
+
+			// If local timezone is not UTC, results should be different from UTC optimization
+			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
+				const utcSubbed = subWeeks(d.getTime(), 1, "UTC");
+				expect(subbed).not.toBe(utcSubbed);
+			} else {
+				// If local timezone is UTC, should use optimization and get same result
+				const utcSubbed = subWeeks(d.getTime(), 1, "UTC");
+				expect(subbed).toBe(utcSubbed);
+			}
+		});
 	});
 
 	describe("startOfISOWeek", () => {
@@ -412,6 +529,24 @@ describe("Week functions", () => {
 			});
 			expect(utcParts.day).toBe(nyParts.day); // Same day
 		});
+
+		it("defaults to local timezone when timezone is undefined", () => {
+			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
+			const start = startOfISOWeek(d.getTime(), undefined);
+
+			// Get the local timezone
+			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const localStart = startOfISOWeek(d.getTime(), localTz as TimeZone);
+
+			// Should match local timezone behavior
+			expect(start).toBe(localStart);
+
+			// If local timezone is not UTC, results should be different
+			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
+				const utcStart = startOfISOWeek(d.getTime(), "UTC");
+				expect(start).not.toBe(utcStart);
+			}
+		});
 	});
 
 	describe("endOfISOWeek", () => {
@@ -445,6 +580,24 @@ describe("Week functions", () => {
 			expect(parts.hour).toBe(23);
 			expect(parts.minute).toBe(59);
 			expect(parts.second).toBe(59);
+		});
+
+		it("defaults to local timezone when timezone is undefined", () => {
+			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
+			const end = endOfISOWeek(d.getTime(), undefined);
+
+			// Get the local timezone
+			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const localEnd = endOfISOWeek(d.getTime(), localTz as TimeZone);
+
+			// Should match local timezone behavior
+			expect(end).toBe(localEnd);
+
+			// If local timezone is not UTC, results should be different
+			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
+				const utcEnd = endOfISOWeek(d.getTime(), "UTC");
+				expect(end).not.toBe(utcEnd);
+			}
 		});
 	});
 
@@ -483,7 +636,7 @@ describe("Week functions", () => {
 			expect(saturdayWeeks).toBe(5);
 		});
 
-		it("should work with any day of the month", () => {
+		it("should work with TimeZone day of the month", () => {
 			// All days in June 2023 should return same number of weeks
 			expect(getWeeksInMonth({ day: 1, month: 6, year: 2023 }, "UTC")).toBe(5);
 			expect(getWeeksInMonth({ day: 15, month: 6, year: 2023 }, "UTC")).toBe(5);
@@ -544,6 +697,24 @@ describe("Week functions", () => {
 						expect(weeks).toBeLessThanOrEqual(6);
 					}
 				}
+			}
+		});
+
+		it("defaults to local timezone when timezone is undefined", () => {
+			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
+			const weeks = getWeeksInMonth(d.getTime(), undefined);
+
+			// Get the local timezone
+			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const localWeeks = getWeeksInMonth(d.getTime(), localTz as TimeZone);
+
+			// Should match local timezone behavior
+			expect(weeks).toBe(localWeeks);
+
+			// If local timezone is not UTC, results should be different
+			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
+				const utcWeeks = getWeeksInMonth(d.getTime(), "UTC");
+				expect(weeks).not.toBe(utcWeeks);
 			}
 		});
 	});

@@ -1,5 +1,9 @@
 import { formatToParts, type TimeZone } from "./index.pub.js";
-import { wallTimeToUTC } from "./utils.js";
+import { wallTimeToUTC as wallTimeToUTCBase } from "./utils.js";
+
+function getSystemTimeZone(): TimeZone {
+	return Intl.DateTimeFormat().resolvedOptions().timeZone as TimeZone;
+}
 
 /**
  * Year utility functions with performance optimizations.
@@ -14,20 +18,34 @@ const YEAR_OPTS = { year: "numeric" } as const;
 type YearOptions = { year: number };
 type OptionsOrTimestamp = YearOptions | number;
 
-function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): YearOptions {
-	const dt =
-		typeof ts === "number" ? formatToParts(ts, timeZone, YEAR_OPTS) : ts;
+function getOptions(ts: OptionsOrTimestamp, timeZone?: TimeZone): YearOptions {
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	const dt = typeof ts === "number" ? formatToParts(ts, tz, YEAR_OPTS) : ts;
 	return dt;
 }
 
-export function getYear(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
+function wallTimeToUTC(
+	year: number,
+	month: number,
+	day: number,
+	hour: number,
+	minute: number,
+	second: number,
+	ms: number,
+	timeZone?: TimeZone,
+): number {
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	return wallTimeToUTCBase(year, month, day, hour, minute, second, ms, tz);
+}
+
+export function getYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 	const { year } = getOptions(ts, timeZone);
 	return year ?? 0;
 }
 
 export function isLeapYear(
 	ts: OptionsOrTimestamp,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): boolean {
 	const { year } = getOptions(ts, timeZone);
 	return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
@@ -35,7 +53,7 @@ export function isLeapYear(
 
 export function startOfYear(
 	date: OptionsOrTimestamp,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	const { year } = getOptions(date, timeZone);
 	return wallTimeToUTC(year, 1, 1, 0, 0, 0, 0, timeZone);
@@ -43,7 +61,7 @@ export function startOfYear(
 
 export function endOfYear(
 	date: OptionsOrTimestamp,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	const { year } = getOptions(date, timeZone);
 	return wallTimeToUTC(year, 12, 31, 23, 59, 59, 999, timeZone);
@@ -52,21 +70,18 @@ export function endOfYear(
 export function addYears(
 	date: OptionsOrTimestamp,
 	amount: number,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	if (typeof date === "number") {
-		const { year, month, day, hour, minute, second } = formatToParts(
-			date,
-			timeZone,
-			{
-				day: "2-digit",
-				hour: "2-digit",
-				minute: "2-digit",
-				month: "2-digit",
-				second: "2-digit",
-				year: "numeric",
-			},
-		);
+		const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+		const { year, month, day, hour, minute, second } = formatToParts(date, tz, {
+			day: "2-digit",
+			hour: "2-digit",
+			minute: "2-digit",
+			month: "2-digit",
+			second: "2-digit",
+			year: "numeric",
+		});
 
 		const targetYear = year + amount;
 		let targetDay = day;
@@ -99,14 +114,14 @@ export function addYears(
 export function subYears(
 	date: OptionsOrTimestamp,
 	amount: number,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	return addYears(date, -amount, timeZone);
 }
 
 export function getDaysInYear(
 	date: OptionsOrTimestamp,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	// Performance optimization: We can calculate days in year without timezone
 	// since leap year logic is purely mathematical

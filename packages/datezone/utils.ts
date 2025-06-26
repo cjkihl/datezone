@@ -2,6 +2,10 @@ import { FULL_TS, formatToParts } from "./format-parts.js";
 import type { TimeZone } from "./iana.js";
 import { getUTCtoTimezoneOffsetMinutes } from "./offset.js";
 
+function getSystemTimeZone(): string {
+	return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
 /**
  * Converts a local date to UTC.
  */
@@ -21,10 +25,11 @@ export function localToUTC(date: Date): number {
  * Converts a UTC date to the target timezone.
  * Returns a Date object representing the same instant, but with wall-clock time in the target timezone.
  */
-export function utcToTimeZone(ts: number, timeZone: TimeZone): number {
+export function utcToTimeZone(ts: number, timeZone?: TimeZone): number {
+	const tz = timeZone ?? getSystemTimeZone();
 	const { year, month, day, hour, minute, second } = formatToParts(
 		ts,
-		timeZone,
+		tz,
 		FULL_TS,
 	);
 
@@ -39,7 +44,7 @@ export function utcToTimeZone(ts: number, timeZone: TimeZone): number {
 	);
 
 	// Fast path: if timeZone is UTC, offset is always 0
-	if (timeZone === "Etc/UTC" || timeZone === "UTC") {
+	if (tz === "Etc/UTC" || tz === "UTC") {
 		return utcTs;
 	}
 
@@ -56,12 +61,13 @@ export function wallTimeToUTC(
 	minute: number,
 	second: number,
 	ms: number,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
+	const tz = timeZone ?? getSystemTimeZone();
 	const utcTs = Date.UTC(year, month - 1, day, hour, minute, second, ms);
 
 	// Fast path: if timeZone is UTC, offset is always 0
-	if (timeZone === "Etc/UTC" || timeZone === "UTC") {
+	if (tz === "Etc/UTC" || tz === "UTC") {
 		return utcTs;
 	}
 

@@ -1,4 +1,12 @@
-import { formatToParts, type TimeZone, wallTimeToUTC } from "./index.pub.js";
+import {
+	formatToParts,
+	type TimeZone,
+	wallTimeToUTC as wallTimeToUTCBase,
+} from "./index.pub.js";
+
+function getSystemTimeZone(): TimeZone {
+	return Intl.DateTimeFormat().resolvedOptions().timeZone as TimeZone;
+}
 
 const HOUR_OPTS = { hour: "2-digit", hour12: false } as const;
 const FULL_HOUR_OPTS = {
@@ -14,10 +22,24 @@ const FULL_HOUR_OPTS = {
 type HourOptions = { hour: number };
 type OptionsOrTimestamp = HourOptions | number;
 
-function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): HourOptions {
-	const dt =
-		typeof ts === "number" ? formatToParts(ts, timeZone, HOUR_OPTS) : ts;
+function getOptions(ts: OptionsOrTimestamp, timeZone?: TimeZone): HourOptions {
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	const dt = typeof ts === "number" ? formatToParts(ts, tz, HOUR_OPTS) : ts;
 	return dt;
+}
+
+function wallTimeToUTC(
+	year: number,
+	month: number,
+	day: number,
+	hour: number,
+	minute: number,
+	second: number,
+	ms: number,
+	timeZone?: TimeZone,
+): number {
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	return wallTimeToUTCBase(year, month, day, hour, minute, second, ms, tz);
 }
 
 /**
@@ -26,7 +48,7 @@ function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): HourOptions {
  * @param timeZone - The timezone to use.
  * @returns The 12-hour time.
  */
-export function get12Hour(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
+export function get12Hour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 	const { hour } = getOptions(ts, timeZone);
 	const h = hour % 12;
 	return h === 0 ? 12 : h;
@@ -38,7 +60,7 @@ export function get12Hour(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
  * @param timeZone - The timezone to use.
  * @returns The 24-hour time.
  */
-export function get24Hour(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
+export function get24Hour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 	const { hour } = getOptions(ts, timeZone);
 	return hour;
 }
@@ -49,7 +71,7 @@ export function get24Hour(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
  * @param timeZone - The timezone to use.
  * @returns The hour.
  */
-export function getHour(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
+export function getHour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 	const { hour } = getOptions(ts, timeZone);
 	return hour;
 }
@@ -64,7 +86,7 @@ export function getHour(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
 export function addHours(
 	ts: OptionsOrTimestamp,
 	hours: number,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	const timestamp = typeof ts === "number" ? ts : 0; // If ts is HourOptions, we need a base timestamp
 
@@ -72,7 +94,8 @@ export function addHours(
 		// If ts is HourOptions, we need to construct a timestamp
 		// For now, use current year/month/day with the given hour
 		const now = new Date();
-		const parts = formatToParts(now.getTime(), timeZone, FULL_HOUR_OPTS);
+		const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+		const parts = formatToParts(now.getTime(), tz, FULL_HOUR_OPTS);
 		return wallTimeToUTC(
 			parts.year,
 			parts.month,
@@ -86,7 +109,8 @@ export function addHours(
 	}
 
 	// Get the current time parts in the target timezone
-	const parts = formatToParts(timestamp, timeZone, FULL_HOUR_OPTS);
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	const parts = formatToParts(timestamp, tz, FULL_HOUR_OPTS);
 
 	// Add hours and handle day overflow
 	return wallTimeToUTC(
@@ -111,7 +135,7 @@ export function addHours(
 export function subHours(
 	ts: OptionsOrTimestamp,
 	hours: number,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	return addHours(ts, -hours, timeZone);
 }
@@ -124,14 +148,15 @@ export function subHours(
  */
 export function startOfHour(
 	ts: OptionsOrTimestamp,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	const timestamp = typeof ts === "number" ? ts : 0;
 
 	if (typeof ts !== "number") {
 		// If ts is HourOptions, construct with minute/second/ms = 0
 		const now = new Date();
-		const parts = formatToParts(now.getTime(), timeZone, FULL_HOUR_OPTS);
+		const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+		const parts = formatToParts(now.getTime(), tz, FULL_HOUR_OPTS);
 		return wallTimeToUTC(
 			parts.year,
 			parts.month,
@@ -145,7 +170,8 @@ export function startOfHour(
 	}
 
 	// Get the current time parts in the target timezone
-	const parts = formatToParts(timestamp, timeZone, FULL_HOUR_OPTS);
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	const parts = formatToParts(timestamp, tz, FULL_HOUR_OPTS);
 
 	// Set minute, second, and millisecond to 0
 	return wallTimeToUTC(
@@ -166,13 +192,14 @@ export function startOfHour(
  * @param timeZone - The timezone to use.
  * @returns The timestamp representing the end of the hour.
  */
-export function endOfHour(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
+export function endOfHour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 	const timestamp = typeof ts === "number" ? ts : 0;
 
 	if (typeof ts !== "number") {
 		// If ts is HourOptions, construct with minute/second/ms = max
 		const now = new Date();
-		const parts = formatToParts(now.getTime(), timeZone, FULL_HOUR_OPTS);
+		const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+		const parts = formatToParts(now.getTime(), tz, FULL_HOUR_OPTS);
 		return wallTimeToUTC(
 			parts.year,
 			parts.month,
@@ -186,7 +213,8 @@ export function endOfHour(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
 	}
 
 	// Get the current time parts in the target timezone
-	const parts = formatToParts(timestamp, timeZone, FULL_HOUR_OPTS);
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	const parts = formatToParts(timestamp, tz, FULL_HOUR_OPTS);
 
 	// Set minute, second, and millisecond to max
 	return wallTimeToUTC(
@@ -209,14 +237,15 @@ export function endOfHour(ts: OptionsOrTimestamp, timeZone: TimeZone): number {
  */
 export function startOfMinute(
 	ts: OptionsOrTimestamp,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	const timestamp = typeof ts === "number" ? ts : 0;
 
 	if (typeof ts !== "number") {
 		// If ts is HourOptions, we need more context - use current time
 		const now = new Date();
-		const parts = formatToParts(now.getTime(), timeZone, FULL_HOUR_OPTS);
+		const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+		const parts = formatToParts(now.getTime(), tz, FULL_HOUR_OPTS);
 		return wallTimeToUTC(
 			parts.year,
 			parts.month,
@@ -230,7 +259,8 @@ export function startOfMinute(
 	}
 
 	// Get the current time parts in the target timezone
-	const parts = formatToParts(timestamp, timeZone, FULL_HOUR_OPTS);
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	const parts = formatToParts(timestamp, tz, FULL_HOUR_OPTS);
 
 	// Set second and millisecond to 0
 	return wallTimeToUTC(
@@ -253,14 +283,15 @@ export function startOfMinute(
  */
 export function endOfMinute(
 	ts: OptionsOrTimestamp,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	const timestamp = typeof ts === "number" ? ts : 0;
 
 	if (typeof ts !== "number") {
 		// If ts is HourOptions, we need more context - use current time
 		const now = new Date();
-		const parts = formatToParts(now.getTime(), timeZone, FULL_HOUR_OPTS);
+		const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+		const parts = formatToParts(now.getTime(), tz, FULL_HOUR_OPTS);
 		return wallTimeToUTC(
 			parts.year,
 			parts.month,
@@ -274,7 +305,8 @@ export function endOfMinute(
 	}
 
 	// Get the current time parts in the target timezone
-	const parts = formatToParts(timestamp, timeZone, FULL_HOUR_OPTS);
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	const parts = formatToParts(timestamp, tz, FULL_HOUR_OPTS);
 
 	// Set second and millisecond to max
 	return wallTimeToUTC(
@@ -297,14 +329,15 @@ export function endOfMinute(
  */
 export function startOfSecond(
 	ts: OptionsOrTimestamp,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	const timestamp = typeof ts === "number" ? ts : 0;
 
 	if (typeof ts !== "number") {
 		// If ts is HourOptions, we need more context - use current time
 		const now = new Date();
-		const parts = formatToParts(now.getTime(), timeZone, FULL_HOUR_OPTS);
+		const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+		const parts = formatToParts(now.getTime(), tz, FULL_HOUR_OPTS);
 		return wallTimeToUTC(
 			parts.year,
 			parts.month,
@@ -318,7 +351,8 @@ export function startOfSecond(
 	}
 
 	// Get the current time parts in the target timezone
-	const parts = formatToParts(timestamp, timeZone, FULL_HOUR_OPTS);
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	const parts = formatToParts(timestamp, tz, FULL_HOUR_OPTS);
 
 	// Set millisecond to 0
 	return wallTimeToUTC(
@@ -341,14 +375,15 @@ export function startOfSecond(
  */
 export function endOfSecond(
 	ts: OptionsOrTimestamp,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	const timestamp = typeof ts === "number" ? ts : 0;
 
 	if (typeof ts !== "number") {
 		// If ts is HourOptions, we need more context - use current time
 		const now = new Date();
-		const parts = formatToParts(now.getTime(), timeZone, FULL_HOUR_OPTS);
+		const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+		const parts = formatToParts(now.getTime(), tz, FULL_HOUR_OPTS);
 		return wallTimeToUTC(
 			parts.year,
 			parts.month,
@@ -362,7 +397,8 @@ export function endOfSecond(
 	}
 
 	// Get the current time parts in the target timezone
-	const parts = formatToParts(timestamp, timeZone, FULL_HOUR_OPTS);
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	const parts = formatToParts(timestamp, tz, FULL_HOUR_OPTS);
 
 	// Set millisecond to max
 	return wallTimeToUTC(
@@ -387,14 +423,15 @@ export function endOfSecond(
 export function addMinutes(
 	ts: OptionsOrTimestamp,
 	amount: number,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	const timestamp = typeof ts === "number" ? ts : 0;
 
 	if (typeof ts !== "number") {
 		// If ts is HourOptions, construct with current date
 		const now = new Date();
-		const parts = formatToParts(now.getTime(), timeZone, FULL_HOUR_OPTS);
+		const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+		const parts = formatToParts(now.getTime(), tz, FULL_HOUR_OPTS);
 		return wallTimeToUTC(
 			parts.year,
 			parts.month,
@@ -408,7 +445,8 @@ export function addMinutes(
 	}
 
 	// Get the current time parts in the target timezone
-	const parts = formatToParts(timestamp, timeZone, FULL_HOUR_OPTS);
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	const parts = formatToParts(timestamp, tz, FULL_HOUR_OPTS);
 
 	// Add minutes and handle hour overflow
 	return wallTimeToUTC(
@@ -433,7 +471,7 @@ export function addMinutes(
 export function subMinutes(
 	ts: OptionsOrTimestamp,
 	amount: number,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	return addMinutes(ts, -amount, timeZone);
 }
@@ -448,14 +486,15 @@ export function subMinutes(
 export function addSeconds(
 	ts: OptionsOrTimestamp,
 	amount: number,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	const timestamp = typeof ts === "number" ? ts : 0;
 
 	if (typeof ts !== "number") {
 		// If ts is HourOptions, construct with current date
 		const now = new Date();
-		const parts = formatToParts(now.getTime(), timeZone, FULL_HOUR_OPTS);
+		const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+		const parts = formatToParts(now.getTime(), tz, FULL_HOUR_OPTS);
 		return wallTimeToUTC(
 			parts.year,
 			parts.month,
@@ -469,7 +508,8 @@ export function addSeconds(
 	}
 
 	// Get the current time parts in the target timezone
-	const parts = formatToParts(timestamp, timeZone, FULL_HOUR_OPTS);
+	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	const parts = formatToParts(timestamp, tz, FULL_HOUR_OPTS);
 
 	// Add seconds and handle minute overflow
 	return wallTimeToUTC(
@@ -494,7 +534,7 @@ export function addSeconds(
 export function subSeconds(
 	ts: OptionsOrTimestamp,
 	amount: number,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
 	return addSeconds(ts, -amount, timeZone);
 }

@@ -5,8 +5,7 @@
 	"private": true,
 	"scripts": {
 		"test": "bun test",
-		"build": "turbo build",
-		"build-pkg": "turbo build --filter=./packages/*",
+		"build": "turbo build --filter=./packages/*",
 		"changeset": "changeset",
 		"resolve": "bun run resolve-deps resolve",
 		"restore": "bun run resolve-deps restore",
@@ -24,11 +23,11 @@
 		"bench:cache": "bun tools/benchmark/run-with-output.ts cache-test.ts"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.0.0",
-		"@changesets/cli": "^2.29.4",
-		"@cjkihl/changeset-dep-resolver": "^0.1.5",
-		"@cjkihl/create-exports": "^0.1.17",
-		"@cjkihl/tsconfig": "^0.1.17",
+		"@biomejs/biome": "^2.0.5",
+		"@changesets/cli": "^2.29.5",
+		"@cjkihl/changeset-dep-resolver": "^1.0.3",
+		"@cjkihl/create-exports": "^1.0.2",
+		"@cjkihl/tsconfig": "^1.0.1",
 		"@date-fns/tz": "^1.2.0",
 		"@manypkg/cli": "^0.24.0",
 		"@types/bun": "latest",
@@ -43,7 +42,7 @@
 	"peerDependencies": {
 		"typescript": "^5"
 	},
-	"packageManager": "bun@1.2.16",
+	"packageManager": "bun@1.2.17",
 	"workspaces": [
 		"packages/*",
 		"shared/*",
