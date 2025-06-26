@@ -8,7 +8,7 @@ import type { PlainDateTime } from "../types.js";
  */
 export function formatTimezone(offset: number, pattern: string): string {
 	if (offset === 0 && pattern[0]!.toUpperCase() === "X") return "Z";
-	const sign = offset <= 0 ? "+" : "-";
+	const sign = offset < 0 ? "-" : "+";
 	const abs = Math.abs(offset);
 	const h = Math.floor(abs / 60);
 	const m = abs % 60;
@@ -35,7 +35,7 @@ export function formatTimezone(offset: number, pattern: string): string {
  * @returns The formatted GMT string.
  */
 export function formatGMT(offset: number, long: boolean): string {
-	const sign = offset <= 0 ? "+" : "-";
+	const sign = offset < 0 ? "-" : "+";
 	const abs = Math.abs(offset);
 	const h = Math.floor(abs / 60);
 	const m = abs % 60;

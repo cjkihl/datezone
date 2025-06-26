@@ -1,6 +1,6 @@
 # 🏁 Datezone vs Date-fns Performance Comparison
 
-**Generated:** 2025-06-26T14:44:04.862Z  \n**Node.js:** v22.6.0  \n**Platform:** darwin arm64
+**Generated:** 2025-06-26T15:54:47.884Z  \n**Node.js:** v22.6.0  \n**Platform:** darwin arm64
 
 ## 📊 Performance Overview
 
@@ -23,42 +23,65 @@ This report compares **Datezone** against **Date-fns v4** with timezone support 
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addDays | 137.90 µs<br/><sub>7252 ops/sec</sub> | **66.57 µs**<br/>**<sub>15021 ops/sec</sub>** | 🐌 |
-| startOfDay | **65.97 µs**<br/>**<sub>15158 ops/sec</sub>** | 73.28 µs<br/><sub>13647 ops/sec</sub> | ✅ |
-| endOfDay | 69.83 µs<br/><sub>14321 ops/sec</sub> | **66.52 µs**<br/>**<sub>15033 ops/sec</sub>** | 🤝 |
+| addDays | 139.70 µs<br/><sub>7158 ops/sec</sub> | **65.59 µs**<br/>**<sub>15246 ops/sec</sub>** | 🐌 <sub>-53%</sub> |
+| startOfDay | **66.66 µs**<br/>**<sub>15001 ops/sec</sub>** | 70.36 µs<br/><sub>14212 ops/sec</sub> | 🤝 |
+| endOfDay | 71.71 µs<br/><sub>13946 ops/sec</sub> | **67.53 µs**<br/>**<sub>14808 ops/sec</sub>** | 🤝 |
 
 ## Non-Timezone: Month Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addMonths | 60.79 ms<br/><sub>16.45 ops/sec</sub> | **345.90 µs**<br/>**<sub>2891 ops/sec</sub>** | 🐌 |
-| startOfMonth | 55.71 ms<br/><sub>17.95 ops/sec</sub> | **142.16 µs**<br/>**<sub>7035 ops/sec</sub>** | 🐌 |
-| endOfMonth | 53.11 ms<br/><sub>18.83 ops/sec</sub> | **183.16 µs**<br/>**<sub>5460 ops/sec</sub>** | 🐌 |
-| calendar month generation | 628.81 ms<br/><sub>1.59 ops/sec</sub> | -<br/>- | 🔥 |
+| addMonths | 59.14 ms<br/><sub>16.91 ops/sec</sub> | **381.20 µs**<br/>**<sub>2623 ops/sec</sub>** | 🐌 <sub>-99%</sub> |
+| startOfMonth | 52.89 ms<br/><sub>18.91 ops/sec</sub> | **270.80 µs**<br/>**<sub>3693 ops/sec</sub>** | 🐌 <sub>-99%</sub> |
+| endOfMonth | 52.28 ms<br/><sub>19.13 ops/sec</sub> | **186.18 µs**<br/>**<sub>5371 ops/sec</sub>** | 🐌 <sub>-100%</sub> |
 
 ## Non-Timezone: Year Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addYears | **85.44 µs**<br/>**<sub>11704 ops/sec</sub>** | 362.95 µs<br/><sub>2755 ops/sec</sub> | 🚀 |
-| startOfYear | **105.70 µs**<br/>**<sub>9461 ops/sec</sub>** | 274.05 µs<br/><sub>3649 ops/sec</sub> | 🚀 |
-| endOfYear | **119.47 µs**<br/>**<sub>8370 ops/sec</sub>** | 280.24 µs<br/><sub>3568 ops/sec</sub> | 🚀 |
+| addYears | **297.43 µs**<br/>**<sub>3362 ops/sec</sub>** | 377.73 µs<br/><sub>2647 ops/sec</sub> | ⚡ <sub>+27%</sub> |
+| startOfYear | **105.80 µs**<br/>**<sub>9451 ops/sec</sub>** | 283.66 µs<br/><sub>3525 ops/sec</sub> | 🚀 <sub>+168%</sub> |
+| endOfYear | **72.99 µs**<br/>**<sub>13701 ops/sec</sub>** | 272.65 µs<br/><sub>3668 ops/sec</sub> | 🚀 <sub>+274%</sub> |
 
-## Other
+## Timezone-Aware: Day Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| format | -<br/>- | 25.48 ms<br/><sub>39.24 ops/sec</sub> | 📚 |
+| addDays | **3.66 ms**<br/>**<sub>273.45 ops/sec</sub>** | 9.81 ms<br/><sub>101.98 ops/sec</sub> | 🚀 <sub>+168%</sub> |
+
+## Timezone-Aware: Month Operations
+
+| Operation | Datezone | Date-fns | Performance |
+|-----------|----------|----------|-------------|
+| addMonths | **5.29 ms**<br/>**<sub>188.90 ops/sec</sub>** | 16.37 ms<br/><sub>61.09 ops/sec</sub> | 🚀 <sub>+209%</sub> |
+
+## Timezone-Aware: Year Operations
+
+| Operation | Datezone | Date-fns | Performance |
+|-----------|----------|----------|-------------|
+| addYears | **4.99 ms**<br/>**<sub>200.53 ops/sec</sub>** | 16.18 ms<br/><sub>61.80 ops/sec</sub> | 🚀 <sub>+224%</sub> |
+
+## Non-Timezone: Formatting Operations
+
+| Operation | Datezone | Date-fns | Performance |
+|-----------|----------|----------|-------------|
+| format | **1.65 ms**<br/>**<sub>607.02 ops/sec</sub>** | 5.12 ms<br/><sub>195.48 ops/sec</sub> | 🚀 <sub>+211%</sub> |
+
+## Timezone-Aware: Formatting Operations
+
+| Operation | Datezone | Date-fns | Performance |
+|-----------|----------|----------|-------------|
+| format | **6.87 ms**<br/>**<sub>145.59 ops/sec</sub>** | 14.76 ms<br/><sub>67.75 ops/sec</sub> | 🚀 <sub>+115%</sub> |
 
 ## 📈 Summary
 
 | Metric | Count | Percentage |
 |--------|-------|------------|
-| **Datezone wins** | 4 | 36.4% |
-| **Date-fns wins** | 4 | 36.4% |
-| **Close matches** | 1 | 9.1% |
-| **Datezone unique** | 1 | 9.1% |
-| **Total operations** | 11 | 100% |
+| **Datezone wins** | 8 | 57.1% |
+| **Date-fns wins** | 4 | 28.6% |
+| **Close matches** | 2 | 14.3% |
+| **Datezone unique** | 0 | 0.0% |
+| **Total operations** | 14 | 100% |
 
 ## 🔬 Methodology
 
@@ -86,5 +109,6 @@ This report compares **Datezone** against **Date-fns v4** with timezone support 
 
 ---
 
-*To regenerate: [36mbun run tools/benchmark/format-results.ts[0m*
+*To regenerate: 
+[36mbun run tools/benchmark/format-results.ts[0m*
 

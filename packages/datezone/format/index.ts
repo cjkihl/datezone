@@ -1,11 +1,12 @@
 import { FULL_TS, formatToParts } from "../format-parts.js";
-import type { TimeZone } from "../iana.js";
+import { isUTC, type TimeZone } from "../iana.js";
+import { getUTCtoTimezoneOffsetMinutes } from "../offset.js";
 import type { PlainDateTime } from "../types.js";
 import { formatters } from "./formatters.js";
 
 type FormatOptions = {
 	locale: string;
-	timeZone: TimeZone;
+	timeZone?: TimeZone;
 };
 
 /**
@@ -17,7 +18,7 @@ type FormatOptions = {
  * @description
  * Return the formatted date string in the given format. The result may vary by locale and timezone.
  *
- * The characters wrapped between two single quotes characters (') are escaped.
+ * The characters wrapped between two single quotes characters ('') are escaped.
  * Two single quotes in a row, whether inside or outside a quoted sequence, represent a 'real' single quote.
  * (see the last example)
  *
@@ -255,8 +256,8 @@ type FormatOptions = {
  * 9. `D` and `DD` tokens represent days of the year but they are often confused with days of the month.
  *
  * @param ts - The Timestamp to format
- * @param format - The string of tokens
- * @param options - An object with options
+ * @param formatString - The string of tokens
+ * @param options - An object with options. `locale` is required. `timeZone` is optional and defaults to the system's local timezone.
  *
  * @returns The formatted date string
  *
@@ -285,69 +286,57 @@ export function format(
 	formatString: string,
 	options: FormatOptions,
 ): string {
-	// Use formatToParts for typesafe extraction of date parts in the correct time zone and locale
-	const parts = formatToParts(ts, options.timeZone as string, FULL_TS);
-	let year = parts.year;
-	if (ts < 0 && year > 0) {
-		year = 1 - year;
-	}
+	let dt: PlainDateTime;
+	const d = new Date(ts);
 
-	// Compute the timezone offset in minutes for the given timeZone and timestamp
-	function getOffsetMinutes(ts: number, timeZone: string): number {
-		// Get the local time in the target timeZone using Intl
-		const dtf = new Intl.DateTimeFormat("en-US", {
-			day: "2-digit",
-			hour: "2-digit",
-			hour12: false,
-			minute: "2-digit",
-			month: "2-digit",
-			second: "2-digit",
-			timeZone,
-			year: "numeric",
-		});
-		const partsArr = dtf.formatToParts(ts);
-		const get = (type: string) => {
-			const part = partsArr.find((p) => p.type === type);
-			if (!part) throw new Error(`Missing part: ${type}`);
-			return part.value;
+	if (!options.timeZone) {
+		// Fast path for local timezone
+		dt = {
+			day: d.getDate(),
+			hour: d.getHours(),
+			millisecond: d.getMilliseconds(),
+			minute: d.getMinutes(),
+			month: d.getMonth() + 1,
+			second: d.getSeconds(),
+			timezoneOffsetMinutes: -d.getTimezoneOffset(),
+			year: d.getFullYear(),
 		};
-		const year = get("year");
-		const month = get("month");
-		const day = get("day");
-		const hour = get("hour");
-		const minute = get("minute");
-		const second = get("second");
-		// Construct a UTC timestamp for the same local time in the target timezone
-		const asUTC = Date.UTC(
-			Number(year),
-			Number(month) - 1,
-			Number(day),
-			Number(hour),
-			Number(minute),
-			Number(second),
+	} else if (isUTC(options.timeZone)) {
+		// Fast path for UTC
+		dt = {
+			day: d.getUTCDate(),
+			hour: d.getUTCHours(),
+			millisecond: d.getUTCMilliseconds(),
+			minute: d.getUTCMinutes(),
+			month: d.getUTCMonth() + 1,
+			second: d.getUTCSeconds(),
+			timezoneOffsetMinutes: 0,
+			year: d.getUTCFullYear(),
+		};
+	} else {
+		// Path for specific IANA timezones
+		const parts = formatToParts(ts, options.timeZone, FULL_TS);
+		let year = parts.year;
+		if (ts < 0 && year > 0) {
+			year = 1 - year;
+		}
+
+		const timezoneOffsetMinutes = getUTCtoTimezoneOffsetMinutes(
+			ts,
+			options.timeZone,
 		);
-		// Offset in minutes
-		return -(asUTC - ts) / 60000;
+
+		dt = {
+			day: parts.day,
+			hour: parts.hour,
+			millisecond: d.getUTCMilliseconds(),
+			minute: parts.minute,
+			month: parts.month,
+			second: parts.second,
+			timezoneOffsetMinutes,
+			year,
+		};
 	}
-
-	const timezoneOffsetMinutes = getOffsetMinutes(
-		ts,
-		options.timeZone as string,
-	);
-
-	// Milliseconds: extract from the timestamp directly
-	const millisecond = Math.floor(ts % 1000);
-
-	const dt: PlainDateTime = {
-		day: parts.day,
-		hour: parts.hour,
-		millisecond,
-		minute: parts.minute,
-		month: parts.month,
-		second: parts.second,
-		timezoneOffsetMinutes,
-		year,
-	};
 
 	const ctx = {
 		dt,
@@ -406,7 +395,11 @@ export function format(
 
 		if (token in formatters) {
 			const formatter = formatters[token as keyof typeof formatters];
-			result += formatter({ ...ctx, len: token.length });
+			result += formatter({
+				...ctx,
+				len: token.length,
+				timeZone: ctx.timeZone,
+			});
 			i += token.length;
 			continue;
 		}

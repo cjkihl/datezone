@@ -1,10 +1,9 @@
-// Shared benchmark group/category definitions and categorization logic
-
 export const BENCHMARK_GROUPS = {
 	COMPLEX_TIMEZONE: "Complex Timezone",
 	DATEZONE_SPECIFIC: "Datezone-Specific",
 	MULTI_TIMEZONE: "Multi-Timezone",
 	NON_TIMEZONE_DAY: "Non-Timezone: Day",
+	NON_TIMEZONE_FORMATTING: "Non-Timezone: Formatting",
 	NON_TIMEZONE_MONTH: "Non-Timezone: Month",
 	NON_TIMEZONE_YEAR: "Non-Timezone: Year",
 	REAL_WORLD: "Real-World",
@@ -21,6 +20,7 @@ export const GROUP_LABELS: Record<BenchmarkGroupKey, string> = {
 	DATEZONE_SPECIFIC: "Datezone-Specific Operations",
 	MULTI_TIMEZONE: "Multi-Timezone Operations",
 	NON_TIMEZONE_DAY: "Non-Timezone: Day Operations",
+	NON_TIMEZONE_FORMATTING: "Non-Timezone: Formatting Operations",
 	NON_TIMEZONE_MONTH: "Non-Timezone: Month Operations",
 	NON_TIMEZONE_YEAR: "Non-Timezone: Year Operations",
 	REAL_WORLD: "Real-World Timezone Scenarios",
@@ -41,6 +41,8 @@ export function categorize(operation: string): BenchmarkGroupKey | "Other" {
 		return "TIMEZONE_AWARE_YEAR";
 	if (op.includes("timezone") && op.includes("format"))
 		return "TIMEZONE_AWARE_FORMATTING";
+	if (op.includes("format") && !op.includes("timezone"))
+		return "NON_TIMEZONE_FORMATTING";
 	if (!op.includes("timezone") && op.includes("month"))
 		return "NON_TIMEZONE_MONTH";
 	if (!op.includes("timezone") && op.includes("day")) return "NON_TIMEZONE_DAY";

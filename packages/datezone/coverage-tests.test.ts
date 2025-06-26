@@ -41,13 +41,13 @@ describe("Coverage Tests - Missing Lines", () => {
 	describe("Format utils edge cases", () => {
 		test("formatTimezone with different patterns", () => {
 			// Test case 4 (XXXX/xxxx) pattern
-			expect(formatTimezone(-480, "XXXX")).toBe("+0800");
+			expect(formatTimezone(-480, "XXXX")).toBe("-0800");
 
 			// Test case 5 (XXXXX/xxxxx) pattern
-			expect(formatTimezone(-480, "XXXXX")).toBe("+08:00");
+			expect(formatTimezone(-480, "XXXXX")).toBe("-08:00");
 
 			// Test default case (unknown pattern length)
-			expect(formatTimezone(-480, "XXXXXX")).toBe("+08:00");
+			expect(formatTimezone(-480, "XXXXXX")).toBe("-08:00");
 
 			// Test zero offset with non-X pattern - returns Z for zero offset
 			expect(formatTimezone(0, "xxx")).toBe("Z");
@@ -55,13 +55,13 @@ describe("Coverage Tests - Missing Lines", () => {
 
 		test("formatGMT with different options", () => {
 			// Test short format with non-zero minutes
-			expect(formatGMT(-90, false)).toBe("GMT+1:30");
+			expect(formatGMT(-90, false)).toBe("GMT-1:30");
 
 			// Test short format with zero minutes
-			expect(formatGMT(-120, false)).toBe("GMT+2");
+			expect(formatGMT(-120, false)).toBe("GMT-2");
 
 			// Test long format
-			expect(formatGMT(-90, true)).toBe("GMT+01:30");
+			expect(formatGMT(-90, true)).toBe("GMT-01:30");
 		});
 
 		test("formatTimestamp", () => {

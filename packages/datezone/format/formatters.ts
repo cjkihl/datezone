@@ -34,7 +34,7 @@ function get12Hour(hour: number): number {
 type Options = {
 	dt: PlainDateTime;
 	locale: string;
-	timeZone: TimeZone;
+	timeZone?: TimeZone;
 	len: number;
 };
 
@@ -206,13 +206,13 @@ function MM(o: Options): string {
 	return padZeros(o.dt.month, 2);
 }
 function MMM(o: Options): string {
-	return getMonthName(o.locale, "short", o.dt.month - 1);
+	return getMonthName(o.locale, "short", o.dt.month);
 }
 function MMMM(o: Options): string {
-	return getMonthName(o.locale, "long", o.dt.month - 1);
+	return getMonthName(o.locale, "long", o.dt.month);
 }
 function MMMMM(o: Options): string {
-	return getMonthName(o.locale, "narrow", o.dt.month - 1);
+	return getMonthName(o.locale, "narrow", o.dt.month);
 }
 
 /**
@@ -228,13 +228,13 @@ function LL(o: Options): string {
 	return padZeros(o.dt.month, 2);
 }
 function LLL(o: Options): string {
-	return getMonthName(o.locale, "short", o.dt.month - 1);
+	return getMonthName(o.locale, "short", o.dt.month);
 }
 function LLLL(o: Options): string {
-	return getMonthName(o.locale, "long", o.dt.month - 1);
+	return getMonthName(o.locale, "long", o.dt.month);
 }
 function LLLLL(o: Options): string {
-	return getMonthName(o.locale, "narrow", o.dt.month - 1);
+	return getMonthName(o.locale, "narrow", o.dt.month);
 }
 
 /**
@@ -686,13 +686,13 @@ function P(o: Options): string {
 	return `${padZeros(o.dt.month, 2)}/${padZeros(o.dt.day, 2)}/${padZeros(o.dt.year, 4)}`;
 }
 function PP(o: Options): string {
-	return `${getMonthName(o.locale, "long", o.dt.month - 1)} ${formatOrdinal(o.dt.day, o.locale)}, ${o.dt.year}`;
+	return `${getMonthName(o.locale, "long", o.dt.month)} ${formatOrdinal(o.dt.day, o.locale)}, ${o.dt.year}`;
 }
 function PPP(o: Options): string {
-	return `${weekDayName(o.locale, "long", dayOfWeek(o.dt, o.timeZone))}, ${getMonthName(o.locale, "long", o.dt.month - 1)} ${formatOrdinal(o.dt.day, o.locale)}, ${o.dt.year}`;
+	return `${weekDayName(o.locale, "long", dayOfWeek(o.dt, o.timeZone))}, ${getMonthName(o.locale, "long", o.dt.month)} ${formatOrdinal(o.dt.day, o.locale)}, ${o.dt.year}`;
 }
 function PPPP(o: Options): string {
-	return `${weekDayName(o.locale, "long", dayOfWeek(o.dt, o.timeZone))}, ${getMonthName(o.locale, "long", o.dt.month - 1)} ${formatOrdinal(o.dt.day, o.locale)}, ${o.dt.year}`;
+	return `${weekDayName(o.locale, "long", dayOfWeek(o.dt, o.timeZone))}, ${getMonthName(o.locale, "long", o.dt.month)} ${formatOrdinal(o.dt.day, o.locale)}, ${o.dt.year}`;
 }
 
 /**

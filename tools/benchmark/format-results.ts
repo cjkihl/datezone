@@ -70,35 +70,33 @@ function extractComparisonRows(data: MitataOutput): ComparisonRow[] {
 		const alias = typeof bench.alias === "string" ? bench.alias : "";
 		const run = bench.runs[0];
 		if (!run || !run.stats) continue;
-		const match = alias.match(/^(datezone|date-fns):\s*(.+?)\s*\((.+)\)$/);
+
+		// Updated regex to capture all variations
+		const match = alias.match(
+			/^(datezone|date-fns|native):\s*(.+?)(?:\s*\((.+)\))?$/,
+		);
 		if (!match) continue;
-		const lib = typeof match[1] === "string" ? match[1] : "";
-		let op = match[2];
-		op = typeof op === "string" ? op : "";
-		const key = op;
+
+		const lib = match[1] as "datezone" | "date-fns" | "native";
+		const op = match[2]?.trim() ?? "";
+		const variant = match[3]?.trim() ?? "local"; // Default to 'local' if no variant
+
+		const key = `${op} (${variant})`; // Unique key for each operation variant
+
 		const result: BenchmarkResult = {
 			name: op,
 			ops: formatOps(run.stats.ticks, run.stats.avg) || "-",
 			samples: run.stats.samples.length,
 			time: formatTime(run.stats.avg) || "-",
 		};
-		if (!rows[key]) rows[key] = { operation: op };
-		// For each op, keep the fastest (lowest avg) result for each lib
+
+		if (!rows[key]) rows[key] = { operation: `${op} (${variant})` };
+
+		// Assign the result to the correct library
 		if (lib === "datezone") {
-			if (
-				!rows[key].datezone ||
-				run.stats.avg < Number(rows[key].datezone.time.replace(/[^\d.]/g, ""))
-			) {
-				rows[key].datezone = result;
-			}
-		}
-		if (lib === "date-fns") {
-			if (
-				!rows[key].datefns ||
-				run.stats.avg < Number(rows[key].datefns.time.replace(/[^\d.]/g, ""))
-			) {
-				rows[key].datefns = result;
-			}
+			rows[key].datezone = result;
+		} else if (lib === "date-fns") {
+			rows[key].datefns = result;
 		}
 	}
 	return Object.values(rows);
@@ -107,22 +105,24 @@ function extractComparisonRows(data: MitataOutput): ComparisonRow[] {
 function getPerfIcon(
 	datezone?: BenchmarkResult,
 	datefns?: BenchmarkResult,
-): { icon: string; desc: string } {
-	if (!datezone && datefns) return { desc: "Date-fns only", icon: "📚" };
-	if (datezone && !datefns) return { desc: "Datezone only", icon: "🔥" };
-	if (!datezone || !datefns) return { desc: "N/A", icon: "-" };
+): { icon: string; desc: string; pct: number | null } {
+	if (!datezone && datefns)
+		return { desc: "Date-fns only", icon: "📚", pct: null };
+	if (datezone && !datefns)
+		return { desc: "Datezone only", icon: "🔥", pct: null };
+	if (!datezone || !datefns) return { desc: "N/A", icon: "-", pct: null };
 	// Parse ops/sec as float
 	const dzOps = Number.parseFloat(datezone.ops.replace(/[^\d.]/g, ""));
 	const dfOps = Number.parseFloat(datefns.ops.replace(/[^\d.]/g, ""));
-	if (!dzOps || !dfOps) return { desc: "N/A", icon: "-" };
+	if (!dzOps || !dfOps) return { desc: "N/A", icon: "-", pct: null };
 	const diff = dzOps - dfOps;
 	const pct = (diff / dfOps) * 100;
-	if (pct > 100) return { desc: ">100% faster", icon: "🚀" };
-	if (pct > 25) return { desc: "25-100% faster", icon: "⚡" };
-	if (pct > 10) return { desc: "10-25% faster", icon: "✅" };
-	if (pct > -10) return { desc: "<10% difference", icon: "🤝" };
-	if (pct > -25) return { desc: "Date-fns leads (10-25%)", icon: "⚠️" };
-	return { desc: ">25% slower", icon: "🐌" };
+	if (pct > 100) return { desc: ">100% faster", icon: "🚀", pct };
+	if (pct > 25) return { desc: "25-100% faster", icon: "⚡", pct };
+	if (pct > 10) return { desc: "10-25% faster", icon: "✅", pct };
+	if (pct > -10) return { desc: "<10% difference", icon: "🤝", pct };
+	if (pct > -25) return { desc: "Date-fns leads (10-25%)", icon: "⚠️", pct };
+	return { desc: ">25% slower", icon: "🐌", pct };
 }
 
 function formatOpsSub(ops: string): string {
@@ -205,11 +205,18 @@ function generateCreativeMarkdown(rows: ComparisonRow[]): string {
 		md += "| Operation | Datezone | Date-fns | Performance |\n";
 		md += "|-----------|----------|----------|-------------|\n";
 		for (const row of group) {
-			const { icon } = getPerfIcon(row.datezone, row.datefns);
+			const { icon, pct } = getPerfIcon(row.datezone, row.datefns);
 			let dzTime = row.datezone?.time || "-";
 			let dzOps = row.datezone?.ops ? formatOpsSub(row.datezone.ops) : "-";
 			let dfTime = row.datefns?.time || "-";
 			let dfOps = row.datefns?.ops ? formatOpsSub(row.datefns.ops) : "-";
+
+			let perfText = icon;
+			if (pct !== null && Math.abs(pct) > 10) {
+				const sign = pct > 0 ? "+" : "";
+				perfText += ` <sub>${sign}${pct.toFixed(0)}%</sub>`;
+			}
+
 			// Bold the best
 			if (row.datezone && row.datefns) {
 				const dzOpsNum = Number.parseFloat(
@@ -226,8 +233,7 @@ function generateCreativeMarkdown(rows: ComparisonRow[]): string {
 					[dzOps, dfOps] = boldBest(dzOps, dfOps, "datefns");
 				}
 			}
-			md += `| ${(row.operation ?? "").replace(/\s*\(.+\)/, "")} | ${dzTime}<br/>${dzOps} | ${dfTime}<br/>${dfOps} | ${icon} |
-`;
+			md += `| ${(row.operation ?? "").replace(/\s*\(.+\)/, "")} | ${dzTime}<br/>${dzOps} | ${dfTime}<br/>${dfOps} | ${perfText} |\n`;
 		}
 		md += "\n";
 	}
@@ -247,8 +253,8 @@ function generateCreativeMarkdown(rows: ComparisonRow[]): string {
 		"### Comparison Approach\n- **Datezone:** Built-in timezone support with UTC timestamps\n- **Date-fns:** v4.x with @date-fns/tz package for timezone operations\n- **Test Data:** Realistic timestamps across different times and timezones\n- **Fairness:** Both libraries tested with equivalent timezone-aware operations\n\n";
 	md +=
 		"### Performance Metrics\n- **Time (avg):** Average execution time per operation\n- **Operations/sec:** Throughput (higher = better)\n- **Comparison:** Based on operations per second difference\n\n";
-	md += `### Notes\n- Results may vary based on system specifications and load\n- Benchmarks focus on equivalent functionality where available\n- Some operations are unique to Datezone (timezone utilities)\n- All operations tested with timezone awareness for fair comparison\n\n---\n\n*To regenerate: \
-[36mbun run tools/benchmark/format-results.ts[0m*\n\n`;
+	md +=
+		"### Notes\n- Results may vary based on system specifications and load\n- Benchmarks focus on equivalent functionality where available\n- Some operations are unique to Datezone (timezone utilities)\n- All operations tested with timezone awareness for fair comparison\n\n---\n\n*To regenerate: \n\u001b[36mbun run tools/benchmark/format-results.ts\u001b[0m*\n\n";
 	return md;
 }
 
