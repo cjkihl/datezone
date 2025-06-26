@@ -8,93 +8,72 @@ Generate a beautiful comparison report:
 
 ```bash
 # From workspace root
-bun run bench:report
+bun run bench:comprehensive   # Step 1: Run benchmarks (outputs JSON)
+bun run bench:report         # Step 2: Format report (outputs markdown)
 
 # From tools/benchmark directory  
-bun run report
+bun run bench:comprehensive
+bun run bench:report
 ```
-
-## 📊 What You Get
-
-Instead of raw mitata output that looks like this:
-```
-┌─ Month Operations ──────────────────────────────────────────────────┐
-│ datezone: startOfMonth     │    45.2ns │ 22.1M ops/sec │  ± 2.3% │
-│ date-fns: startOfMonth     │   127.8ns │  7.8M ops/sec │  ± 1.8% │
-└──────────────────────────────────────────────────────────────────────┘
-```
-
-You get beautiful markdown tables like this:
-
-| Operation | Datezone | Date-fns | Performance |
-|-----------|----------|----------|-------------|
-| startOfMonth | **45.2ns**<br/><sub>22.1M ops/sec</sub> | **127.8ns**<br/><sub>7.8M ops/sec</sub> | 🚀 183% faster |
 
 ## 🏆 Available Commands
 
 | Command | Description | Output Format |
 |---------|-------------|---------------|
-| `bun run bench:report` | 🌟 **Recommended** - Formatted comparison | Beautiful markdown tables |
-| `bun run bench:comprehensive` | Full timezone-aware comparison | Raw mitata output |
-| `bun run bench:compare` | Quick library comparison | Raw mitata output |
-| `bun run bench` | Datezone-only benchmarks | Raw mitata output |
+| `bun run bench:comprehensive` | Run all benchmarks, output JSON | `output/output.json` |
+| `bun run bench:report` | 🌟 **Recommended** - Format comparison | Beautiful markdown tables |
+| `bun run bench:clean` | Clean all output and report files | - |
 
 ## 📁 Output Files
 
-- `reports/sample-comparison-report.md` - Example of formatted output
-- `reports/comparison-report.md` - Real benchmark results (when available)
-- `reports/performance-benchmarks.md` - Documentation
+- `output/output.json` - Raw Mitata JSON output (from benchmarks)
+- `reports/comparison-report.md` - Formatted markdown report
+
+## 🛠️ How It Works
+
+1. **Run Benchmarks:**
+   - `bun run bench:comprehensive`
+   - This runs all benchmarks and writes the results as JSON to `output/output.json` using Mitata's `print` option.
+2. **Format the Report:**
+   - `bun run bench:report`
+   - This reads the JSON output and generates a markdown report in `reports/comparison-report.md`.
+3. **View the Report:**
+   - Open `reports/comparison-report.md` in your editor or markdown viewer.
+4. **Clean Outputs:**
+   - `bun run bench:clean`
+   - Removes all files in `output/` and `reports/`.
 
 ## 🎯 Report Features
 
-### Performance Icons
 - 🚀 **Datezone dominates** (>100% faster)
-- ⚡ **Datezone wins** (25-100% faster)  
+- ⚡ **Datezone wins** (25-100% faster)
 - ✅ **Datezone leads** (10-25% faster)
 - 🤝 **Close match** (<10% difference)
 - ⚠️ **Date-fns leads** (10-25% faster)
 - 🔥 **Datezone only** (no equivalent)
 
-### Summary Statistics
-- Win/loss ratios between libraries
-- Performance improvement percentages
-- Unique operation counts
-
-### Methodology Details
-- System information
-- Test data descriptions
-- Fair comparison approach
-- Measurement techniques
-
 ## 🔧 Technical Details
 
-### What's Benchmarked
 - **Timezone-aware operations** (fair comparison)
-- **Month/day/time manipulations** 
+- **Month/day/time manipulations**
 - **Formatting and parsing**
 - **Unique Datezone utilities**
-
-### Libraries Tested
 - **Datezone**: Built-in timezone support
 - **Date-fns v4**: With `@date-fns/tz` package
-
-### Benchmark Tool
 - [Mitata](https://github.com/evanwashere/mitata) - High-precision JavaScript benchmarking
-- Multiple samples with statistical significance
-- Memory allocation tracking
 
 ## 🚧 Current Status
 
-The `format-results.ts` script is a work-in-progress that attempts to parse raw mitata output. For now, `simple-format.ts` provides a working example with sample data.
+- The workflow now uses Mitata's `print` option to write JSON directly to `output/output.json`.
+- The formatter reads this file and generates a markdown report.
+- No more parsing stdout or filtering preamble text.
 
-### To improve the system:
-1. Fix mitata output parsing in `format-results.ts`
-2. Add more comprehensive benchmark scenarios
-3. Integrate with CI for automated reporting
+## Optional Scripts
 
-## 🎨 Example Output
+- `bun run bench` — Runs Datezone-only microbenchmarks (for internal performance testing, not comparison)
+- `bun run quick` — Runs a quick comparison benchmark (less comprehensive, for fast feedback)
 
-See [sample-comparison-report.md](reports/sample-comparison-report.md) for a complete example of the formatted output.
+These are not required for the main workflow, but can be useful for development or profiling.
 
 ---
 

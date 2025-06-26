@@ -1,0 +1,149 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Datezone Monorepo - Cursor Rules
+
+## Project Overview
+This is a monorepo for the datezone library - a lightweight and comprehensive date and timezone utility library for JavaScript/TypeScript. The project uses modern tooling and follows strict development practices.
+
+## Package Manager & Build Tools
+- **Always use Bun** as the package manager (version 1.2.17)
+- **Turborepo** is used for build orchestration and caching
+- **TypeScript** is used throughout with strict configuration
+- **Biome** is used for formatting and linting
+
+## Monorepo Structure
+```
+datezone/
+├── apps/
+│   └── site/                 # Next.js demo/documentation site
+├── packages/
+│   └── datezone/            # Main library package
+├── tools/
+│   └── benchmark/           # Performance benchmarking tools
+├── biome.json              # Biome configuration
+├── turbo.json              # Turborepo configuration
+└── package.json            # Root package.json
+```
+
+## Development Workflow
+
+### Package Manager Commands
+- Install dependencies: `bun install`
+- Add dependencies: `bun add <package>` (root) or `bun add <package> --workspace=<workspace>`
+- Run scripts: `bun run <script>`
+- Run tests: `bun test`
+- Build: `bun run build`
+
+### Code Quality Commands
+- Lint and format: `bun run lint-fix`
+- Type check: `bun run type-check`
+- Run tests: `bun test`
+
+## TypeScript Rules
+- **Strict mode is enforced** - `any` type is not allowed
+- **Unused variables are not allowed** - all variables must be used
+- Use explicit types when type inference is unclear
+- Prefer `const` over `let` when possible
+- Use `readonly` for immutable data structures
+
+## Code Style & Formatting
+- **Biome** handles all formatting and linting
+- Indent style: tabs (2 spaces width)
+- Always run `bun run lint-fix` after adding code
+- Follow Biome's recommended rules and project-specific overrides
+
+## Testing Requirements
+- **Always run tests** with `bun test` after making changes
+- Ensure your changes don't break existing tests
+- Tests are located in `*.test.ts` files alongside source files
+- Use descriptive test names and proper assertions
+
+## Package-Specific Guidelines
+
+### `packages/datezone/` (Main Library)
+- This is the core datezone library
+- Exports are managed through `create-exports`
+- Build output goes to `dist/` directory
+- All public APIs must be properly typed
+- Performance is critical - benchmark changes when needed
+
+### `apps/site/` (Demo Site)
+- Next.js application for documentation/demo
+- Uses Tailwind CSS for styling
+- Turbopack enabled for development
+- Private package (not published)
+
+### `tools/benchmark/` (Benchmarking Tools)
+- Performance testing utilities
+- Uses mitata for benchmarking
+- Generates performance reports
+- Run with `bun run bench` commands
+
+## Development Best Practices
+
+### Before Committing
+1. Run `bun run lint-fix` to format and lint code
+2. Run `bun test` to ensure all tests pass
+3. Run `bun run type-check` to verify TypeScript compilation
+4. Run `bun run build` to ensure everything builds correctly
+
+### Adding New Features
+1. Add tests first (TDD approach)
+2. Implement the feature with strict typing
+3. Update documentation if needed
+4. Run all quality checks
+5. Consider performance implications
+
+### Performance Considerations
+- The library is designed to be lightweight and tree-shakeable
+- Use the benchmark tools to measure performance impact
+- Avoid unnecessary allocations and computations
+- Consider bundle size impact
+
+## Common Commands Reference
+```bash
+# Development
+bun run dev              # Start Next.js dev server
+bun run build            # Build all packages
+bun run test             # Run all tests
+bun run lint-fix         # Format and lint code
+bun run type-check       # Type check all packages
+
+# Benchmarking
+bun run bench            # Run basic benchmarks
+bun run bench:compare    # Compare performance
+bun run bench:report     # Generate performance report
+
+# Package management
+bun add <package>        # Add dependency to root
+bun add <package> --workspace=datezone  # Add to specific package
+```
+
+## File Naming Conventions
+- Source files: `*.ts`
+- Test files: `*.test.ts`
+- Configuration files: `*.json`, `*.ts`, `*.mjs`
+- Documentation: `README.md`, `CHANGELOG.md`
+
+## Import/Export Guidelines
+- Use ES modules (`import`/`export`)
+- Prefer named exports over default exports
+- Use relative imports for internal files
+- Use package imports for external dependencies
+
+## Error Handling
+- Use proper TypeScript error types
+- Avoid `any` type - use proper error interfaces
+- Handle edge cases explicitly
+- Provide meaningful error messages
+
+## Documentation
+- Keep README files up to date
+- Document public APIs with JSDoc comments
+- Update CHANGELOG for user-facing changes
+- Include usage examples in documentation
+
+Remember: This is a performance-critical library, so always consider the impact of your changes on bundle size and runtime performance.

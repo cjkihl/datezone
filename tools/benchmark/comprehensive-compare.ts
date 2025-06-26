@@ -1,4 +1,7 @@
 // Import date-fns v4 timezone support
+
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 import { TZDate } from "@date-fns/tz";
 // Import date-fns v4 functions
 import {
@@ -15,27 +18,22 @@ import {
 } from "date-fns";
 // Import datezone functions
 import {
-	DAY,
+	addDays as dzAddDays,
 	addMonths as dzAddMonths,
+	addYears as dzAddYears,
 	endOfDay as dzEndOfDay,
 	endOfMonth as dzEndOfMonth,
+	endOfYear as dzEndOfYear,
 	formatToParts as dzFormatToParts,
 	getTimezoneOffsetMinutes as dzGetTimezoneOffsetMinutes,
 	startOfDay as dzStartOfDay,
 	startOfMonth as dzStartOfMonth,
+	startOfYear as dzStartOfYear,
 	wallTimeToUTC as dzWallTimeToUTC,
+	getLocalTimezone,
 	type TimeZone,
 } from "datezone";
 import { bench, do_not_optimize, group, run } from "mitata";
-
-// Helper function for datezone
-const dzAddDays = (ts: number, days: number, _timeZone: string): number => {
-	return ts + days * DAY;
-};
-
-const dzAddYears = (ts: number, years: number, timeZone: TimeZone): number => {
-	return dzAddMonths(ts, years * 12, timeZone);
-};
 
 // Test data
 const testTimestamp = new Date("2024-06-15T15:45:30.123Z").getTime();
@@ -54,6 +52,122 @@ console.log(
 );
 console.log(`Test timezone: ${testTimezone}`);
 console.log("Date-fns version: ^4.1.0 with @date-fns/tz ^1.2.0\n");
+
+// ===============================================
+// OPTIONAL TIMEZONE SUPPORT COMPARISON (Datezone local vs Date-fns no timezone)
+// ===============================================
+
+group(
+	"Optional Timezone: Basic Operations (Datezone local vs Date-fns)",
+	() => {
+		bench("datezone: addDays (local timezone)", function* () {
+			yield () => do_not_optimize(dzAddDays(testTimestamp, 7));
+		});
+
+		bench("date-fns: addDays (no timezone)", function* () {
+			yield () => {
+				const result = fnsAddDays(testDate, 7);
+				return do_not_optimize(result.getTime());
+			};
+		});
+
+		bench("datezone: addMonths (local timezone)", function* () {
+			yield () =>
+				do_not_optimize(dzAddMonths(testTimestamp, 3, getLocalTimezone()));
+		});
+
+		bench("date-fns: addMonths (no timezone)", function* () {
+			yield () => {
+				const result = fnsAddMonths(testDate, 3);
+				return do_not_optimize(result.getTime());
+			};
+		});
+
+		bench("datezone: addYears (local timezone)", function* () {
+			yield () => do_not_optimize(dzAddYears(testTimestamp, 2));
+		});
+
+		bench("date-fns: addYears (no timezone)", function* () {
+			yield () => {
+				const result = fnsAddYears(testDate, 2);
+				return do_not_optimize(result.getTime());
+			};
+		});
+	},
+);
+
+group(
+	"Optional Timezone: Start/End Operations (Datezone local vs Date-fns)",
+	() => {
+		bench("datezone: startOfDay (local timezone)", function* () {
+			yield () => do_not_optimize(dzStartOfDay(testTimestamp));
+		});
+
+		bench("date-fns: startOfDay (no timezone)", function* () {
+			yield () => {
+				const result = fnsStartOfDay(testDate);
+				return do_not_optimize(result.getTime());
+			};
+		});
+
+		bench("datezone: endOfDay (local timezone)", function* () {
+			yield () => do_not_optimize(dzEndOfDay(testTimestamp));
+		});
+
+		bench("date-fns: endOfDay (no timezone)", function* () {
+			yield () => {
+				const result = fnsEndOfDay(testDate);
+				return do_not_optimize(result.getTime());
+			};
+		});
+
+		bench("datezone: startOfMonth (local timezone)", function* () {
+			yield () =>
+				do_not_optimize(dzStartOfMonth(testTimestamp, getLocalTimezone()));
+		});
+
+		bench("date-fns: startOfMonth (no timezone)", function* () {
+			yield () => {
+				const result = fnsStartOfMonth(testDate);
+				return do_not_optimize(result.getTime());
+			};
+		});
+
+		bench("datezone: endOfMonth (local timezone)", function* () {
+			yield () =>
+				do_not_optimize(dzEndOfMonth(testTimestamp, getLocalTimezone()));
+		});
+
+		bench("date-fns: endOfMonth (no timezone)", function* () {
+			yield () => {
+				const result = fnsEndOfMonth(testDate);
+				return do_not_optimize(result.getTime());
+			};
+		});
+
+		bench("datezone: startOfYear (local timezone)", function* () {
+			yield () => do_not_optimize(dzStartOfYear(testTimestamp));
+		});
+
+		bench("date-fns: startOfYear (no timezone)", function* () {
+			yield () => {
+				const result = fnsStartOfYear(testDate);
+				return do_not_optimize(result.getTime());
+			};
+		});
+
+		bench("datezone: endOfYear (local timezone)", function* () {
+			yield () => do_not_optimize(dzEndOfYear(testTimestamp));
+		});
+
+		bench("date-fns: endOfYear (no timezone)", function* () {
+			yield () => {
+				const result = fnsEndOfYear(testDate);
+				return do_not_optimize(result.getTime());
+			};
+		});
+	},
+);
 
 // ===============================================
 // TIMEZONE-AWARE OPERATIONS COMPARISON (Apples to Apples)
@@ -465,5 +579,14 @@ group("Datezone-Specific Operations", () => {
 	});
 });
 
-// Run the comprehensive benchmark
-await run();
+const outputDir = join(__dirname, "output");
+if (!existsSync(outputDir)) {
+	mkdirSync(outputDir);
+}
+
+await run({
+	format: "json",
+	print: (s: string) => {
+		writeFileSync(join(outputDir, "output.json"), s);
+	},
+});

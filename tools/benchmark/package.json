@@ -5,12 +5,11 @@
 	"description": "Performance benchmarks for Datezone",
 	"type": "module",
 	"scripts": {
+		"bench:comprehensive": "bun run comprehensive-compare.ts",
+		"bench:report": "bun run format-results.ts",
+		"bench:clean": "rm -rf output/*.json reports/*.md",
 		"bench": "bun run run.ts",
-		"type-check": "tsc --noEmit",
-		"compare": "bun run comprehensive-compare.ts",
-		"quick": "bun run compare.ts",
-		"report": "bun run format-results.ts",
-		"sample": "bun run simple-format.ts"
+		"quick": "bun run compare.ts"
 	},
 	"dependencies": {
 		"@date-fns/tz": "^1.2.0",

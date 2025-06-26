@@ -33,11 +33,40 @@ function wallTimeToUTC(
 	return wallTimeToUTCBase(year, month, day, hour, minute, second, ms, tz);
 }
 
+function toDateParts(
+	ts: OptionsOrTimestamp,
+	useUTC: boolean,
+): { year: number; month: number; day: number } {
+	if (typeof ts === "number") {
+		const d = new Date(ts);
+		return useUTC
+			? {
+					day: d.getUTCDate(),
+					month: d.getUTCMonth() + 1,
+					year: d.getUTCFullYear(),
+				}
+			: { day: d.getDate(), month: d.getMonth() + 1, year: d.getFullYear() };
+	}
+	return ts;
+}
+
 export function addDays(
 	ts: OptionsOrTimestamp,
 	days: number,
 	timeZone?: TimeZone,
 ): number {
+	if (timeZone === "UTC" || timeZone === "Etc/UTC") {
+		const { year, month, day } = toDateParts(ts, true);
+		const d = new Date(Date.UTC(year, month - 1, day));
+		d.setUTCDate(d.getUTCDate() + days);
+		return d.getTime();
+	}
+	if (!timeZone) {
+		const { year, month, day } = toDateParts(ts, false);
+		const d = new Date(year, month - 1, day);
+		d.setDate(d.getDate() + days);
+		return d.getTime();
+	}
 	const { year, month, day } = getOptions(ts, timeZone);
 	return wallTimeToUTC(year, month, day + days, 0, 0, 0, 0, timeZone);
 }
@@ -58,6 +87,14 @@ export function startOfDay(
 	ts: OptionsOrTimestamp,
 	timeZone?: TimeZone,
 ): number {
+	if (timeZone === "UTC" || timeZone === "Etc/UTC") {
+		const { year, month, day } = toDateParts(ts, true);
+		return Date.UTC(year, month - 1, day);
+	}
+	if (!timeZone) {
+		const { year, month, day } = toDateParts(ts, false);
+		return new Date(year, month - 1, day).getTime();
+	}
 	const { year, month, day } = getOptions(ts, timeZone);
 	return wallTimeToUTC(year, month, day, 0, 0, 0, 0, timeZone);
 }
@@ -66,8 +103,15 @@ export function startOfDay(
  * Returns the end of the day (23:59:59.999) in the given timezone.
  */
 export function endOfDay(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
+	if (timeZone === "UTC" || timeZone === "Etc/UTC") {
+		const { year, month, day } = toDateParts(ts, true);
+		return Date.UTC(year, month - 1, day, 23, 59, 59, 999);
+	}
+	if (!timeZone) {
+		const { year, month, day } = toDateParts(ts, false);
+		return new Date(year, month - 1, day, 23, 59, 59, 999).getTime();
+	}
 	const { year, month, day } = getOptions(ts, timeZone);
-
 	return wallTimeToUTC(year, month, day, 23, 59, 59, 999, timeZone);
 }
 

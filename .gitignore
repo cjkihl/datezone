@@ -10,6 +10,7 @@ node_modules
 !.vscode
 !.npmrc
 !.changeset
+!.cursor
 
 # Build output
 dist

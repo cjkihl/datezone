@@ -42,7 +42,7 @@
 	"peerDependencies": {
 		"typescript": "^5"
 	},
-	"packageManager": "bun@1.2.17",
+	"packageManager": "bun@1.2.18",
 	"workspaces": [
 		"packages/*",
 		"shared/*",
