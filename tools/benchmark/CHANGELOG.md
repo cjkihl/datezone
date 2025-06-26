@@ -1,5 +1,12 @@
 # @datezone/benchmarks
 
+## 0.0.1
+
+### Patch Changes
+
+- Updated dependencies [001a049]
+  - datezone@1.0.1
+
 ## 2.0.0
 
 ### Major Changes

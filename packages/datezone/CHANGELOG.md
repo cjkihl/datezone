@@ -1,5 +1,11 @@
 # datezone
 
+## 1.0.1
+
+### Patch Changes
+
+- 001a049: Performance
+
 ## 1.0.0
 
 ### Major Changes
