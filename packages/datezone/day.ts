@@ -1,24 +1,50 @@
 import { getCachedFormatterLocale } from "./cache.js";
 import { DAY } from "./constants.js";
 import { formatToParts } from "./format-parts.js";
-import type { TimeZone } from "./iana.js";
+import { isUTC, type TimeZone } from "./iana.js";
 import { wallTimeToUTC as wallTimeToUTCBase } from "./utils.js";
 import { isLeapYear } from "./year.js";
 
+/**
+ * @returns The system's time zone.
+ */
 function getSystemTimeZone(): TimeZone {
 	return Intl.DateTimeFormat().resolvedOptions().timeZone as TimeZone;
 }
 
 const DAY_OPTS = { day: "2-digit", month: "2-digit", year: "numeric" } as const;
+/**
+ * Represents options for a day.
+ */
 type DayOptions = { year: number; month: number; day: number };
+/**
+ * Represents either day options or a timestamp.
+ */
 type OptionsOrTimestamp = DayOptions | number;
 
-function getOptions(ts: OptionsOrTimestamp, timeZone?: TimeZone): DayOptions {
-	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
-	const dt = typeof ts === "number" ? formatToParts(ts, tz, DAY_OPTS) : ts;
+/**
+ * Gets day options from a timestamp or options object.
+ * @param ts - The timestamp or options object.
+ * @param timeZone - The time zone.
+ * @returns The day options.
+ */
+function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): DayOptions {
+	const dt = typeof ts === "number" ? formatToParts(ts, timeZone, DAY_OPTS) : ts;
 	return dt;
 }
 
+/**
+ * Converts wall time to a UTC timestamp.
+ * @param year - The year.
+ * @param month - The month.
+ * @param day - The day.
+ * @param hour - The hour.
+ * @param minute - The minute.
+ * @param second - The second.
+ * @param ms - The millisecond.
+ * @param timeZone - The time zone.
+ * @returns The UTC timestamp.
+ */
 function wallTimeToUTC(
 	year: number,
 	month: number,
@@ -27,73 +53,85 @@ function wallTimeToUTC(
 	minute: number,
 	second: number,
 	ms: number,
-	timeZone?: TimeZone,
+	timeZone: TimeZone,
 ): number {
-	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
-	return wallTimeToUTCBase(year, month, day, hour, minute, second, ms, tz);
+	return wallTimeToUTCBase(year, month, day, hour, minute, second, ms, timeZone);
 }
 
-function toDateParts(
-	ts: OptionsOrTimestamp,
-	useUTC: boolean,
-): { year: number; month: number; day: number } {
-	if (typeof ts === "number") {
-		const d = new Date(ts);
-		return useUTC
-			? {
-					day: d.getUTCDate(),
-					month: d.getUTCMonth() + 1,
-					year: d.getUTCFullYear(),
-				}
-			: { day: d.getDate(), month: d.getMonth() + 1, year: d.getFullYear() };
-	}
-	return ts;
-}
-
+/**
+ * Adds a number of days to a timestamp or options object.
+ * @param ts - The timestamp or options object.
+ * @param days - The number of days to add.
+ * @param timeZone - The time zone.
+ * @returns The new timestamp.
+ */
 export function addDays(
 	ts: OptionsOrTimestamp,
 	days: number,
 	timeZone?: TimeZone,
 ): number {
-	if (timeZone === "UTC" || timeZone === "Etc/UTC") {
-		const { year, month, day } = toDateParts(ts, true);
-		const d = new Date(Date.UTC(year, month - 1, day));
-		d.setUTCDate(d.getUTCDate() + days);
-		return d.getTime();
-	}
+	const inputTs =
+		typeof ts === "number"
+			? ts
+			: (timeZone && isUTC(timeZone))
+				? Date.UTC(ts.year, ts.month - 1, ts.day)
+				: new Date(ts.year, ts.month - 1, ts.day).getTime();
+
+	const d = new Date(inputTs);
+
 	if (!timeZone) {
-		const { year, month, day } = toDateParts(ts, false);
-		const d = new Date(year, month - 1, day);
 		d.setDate(d.getDate() + days);
 		return d.getTime();
 	}
+	if (isUTC(timeZone)) {
+		d.setUTCDate(d.getUTCDate() + days);
+		return d.getTime();
+	}
+
 	const { year, month, day } = getOptions(ts, timeZone);
 	return wallTimeToUTC(year, month, day + days, 0, 0, 0, 0, timeZone);
 }
 
+/**
+ * Subtracts a number of days from a timestamp or options object.
+ * @param ts - The timestamp or options object.
+ * @param days - The number of days to subtract.
+ * @param timeZone - The time zone.
+ * @returns The new timestamp.
+ */
 export function subDays(
 	ts: OptionsOrTimestamp,
 	days: number,
 	timeZone?: TimeZone,
 ): number {
-	const { year, month, day } = getOptions(ts, timeZone);
-	return wallTimeToUTC(year, month, day - days, 0, 0, 0, 0, timeZone);
+	return addDays(ts, -days, timeZone);
 }
 
 /**
  * Returns the start of the day (00:00:00.000) in the given timezone.
+ * @param ts - The timestamp or options object.
+ * @param timeZone - The time zone.
+ * @returns The timestamp for the start of the day.
  */
 export function startOfDay(
 	ts: OptionsOrTimestamp,
 	timeZone?: TimeZone,
 ): number {
-	if (timeZone === "UTC" || timeZone === "Etc/UTC") {
-		const { year, month, day } = toDateParts(ts, true);
-		return Date.UTC(year, month - 1, day);
-	}
 	if (!timeZone) {
-		const { year, month, day } = toDateParts(ts, false);
-		return new Date(year, month - 1, day).getTime();
+		const d =
+			typeof ts === "number"
+				? new Date(ts)
+				: new Date(ts.year, ts.month - 1, ts.day);
+		d.setHours(0, 0, 0, 0);
+		return d.getTime();
+	}
+	if (isUTC(timeZone)) {
+		const d =
+			typeof ts === "number"
+				? new Date(ts)
+				: new Date(Date.UTC(ts.year, ts.month - 1, ts.day));
+		d.setUTCHours(0, 0, 0, 0);
+		return d.getTime();
 	}
 	const { year, month, day } = getOptions(ts, timeZone);
 	return wallTimeToUTC(year, month, day, 0, 0, 0, 0, timeZone);
@@ -101,15 +139,26 @@ export function startOfDay(
 
 /**
  * Returns the end of the day (23:59:59.999) in the given timezone.
+ * @param ts - The timestamp or options object.
+ * @param timeZone - The time zone.
+ * @returns The timestamp for the end of the day.
  */
 export function endOfDay(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
-	if (timeZone === "UTC" || timeZone === "Etc/UTC") {
-		const { year, month, day } = toDateParts(ts, true);
-		return Date.UTC(year, month - 1, day, 23, 59, 59, 999);
-	}
 	if (!timeZone) {
-		const { year, month, day } = toDateParts(ts, false);
-		return new Date(year, month - 1, day, 23, 59, 59, 999).getTime();
+		const d =
+			typeof ts === "number"
+				? new Date(ts)
+				: new Date(ts.year, ts.month - 1, ts.day);
+		d.setHours(23, 59, 59, 999);
+		return d.getTime();
+	}
+	if (isUTC(timeZone)) {
+		const d =
+			typeof ts === "number"
+				? new Date(ts)
+				: new Date(Date.UTC(ts.year, ts.month - 1, ts.day));
+		d.setUTCHours(23, 59, 59, 999);
+		return d.getTime();
 	}
 	const { year, month, day } = getOptions(ts, timeZone);
 	return wallTimeToUTC(year, month, day, 23, 59, 59, 999, timeZone);
@@ -117,6 +166,9 @@ export function endOfDay(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 
 /**
  * Returns the start of the next day (00:00:00.000) in the given timezone.
+ * @param ts - The timestamp or options object.
+ * @param timeZone - The time zone.
+ * @returns The timestamp for the start of the next day.
  */
 export function nextDay(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 	const start = startOfDay(ts, timeZone);
@@ -125,6 +177,9 @@ export function nextDay(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 
 /**
  * Returns the start of the previous day (00:00:00.000) in the given timezone.
+ * @param ts - The timestamp or options object.
+ * @param timeZone - The time zone.
+ * @returns The timestamp for the start of the previous day.
  */
 export function previousDay(
 	ts: OptionsOrTimestamp,
@@ -136,12 +191,38 @@ export function previousDay(
 
 /**
  * Returns the ISO day of week (1=Monday, 7=Sunday) in the given timezone.
+ * @param tsOrOptions - The timestamp or options object.
+ * @param timeZone - The time zone.
+ * @returns The ISO day of the week.
  * @see https://en.wikipedia.org/wiki/ISO_week_date
  */
 export function dayOfWeek(
 	tsOrOptions: OptionsOrTimestamp,
 	timeZone?: TimeZone,
 ): number {
+	if (!timeZone) {
+		const d =
+			typeof tsOrOptions === "number"
+				? new Date(tsOrOptions)
+				: new Date(tsOrOptions.year, tsOrOptions.month - 1, tsOrOptions.day);
+		const day = d.getDay();
+		return day === 0 ? 7 : day;
+	}
+	if (isUTC(timeZone)) {
+		const d =
+			typeof tsOrOptions === "number"
+				? new Date(tsOrOptions)
+				: new Date(
+						Date.UTC(
+							tsOrOptions.year,
+							tsOrOptions.month - 1,
+							tsOrOptions.day,
+						),
+					);
+		const day = d.getUTCDay();
+		return day === 0 ? 7 : day;
+	}
+
 	const { year, month, day } = getOptions(tsOrOptions, timeZone);
 
 	// Zeller's congruence, ISO: 1=Monday, 7=Sunday
@@ -168,13 +249,38 @@ export function dayOfWeek(
 
 /**
  * Returns the day of year (1-366) in the given timezone.
+ * @param ts - The timestamp or options object.
+ * @param timeZone - The time zone.
+ * @returns The day of the year.
  */
 export function dayOfYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
-	const { year, month, day } = getOptions(ts, timeZone);
-	const tz: TimeZone = (timeZone ?? getSystemTimeZone()) as TimeZone;
+	let year: number, month: number, day: number;
+
+	if (!timeZone) {
+		if (typeof ts === "number") {
+			const d = new Date(ts);
+			year = d.getFullYear();
+			month = d.getMonth() + 1;
+			day = d.getDate();
+		} else {
+			({ year, month, day } = ts);
+		}
+	} else if (isUTC(timeZone)) {
+		if (typeof ts === "number") {
+			const d = new Date(ts);
+			year = d.getUTCFullYear();
+			month = d.getUTCMonth() + 1;
+			day = d.getUTCDate();
+		} else {
+			({ year, month, day } = ts);
+		}
+	} else {
+		({ year, month, day } = getOptions(ts, timeZone));
+	}
+
 	const monthDays = [
 		31,
-		isLeapYear({ year }, tz) ? 29 : 28,
+		isLeapYear({ year }, timeZone) ? 29 : 28,
 		31,
 		30,
 		31,
@@ -194,6 +300,13 @@ export function dayOfYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 	return doy;
 }
 
+/**
+ * Returns the localized weekday name.
+ * @param locale - The locale string.
+ * @param type - The format of the name ("long", "short", or "narrow").
+ * @param day - The ISO day of the week (1=Monday, 7=Sunday).
+ * @returns The localized weekday name.
+ */
 export function weekDayName(
 	locale: string,
 	type: "long" | "short" | "narrow",

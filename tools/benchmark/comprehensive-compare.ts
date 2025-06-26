@@ -54,210 +54,200 @@ console.log(`Test timezone: ${testTimezone}`);
 console.log("Date-fns version: ^4.1.0 with @date-fns/tz ^1.2.0\n");
 
 // ===============================================
-// OPTIONAL TIMEZONE SUPPORT COMPARISON (Datezone local vs Date-fns no timezone)
+// LOCAL/NAIVE (NO TIMEZONE) OPERATIONS COMPARISON
 // ===============================================
 
-group(
-	"Optional Timezone: Basic Operations (Datezone local vs Date-fns)",
-	() => {
-		bench("datezone: addDays (local timezone)", function* () {
-			yield () => do_not_optimize(dzAddDays(testTimestamp, 7));
-		});
-
-		bench("date-fns: addDays (no timezone)", function* () {
-			yield () => {
-				const result = fnsAddDays(testDate, 7);
-				return do_not_optimize(result.getTime());
-			};
-		});
-
-		bench("datezone: addMonths (local timezone)", function* () {
-			yield () =>
-				do_not_optimize(dzAddMonths(testTimestamp, 3, getLocalTimezone()));
-		});
-
-		bench("date-fns: addMonths (no timezone)", function* () {
-			yield () => {
-				const result = fnsAddMonths(testDate, 3);
-				return do_not_optimize(result.getTime());
-			};
-		});
-
-		bench("datezone: addYears (local timezone)", function* () {
-			yield () => do_not_optimize(dzAddYears(testTimestamp, 2));
-		});
-
-		bench("date-fns: addYears (no timezone)", function* () {
-			yield () => {
-				const result = fnsAddYears(testDate, 2);
-				return do_not_optimize(result.getTime());
-			};
-		});
-	},
-);
-
-group(
-	"Optional Timezone: Start/End Operations (Datezone local vs Date-fns)",
-	() => {
-		bench("datezone: startOfDay (local timezone)", function* () {
-			yield () => do_not_optimize(dzStartOfDay(testTimestamp));
-		});
-
-		bench("date-fns: startOfDay (no timezone)", function* () {
-			yield () => {
-				const result = fnsStartOfDay(testDate);
-				return do_not_optimize(result.getTime());
-			};
-		});
-
-		bench("datezone: endOfDay (local timezone)", function* () {
-			yield () => do_not_optimize(dzEndOfDay(testTimestamp));
-		});
-
-		bench("date-fns: endOfDay (no timezone)", function* () {
-			yield () => {
-				const result = fnsEndOfDay(testDate);
-				return do_not_optimize(result.getTime());
-			};
-		});
-
-		bench("datezone: startOfMonth (local timezone)", function* () {
-			yield () =>
-				do_not_optimize(dzStartOfMonth(testTimestamp, getLocalTimezone()));
-		});
-
-		bench("date-fns: startOfMonth (no timezone)", function* () {
-			yield () => {
-				const result = fnsStartOfMonth(testDate);
-				return do_not_optimize(result.getTime());
-			};
-		});
-
-		bench("datezone: endOfMonth (local timezone)", function* () {
-			yield () =>
-				do_not_optimize(dzEndOfMonth(testTimestamp, getLocalTimezone()));
-		});
-
-		bench("date-fns: endOfMonth (no timezone)", function* () {
-			yield () => {
-				const result = fnsEndOfMonth(testDate);
-				return do_not_optimize(result.getTime());
-			};
-		});
-
-		bench("datezone: startOfYear (local timezone)", function* () {
-			yield () => do_not_optimize(dzStartOfYear(testTimestamp));
-		});
-
-		bench("date-fns: startOfYear (no timezone)", function* () {
-			yield () => {
-				const result = fnsStartOfYear(testDate);
-				return do_not_optimize(result.getTime());
-			};
-		});
-
-		bench("datezone: endOfYear (local timezone)", function* () {
-			yield () => do_not_optimize(dzEndOfYear(testTimestamp));
-		});
-
-		bench("date-fns: endOfYear (no timezone)", function* () {
-			yield () => {
-				const result = fnsEndOfYear(testDate);
-				return do_not_optimize(result.getTime());
-			};
-		});
-	},
-);
-
-// ===============================================
-// TIMEZONE-AWARE OPERATIONS COMPARISON (Apples to Apples)
-// ===============================================
-
-group("Timezone-Aware: Month Operations", () => {
-	bench("datezone: startOfMonth (with timezone)", function* () {
-		yield () => do_not_optimize(dzStartOfMonth(testTimestamp, testTimezone));
+group("Local/Naive: Day Operations", () => {
+	bench("datezone: addDays (local)", function* () {
+		yield () => do_not_optimize(dzAddDays(testTimestamp, 7));
 	});
-
-	bench("date-fns: startOfMonth (with timezone)", function* () {
+	bench("date-fns: addDays (local)", function* () {
 		yield () => {
-			const tzDate = new TZDate(testTimestamp, testTimezone);
-			const result = fnsStartOfMonth(tzDate);
+			const result = fnsAddDays(testDate, 7);
 			return do_not_optimize(result.getTime());
 		};
 	});
-
-	bench("datezone: endOfMonth (with timezone)", function* () {
-		yield () => do_not_optimize(dzEndOfMonth(testTimestamp, testTimezone));
+	bench("datezone: startOfDay (local)", function* () {
+		yield () => do_not_optimize(dzStartOfDay(testTimestamp));
 	});
-
-	bench("date-fns: endOfMonth (with timezone)", function* () {
+	bench("date-fns: startOfDay (local)", function* () {
 		yield () => {
-			const tzDate = new TZDate(testTimestamp, testTimezone);
-			const result = fnsEndOfMonth(tzDate);
+			const result = fnsStartOfDay(testDate);
 			return do_not_optimize(result.getTime());
 		};
 	});
-
-	bench("datezone: addMonths (with timezone)", function* () {
-		yield () => do_not_optimize(dzAddMonths(testTimestamp, 3, testTimezone));
+	bench("datezone: endOfDay (local)", function* () {
+		yield () => do_not_optimize(dzEndOfDay(testTimestamp));
 	});
-
-	bench("date-fns: addMonths (with timezone)", function* () {
+	bench("date-fns: endOfDay (local)", function* () {
 		yield () => {
-			const tzDate = new TZDate(testTimestamp, testTimezone);
-			const result = fnsAddMonths(tzDate, 3);
+			const result = fnsEndOfDay(testDate);
 			return do_not_optimize(result.getTime());
 		};
 	});
 });
 
+group("Local/Naive: Month Operations", () => {
+	bench("datezone: addMonths (local)", function* () {
+		yield () =>
+			do_not_optimize(dzAddMonths(testTimestamp, 3, getLocalTimezone()));
+	});
+	bench("date-fns: addMonths (local)", function* () {
+		yield () => {
+			const result = fnsAddMonths(testDate, 3);
+			return do_not_optimize(result.getTime());
+		};
+	});
+	bench("datezone: startOfMonth (local)", function* () {
+		yield () =>
+			do_not_optimize(dzStartOfMonth(testTimestamp, getLocalTimezone()));
+	});
+	bench("date-fns: startOfMonth (local)", function* () {
+		yield () => {
+			const result = fnsStartOfMonth(testDate);
+			return do_not_optimize(result.getTime());
+		};
+	});
+	bench("datezone: endOfMonth (local)", function* () {
+		yield () =>
+			do_not_optimize(dzEndOfMonth(testTimestamp, getLocalTimezone()));
+	});
+	bench("date-fns: endOfMonth (local)", function* () {
+		yield () => {
+			const result = fnsEndOfMonth(testDate);
+			return do_not_optimize(result.getTime());
+		};
+	});
+});
+
+group("Local/Naive: Year Operations", () => {
+	bench("datezone: addYears (local)", function* () {
+		yield () => do_not_optimize(dzAddYears(testTimestamp, 2));
+	});
+	bench("date-fns: addYears (local)", function* () {
+		yield () => {
+			const result = fnsAddYears(testDate, 2);
+			return do_not_optimize(result.getTime());
+		};
+	});
+	bench("datezone: startOfYear (local)", function* () {
+		yield () => do_not_optimize(dzStartOfYear(testTimestamp));
+	});
+	bench("date-fns: startOfYear (local)", function* () {
+		yield () => {
+			const result = fnsStartOfYear(testDate);
+			return do_not_optimize(result.getTime());
+		};
+	});
+	bench("datezone: endOfYear (local)", function* () {
+		yield () => do_not_optimize(dzEndOfYear(testTimestamp));
+	});
+	bench("date-fns: endOfYear (local)", function* () {
+		yield () => {
+			const result = fnsEndOfYear(testDate);
+			return do_not_optimize(result.getTime());
+		};
+	});
+});
+
+// ===============================================
+// TIMEZONE-AWARE OPERATIONS COMPARISON (Apples to Apples)
+// ===============================================
+
 group("Timezone-Aware: Day Operations", () => {
-	bench("datezone: startOfDay (with timezone)", function* () {
-		yield () => do_not_optimize(dzStartOfDay(testTimestamp, testTimezone));
-	});
-
-	bench("date-fns: startOfDay (with timezone)", function* () {
-		yield () => {
-			const tzDate = new TZDate(testTimestamp, testTimezone);
-			const result = fnsStartOfDay(tzDate);
-			return do_not_optimize(result.getTime());
-		};
-	});
-
-	bench("datezone: endOfDay (with timezone)", function* () {
-		yield () => do_not_optimize(dzEndOfDay(testTimestamp, testTimezone));
-	});
-
-	bench("date-fns: endOfDay (with timezone)", function* () {
-		yield () => {
-			const tzDate = new TZDate(testTimestamp, testTimezone);
-			const result = fnsEndOfDay(tzDate);
-			return do_not_optimize(result.getTime());
-		};
-	});
-
-	bench("datezone: addDays (with timezone)", function* () {
+	bench("datezone: addDays (timezone)", function* () {
 		yield () => do_not_optimize(dzAddDays(testTimestamp, 7, testTimezone));
 	});
-
-	bench("date-fns: addDays (with timezone)", function* () {
+	bench("date-fns: addDays (timezone)", function* () {
 		yield () => {
 			const tzDate = new TZDate(testTimestamp, testTimezone);
 			const result = fnsAddDays(tzDate, 7);
 			return do_not_optimize(result.getTime());
 		};
 	});
+	bench("datezone: startOfDay (timezone)", function* () {
+		yield () => do_not_optimize(dzStartOfDay(testTimestamp, testTimezone));
+	});
+	bench("date-fns: startOfDay (timezone)", function* () {
+		yield () => {
+			const tzDate = new TZDate(testTimestamp, testTimezone);
+			const result = fnsStartOfDay(tzDate);
+			return do_not_optimize(result.getTime());
+		};
+	});
+	bench("datezone: endOfDay (timezone)", function* () {
+		yield () => do_not_optimize(dzEndOfDay(testTimestamp, testTimezone));
+	});
+	bench("date-fns: endOfDay (timezone)", function* () {
+		yield () => {
+			const tzDate = new TZDate(testTimestamp, testTimezone);
+			const result = fnsEndOfDay(tzDate);
+			return do_not_optimize(result.getTime());
+		};
+	});
+});
+
+group("Timezone-Aware: Month Operations", () => {
+	bench("datezone: addMonths (timezone)", function* () {
+		yield () => do_not_optimize(dzAddMonths(testTimestamp, 3, testTimezone));
+	});
+	bench("date-fns: addMonths (timezone)", function* () {
+		yield () => {
+			const tzDate = new TZDate(testTimestamp, testTimezone);
+			const result = fnsAddMonths(tzDate, 3);
+			return do_not_optimize(result.getTime());
+		};
+	});
+	bench("datezone: startOfMonth (timezone)", function* () {
+		yield () => do_not_optimize(dzStartOfMonth(testTimestamp, testTimezone));
+	});
+	bench("date-fns: startOfMonth (timezone)", function* () {
+		yield () => {
+			const tzDate = new TZDate(testTimestamp, testTimezone);
+			const result = fnsStartOfMonth(tzDate);
+			return do_not_optimize(result.getTime());
+		};
+	});
+	bench("datezone: endOfMonth (timezone)", function* () {
+		yield () => do_not_optimize(dzEndOfMonth(testTimestamp, testTimezone));
+	});
+	bench("date-fns: endOfMonth (timezone)", function* () {
+		yield () => {
+			const tzDate = new TZDate(testTimestamp, testTimezone);
+			const result = fnsEndOfMonth(tzDate);
+			return do_not_optimize(result.getTime());
+		};
+	});
 });
 
 group("Timezone-Aware: Year Operations", () => {
-	bench("datezone: addYears (with timezone)", function* () {
+	bench("datezone: addYears (timezone)", function* () {
 		yield () => do_not_optimize(dzAddYears(testTimestamp, 2, testTimezone));
 	});
-
-	bench("date-fns: addYears (with timezone)", function* () {
+	bench("date-fns: addYears (timezone)", function* () {
 		yield () => {
 			const tzDate = new TZDate(testTimestamp, testTimezone);
 			const result = fnsAddYears(tzDate, 2);
+			return do_not_optimize(result.getTime());
+		};
+	});
+	bench("datezone: startOfYear (timezone)", function* () {
+		yield () => do_not_optimize(dzStartOfYear(testTimestamp, testTimezone));
+	});
+	bench("date-fns: startOfYear (timezone)", function* () {
+		yield () => {
+			const tzDate = new TZDate(testTimestamp, testTimezone);
+			const result = fnsStartOfYear(tzDate);
+			return do_not_optimize(result.getTime());
+		};
+	});
+	bench("datezone: endOfYear (timezone)", function* () {
+		yield () => do_not_optimize(dzEndOfYear(testTimestamp, testTimezone));
+	});
+	bench("date-fns: endOfYear (timezone)", function* () {
+		yield () => {
+			const tzDate = new TZDate(testTimestamp, testTimezone);
+			const result = fnsEndOfYear(tzDate);
 			return do_not_optimize(result.getTime());
 		};
 	});
