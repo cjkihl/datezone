@@ -1,5 +1,10 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import {
+	type BenchmarkGroupKey,
+	categorize,
+	GROUP_LABELS,
+} from "./benchmark-categories.js";
 
 interface MitataStats {
 	min: number;
@@ -45,11 +50,6 @@ interface ComparisonRow {
 	operation?: string;
 	datezone?: BenchmarkResult;
 	datefns?: BenchmarkResult;
-}
-
-interface OperationKey {
-	operation: string;
-	desc: string;
 }
 
 function formatTime(avg: number): string {
@@ -104,55 +104,6 @@ function extractComparisonRows(data: MitataOutput): ComparisonRow[] {
 	return Object.values(rows);
 }
 
-const CATEGORY_MAP: Record<string, string> = {
-	"Complex Timezone": "Complex Timezone Workflows",
-	"Datezone-Specific": "Datezone-Specific Operations",
-	"Multi-Timezone": "Multi-Timezone Operations",
-	"Non-Timezone: Day": "Non-Timezone: Day Operations",
-	"Non-Timezone: Month": "Non-Timezone: Month Operations",
-	"Non-Timezone: Year": "Non-Timezone: Year Operations",
-	"Real-World": "Real-World Timezone Scenarios",
-	"Timezone-Aware: Day": "Timezone-Aware: Day Operations",
-	"Timezone-Aware: Formatting": "Timezone-Aware: Formatting Operations",
-	"Timezone-Aware: Month": "Timezone-Aware: Month Operations",
-	"Timezone-Aware: Year": "Timezone-Aware: Year Operations",
-};
-
-function categorize(operation: string): string {
-	const op = operation.toLowerCase();
-	if (op.includes("timezone") && op.includes("month"))
-		return CATEGORY_MAP["Timezone-Aware: Month"] ?? "Other";
-	if (op.includes("timezone") && op.includes("day"))
-		return CATEGORY_MAP["Timezone-Aware: Day"] ?? "Other";
-	if (op.includes("timezone") && op.includes("year"))
-		return CATEGORY_MAP["Timezone-Aware: Year"] ?? "Other";
-	if (op.includes("timezone") && op.includes("format"))
-		return CATEGORY_MAP["Timezone-Aware: Formatting"] ?? "Other";
-	if (!op.includes("timezone") && op.includes("month"))
-		return CATEGORY_MAP["Non-Timezone: Month"] ?? "Other";
-	if (!op.includes("timezone") && op.includes("day"))
-		return CATEGORY_MAP["Non-Timezone: Day"] ?? "Other";
-	if (!op.includes("timezone") && op.includes("year"))
-		return CATEGORY_MAP["Non-Timezone: Year"] ?? "Other";
-	if (op.includes("complex"))
-		return CATEGORY_MAP["Complex Timezone"] ?? "Other";
-	if (op.includes("multi") && op.includes("timezone"))
-		return CATEGORY_MAP["Multi-Timezone"] ?? "Other";
-	if (
-		op.includes("real-world") ||
-		op.includes("calendar") ||
-		op.includes("dashboard")
-	)
-		return CATEGORY_MAP["Real-World"] ?? "Other";
-	if (
-		op.includes("datezone") ||
-		op.includes("offset") ||
-		op.includes("walltime")
-	)
-		return CATEGORY_MAP["Datezone-Specific"] ?? "Other";
-	return "Other";
-}
-
 function getPerfIcon(
 	datezone?: BenchmarkResult,
 	datefns?: BenchmarkResult,
@@ -191,7 +142,9 @@ function boldBest(
 function groupRows(rows: ComparisonRow[]): Record<string, ComparisonRow[]> {
 	const grouped: Record<string, ComparisonRow[]> = {};
 	for (const row of rows) {
-		const cat = categorize(row.operation || "");
+		const catKey = categorize(row.operation || "");
+		const cat =
+			catKey !== "Other" ? GROUP_LABELS[catKey as BenchmarkGroupKey] : "Other";
 		if (!grouped[cat]) grouped[cat] = [];
 		grouped[cat].push(row);
 	}

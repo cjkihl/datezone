@@ -14,6 +14,7 @@ node_modules
 
 # Build output
 dist
+tools/benchmark/output
 
 # Logs
 *-debug.log*

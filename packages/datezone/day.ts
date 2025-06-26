@@ -5,13 +5,6 @@ import { isUTC, type TimeZone } from "./iana.js";
 import { wallTimeToUTC as wallTimeToUTCBase } from "./utils.js";
 import { isLeapYear } from "./year.js";
 
-/**
- * @returns The system's time zone.
- */
-function getSystemTimeZone(): TimeZone {
-	return Intl.DateTimeFormat().resolvedOptions().timeZone as TimeZone;
-}
-
 const DAY_OPTS = { day: "2-digit", month: "2-digit", year: "numeric" } as const;
 /**
  * Represents options for a day.
@@ -29,7 +22,8 @@ type OptionsOrTimestamp = DayOptions | number;
  * @returns The day options.
  */
 function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): DayOptions {
-	const dt = typeof ts === "number" ? formatToParts(ts, timeZone, DAY_OPTS) : ts;
+	const dt =
+		typeof ts === "number" ? formatToParts(ts, timeZone, DAY_OPTS) : ts;
 	return dt;
 }
 
@@ -55,7 +49,16 @@ function wallTimeToUTC(
 	ms: number,
 	timeZone: TimeZone,
 ): number {
-	return wallTimeToUTCBase(year, month, day, hour, minute, second, ms, timeZone);
+	return wallTimeToUTCBase(
+		year,
+		month,
+		day,
+		hour,
+		minute,
+		second,
+		ms,
+		timeZone,
+	);
 }
 
 /**
@@ -73,7 +76,7 @@ export function addDays(
 	const inputTs =
 		typeof ts === "number"
 			? ts
-			: (timeZone && isUTC(timeZone))
+			: timeZone && isUTC(timeZone)
 				? Date.UTC(ts.year, ts.month - 1, ts.day)
 				: new Date(ts.year, ts.month - 1, ts.day).getTime();
 
@@ -213,11 +216,7 @@ export function dayOfWeek(
 			typeof tsOrOptions === "number"
 				? new Date(tsOrOptions)
 				: new Date(
-						Date.UTC(
-							tsOrOptions.year,
-							tsOrOptions.month - 1,
-							tsOrOptions.day,
-						),
+						Date.UTC(tsOrOptions.year, tsOrOptions.month - 1, tsOrOptions.day),
 					);
 		const day = d.getUTCDay();
 		return day === 0 ? 7 : day;
@@ -254,7 +253,9 @@ export function dayOfWeek(
  * @returns The day of the year.
  */
 export function dayOfYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
-	let year: number, month: number, day: number;
+	let year: number;
+	let month: number;
+	let day: number;
 
 	if (!timeZone) {
 		if (typeof ts === "number") {

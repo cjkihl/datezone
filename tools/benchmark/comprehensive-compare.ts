@@ -34,6 +34,7 @@ import {
 	type TimeZone,
 } from "datezone";
 import { bench, do_not_optimize, group, run } from "mitata";
+import { BENCHMARK_GROUPS } from "./benchmark-categories.js";
 
 // Test data
 const testTimestamp = new Date("2024-06-15T15:45:30.123Z").getTime();
@@ -57,7 +58,7 @@ console.log("Date-fns version: ^4.1.0 with @date-fns/tz ^1.2.0\n");
 // LOCAL/NAIVE (NO TIMEZONE) OPERATIONS COMPARISON
 // ===============================================
 
-group("Local/Naive: Day Operations", () => {
+group(BENCHMARK_GROUPS.NON_TIMEZONE_DAY, () => {
 	bench("datezone: addDays (local)", function* () {
 		yield () => do_not_optimize(dzAddDays(testTimestamp, 7));
 	});
@@ -87,7 +88,7 @@ group("Local/Naive: Day Operations", () => {
 	});
 });
 
-group("Local/Naive: Month Operations", () => {
+group(BENCHMARK_GROUPS.NON_TIMEZONE_MONTH, () => {
 	bench("datezone: addMonths (local)", function* () {
 		yield () =>
 			do_not_optimize(dzAddMonths(testTimestamp, 3, getLocalTimezone()));
@@ -120,7 +121,7 @@ group("Local/Naive: Month Operations", () => {
 	});
 });
 
-group("Local/Naive: Year Operations", () => {
+group(BENCHMARK_GROUPS.NON_TIMEZONE_YEAR, () => {
 	bench("datezone: addYears (local)", function* () {
 		yield () => do_not_optimize(dzAddYears(testTimestamp, 2));
 	});
@@ -154,7 +155,7 @@ group("Local/Naive: Year Operations", () => {
 // TIMEZONE-AWARE OPERATIONS COMPARISON (Apples to Apples)
 // ===============================================
 
-group("Timezone-Aware: Day Operations", () => {
+group(BENCHMARK_GROUPS.TIMEZONE_AWARE_DAY, () => {
 	bench("datezone: addDays (timezone)", function* () {
 		yield () => do_not_optimize(dzAddDays(testTimestamp, 7, testTimezone));
 	});
@@ -187,7 +188,7 @@ group("Timezone-Aware: Day Operations", () => {
 	});
 });
 
-group("Timezone-Aware: Month Operations", () => {
+group(BENCHMARK_GROUPS.TIMEZONE_AWARE_MONTH, () => {
 	bench("datezone: addMonths (timezone)", function* () {
 		yield () => do_not_optimize(dzAddMonths(testTimestamp, 3, testTimezone));
 	});
@@ -220,7 +221,7 @@ group("Timezone-Aware: Month Operations", () => {
 	});
 });
 
-group("Timezone-Aware: Year Operations", () => {
+group(BENCHMARK_GROUPS.TIMEZONE_AWARE_YEAR, () => {
 	bench("datezone: addYears (timezone)", function* () {
 		yield () => do_not_optimize(dzAddYears(testTimestamp, 2, testTimezone));
 	});
@@ -253,41 +254,23 @@ group("Timezone-Aware: Year Operations", () => {
 	});
 });
 
-group("Timezone-Aware: Formatting Operations", () => {
-	bench("datezone: formatToParts (with timezone)", function* () {
+group(BENCHMARK_GROUPS.TIMEZONE_AWARE_FORMATTING, () => {
+	bench("datezone: format (Stockholm)", function* () {
+		// Import here to avoid top-level import issues if needed
+		const { format: dzFormat } = require("datezone/format");
 		yield () =>
 			do_not_optimize(
-				dzFormatToParts(testTimestamp, testTimezone, {
-					day: "2-digit",
-					hour: "2-digit",
-					minute: "2-digit",
-					month: "2-digit",
-					second: "2-digit",
-					year: "numeric",
+				dzFormat(testTimestamp, "yyyy-MM-dd HH:mm:ss", {
+					locale: "en-US",
+					timeZone: "Europe/Stockholm",
 				}),
 			);
 	});
-
-	bench("date-fns: format (with timezone)", function* () {
+	bench("date-fns: format (Stockholm)", function* () {
 		yield () => {
-			const tzDate = new TZDate(testTimestamp, testTimezone);
+			const tzDate = new TZDate(testTimestamp, "Europe/Stockholm");
 			const result = fnsFormat(tzDate, "yyyy-MM-dd HH:mm:ss");
 			return do_not_optimize(result);
-		};
-	});
-
-	bench("native: Intl.DateTimeFormat (with timezone)", function* () {
-		yield () => {
-			const formatter = new Intl.DateTimeFormat("en-US", {
-				day: "2-digit",
-				hour: "2-digit",
-				minute: "2-digit",
-				month: "2-digit",
-				second: "2-digit",
-				timeZone: testTimezone,
-				year: "numeric",
-			});
-			return do_not_optimize(formatter.formatToParts(testTimestamp));
 		};
 	});
 });
@@ -296,7 +279,7 @@ group("Timezone-Aware: Formatting Operations", () => {
 // NON-TIMEZONE OPERATIONS COMPARISON
 // ===============================================
 
-group("Non-Timezone: Month Operations", () => {
+group(BENCHMARK_GROUPS.NON_TIMEZONE_MONTH, () => {
 	bench("datezone: startOfMonth (UTC)", function* () {
 		yield () => do_not_optimize(dzStartOfMonth(testTimestamp, "UTC"));
 	});
@@ -331,7 +314,7 @@ group("Non-Timezone: Month Operations", () => {
 	});
 });
 
-group("Non-Timezone: Day Operations", () => {
+group(BENCHMARK_GROUPS.NON_TIMEZONE_DAY, () => {
 	bench("datezone: addDays (UTC)", function* () {
 		yield () => do_not_optimize(dzAddDays(testTimestamp, 7, "UTC"));
 	});
@@ -344,7 +327,7 @@ group("Non-Timezone: Day Operations", () => {
 	});
 });
 
-group("Non-Timezone: Year Operations", () => {
+group(BENCHMARK_GROUPS.NON_TIMEZONE_YEAR, () => {
 	bench("datezone: addYears (UTC)", function* () {
 		yield () => do_not_optimize(dzAddYears(testTimestamp, 2, "UTC"));
 	});
@@ -375,7 +358,7 @@ group("Non-Timezone: Year Operations", () => {
 // COMPLEX TIMEZONE-AWARE WORKFLOWS
 // ===============================================
 
-group("Complex Timezone Workflows", () => {
+group(BENCHMARK_GROUPS.COMPLEX_TIMEZONE, () => {
 	bench("datezone: complex timezone workflow", function* () {
 		yield () => {
 			// Simulate: get start of month, add days, format with timezone
@@ -406,7 +389,7 @@ group("Complex Timezone Workflows", () => {
 // MULTI-TIMEZONE OPERATIONS
 // ===============================================
 
-group("Multi-Timezone Operations", () => {
+group(BENCHMARK_GROUPS.MULTI_TIMEZONE, () => {
 	bench("datezone: multiple timezone formatting", function* () {
 		yield () => {
 			const results = testTimezones.map((tz) =>
@@ -450,7 +433,7 @@ group("Multi-Timezone Operations", () => {
 // REAL-WORLD SCENARIOS (TIMEZONE-AWARE)
 // ===============================================
 
-group("Real-World Timezone Scenarios", () => {
+group(BENCHMARK_GROUPS.REAL_WORLD, () => {
 	bench("datezone: calendar month generation (timezone)", function* () {
 		yield () => {
 			const now = Date.now();
@@ -545,7 +528,7 @@ group("Real-World Timezone Scenarios", () => {
 // UNIQUE DATEZONE OPERATIONS
 // ===============================================
 
-group("Datezone-Specific Operations", () => {
+group(BENCHMARK_GROUPS.DATEZONE_SPECIFIC, () => {
 	bench("datezone: wallTimeToUTC", function* () {
 		yield () =>
 			do_not_optimize(

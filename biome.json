@@ -20,7 +20,8 @@
 			"!**/dist/**",
 			"!**/.turbo/**",
 			"!**/package.json",
-			"!**/bun.lock"
+			"!**/bun.lock",
+			"!tools/benchmark/output/**"
 		]
 	},
 	"formatter": {
