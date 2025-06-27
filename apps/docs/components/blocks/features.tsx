@@ -2,18 +2,18 @@ import { useId } from "react";
 
 export function Features() {
 	return (
-		<div className="py-2">
-			<div className="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-10 md:gap-2 max-w-7xl mx-auto">
+		<div className="py-8">
+			<div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 md:gap-6 max-w-7xl mx-auto">
 				{grid.map((feature, i) => (
 					<div
-						className="relative bg-gradient-to-b dark:from-neutral-900 from-neutral-100 dark:to-neutral-950 to-white px-6 py-2 overflow-hidden"
+						className="relative bg-gradient-to-br dark:from-slate-800/50 from-slate-100/80 dark:to-slate-900/80 to-slate-50/60 px-8 py-6 overflow-hidden rounded-2xl border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300 hover:scale-[1.02] group"
 						key={feature.title}
 					>
 						<Grid size={i * 5 + 10} />
-						<p className="text-base font-bold text-neutral-800 dark:text-white relative z-0">
+						<p className="text-lg font-bold text-slate-900 dark:text-slate-100 relative z-10 mb-3 group-hover:text-slate-800 dark:group-hover:text-white transition-colors">
 							{feature.title}
 						</p>
-						<p className="text-neutral-600 dark:text-neutral-400 text-base font-normal relative z-0">
+						<p className="text-slate-600 dark:text-slate-300 text-base font-normal relative z-10 leading-relaxed group-hover:text-slate-700 dark:group-hover:text-slate-200 transition-colors">
 							{feature.description}
 						</p>
 					</div>
@@ -25,41 +25,40 @@ export function Features() {
 
 const grid = [
 	{
-		description: "Support for most popular frameworks",
-		title: "Framework Agnostic",
+		description: "Lightweight and tree-shakeable for optimal performance",
+		title: "Lightweight & Fast",
 	},
 	{
-		description:
-			"Built-in support for secure email and password authentication",
-		title: "Email & Password",
+		description: "Built with TypeScript for type-safe date operations",
+		title: "TypeScript Native",
 	},
 	{
-		description: "Manage user accounts and sessions with ease",
-		title: "Account & Session Management",
+		description: "Comprehensive timezone support with IANA database",
+		title: "Timezone Aware",
 	},
 	{
-		description: "Built-in rate limiter with custom rules",
-		title: "Built-In Rate Limiter",
+		description: "Intuitive API designed for developer experience",
+		title: "Developer Friendly",
 	},
 	{
-		description: "Automatic database management and migrations",
-		title: "Automatic Database Management",
+		description: "Flexible formatting with customizable output",
+		title: "Flexible Formatting",
 	},
 	{
-		description: "Multiple social sign-on providers",
-		title: "Social Sign-on",
+		description: "Zero dependencies for maximum compatibility",
+		title: "Zero Dependencies",
 	},
 	{
-		description: "Manage organizations and access control",
-		title: "Organization & Access Control",
+		description: "Immutable operations for predictable behavior",
+		title: "Immutable Operations",
 	},
 	{
-		description: "Secure your users with two factor authentication",
-		title: "Two Factor Authentication",
+		description: "Comprehensive utilities for all date needs",
+		title: "Complete Utilities",
 	},
 	{
-		description: "Even more capabilities with plugins",
-		title: "Plugin Ecosystem",
+		description: "Well-tested and production ready",
+		title: "Battle Tested",
 	},
 ];
 
@@ -78,10 +77,10 @@ export const Grid = ({
 		[Math.floor(Math.random() * 4) + 7, Math.floor(Math.random() * 6) + 1],
 	];
 	return (
-		<div className="pointer-events-none absolute left-1/2 top-0  -ml-20 -mt-2 h-full w-full [mask-image:linear-gradient(white,transparent)]">
-			<div className="absolute inset-0 bg-gradient-to-r  [mask-image:radial-gradient(farthest-side_at_top,white,transparent)] dark:from-zinc-900/30 from-zinc-100/30 to-zinc-300/30 dark:to-zinc-900/30 opacity-100">
+		<div className="pointer-events-none absolute left-1/2 top-0 -ml-20 -mt-2 h-full w-full [mask-image:linear-gradient(white,transparent)] rounded-2xl overflow-hidden">
+			<div className="absolute inset-0 bg-gradient-to-r [mask-image:radial-gradient(farthest-side_at_top,white,transparent)] dark:from-slate-800/20 from-slate-200/30 to-slate-300/20 dark:to-slate-900/20 opacity-60">
 				<GridPattern
-					className="absolute inset-0 h-full w-full  mix-blend-overlay dark:fill-white/10 dark:stroke-white/10 stroke-black/10 fill-black/10"
+					className="absolute inset-0 h-full w-full mix-blend-overlay dark:fill-slate-400/10 dark:stroke-slate-400/10 stroke-slate-600/10 fill-slate-600/10"
 					height={size ?? 20}
 					squares={p}
 					width={size ?? 20}

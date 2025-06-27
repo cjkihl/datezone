@@ -11,7 +11,7 @@
 	"rsc": true,
 	"style": "new-york",
 	"tailwind": {
-		"baseColor": "stone",
+		"baseColor": "slate",
 		"css": "app/global.css",
 		"cssVariables": true,
 		"prefix": ""

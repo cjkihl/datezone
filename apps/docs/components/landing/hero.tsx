@@ -45,7 +45,7 @@ function TrafficLightsIcon(props: React.ComponentPropsWithoutRef<"svg">) {
 
 export default function Hero() {
 	return (
-		<section className="max-h-[40rem] relative w-full flex md:items-center md:justify-center dark:bg-black/[0.96] antialiased bg-grid-white/[0.02] overflow-hidden px-8 md:min-h-[40rem]">
+		<section className="max-h-[40rem] relative w-full flex md:items-center md:justify-center antialiased overflow-hidden px-8 md:min-h-[40rem]">
 			<Spotlight />
 			<div className="overflow-hidden bg-transparent md:px-10 dark:-mb-32 dark:mt-[-4.75rem] dark:pb-32 dark:pt-[4.75rem]">
 				<div className="lg:max-w-8xl mx-auto grid max-w-full grid-cols-1 items-center gap-x-8 gap-y-16 px-4 py-2 lg:grid-cols-2 lg:px-8 lg:py-4 xl:gap-x-16 xl:px-12">
@@ -72,9 +72,9 @@ export default function Hero() {
 								</div>
 							</div>
 
-							<p className="text-zinc-800 dark:text-zinc-300 mt-3 tracking-tight text-2xl md:text-3xl">
-								A blazingly fast, fully-typed TypeScript library for working
-								with dates and times
+							<p className="text-zinc-800 dark:text-zinc-300 mt-3 tracking-tight text-3xl md:text-4xl">
+								The fastest TypeScript library for working with dates, times and
+								timezones.
 							</p>
 							<div className="relative mt-2 md:flex items-center gap-2 w-10/12 hidden border border-white/5">
 								<GradientBG className="w-full flex items-center justify-between">

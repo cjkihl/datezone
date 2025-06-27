@@ -6,8 +6,6 @@ export default function NotFound() {
 		<div className="h-full relative overflow-hidden">
 			<Section
 				className="mb-1 h-[92.3vh] overflow-y-hidden"
-				crosses
-				crossesOffset="lg:translate-y-[5.25rem]"
 				customPaddings
 				id="404"
 			>
