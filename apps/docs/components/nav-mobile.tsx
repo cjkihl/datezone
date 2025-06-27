@@ -201,24 +201,12 @@ export const navMenu: {
 	}[];
 }[] = [
 	{
-		name: "_helo",
+		name: "Home",
 		path: "/",
 	},
 
 	{
-		name: "docs",
+		name: "Docs",
 		path: "/docs",
-	},
-	{
-		name: "examples",
-		path: "/docs/examples/next-js",
-	},
-	{
-		name: "changelogs",
-		path: "/changelogs",
-	},
-	{
-		name: "community",
-		path: "/community",
 	},
 ];

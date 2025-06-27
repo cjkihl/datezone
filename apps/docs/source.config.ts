@@ -10,16 +10,6 @@ export const docs = defineDocs({
 	dir: "./content/docs",
 });
 
-export const changelogCollection = defineCollections({
-	dir: "./content/changelogs",
-	schema: z.object({
-		date: z.date(),
-		description: z.string(),
-		title: z.string(),
-	}),
-	type: "doc",
-});
-
 export const blogCollection = defineCollections({
 	dir: "./content/blogs",
 	schema: z.object({

@@ -6,6 +6,21 @@
         "source.organizeImports.biome": "explicit",
         "source.fixAll.biome": "explicit"
     },
+    "search.exclude": {
+        "**/.*": true,
+        "**/bun.lock": true,
+        "**/node_modules": true,
+        "**/.next": true,
+        "**/.turbo": true,
+        "**/dist": true,
+        "**/build": true,
+        "**/out": true,
+        "**/coverage": true,
+        "**/logs": true,
+        "**/tmp": true,
+        "**/temp": true,
+    },
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "biomejs.biome",
+    "explorer.autoReveal": false
 }

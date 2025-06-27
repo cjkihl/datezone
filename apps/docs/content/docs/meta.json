@@ -4,8 +4,7 @@
 		"installation",
 		"basic-usage",
 		"api-reference",
-		"comparison",
-		"changelog"
+		"comparison"
 	],
 	"root": true,
 	"title": "Datezone Documentation"

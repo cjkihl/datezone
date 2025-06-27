@@ -126,7 +126,6 @@ export default async function Page({
 							Folder,
 							ForkButton,
 							GenerateSecret,
-
 							Link: ({
 								className,
 								...props

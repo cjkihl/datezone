@@ -1,103 +1,253 @@
 ---
 title: FAQ
-description: Frequently asked questions about Better Auth.
+description: Frequently asked questions about datezone.
 ---
 
-This page contains frequently asked questions, common issues, and other helpful information about Better Auth.
+This page contains frequently asked questions, common issues, and other helpful information about the datezone library.
 
 <Accordions>
-  <Accordion title="Auth client not working">
-  When encountering `createAuthClient` related errors, make sure to have the correct import path as it varies based on environment.
+  <Accordion title="What is the difference between Date objects and timestamps?">
+  
+JavaScript Date objects and timestamps serve different purposes:
 
-If you're using the auth client on react front-end, you'll need to import it from `/react`:
-
-```ts title="component.ts"
-import { createAuthClient } from "better-auth/react";
+**Date Objects** are JavaScript's built-in date representation that includes timezone information based on the user's system:
+```ts
+const date = new Date(); // Current date in user's timezone
+console.log(date.toString()); // "Mon Jan 01 2024 12:00:00 GMT-0800 (PST)"
 ```
 
-Where as if you're using the auth client in Next.js middleware, server-actions, server-components or anything server-related, you'll likely need to import it from `/client`:
+**Timestamps** are numbers representing milliseconds since January 1, 1970 UTC:
+```ts
+const timestamp = Date.now(); // 1704067200000
+const timestamp2 = new Date().getTime(); // Same as above
+```
 
-```ts title="server.ts"
-import { createAuthClient } from "better-auth/client";
+With datezone, you can easily work with both:
+```ts
+import { day } from '@/datezone';
+
+const today = day(); // Current date
+const timestamp = today.timestamp(); // Get timestamp
+const fromTimestamp = day(1704067200000); // Create from timestamp
 ```
 
 </Accordion>
 
-<Accordion title="getSession not working">
-If you try to call `authClient.getSession` on a server environment (e.g, a Next.js server component), it doesn't work since it can't access the cookies. You can use the `auth.api.getSession` instead and pass the request headers to it. 
+<Accordion title="How should I handle timezones for REST APIs?">
 
-```tsx title="server.tsx"
-import { auth } from "./auth";
-import { headers } from "next/headers";
+For REST APIs, always use UTC timestamps or ISO 8601 strings to avoid timezone confusion:
 
-const session = await auth.api.getSession({
-    headers: await headers()
-})
+**Recommended approach - UTC timestamps:**
+```ts
+// API Response
+{
+  "createdAt": 1704067200000, // UTC timestamp
+  "updatedAt": 1704070800000
+}
+
+// Client-side handling with datezone
+import { day } from '@/datezone';
+
+const createdDate = day(apiResponse.createdAt).tz('America/New_York');
+console.log(createdDate.format('YYYY-MM-DD HH:mm')); // Displayed in user's timezone
 ```
 
-if you need to use the auth client on the server for different purposes, you still can pass the request headers to it:
+**Alternative - ISO 8601 strings:**
+```ts
+// API Response
+{
+  "createdAt": "2024-01-01T12:00:00.000Z", // Always include 'Z' for UTC
+  "updatedAt": "2024-01-01T13:00:00.000Z"
+}
 
-```tsx title="server.tsx"
-import { authClient } from "./auth-client";
-import { headers } from "next/headers";
-
-const session = await authClient.getSession({
-    fetchOptions:{
-      headers: await headers()
-    }
-})
+// Client-side handling
+const createdDate = day(apiResponse.createdAt).tz('user-timezone');
 ```
-</Accordion>
-
-<Accordion title="Adding custom fields to the users table">
-
-Better Auth provides a type-safe way to extend the user and session schemas, take a look at our docs on <Link href="/docs/concepts/database#extending-core-schema">extending core schema</Link>.
-
-</Accordion>
-
-<Accordion title="Difference between getSession and useSession">
-Both `useSession` and `getSession` instances are used fundamentally different based on the situation.
-
-`useSession` is a hook, meaning it can trigger re-renders whenever session data changes.
-
-If you have UI you need to change based on user or session data, you can use this hook.
 
 <Callout type="warn">
-  For performance reasons, do not use this hook on your `layout.tsx` file. We
-  recommend using RSC and use your server auth instance to get the session data
-  via `auth.api.getSession`.
+  Never send timezone-specific dates without explicit timezone information in APIs.
+  This leads to confusion when users are in different timezones.
 </Callout>
 
-`getSession` returns a promise containing data and error.
-
-For all other situations where you shouldn't use `useSession`, is when you should be using `getSession`.
-
-<Callout type="info">
-   `getSession` is available on both server and client auth instances.
-   Not just the latter.
-</Callout>
 </Accordion>
 
-<Accordion title="Common TypeScript Errors">
-If you're facing typescript errors, make sure your tsconfig has `strict` set to `true`:
+<Accordion title="Why are timezones so complicated in JavaScript?">
+
+JavaScript's built-in Date object has several limitations:
+
+1. **No timezone information**: Date objects don't store which timezone they represent
+2. **System timezone only**: All dates are interpreted in the user's system timezone
+3. **Limited formatting**: Basic formatting options without locale support
+4. **Mutation issues**: Date objects are mutable, leading to bugs
+
+```ts
+// Problems with native Date
+const date = new Date('2024-01-01'); // What timezone is this?
+date.setHours(date.getHours() + 1); // Mutates original date!
+
+// Solutions with datezone
+import { day } from '@/datezone';
+
+const date = day('2024-01-01').tz('America/New_York'); // Explicit timezone
+const newDate = date.add(1, 'hour'); // Immutable operations
+```
+
+Datezone solves these issues by providing:
+- Explicit timezone handling
+- Immutable operations
+- Rich formatting options
+- Better parsing capabilities
+
+</Accordion>
+
+<Accordion title="How do I convert between timezones?">
+
+Use the `tz()` method to convert dates between timezones:
+
+```ts
+import { day } from '@/datezone';
+
+// Start with a date in one timezone
+const nyTime = day('2024-01-01 15:30').tz('America/New_York');
+
+// Convert to different timezones
+const londonTime = nyTime.tz('Europe/London');
+const tokyoTime = nyTime.tz('Asia/Tokyo');
+const utcTime = nyTime.tz('UTC');
+
+console.log(nyTime.format('HH:mm z'));    // "15:30 EST"
+console.log(londonTime.format('HH:mm z')); // "20:30 GMT"
+console.log(tokyoTime.format('HH:mm z'));  // "05:30 JST" (next day)
+console.log(utcTime.format('HH:mm z'));    // "20:30 UTC"
+```
+
+<Callout type="info">
+  The underlying timestamp remains the same - only the display changes based on timezone.
+</Callout>
+
+</Accordion>
+
+<Accordion title="What timezone formats does datezone support?">
+
+Datezone supports multiple timezone formats for maximum flexibility:
+
+**IANA timezone names (recommended):**
+```ts
+day().tz('America/New_York')
+day().tz('Europe/London')  
+day().tz('Asia/Tokyo')
+day().tz('UTC')
+```
+
+**UTC offsets:**
+```ts
+day().tz('+05:30')  // India Standard Time
+day().tz('-08:00')  // Pacific Standard Time
+day().tz('Z')       // UTC (same as 'UTC')
+```
+
+**Common abbreviations:**
+```ts
+day().tz('EST')     // Eastern Standard Time
+day().tz('PST')     // Pacific Standard Time
+day().tz('GMT')     // Greenwich Mean Time
+```
+
+<Callout type="warn">
+  IANA timezone names are preferred because they handle daylight saving time automatically.
+  UTC offsets are static and don't account for DST changes.
+</Callout>
+
+</Accordion>
+
+<Accordion title="How do I handle daylight saving time?">
+
+When using IANA timezone names, datezone automatically handles daylight saving time (DST):
+
+```ts
+import { day } from '@/datezone';
+
+// Winter time (Standard Time)
+const winter = day('2024-01-15 12:00').tz('America/New_York');
+console.log(winter.format('HH:mm z')); // "12:00 EST"
+
+// Summer time (Daylight Time)  
+const summer = day('2024-07-15 12:00').tz('America/New_York');
+console.log(summer.format('HH:mm z')); // "12:00 EDT"
+
+// DST transition handling
+const beforeDST = day('2024-03-10 01:30').tz('America/New_York');
+const afterDST = beforeDST.add(1, 'hour');
+console.log(beforeDST.format('HH:mm z')); // "01:30 EST"
+console.log(afterDST.format('HH:mm z'));  // "03:30 EDT" (skips 2:30)
+```
+
+<Callout type="info">
+  DST transitions are handled automatically - you don't need to worry about the complexities.
+</Callout>
+
+</Accordion>
+
+<Accordion title="How do I format dates for different locales?">
+
+Use the formatting system with locale-specific patterns:
+
+```ts
+import { day } from '@/datezone';
+
+const date = day('2024-01-15');
+
+// Different date formats
+console.log(date.format('MM/DD/YYYY'));     // "01/15/2024" (US)
+console.log(date.format('DD/MM/YYYY'));     // "15/01/2024" (UK)
+console.log(date.format('YYYY-MM-DD'));     // "2024-01-15" (ISO)
+
+// With time
+console.log(date.format('DD MMM YYYY, HH:mm')); // "15 Jan 2024, 00:00"
+
+// Full customization
+console.log(date.format('dddd, MMMM Do, YYYY')); // "Monday, January 15th, 2024"
+```
+
+For more formatting options, see the <Link href="/docs/reference/format">format documentation</Link>.
+
+</Accordion>
+
+<Accordion title="Common TypeScript issues">
+
+If you're facing TypeScript errors with datezone:
+
+**Make sure strict mode is enabled:**
 ```json title="tsconfig.json"
 {
   "compilerOptions": {
     "strict": true,
+    "strictNullChecks": true
   }
 }
 ```
 
-if you can't set strict to true, you can enable strictNullChecks:
-```json title="tsconfig.json"
-{
-  "compilerOptions": {
-    "strictNullChecks": true,
-  }
-}
+**Import issues:**
+```ts
+// ✅ Correct import
+import { day, month, year } from '@/datezone';
+
+// ❌ Incorrect - no default export
+import datezone from '@/datezone';
 ```
 
-You can learn more in our <Link href="/docs/concepts/typescript#typescript-config">TypeScript docs</Link>.
+**Type inference:**
+```ts
+// TypeScript will infer the correct types
+const today = day(); // DayInstance
+const currentMonth = month(); // MonthInstance
+const thisYear = year(); // YearInstance
+
+// Explicit typing if needed
+import type { DayInstance } from '@/datezone';
+const date: DayInstance = day('2024-01-01');
+```
+
 </Accordion>
 
 </Accordions>
