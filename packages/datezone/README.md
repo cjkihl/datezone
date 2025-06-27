@@ -2,16 +2,21 @@
 
 [![Coverage](https://img.shields.io/badge/Coverage-91%25-brightgreen?style=flat-square)](../../tools/coverage)
 [![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen?style=flat-square&logo=testing-library)](../../tools/coverage)
-[![Performance](https://img.shields.io/badge/Perf-Up%20to%20115033%25%20faster-success?style=flat-square)](../../tools/benchmark/reports/comparison-report.md)
+[![Performance](https://img.shields.io/badge/Performance-1000x%20faster%20than%20date--fns-success?style=flat-square)](https://github.com/cjkihl/datezone/blob/main/tools/benchmark/reports/comparison-report.md)
+
 [![Bun](https://img.shields.io/badge/Bun-000?logo=bun&logoColor=fff&style=flat-square)](https://bun.sh)
 [![TypeScript](https://img.shields.io/badge/TypeScript-First-blue?style=flat-square)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+
+[![Star on GitHub](https://img.shields.io/github/stars/cjkihl/datezone?style=flat-square&logo=github)](https://github.com/cjkihl/datezone/stargazers)
+[![Sponsor](https://img.shields.io/badge/Sponsor-❤-ff69b4?style=flat-square&logo=github-sponsors)](https://github.com/sponsors/cjkihl)
 
 A **blazingly fast**, fully-typed TypeScript library for working with dates and times, with explicit timezone support and no unnecessary `Date` object creation. Designed for high-frequency usage, tree-shakeable builds, and maximum performance.
 
 ## 🚀 Why Datezone?
 
-- **Extreme Performance**: Up to **115,000% faster** than date-fns for timezone operations ([see benchmarks](../../tools/benchmark/reports/comparison-report.md))
+- **Extreme Performance**: Up to **1,000x faster** than date-fns for timezone operations ([see benchmarks](https://github.com/cjkihl/datezone/blob/main/tools/benchmark/reports/comparison-report.md))
+- **Faster by Design**: Uses timestamp math instead of creating `Date` objects, minimizing allocations and saving work for the garbage collector
 - **Timezone-First**: All functions accept an optional `timeZone` parameter
 - **Zero Unnecessary Objects**: Avoids creating `Date` objects unless needed
 - **Tree-Shakeable**: Import only what you need
@@ -21,17 +26,24 @@ A **blazingly fast**, fully-typed TypeScript library for working with dates and 
 ## Installation
 
 ```sh
+# Bun
 bun add datezone
+
+# pnpm
+pnpm add datezone
+
+# npm
+npm install datezone
 ```
 
 ## Quick Start
 
 ```ts
 import { startOfDay, addDays, format } from "datezone";
-const now = new Date();
+const now = Date.now();
 const startNY = startOfDay(now, "America/New_York");
 const tomorrow = addDays(now, 1, "Europe/London");
-const formatted = format(now.getTime(), "yyyy-MM-dd HH:mm:ss zzzz", { locale: "en", timeZone: "America/New_York" });
+const formatted = format(now, "yyyy-MM-dd HH:mm:ss zzzz", { locale: "en", timeZone: "America/New_York" });
 ```
 
 ## API Reference
@@ -51,7 +63,7 @@ Latest benchmarks vs. date-fns:
 | dayOfYear (tz) | **2.94 ms** | 13.31 ms | **+352%** |
 | format (tz) | **6.97 ms** | 14.82 ms | **+113%** |
 
-**[Full performance report →](../../tools/benchmark/reports/comparison-report.md)**
+**[Full performance report →](https://github.com/cjkihl/datezone/blob/main/tools/benchmark/reports/comparison-report.md)**
 
 ## Why Choose Datezone?
 
@@ -63,14 +75,7 @@ Latest benchmarks vs. date-fns:
 
 ## Contributing
 
-We welcome contributions! Datezone maintains **90%+ code coverage** using Bun's built-in coverage reporting.
-
-```sh
-bun install
-bun test --coverage
-bun run bench:compare
-bun run lint-fix
-```
+See our [Contributing Guide](https://github.com/cjkihl/datezone/blob/main/packages/datezone/CONTRIBUTING.md).
 
 ## License
 
