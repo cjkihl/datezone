@@ -45,5 +45,11 @@
 		"packages/*",
 		"shared/*",
 		"tools/*"
-	]
+	],
+	"dependencies": {
+		"fumadocs-core": "^15.5.5",
+		"fumadocs-mdx": "^11.6.9",
+		"fumadocs-ui": "^15.5.5",
+		"zod": "^3.25.67"
+	}
 }

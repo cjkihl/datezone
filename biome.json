@@ -45,7 +45,9 @@
 				"useExhaustiveDependencies": "error"
 			},
 			"nursery": {
-				"useSortedClasses": "off"
+				"noNestedComponentDefinitions": "off",
+				"useSortedClasses": "off",
+				"useUniqueElementIds": "off"
 			},
 			"recommended": true,
 			"style": {
