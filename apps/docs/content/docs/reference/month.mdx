@@ -1,0 +1,282 @@
+---
+title: Month Utilities
+---
+
+# Month Utilities (`@/datezone/month`)
+
+This page documents all exported functions from the `month` module in `@/datezone`.
+
+## Functions
+
+### startOfMonth
+
+Returns the start of the month (first day, 00:00:00.000) in the given timezone.
+
+```ts
+startOfMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+startOfMonth(Date.now())
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+startOfMonth(Date.now(), "America/New_York")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### endOfMonth
+
+Returns the end of the month (last day, 23:59:59.999) in the given timezone.
+
+```ts
+endOfMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+endOfMonth(Date.now())
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+endOfMonth(Date.now(), "Europe/London")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### addMonths
+
+Adds a number of months to a timestamp.
+
+```ts
+addMonths(ts: number, months: number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+addMonths(Date.now(), 2)
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+addMonths(Date.now(), 2, "Asia/Tokyo")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### subMonths
+
+Subtracts a number of months from a timestamp.
+
+```ts
+subMonths(ts: number, months: number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+subMonths(Date.now(), 1)
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+subMonths(Date.now(), 1, "UTC")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### startOfNextMonth
+
+Returns the start of the next month (first day, 00:00:00.000) in the given timezone.
+
+```ts
+startOfNextMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+startOfNextMonth(Date.now())
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+startOfNextMonth(Date.now(), "America/Los_Angeles")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### endOfNextMonth
+
+Returns the end of the next month (last day, 23:59:59.999) in the given timezone.
+
+```ts
+endOfNextMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+endOfNextMonth(Date.now())
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+endOfNextMonth(Date.now(), "Europe/Berlin")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### startOfPrevMonth
+
+Returns the start of the previous month (first day, 00:00:00.000) in the given timezone.
+
+```ts
+startOfPrevMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+startOfPrevMonth(Date.now())
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+startOfPrevMonth(Date.now(), "Asia/Singapore")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### endOfPrevMonth
+
+Returns the end of the previous month (last day, 23:59:59.999) in the given timezone.
+
+```ts
+endOfPrevMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+endOfPrevMonth(Date.now())
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+endOfPrevMonth(Date.now(), "Australia/Sydney")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### daysInMonth
+
+Returns the number of days in the month for the given date and timezone.
+
+```ts
+daysInMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+daysInMonth(Date.now())
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+daysInMonth(Date.now(), "America/Sao_Paulo")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### getMonthName
+
+Returns the localized month name.
+
+```ts
+getMonthName(locale: string, type: "long" | "short" | "narrow", month: number): string
+```
+
+<Tabs items={["en-US", "fr-FR"]}>
+  <Tab value="en-US">
+
+```ts title="en-US"
+getMonthName("en-US", "long", 1) // "January"
+```
+  </Tab>
+  <Tab value="fr-FR">
+
+```ts title="fr-FR"
+getMonthName("fr-FR", "short", 3) // "mars"
+```
+  </Tab>
+</Tabs>
+
+---
+
+### getQuarter
+
+Returns the quarter of the year (1-4) for the given date and timezone.
+
+```ts
+getQuarter(ts: YearMonthOptions | number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+getQuarter(Date.now())
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+getQuarter(Date.now(), "Europe/Paris")
+```
+  </Tab>
+</Tabs> 

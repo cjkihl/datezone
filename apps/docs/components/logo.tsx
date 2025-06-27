@@ -3,18 +3,36 @@ import { cn } from "@/lib/utils";
 export const Logo = (props: SVGProps<SVGSVGElement>) => {
 	return (
 		<svg
-			className={cn("w-5 h-5", props.className)}
+			className={cn("w-5 h-5 text-black dark:text-white", props.className)}
 			fill="none"
-			height="45"
-			viewBox="0 0 60 45"
-			width="60"
+			height="30"
+			viewBox="0 0 30 30"
+			width="30"
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<path
+				className="stroke-black dark:stroke-white"
+				d="M5.5 7H25C25 7 26.5 7 26.5 8.5V25C26.5 25 26.5 26.5 25 26.5H5.5C5.5 26.5 4 26.5 4 25V8.5C4 8.5 4 7 5.5 7Z"
+				strokeWidth="2"
+			/>
+			<path
+				className="stroke-black dark:stroke-white"
+				d="M10 9.25V4"
+				strokeLinecap="round"
+				strokeWidth="2"
+			/>
+			<path
+				className="stroke-black dark:stroke-white"
+				d="M20.5 9.25V4"
+				strokeLinecap="round"
+				strokeWidth="2"
+			/>
+			<rect
 				className="fill-black dark:fill-white"
-				clipRule="evenodd"
-				d="M0 0H15V15H30V30H15V45H0V30V15V0ZM45 30V15H30V0H45H60V15V30V45H45H30V30H45Z"
-				fillRule="evenodd"
+				height="12"
+				width="22"
+				x="4.24805"
+				y="14.25"
 			/>
 		</svg>
 	);

@@ -155,7 +155,7 @@ export async function GET(req: Request) {
 							style={{ fontFamily: "GeistSans", fontWeight: "semibold" }}
 							tw="flex text-xl"
 						>
-							Better Auth.
+							Datezone.
 						</div>
 						<div tw="flex gap-2 items-center text-xl">
 							<svg

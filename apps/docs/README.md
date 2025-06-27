@@ -1,6 +1,6 @@
-# Better Auth Docs
+# Datezone Docs
 
-This is the documentation site for Better Auth.
+This is the documentation site for Datezone.
 
 ## Contributing
 

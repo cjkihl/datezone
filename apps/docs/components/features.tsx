@@ -1,14 +1,14 @@
 "use client";
 
-import { LockClosedIcon } from "@radix-ui/react-icons";
 import {
+	BadgeCheckIcon,
+	BoxIcon,
+	FastForwardIcon,
 	Globe2Icon,
-	PlugIcon,
-	PlugZap2Icon,
+	GlobeIcon,
+	LeafIcon,
 	Plus,
-	RabbitIcon,
-	ShieldCheckIcon,
-	Webhook,
+	ZapIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TechStackDisplay } from "./display-techstack";
@@ -18,54 +18,52 @@ import { Ripple } from "./ripple";
 
 const features = [
 	{
-		description:
-			"Supports popular frameworks, including React, Vue, Svelte, Astro, Solid, Next.js, Nuxt, Tanstack Start, Hono, and more.",
-		icon: PlugZap2Icon,
+		description: "Up to 1,000x faster than date-fns for timezone operations.",
+		icon: ZapIcon,
 		id: 1,
-		label: "Framework Agnostic",
-		title: "Support for popular <strong>frameworks</strong>.",
+		label: "Extreme Performance",
+		title: "<strong>Blazing fast</strong> performance.",
 	},
 	{
 		description:
-			"Built-in support for email and password authentication, with session and account management features.",
-		icon: LockClosedIcon,
+			"Uses timestamp math instead of creating Date objects, minimizing allocations.",
+		icon: FastForwardIcon,
 		id: 2,
-		label: "Authentication",
-		title: "Email & Password <strong>Authentication</strong>.",
+		label: "Faster by Design",
+		title:
+			"<strong>Faster by design</strong>, with no unnecessary object creation.",
 	},
 	{
 		description:
-			"Allow users to sign in with their accounts, including GitHub, Google, Discord, Twitter, and more.",
-		icon: Webhook,
+			"All functions accept an optional timeZone parameter for explicit timezone handling.",
+		icon: GlobeIcon,
 		id: 3,
-		label: "Social Sign-on",
-		title: "Support multiple <strong>OAuth providers</strong>.",
+		label: "Timezone-First",
+		title: "<strong>Timezone-first</strong> API design.",
 	},
 	{
 		description:
-			"Secure your users accounts with two factor authentication with a few lines of code.",
-		icon: ShieldCheckIcon,
+			"Avoids creating Date objects unless absolutely necessary, saving garbage collector work.",
+		icon: BoxIcon,
 		id: 4,
-		label: "Two Factor",
-		title: "Multi Factor <strong>Authentication</strong>.",
+		label: "Zero Unnecessary Objects",
+		title: "<strong>Zero unnecessary objects</strong> for maximum efficiency.",
 	},
 	{
-		description:
-			"Multi tenant support with members, organization, teams and invitation with access control.",
-
-		icon: RabbitIcon,
+		description: "Import only what you need, keeping your bundle size small.",
+		icon: LeafIcon,
 		id: 5,
-		label: "Multi Tenant",
-		title: "<strong>Organization</strong> Members and Invitation.",
+		label: "Tree-Shakeable",
+		title: "<strong>Tree-shakeable</strong> for smaller bundle sizes.",
 	},
 
 	{
 		description:
-			"Improve your application experience with our official plugins and those created by the community.",
-		icon: PlugIcon,
+			"No side effects and strict TypeScript types for reliable code.",
+		icon: BadgeCheckIcon,
 		id: 6,
-		label: "Plugin Ecosystem",
-		title: "A lot more features with <strong>plugins</strong>.",
+		label: "Pure & Typed",
+		title: "<strong>Pure and fully typed</strong> for robust applications.",
 	},
 ];
 

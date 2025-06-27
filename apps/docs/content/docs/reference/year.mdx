@@ -1,0 +1,292 @@
+---
+title: Year Utilities
+description: Functions for working with years in dates and timestamps
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+
+# Year Utilities
+
+Year utilities provide functions for working with years in dates and timestamps, including leap year calculations, year boundaries, and year arithmetic.
+
+## getYear
+
+Get the year from a timestamp or year options.
+
+```typescript
+function getYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { getYear } from '@/datezone';
+
+const timestamp = new Date(2024, 2, 15).getTime(); // March 15, 2024
+const year = getYear(timestamp);
+console.log(year); // 2024
+
+// Using year options
+const yearFromOptions = getYear({ year: 2023 });
+console.log(yearFromOptions); // 2023
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { getYear } from '@/datezone';
+
+const timestamp = new Date(2024, 11, 31, 23, 30).getTime(); // Dec 31, 2024 11:30 PM
+const yearInNY = getYear(timestamp, 'America/New_York');
+const yearInTokyo = getYear(timestamp, 'Asia/Tokyo');
+console.log(yearInNY); // 2024
+console.log(yearInTokyo); // 2025 (next day due to timezone difference)
+```
+
+</Tab>
+</Tabs>
+
+## isLeapYear
+
+Check if a year is a leap year.
+
+```typescript
+function isLeapYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): boolean
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { isLeapYear } from '@/datezone';
+
+const timestamp2024 = new Date(2024, 0, 1).getTime();
+const timestamp2023 = new Date(2023, 0, 1).getTime();
+
+console.log(isLeapYear(timestamp2024)); // true (2024 is a leap year)
+console.log(isLeapYear(timestamp2023)); // false (2023 is not a leap year)
+
+// Using year options
+console.log(isLeapYear({ year: 2000 })); // true
+console.log(isLeapYear({ year: 1900 })); // false (divisible by 100 but not 400)
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { isLeapYear } from '@/datezone';
+
+const timestamp = new Date(2023, 11, 31, 23, 30).getTime(); // Dec 31, 2023
+const isLeapInNY = isLeapYear(timestamp, 'America/New_York');
+const isLeapInSydney = isLeapYear(timestamp, 'Australia/Sydney');
+console.log(isLeapInNY); // false (2023)
+console.log(isLeapInSydney); // true (2024 due to timezone difference)
+```
+
+</Tab>
+</Tabs>
+
+## startOfYear
+
+Get the timestamp for the start of the year.
+
+```typescript
+function startOfYear(date: OptionsOrTimestamp, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { startOfYear } from '@/datezone';
+
+const timestamp = new Date(2024, 5, 15, 14, 30).getTime(); // June 15, 2024 2:30 PM
+const yearStart = startOfYear(timestamp);
+console.log(new Date(yearStart)); // January 1, 2024 00:00:00
+
+// Using year options
+const yearStartFromOptions = startOfYear({ year: 2023 });
+console.log(new Date(yearStartFromOptions)); // January 1, 2023 00:00:00
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { startOfYear } from '@/datezone';
+
+const timestamp = new Date(2024, 5, 15).getTime();
+const yearStartNY = startOfYear(timestamp, 'America/New_York');
+const yearStartTokyo = startOfYear(timestamp, 'Asia/Tokyo');
+
+console.log(new Date(yearStartNY)); // January 1, 2024 in NY timezone
+console.log(new Date(yearStartTokyo)); // January 1, 2024 in Tokyo timezone
+```
+
+</Tab>
+</Tabs>
+
+## endOfYear
+
+Get the timestamp for the end of the year.
+
+```typescript
+function endOfYear(date: OptionsOrTimestamp, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { endOfYear } from '@/datezone';
+
+const timestamp = new Date(2024, 5, 15, 14, 30).getTime(); // June 15, 2024 2:30 PM
+const yearEnd = endOfYear(timestamp);
+console.log(new Date(yearEnd)); // December 31, 2024 23:59:59.999
+
+// Using year options
+const yearEndFromOptions = endOfYear({ year: 2023 });
+console.log(new Date(yearEndFromOptions)); // December 31, 2023 23:59:59.999
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { endOfYear } from '@/datezone';
+
+const timestamp = new Date(2024, 5, 15).getTime();
+const yearEndNY = endOfYear(timestamp, 'America/New_York');
+const yearEndTokyo = endOfYear(timestamp, 'Asia/Tokyo');
+
+console.log(new Date(yearEndNY)); // December 31, 2024 23:59:59.999 in NY timezone
+console.log(new Date(yearEndTokyo)); // December 31, 2024 23:59:59.999 in Tokyo timezone
+```
+
+</Tab>
+</Tabs>
+
+## addYears
+
+Add years to a date.
+
+```typescript
+function addYears(date: OptionsOrTimestamp, amount: number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { addYears } from '@/datezone';
+
+const timestamp = new Date(2024, 1, 29).getTime(); // February 29, 2024 (leap year)
+const futureDate = addYears(timestamp, 2);
+console.log(new Date(futureDate)); // February 28, 2026 (not a leap year, so adjusted)
+
+const normalDate = new Date(2024, 5, 15).getTime(); // June 15, 2024
+const futureNormal = addYears(normalDate, 3);
+console.log(new Date(futureNormal)); // June 15, 2027
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { addYears } from '@/datezone';
+
+const timestamp = new Date(2024, 1, 29).getTime(); // February 29, 2024
+const futureInNY = addYears(timestamp, 1, 'America/New_York');
+const futureInTokyo = addYears(timestamp, 1, 'Asia/Tokyo');
+
+console.log(new Date(futureInNY)); // February 28, 2025 in NY timezone
+console.log(new Date(futureInTokyo)); // February 28, 2025 in Tokyo timezone
+```
+
+</Tab>
+</Tabs>
+
+## subYears
+
+Subtract years from a date.
+
+```typescript
+function subYears(date: OptionsOrTimestamp, amount: number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { subYears } from '@/datezone';
+
+const timestamp = new Date(2024, 1, 29).getTime(); // February 29, 2024 (leap year)
+const pastDate = subYears(timestamp, 1);
+console.log(new Date(pastDate)); // February 28, 2023 (not a leap year, so adjusted)
+
+const normalDate = new Date(2024, 5, 15).getTime(); // June 15, 2024
+const pastNormal = subYears(normalDate, 5);
+console.log(new Date(pastNormal)); // June 15, 2019
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { subYears } from '@/datezone';
+
+const timestamp = new Date(2024, 1, 29).getTime(); // February 29, 2024
+const pastInNY = subYears(timestamp, 2, 'America/New_York');
+const pastInTokyo = subYears(timestamp, 2, 'Asia/Tokyo');
+
+console.log(new Date(pastInNY)); // February 28, 2022 in NY timezone
+console.log(new Date(pastInTokyo)); // February 28, 2022 in Tokyo timezone
+```
+
+</Tab>
+</Tabs>
+
+## getDaysInYear
+
+Get the number of days in a year (365 or 366 for leap years).
+
+```typescript
+function getDaysInYear(date: OptionsOrTimestamp, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { getDaysInYear } from '@/datezone';
+
+const timestamp2024 = new Date(2024, 0, 1).getTime(); // 2024 (leap year)
+const timestamp2023 = new Date(2023, 0, 1).getTime(); // 2023 (not leap year)
+
+console.log(getDaysInYear(timestamp2024)); // 366
+console.log(getDaysInYear(timestamp2023)); // 365
+
+// Using year options
+console.log(getDaysInYear({ year: 2000 })); // 366 (leap year)
+console.log(getDaysInYear({ year: 1900 })); // 365 (not leap year)
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { getDaysInYear } from '@/datezone';
+
+const timestamp = new Date(2023, 11, 31, 23, 30).getTime(); // Dec 31, 2023
+const daysInNY = getDaysInYear(timestamp, 'America/New_York');
+const daysInSydney = getDaysInYear(timestamp, 'Australia/Sydney');
+
+console.log(daysInNY); // 365 (2023)
+console.log(daysInSydney); // 366 (2024 due to timezone difference)
+```
+
+</Tab>
+</Tabs> 

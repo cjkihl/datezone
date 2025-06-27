@@ -1,0 +1,247 @@
+---
+title: Offset Utilities
+description: Functions for working with timezone offsets
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+
+# Offset Utilities
+
+Offset utilities provide functions for working with timezone offsets, calculating time differences between timezones, and converting between UTC and local times.
+
+## getUTCtoTimezoneOffsetMinutes
+
+Get the offset in minutes from UTC to a specific timezone.
+
+```typescript
+function getUTCtoTimezoneOffsetMinutes(ts: number, zone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { getUTCtoTimezoneOffsetMinutes } from '@/datezone';
+
+const timestamp = new Date(2024, 5, 15, 12, 0).getTime(); // June 15, 2024 12:00 PM
+
+// Get local timezone offset
+const localOffset = getUTCtoTimezoneOffsetMinutes(timestamp);
+console.log(localOffset); // Offset in minutes for your local timezone
+
+// During DST, offsets change
+const winterTime = new Date(2024, 0, 15, 12, 0).getTime(); // January 15, 2024
+const winterOffset = getUTCtoTimezoneOffsetMinutes(winterTime);
+console.log(winterOffset); // Different offset if your timezone observes DST
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { getUTCtoTimezoneOffsetMinutes } from '@/datezone';
+
+const timestamp = new Date(2024, 5, 15, 12, 0).getTime(); // June 15, 2024
+
+// Get offset for specific timezones
+const nyOffset = getUTCtoTimezoneOffsetMinutes(timestamp, 'America/New_York');
+const tokyoOffset = getUTCtoTimezoneOffsetMinutes(timestamp, 'Asia/Tokyo');
+const utcOffset = getUTCtoTimezoneOffsetMinutes(timestamp, 'UTC');
+
+console.log(nyOffset); // -240 (UTC-4, EDT)
+console.log(tokyoOffset); // 540 (UTC+9, JST)
+console.log(utcOffset); // 0 (UTC has no offset)
+
+// Winter time (different due to DST)
+const winterTime = new Date(2024, 0, 15, 12, 0).getTime();
+const nyWinterOffset = getUTCtoTimezoneOffsetMinutes(winterTime, 'America/New_York');
+console.log(nyWinterOffset); // -300 (UTC-5, EST)
+```
+
+</Tab>
+</Tabs>
+
+## getLocalTimezoneOffsetMinutes
+
+Get the offset in minutes from UTC to the local system timezone.
+
+```typescript
+function getLocalTimezoneOffsetMinutes(ts: number): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { getLocalTimezoneOffsetMinutes } from '@/datezone';
+
+const timestamp = new Date(2024, 5, 15, 12, 0).getTime(); // June 15, 2024
+const localOffset = getLocalTimezoneOffsetMinutes(timestamp);
+console.log(localOffset); // Your local timezone offset in minutes
+
+// Check DST differences
+const summerTime = new Date(2024, 6, 15, 12, 0).getTime(); // July 15, 2024
+const winterTime = new Date(2024, 0, 15, 12, 0).getTime(); // January 15, 2024
+
+const summerOffset = getLocalTimezoneOffsetMinutes(summerTime);
+const winterOffset = getLocalTimezoneOffsetMinutes(winterTime);
+
+console.log(summerOffset); // Summer offset
+console.log(winterOffset); // Winter offset (may differ by 60 minutes if DST)
+console.log(summerOffset - winterOffset); // DST difference (usually 0 or 60)
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { getLocalTimezoneOffsetMinutes } from '@/datezone';
+
+// This function always returns the local system timezone offset
+// regardless of what timezone you might want to compare to
+
+const timestamp = new Date(2024, 5, 15, 12, 0).getTime();
+const localOffset = getLocalTimezoneOffsetMinutes(timestamp);
+
+// To compare with other timezones, use getUTCtoTimezoneOffsetMinutes
+import { getUTCtoTimezoneOffsetMinutes } from '@/datezone';
+
+const nyOffset = getUTCtoTimezoneOffsetMinutes(timestamp, 'America/New_York');
+const difference = localOffset - nyOffset;
+
+console.log(`Local offset: ${localOffset} minutes`);
+console.log(`NY offset: ${nyOffset} minutes`);
+console.log(`Difference: ${difference} minutes`);
+```
+
+</Tab>
+</Tabs>
+
+## getTimezoneOffsetMinutes
+
+Get the offset in minutes between two timezones.
+
+```typescript
+function getTimezoneOffsetMinutes(ts: number, fromZone?: TimeZone, toZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { getTimezoneOffsetMinutes } from '@/datezone';
+
+const timestamp = new Date(2024, 5, 15, 12, 0).getTime(); // June 15, 2024
+
+// From local to local (always 0)
+const localToLocal = getTimezoneOffsetMinutes(timestamp);
+console.log(localToLocal); // 0
+
+// From local to specific timezone
+const localToNY = getTimezoneOffsetMinutes(timestamp, undefined, 'America/New_York');
+console.log(localToNY); // Offset from your local time to NY time
+
+// From specific timezone to local
+const nyToLocal = getTimezoneOffsetMinutes(timestamp, 'America/New_York', undefined);
+console.log(nyToLocal); // Offset from NY time to your local time
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { getTimezoneOffsetMinutes } from '@/datezone';
+
+const timestamp = new Date(2024, 5, 15, 12, 0).getTime(); // June 15, 2024
+
+// Between specific timezones
+const nyToTokyo = getTimezoneOffsetMinutes(timestamp, 'America/New_York', 'Asia/Tokyo');
+const tokyoToLondon = getTimezoneOffsetMinutes(timestamp, 'Asia/Tokyo', 'Europe/London');
+const utcToNY = getTimezoneOffsetMinutes(timestamp, 'UTC', 'America/New_York');
+
+console.log(nyToTokyo); // ~780 minutes (13 hours) from NY to Tokyo
+console.log(tokyoToLondon); // ~-480 minutes (-8 hours) from Tokyo to London
+console.log(utcToNY); // ~-240 minutes (-4 hours) from UTC to NY (EDT)
+
+// Winter time differences
+const winterTime = new Date(2024, 0, 15, 12, 0).getTime();
+const nyToTokyoWinter = getTimezoneOffsetMinutes(winterTime, 'America/New_York', 'Asia/Tokyo');
+console.log(nyToTokyoWinter); // ~840 minutes (14 hours) - 1 hour more due to EST vs EDT
+```
+
+</Tab>
+</Tabs>
+
+## Usage Examples
+
+Here are some practical examples of using offset utilities:
+
+### Converting Times Between Timezones
+
+```typescript
+import { getTimezoneOffsetMinutes } from '@/datezone';
+
+function convertTime(timestamp: number, fromZone: TimeZone, toZone: TimeZone): number {
+  const offsetMinutes = getTimezoneOffsetMinutes(timestamp, fromZone, toZone);
+  return timestamp + (offsetMinutes * 60 * 1000);
+}
+
+const nyTime = new Date(2024, 5, 15, 15, 30).getTime(); // 3:30 PM in NY
+const tokyoTime = convertTime(nyTime, 'America/New_York', 'Asia/Tokyo');
+console.log(new Date(tokyoTime)); // Equivalent time in Tokyo
+```
+
+### Checking DST Transitions
+
+```typescript
+import { getUTCtoTimezoneOffsetMinutes } from '@/datezone';
+
+function checkDSTTransition(timeZone: TimeZone, year: number) {
+  const summer = new Date(year, 6, 15, 12, 0).getTime(); // July 15
+  const winter = new Date(year, 0, 15, 12, 0).getTime(); // January 15
+  
+  const summerOffset = getUTCtoTimezoneOffsetMinutes(summer, timeZone);
+  const winterOffset = getUTCtoTimezoneOffsetMinutes(winter, timeZone);
+  
+  const dstDifference = summerOffset - winterOffset;
+  
+  return {
+    observesDST: dstDifference !== 0,
+    dstOffsetMinutes: dstDifference,
+    summerOffset,
+    winterOffset
+  };
+}
+
+const nyDST = checkDSTTransition('America/New_York', 2024);
+console.log(nyDST); // { observesDST: true, dstOffsetMinutes: 60, ... }
+
+const tokyoDST = checkDSTTransition('Asia/Tokyo', 2024);
+console.log(tokyoDST); // { observesDST: false, dstOffsetMinutes: 0, ... }
+```
+
+### Time Zone Comparison Table
+
+```typescript
+import { getUTCtoTimezoneOffsetMinutes } from '@/datezone';
+
+function createTimezoneTable(timestamp: number, timezones: TimeZone[]) {
+  return timezones.map(tz => {
+    const offset = getUTCtoTimezoneOffsetMinutes(timestamp, tz);
+    const hours = Math.floor(Math.abs(offset) / 60);
+    const minutes = Math.abs(offset) % 60;
+    const sign = offset >= 0 ? '+' : '-';
+    
+    return {
+      timezone: tz,
+      offsetMinutes: offset,
+      offsetString: `UTC${sign}${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`
+    };
+  });
+}
+
+const timestamp = new Date(2024, 5, 15, 12, 0).getTime();
+const timezones: TimeZone[] = ['UTC', 'America/New_York', 'Europe/London', 'Asia/Tokyo'];
+const table = createTimezoneTable(timestamp, timezones);
+console.table(table);
+``` 

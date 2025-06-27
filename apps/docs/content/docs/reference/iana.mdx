@@ -1,0 +1,435 @@
+---
+title: IANA Timezones
+description: IANA timezone definitions and utilities
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+
+# IANA Timezones
+
+IANA timezone utilities provide the complete set of IANA timezone identifiers and helper functions for working with timezone validation and detection.
+
+## TimeZone Type
+
+The `TimeZone` type includes all official IANA timezone identifiers supported by the datezone library.
+
+```typescript
+type TimeZone = 
+  | "Africa/Abidjan" 
+  | "Africa/Accra"
+  | "America/New_York"
+  | "Asia/Tokyo"
+  | "Europe/London"
+  | "UTC"
+  // ... and 600+ more timezone identifiers
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import type { TimeZone } from '@/datezone';
+
+// Type-safe timezone usage
+const validTimezone: TimeZone = 'America/New_York'; // ✅ Valid
+// const invalidTimezone: TimeZone = 'Invalid/Timezone'; // ❌ TypeScript error
+
+// Common timezone identifiers
+const commonTimezones: TimeZone[] = [
+  'UTC',
+  'America/New_York',    // Eastern Time
+  'America/Chicago',     // Central Time  
+  'America/Denver',      // Mountain Time
+  'America/Los_Angeles', // Pacific Time
+  'Europe/London',       // GMT/BST
+  'Europe/Paris',        // CET/CEST
+  'Asia/Tokyo',          // JST
+  'Asia/Shanghai',       // CST
+  'Australia/Sydney',    // AEST/AEDT
+];
+
+console.log('Supported timezones:', commonTimezones);
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import type { TimeZone } from '@/datezone';
+
+// Regional timezone groups
+const northAmericaTimezones: TimeZone[] = [
+  'America/New_York',      // Eastern
+  'America/Chicago',       // Central
+  'America/Denver',        // Mountain
+  'America/Los_Angeles',   // Pacific
+  'America/Anchorage',     // Alaska
+  'Pacific/Honolulu',      // Hawaii
+  'America/Toronto',       // Eastern (Canada)
+  'America/Vancouver',     // Pacific (Canada)
+];
+
+const europeTimezones: TimeZone[] = [
+  'Europe/London',         // GMT/BST
+  'Europe/Paris',          // CET/CEST
+  'Europe/Berlin',         // CET/CEST
+  'Europe/Rome',           // CET/CEST
+  'Europe/Madrid',         // CET/CEST
+  'Europe/Amsterdam',      // CET/CEST
+  'Europe/Stockholm',      // CET/CEST
+  'Europe/Moscow',         // MSK
+];
+
+const asiaTimezones: TimeZone[] = [
+  'Asia/Tokyo',            // JST
+  'Asia/Shanghai',         // CST
+  'Asia/Hong_Kong',        // HKT
+  'Asia/Singapore',        // SGT
+  'Asia/Seoul',            // KST
+  'Asia/Kolkata',          // IST
+  'Asia/Dubai',            // GST
+  'Asia/Bangkok',          // ICT
+];
+
+const oceaniaTimezones: TimeZone[] = [
+  'Australia/Sydney',      // AEST/AEDT
+  'Australia/Melbourne',   // AEST/AEDT
+  'Australia/Perth',       // AWST
+  'Pacific/Auckland',      // NZST/NZDT
+  'Pacific/Fiji',          // FJT
+];
+```
+
+</Tab>
+</Tabs>
+
+## isUTC
+
+Check if a timezone identifier represents UTC.
+
+```typescript
+function isUTC(timeZone: TimeZone): boolean
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { isUTC } from '@/datezone';
+
+// Check various UTC representations
+console.log(isUTC('UTC')); // true
+console.log(isUTC('Etc/UTC')); // true
+console.log(isUTC('Etc/GMT')); // false (GMT is not exactly UTC in this context)
+console.log(isUTC('America/New_York')); // false
+
+// Useful for optimization - UTC calculations are simpler
+function getTimezoneOffset(tz: TimeZone): number {
+  if (isUTC(tz)) {
+    return 0; // UTC has no offset
+  }
+  // ... calculate offset for other timezones
+  return 0; // placeholder
+}
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { isUTC } from '@/datezone';
+
+// Use in conditional logic for performance optimization
+function formatTimeInTimezone(timestamp: number, timezone: TimeZone): string {
+  if (isUTC(timezone)) {
+    // Fast path for UTC - no timezone conversion needed
+    return new Date(timestamp).toUTCString();
+  } else {
+    // Regular path for other timezones
+    return new Date(timestamp).toLocaleString('en-US', { 
+      timeZone: timezone,
+      timeZoneName: 'short'
+    });
+  }
+}
+
+const timestamp = Date.now();
+console.log(formatTimeInTimezone(timestamp, 'UTC'));
+console.log(formatTimeInTimezone(timestamp, 'America/New_York'));
+console.log(formatTimeInTimezone(timestamp, 'Asia/Tokyo'));
+
+// Check multiple timezone identifiers
+const timezones: TimeZone[] = ['UTC', 'Etc/UTC', 'America/New_York', 'GMT'];
+timezones.forEach(tz => {
+  console.log(`${tz} is UTC: ${isUTC(tz)}`);
+});
+```
+
+</Tab>
+</Tabs>
+
+## Timezone Categories
+
+### Major World Regions
+
+```typescript
+// Africa
+const africaTimezones: TimeZone[] = [
+  'Africa/Cairo',          // Egypt
+  'Africa/Lagos',          // Nigeria
+  'Africa/Johannesburg',   // South Africa
+  'Africa/Casablanca',     // Morocco
+  'Africa/Nairobi',        // Kenya
+];
+
+// Americas
+const americasTimezones: TimeZone[] = [
+  'America/Sao_Paulo',     // Brazil
+  'America/Mexico_City',   // Mexico
+  'America/Buenos_Aires',  // Argentina
+  'America/Lima',          // Peru
+  'America/Bogota',        // Colombia
+];
+
+// Asia-Pacific
+const asiaPacificTimezones: TimeZone[] = [
+  'Asia/Karachi',          // Pakistan
+  'Asia/Jakarta',          // Indonesia
+  'Asia/Manila',           // Philippines
+  'Asia/Kuala_Lumpur',     // Malaysia
+  'Pacific/Guam',          // Guam
+];
+```
+
+### Special Timezone Cases
+
+```typescript
+// UTC Variants
+const utcVariants: TimeZone[] = [
+  'UTC',
+  'Etc/UTC',
+  'Etc/GMT',
+  'GMT',
+  'Zulu',
+];
+
+// Fixed Offset Timezones
+const fixedOffsets: TimeZone[] = [
+  'Etc/GMT+1',    // GMT-1 (note the reversed sign)
+  'Etc/GMT+5',    // GMT-5
+  'Etc/GMT-3',    // GMT+3
+  'Etc/GMT-9',    // GMT+9
+];
+
+// Military Time Zones
+const militaryZones: TimeZone[] = [
+  'Etc/GMT+12',   // Y (Yankee)
+  'Etc/GMT+11',   // X (X-ray)
+  'Etc/GMT+10',   // W (Whiskey)
+  'Etc/GMT+9',    // V (Victor)
+  'Etc/GMT+8',    // U (Uniform)
+];
+```
+
+## Usage Examples
+
+### Timezone Validation
+
+```typescript
+import type { TimeZone } from '@/datezone';
+
+function isValidTimezone(tz: string): tz is TimeZone {
+  // This is a type guard that checks if a string is a valid TimeZone
+  const validTimezones: readonly string[] = [
+    'UTC', 'GMT', 'America/New_York', 'Europe/London', 'Asia/Tokyo'
+    // In practice, you'd include all valid timezone identifiers
+  ];
+  
+  return validTimezones.includes(tz);
+}
+
+function safeTimezoneOperation(userInput: string) {
+  if (isValidTimezone(userInput)) {
+    // TypeScript now knows userInput is a valid TimeZone
+    console.log(`Operating with timezone: ${userInput}`);
+    // ... safe to use with datezone functions
+  } else {
+    console.error(`Invalid timezone: ${userInput}`);
+    // Handle invalid timezone
+  }
+}
+
+// Example usage
+safeTimezoneOperation('America/New_York'); // ✅ Valid
+safeTimezoneOperation('Invalid/Zone');     // ❌ Invalid
+```
+
+### Timezone Discovery
+
+```typescript
+import type { TimeZone } from '@/datezone';
+
+class TimezoneHelper {
+  // Get timezone by country/region
+  static getTimezonesByRegion(region: string): TimeZone[] {
+    const timezoneMap: Record<string, TimeZone[]> = {
+      'usa': [
+        'America/New_York',
+        'America/Chicago', 
+        'America/Denver',
+        'America/Los_Angeles',
+        'America/Anchorage',
+        'Pacific/Honolulu'
+      ],
+      'europe': [
+        'Europe/London',
+        'Europe/Paris',
+        'Europe/Berlin',
+        'Europe/Rome',
+        'Europe/Madrid'
+      ],
+      'asia': [
+        'Asia/Tokyo',
+        'Asia/Shanghai',
+        'Asia/Kolkata',
+        'Asia/Dubai',
+        'Asia/Singapore'
+      ]
+    };
+    
+    return timezoneMap[region.toLowerCase()] || [];
+  }
+  
+  // Get major city timezones
+  static getMajorCityTimezones(): Record<string, TimeZone> {
+    return {
+      'New York': 'America/New_York',
+      'Los Angeles': 'America/Los_Angeles',
+      'London': 'Europe/London',
+      'Paris': 'Europe/Paris',
+      'Tokyo': 'Asia/Tokyo',
+      'Sydney': 'Australia/Sydney',
+      'Dubai': 'Asia/Dubai',
+      'Singapore': 'Asia/Singapore',
+      'Hong Kong': 'Asia/Hong_Kong',
+      'Mumbai': 'Asia/Kolkata',
+    };
+  }
+  
+  // Check if timezone observes DST
+  static likelyObservesDST(timezone: TimeZone): boolean {
+    const dstTimezones = [
+      'America/New_York',
+      'America/Chicago',
+      'America/Denver', 
+      'America/Los_Angeles',
+      'Europe/London',
+      'Europe/Paris',
+      'Europe/Berlin',
+      'Australia/Sydney',
+    ];
+    
+    return dstTimezones.includes(timezone);
+  }
+}
+
+// Example usage
+const usaTimezones = TimezoneHelper.getTimezonesByRegion('usa');
+console.log('USA timezones:', usaTimezones);
+
+const cityTimezones = TimezoneHelper.getMajorCityTimezones();
+console.log('Major city timezones:', cityTimezones);
+
+console.log('London observes DST:', TimezoneHelper.likelyObservesDST('Europe/London'));
+console.log('Tokyo observes DST:', TimezoneHelper.likelyObservesDST('Asia/Tokyo'));
+```
+
+### Timezone Picker Component
+
+```typescript
+import type { TimeZone } from '@/datezone';
+
+interface TimezoneOption {
+  value: TimeZone;
+  label: string;
+  offset: string;
+  region: string;
+}
+
+class TimezonePicker {
+  static getPopularTimezones(): TimezoneOption[] {
+    return [
+      { value: 'UTC', label: 'UTC', offset: '+00:00', region: 'Universal' },
+      { value: 'America/New_York', label: 'New York', offset: '-05:00', region: 'North America' },
+      { value: 'America/Chicago', label: 'Chicago', offset: '-06:00', region: 'North America' },
+      { value: 'America/Denver', label: 'Denver', offset: '-07:00', region: 'North America' },
+      { value: 'America/Los_Angeles', label: 'Los Angeles', offset: '-08:00', region: 'North America' },
+      { value: 'Europe/London', label: 'London', offset: '+00:00', region: 'Europe' },
+      { value: 'Europe/Paris', label: 'Paris', offset: '+01:00', region: 'Europe' },
+      { value: 'Asia/Tokyo', label: 'Tokyo', offset: '+09:00', region: 'Asia' },
+      { value: 'Asia/Shanghai', label: 'Shanghai', offset: '+08:00', region: 'Asia' },
+      { value: 'Australia/Sydney', label: 'Sydney', offset: '+10:00', region: 'Oceania' },
+    ];
+  }
+  
+  static groupTimezonesByRegion(): Record<string, TimezoneOption[]> {
+    const timezones = this.getPopularTimezones();
+    const grouped: Record<string, TimezoneOption[]> = {};
+    
+    for (const tz of timezones) {
+      if (!grouped[tz.region]) {
+        grouped[tz.region] = [];
+      }
+      grouped[tz.region].push(tz);
+    }
+    
+    return grouped;
+  }
+  
+  static searchTimezones(query: string): TimezoneOption[] {
+    const allTimezones = this.getPopularTimezones();
+    const lowerQuery = query.toLowerCase();
+    
+    return allTimezones.filter(tz => 
+      tz.label.toLowerCase().includes(lowerQuery) ||
+      tz.value.toLowerCase().includes(lowerQuery) ||
+      tz.region.toLowerCase().includes(lowerQuery)
+    );
+  }
+}
+
+// Example usage
+const popularTimezones = TimezonePicker.getPopularTimezones();
+console.log('Popular timezones:', popularTimezones);
+
+const groupedTimezones = TimezonePicker.groupTimezonesByRegion();
+console.log('Grouped by region:', groupedTimezones);
+
+const searchResults = TimezonePicker.searchTimezones('new');
+console.log('Search results for "new":', searchResults);
+```
+
+## Complete Timezone List
+
+The `TimeZone` type includes all IANA timezone identifiers. Here are some examples by region:
+
+### Africa (50+ timezones)
+- `Africa/Abidjan`, `Africa/Accra`, `Africa/Cairo`, `Africa/Casablanca`, `Africa/Johannesburg`, `Africa/Lagos`, `Africa/Nairobi`, etc.
+
+### America (150+ timezones)  
+- `America/New_York`, `America/Chicago`, `America/Denver`, `America/Los_Angeles`, `America/Toronto`, `America/Mexico_City`, `America/Sao_Paulo`, etc.
+
+### Asia (100+ timezones)
+- `Asia/Tokyo`, `Asia/Shanghai`, `Asia/Kolkata`, `Asia/Dubai`, `Asia/Singapore`, `Asia/Seoul`, `Asia/Bangkok`, etc.
+
+### Europe (60+ timezones)
+- `Europe/London`, `Europe/Paris`, `Europe/Berlin`, `Europe/Rome`, `Europe/Madrid`, `Europe/Amsterdam`, `Europe/Stockholm`, etc.
+
+### Pacific (30+ timezones)
+- `Pacific/Auckland`, `Pacific/Fiji`, `Pacific/Honolulu`, `Pacific/Guam`, `Pacific/Tahiti`, etc.
+
+### Australia (10+ timezones)
+- `Australia/Sydney`, `Australia/Melbourne`, `Australia/Perth`, `Australia/Adelaide`, `Australia/Darwin`, etc.
+
+### Special Zones (50+ timezones)
+- `UTC`, `GMT`, `Etc/UTC`, `Etc/GMT+1` through `Etc/GMT-14`, etc. 

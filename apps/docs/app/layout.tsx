@@ -14,8 +14,8 @@ export const metadata = createMetadata({
 	description: "The most comprehensive authentication library for TypeScript.",
 	metadataBase: baseUrl,
 	title: {
-		default: "Better Auth",
-		template: "%s | Better Auth",
+		default: "Datezone",
+		template: "%s | Datezone",
 	},
 });
 

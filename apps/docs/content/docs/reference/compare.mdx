@@ -1,0 +1,559 @@
+---
+title: Compare Utilities
+description: Functions for comparing dates and timestamps
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+
+# Compare Utilities
+
+Compare utilities provide functions for comparing dates and timestamps, including relative time comparisons and date equality checks.
+
+## isToday
+
+Check if a date is today.
+
+```typescript
+function isToday(date: OptionsOrTimestamp, timeZone: TimeZone): boolean
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { isToday } from '@/datezone';
+
+const today = new Date().getTime();
+const yesterday = new Date(Date.now() - 86400000).getTime();
+
+console.log(isToday(today, 'UTC')); // true
+console.log(isToday(yesterday, 'UTC')); // false
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { isToday } from '@/datezone';
+
+const timestamp = new Date().getTime();
+const isTodayNY = isToday(timestamp, 'America/New_York');
+const isTodayTokyo = isToday(timestamp, 'Asia/Tokyo');
+
+console.log(isTodayNY); // true/false depending on NY timezone
+console.log(isTodayTokyo); // true/false depending on Tokyo timezone
+```
+
+</Tab>
+</Tabs>
+
+## isTomorrow
+
+Check if a date is tomorrow.
+
+```typescript
+function isTomorrow(date: OptionsOrTimestamp, timeZone: TimeZone): boolean
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { isTomorrow } from '@/datezone';
+
+const tomorrow = new Date(Date.now() + 86400000).getTime();
+const today = new Date().getTime();
+
+console.log(isTomorrow(tomorrow, 'UTC')); // true
+console.log(isTomorrow(today, 'UTC')); // false
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { isTomorrow } from '@/datezone';
+
+const timestamp = new Date(Date.now() + 86400000).getTime();
+const isTomorrowNY = isTomorrow(timestamp, 'America/New_York');
+const isTomorrowTokyo = isTomorrow(timestamp, 'Asia/Tokyo');
+
+console.log(isTomorrowNY); // true/false depending on NY timezone
+console.log(isTomorrowTokyo); // true/false depending on Tokyo timezone
+```
+
+</Tab>
+</Tabs>
+
+## isYesterday
+
+Check if a date is yesterday.
+
+```typescript
+function isYesterday(date: OptionsOrTimestamp, timeZone: TimeZone): boolean
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { isYesterday } from '@/datezone';
+
+const yesterday = new Date(Date.now() - 86400000).getTime();
+const today = new Date().getTime();
+
+console.log(isYesterday(yesterday, 'UTC')); // true
+console.log(isYesterday(today, 'UTC')); // false
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { isYesterday } from '@/datezone';
+
+const timestamp = new Date(Date.now() - 86400000).getTime();
+const isYesterdayNY = isYesterday(timestamp, 'America/New_York');
+const isYesterdayTokyo = isYesterday(timestamp, 'Asia/Tokyo');
+
+console.log(isYesterdayNY); // true/false depending on NY timezone
+console.log(isYesterdayTokyo); // true/false depending on Tokyo timezone
+```
+
+</Tab>
+</Tabs>
+
+## isPast
+
+Check if a date is in the past.
+
+```typescript
+function isPast(date: OptionsOrTimestamp, timeZone: TimeZone): boolean
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { isPast } from '@/datezone';
+
+const pastDate = new Date(Date.now() - 3600000).getTime(); // 1 hour ago
+const futureDate = new Date(Date.now() + 3600000).getTime(); // 1 hour from now
+
+console.log(isPast(pastDate, 'UTC')); // true
+console.log(isPast(futureDate, 'UTC')); // false
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { isPast } from '@/datezone';
+
+const timestamp = new Date(Date.now() - 3600000).getTime();
+const isPastNY = isPast(timestamp, 'America/New_York');
+const isPastTokyo = isPast(timestamp, 'Asia/Tokyo');
+
+console.log(isPastNY); // true (1 hour ago in NY timezone)
+console.log(isPastTokyo); // true (1 hour ago in Tokyo timezone)
+```
+
+</Tab>
+</Tabs>
+
+## isFuture
+
+Check if a date is in the future.
+
+```typescript
+function isFuture(date: OptionsOrTimestamp, timeZone: TimeZone): boolean
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { isFuture } from '@/datezone';
+
+const futureDate = new Date(Date.now() + 3600000).getTime(); // 1 hour from now
+const pastDate = new Date(Date.now() - 3600000).getTime(); // 1 hour ago
+
+console.log(isFuture(futureDate, 'UTC')); // true
+console.log(isFuture(pastDate, 'UTC')); // false
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { isFuture } from '@/datezone';
+
+const timestamp = new Date(Date.now() + 3600000).getTime();
+const isFutureNY = isFuture(timestamp, 'America/New_York');
+const isFutureTokyo = isFuture(timestamp, 'Asia/Tokyo');
+
+console.log(isFutureNY); // true (1 hour from now in NY timezone)
+console.log(isFutureTokyo); // true (1 hour from now in Tokyo timezone)
+```
+
+</Tab>
+</Tabs>
+
+## isWeekend
+
+Check if a date falls on a weekend (Saturday or Sunday).
+
+```typescript
+function isWeekend(date: OptionsOrTimestamp, timeZone: TimeZone): boolean
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { isWeekend } from '@/datezone';
+
+const saturday = new Date(2024, 0, 6).getTime(); // Saturday
+const monday = new Date(2024, 0, 8).getTime(); // Monday
+
+console.log(isWeekend(saturday, 'UTC')); // true
+console.log(isWeekend(monday, 'UTC')); // false
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { isWeekend } from '@/datezone';
+
+const timestamp = new Date(2024, 0, 6).getTime(); // Saturday
+const isWeekendNY = isWeekend(timestamp, 'America/New_York');
+const isWeekendTokyo = isWeekend(timestamp, 'Asia/Tokyo');
+
+console.log(isWeekendNY); // true (Saturday in NY timezone)
+console.log(isWeekendTokyo); // true (Saturday in Tokyo timezone)
+```
+
+</Tab>
+</Tabs>
+
+## isBefore
+
+Check if the first date is before the second date.
+
+```typescript
+function isBefore(date1: number, date2: number): boolean
+function isBefore(date1: DateOptions, date2: DateOptions): boolean
+function isBefore(date1: OptionsOrTimestamp, date2: OptionsOrTimestamp, timeZone: TimeZone): boolean
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { isBefore } from '@/datezone';
+
+const date1 = new Date(2024, 0, 15).getTime();
+const date2 = new Date(2024, 0, 20).getTime();
+
+console.log(isBefore(date1, date2)); // true (Jan 15 is before Jan 20)
+console.log(isBefore(date2, date1)); // false
+
+// Using date objects
+const dateObj1 = { year: 2024, month: 1, day: 15 };
+const dateObj2 = { year: 2024, month: 1, day: 20 };
+console.log(isBefore(dateObj1, dateObj2)); // true
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { isBefore } from '@/datezone';
+
+const date1 = new Date(2024, 0, 15).getTime();
+const dateObj2 = { year: 2024, month: 1, day: 20 };
+
+// Mixed types require timezone
+const isBeforeNY = isBefore(date1, dateObj2, 'America/New_York');
+const isBeforeTokyo = isBefore(date1, dateObj2, 'Asia/Tokyo');
+
+console.log(isBeforeNY); // true (comparing with timezone conversion)
+console.log(isBeforeTokyo); // true
+```
+
+</Tab>
+</Tabs>
+
+## isAfter
+
+Check if the first date is after the second date.
+
+```typescript
+function isAfter(date1: number, date2: number): boolean
+function isAfter(date1: DateOptions, date2: DateOptions): boolean
+function isAfter(date1: OptionsOrTimestamp, date2: OptionsOrTimestamp, timeZone: TimeZone): boolean
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { isAfter } from '@/datezone';
+
+const date1 = new Date(2024, 0, 20).getTime();
+const date2 = new Date(2024, 0, 15).getTime();
+
+console.log(isAfter(date1, date2)); // true (Jan 20 is after Jan 15)
+console.log(isAfter(date2, date1)); // false
+
+// Using date objects
+const dateObj1 = { year: 2024, month: 1, day: 20 };
+const dateObj2 = { year: 2024, month: 1, day: 15 };
+console.log(isAfter(dateObj1, dateObj2)); // true
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { isAfter } from '@/datezone';
+
+const date1 = new Date(2024, 0, 20).getTime();
+const dateObj2 = { year: 2024, month: 1, day: 15 };
+
+// Mixed types require timezone
+const isAfterNY = isAfter(date1, dateObj2, 'America/New_York');
+const isAfterTokyo = isAfter(date1, dateObj2, 'Asia/Tokyo');
+
+console.log(isAfterNY); // true (comparing with timezone conversion)
+console.log(isAfterTokyo); // true
+```
+
+</Tab>
+</Tabs>
+
+## isEqual
+
+Check if two dates are equal.
+
+```typescript
+function isEqual(date1: number, date2: number): boolean
+function isEqual(date1: DateOptions, date2: DateOptions): boolean
+function isEqual(date1: OptionsOrTimestamp, date2: OptionsOrTimestamp, timeZone: TimeZone): boolean
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { isEqual } from '@/datezone';
+
+const date1 = new Date(2024, 0, 15).getTime();
+const date2 = new Date(2024, 0, 15).getTime();
+const date3 = new Date(2024, 0, 20).getTime();
+
+console.log(isEqual(date1, date2)); // true
+console.log(isEqual(date1, date3)); // false
+
+// Using date objects
+const dateObj1 = { year: 2024, month: 1, day: 15 };
+const dateObj2 = { year: 2024, month: 1, day: 15 };
+console.log(isEqual(dateObj1, dateObj2)); // true
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { isEqual } from '@/datezone';
+
+const date1 = new Date(2024, 0, 15).getTime();
+const dateObj2 = { year: 2024, month: 1, day: 15 };
+
+// Mixed types require timezone
+const isEqualNY = isEqual(date1, dateObj2, 'America/New_York');
+const isEqualTokyo = isEqual(date1, dateObj2, 'Asia/Tokyo');
+
+console.log(isEqualNY); // true/false depending on timezone conversion
+console.log(isEqualTokyo); // true/false depending on timezone conversion
+```
+
+</Tab>
+</Tabs>
+
+## isSameDay
+
+Check if two dates are on the same day.
+
+```typescript
+function isSameDay(date1: OptionsOrTimestamp, date2: OptionsOrTimestamp, timeZone: TimeZone): boolean
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { isSameDay } from '@/datezone';
+
+const morning = new Date(2024, 0, 15, 9, 0).getTime();
+const evening = new Date(2024, 0, 15, 21, 0).getTime();
+const nextDay = new Date(2024, 0, 16, 9, 0).getTime();
+
+console.log(isSameDay(morning, evening, 'UTC')); // true
+console.log(isSameDay(morning, nextDay, 'UTC')); // false
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { isSameDay } from '@/datezone';
+
+const date1 = new Date(2024, 0, 15, 23, 0).getTime(); // 11 PM
+const date2 = new Date(2024, 0, 16, 1, 0).getTime(); // 1 AM next day
+
+const sameDayNY = isSameDay(date1, date2, 'America/New_York');
+const sameDayTokyo = isSameDay(date1, date2, 'Asia/Tokyo');
+
+console.log(sameDayNY); // false (different days in NY)
+console.log(sameDayTokyo); // false (different days in Tokyo)
+```
+
+</Tab>
+</Tabs>
+
+## isSameWeek
+
+Check if two dates are in the same week.
+
+```typescript
+function isSameWeek(date1: OptionsOrTimestamp, date2: OptionsOrTimestamp, timeZone: TimeZone): boolean
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { isSameWeek } from '@/datezone';
+
+const monday = new Date(2024, 0, 15).getTime(); // Monday
+const friday = new Date(2024, 0, 19).getTime(); // Friday same week
+const nextMonday = new Date(2024, 0, 22).getTime(); // Monday next week
+
+console.log(isSameWeek(monday, friday, 'UTC')); // true
+console.log(isSameWeek(monday, nextMonday, 'UTC')); // false
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { isSameWeek } from '@/datezone';
+
+const date1 = new Date(2024, 0, 15).getTime();
+const date2 = new Date(2024, 0, 19).getTime();
+
+const sameWeekNY = isSameWeek(date1, date2, 'America/New_York');
+const sameWeekTokyo = isSameWeek(date1, date2, 'Asia/Tokyo');
+
+console.log(sameWeekNY); // true (same week in NY timezone)
+console.log(sameWeekTokyo); // true (same week in Tokyo timezone)
+```
+
+</Tab>
+</Tabs>
+
+## isSameMonth
+
+Check if two dates are in the same month.
+
+```typescript
+function isSameMonth(date1: DateOptions, date2: DateOptions): boolean
+function isSameMonth(date1: OptionsOrTimestamp, date2: OptionsOrTimestamp, timeZone: TimeZone): boolean
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { isSameMonth } from '@/datezone';
+
+const date1 = new Date(2024, 0, 15).getTime(); // January 15
+const date2 = new Date(2024, 0, 25).getTime(); // January 25
+const date3 = new Date(2024, 1, 15).getTime(); // February 15
+
+console.log(isSameMonth(date1, date2, 'UTC')); // true
+console.log(isSameMonth(date1, date3, 'UTC')); // false
+
+// Using date objects
+const dateObj1 = { year: 2024, month: 1, day: 15 };
+const dateObj2 = { year: 2024, month: 1, day: 25 };
+console.log(isSameMonth(dateObj1, dateObj2)); // true
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { isSameMonth } from '@/datezone';
+
+const date1 = new Date(2024, 0, 31, 23, 0).getTime(); // Jan 31, 11 PM
+const date2 = new Date(2024, 1, 1, 1, 0).getTime(); // Feb 1, 1 AM
+
+const sameMonthNY = isSameMonth(date1, date2, 'America/New_York');
+const sameMonthTokyo = isSameMonth(date1, date2, 'Asia/Tokyo');
+
+console.log(sameMonthNY); // false (different months)
+console.log(sameMonthTokyo); // false (different months)
+```
+
+</Tab>
+</Tabs>
+
+## isSameYear
+
+Check if two dates are in the same year.
+
+```typescript
+function isSameYear(date1: DateOptions, date2: DateOptions): boolean
+function isSameYear(date1: OptionsOrTimestamp, date2: OptionsOrTimestamp, timeZone: TimeZone): boolean
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { isSameYear } from '@/datezone';
+
+const date1 = new Date(2024, 0, 15).getTime(); // January 2024
+const date2 = new Date(2024, 11, 25).getTime(); // December 2024
+const date3 = new Date(2025, 0, 15).getTime(); // January 2025
+
+console.log(isSameYear(date1, date2, 'UTC')); // true
+console.log(isSameYear(date1, date3, 'UTC')); // false
+
+// Using date objects
+const dateObj1 = { year: 2024, month: 1, day: 15 };
+const dateObj2 = { year: 2024, month: 12, day: 25 };
+console.log(isSameYear(dateObj1, dateObj2)); // true
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { isSameYear } from '@/datezone';
+
+const date1 = new Date(2024, 11, 31, 23, 0).getTime(); // Dec 31, 2024, 11 PM
+const date2 = new Date(2025, 0, 1, 1, 0).getTime(); // Jan 1, 2025, 1 AM
+
+const sameYearNY = isSameYear(date1, date2, 'America/New_York');
+const sameYearTokyo = isSameYear(date1, date2, 'Asia/Tokyo');
+
+console.log(sameYearNY); // false (different years)
+console.log(sameYearTokyo); // false (different years)
+```
+
+</Tab>
+</Tabs> 

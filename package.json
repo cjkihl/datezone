@@ -5,6 +5,7 @@
 	"private": true,
 	"scripts": {
 		"test": "bun test",
+		"dev": "bun run -F docs dev",
 		"build": "turbo build --filter=./packages/*",
 		"changeset": "changeset",
 		"resolve": "bun run resolve-deps resolve",
@@ -47,6 +48,7 @@
 	"packageManager": "bun@1.2.18",
 	"workspaces": [
 		"packages/*",
+		"apps/*",
 		"shared/*",
 		"tools/*"
 	]

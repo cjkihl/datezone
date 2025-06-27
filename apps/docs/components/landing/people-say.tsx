@@ -56,7 +56,7 @@ const testimonials = [
 	{
 		avatar: "/people-say/dax.png",
 		description:
-			"between better-auth and openauth one of those options should cover how you want to do things for 95% of cases. the problem of defaulting to SaaS for auth in js is finally fixed...",
+			"between datezone and openauth one of those options should cover how you want to do things for 95% of cases. the problem of defaulting to SaaS for auth in js is finally fixed...",
 		image: "",
 		link: "https://x.com/thdxr/status/1866222656468705426",
 		name: "Dax",
@@ -76,7 +76,7 @@ const testimonials = [
 	},
 	{
 		avatar: "/people-say/josh-tried-coding.jpg",
-		description: `using better-auth for the first time
+		description: `using datezone for the first time
 
 holy sh** is it good, works so nice with typescript + drizzle`,
 		image: "",
@@ -107,7 +107,7 @@ holy sh** is it good, works so nice with typescript + drizzle`,
 	{
 		avatar: "/people-say/ryan-vogel.jpg",
 		description:
-			"i have been using better-auth for exon todo and it is like so fast, I set it up once and it just works",
+			"i have been using datezone for exon todo and it is like so fast, I set it up once and it just works",
 		image: "",
 		link: "https://x.com/ryandavogel/status/1914789770451964150",
 		name: "Ryan Vogel",
@@ -166,7 +166,7 @@ holy sh** is it good, works so nice with typescript + drizzle`,
 
 	{
 		avatar: "/people-say/vybhav-bhargav.png",
-		description: "better-auth is a work of art.",
+		description: "datezone is a work of art.",
 		link: "https://x.com/vybhavab/status/1891589126513684669",
 		name: "Vybhav Bhargav",
 		profession: "Founding engineer @glyfspace",

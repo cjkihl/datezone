@@ -1,33 +1,39 @@
 ---
 title: Comparison
-description: Comparison of Better Auth versus over other auth libraries and services.
+description: Comparison of Datezone versus other date and time libraries.
 ---
 
 > <p className="text-orange-200">Comparison is the thief of joy.</p>
 
-Here are non detailed reasons why you may want to use Better Auth over other auth libraries and services.
+Here's why you may want to use Datezone over other date and time libraries:
 
-### vs Other Auth Libraries
+### vs date-fns
+- **Smaller bundle size** (tree-shakeable, no locale bloat)
+- **Native timezone support** (IANA, UTC, local)
+- **Consistent, strict TypeScript types**
+- **Performance-focused**
+- **No dependencies**
 
-- **Framework agnostic** - Works with any framework, not just specific ones
-- **Advanced features built-in** - 2FA, multi-tenancy, multi-session, rate limiting, and many more
-- **Plugin system** - Extend functionality without forking or complex workarounds
-- **Full control** - Customize auth flows exactly how you want
+### vs Luxon
+- **Much smaller bundle size**
+- **Faster operations**
+- **Simpler API**
+- **No dependency on Intl or polyfills**
 
-### vs Self-Hosted Auth Servers
+### vs Day.js
+- **Native timezone support**
+- **Strict types**
+- **No plugin bloat**
+- **Better DST handling**
 
-- **No separate infrastructure** - Runs in your app, users stay in your database
-- **Zero server maintenance** - No auth servers to deploy, monitor, or update
-- **Complete feature set** - Everything you need without the operational overhead
-
-### vs Managed Auth Services
-
-- **Keep your data** - Users stay in your database, not a third-party service
-- **No per-user costs** - Scale without worrying about auth billing
-- **Single source of truth** - All user data in one place
+### vs Moment.js
+- **Modern API**
+- **Immutable by default**
+- **Tiny bundle size**
+- **Much faster**
+- **Full timezone support**
 
 ### vs Rolling Your Own
-
-- **Security handled** - Battle-tested auth flows and security practices
-- **Focus on your product** - Spend time on features that matter to your business
-- **Plugin extensibility** - Add custom features without starting from scratch
+- **Handles all edge cases** (DST, leap years, etc.)
+- **Battle-tested**
+- **Focus on your product, not date bugs** 

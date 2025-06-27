@@ -9,32 +9,27 @@ import { Highlight, themes } from "prism-react-renderer";
 import { Fragment, useEffect, useId, useState } from "react";
 import useMeasure from "react-use-measure";
 import { Button } from "@/components/ui/button";
-import { Builder } from "../builder";
 import { GradientBG } from "./gradient-bg";
 import { Spotlight } from "./spotlight";
 
-const tabs: { name: "auth.ts" | "client.ts"; code: string }[] = [
+const tabs: { name: "index.ts" | "format.ts"; code: string }[] = [
 	{
-		code: `export const auth = betterAuth({
-	database: new Pool({
-		connectionString: DATABASE_URL,
-	}),
-    emailAndPassword: {
-        enabled: true,
-    },
-	plugins: [
-	  organization(),
-      twoFactor(),
-	]
-})`,
-		name: "auth.ts",
+		code: `import { startOfDay, addDays } from "datezone";
+
+const now = Date.now();
+const start = startOfDay(now, "America/New_York");
+const tomorrow = addDays(now, 1, "Europe/London");`,
+		name: "index.ts",
 	},
 	{
-		code: `const client = createAuthClient({
-    plugins: [passkeyClient()]
-});
-        `,
-		name: "client.ts",
+		code: `import { format } from "datezone";
+
+const now = Date.now();
+const formatted = format(now, "yyyy-MM-dd HH:mm:ss zzzz", {
+    locale: "en",
+    timeZone: "America/New_York"
+});`,
+		name: "format.ts",
 	},
 ];
 
@@ -71,14 +66,15 @@ export default function Hero() {
 											/>
 										</svg>
 										<span className="text-xs text-opacity-75">
-											Own Your Auth
+											Timezone-First
 										</span>
 									</div>
 								</div>
 							</div>
 
 							<p className="text-zinc-800 dark:text-zinc-300 mt-3 tracking-tight text-2xl md:text-3xl">
-								The most comprehensive authentication framework for TypeScript.
+								A blazingly fast, fully-typed TypeScript library for working
+								with dates and times
 							</p>
 							<div className="relative mt-2 md:flex items-center gap-2 w-10/12 hidden border border-white/5">
 								<GradientBG className="w-full flex items-center justify-between">
@@ -93,14 +89,14 @@ export default function Hero() {
 										<p className=" relative inline tracking-tight opacity-90 md:text-sm text-xs dark:text-white font-mono text-black">
 											npm add{" "}
 											<span className="relative dark:text-fuchsia-100 text-fuchsia-950">
-												better-auth
+												datezone
 												<span className="absolute h-2 bg-gradient-to-tr from-white via-stone-200 to-stone-300 blur-3xl w-full top-0 left-2" />
 											</span>
 										</p>
 									</div>
 									<div className="flex gap-2 items-center">
 										<Link
-											href="https://www.npmjs.com/package/better-auth"
+											href="https://www.npmjs.com/package/datezone"
 											target="_blank"
 										>
 											<svg
@@ -120,7 +116,7 @@ export default function Hero() {
 											</svg>
 										</Link>
 										<Link
-											href="https://github.com/better-auth/better-auth"
+											href="https://github.com/cjkihl/datezone"
 											target="_blank"
 										>
 											<svg
@@ -155,7 +151,6 @@ export default function Hero() {
 									>
 										Get Started
 									</Link>
-									<Builder />
 								</div>
 							}
 						</div>
@@ -175,8 +170,8 @@ export default function Hero() {
 }
 
 function CodePreview() {
-	const [currentTab, setCurrentTab] = useState<"auth.ts" | "client.ts">(
-		"auth.ts",
+	const [currentTab, setCurrentTab] = useState<"index.ts" | "format.ts">(
+		"index.ts",
 	);
 
 	const theme = useTheme();
@@ -314,7 +309,7 @@ function CodePreview() {
 								<motion.div className="self-end" layout>
 									<Link
 										className="shadow-md  border shadow-primary-foreground mb-4 ml-auto mr-4 mt-auto flex cursor-pointer items-center gap-2 px-3 py-1 transition-all ease-in-out hover:opacity-70"
-										href="https://demo.better-auth.com"
+										href="https://github.com/cjkihl/datezone/blob/main/tools/benchmark/reports/comparison-report.md"
 										target="_blank"
 									>
 										<svg
@@ -328,7 +323,7 @@ function CodePreview() {
 												fill="currentColor"
 											/>
 										</svg>
-										<p className="text-sm">Demo</p>
+										<p className="text-sm">Benchmarks</p>
 									</Link>
 								</motion.div>
 							</div>

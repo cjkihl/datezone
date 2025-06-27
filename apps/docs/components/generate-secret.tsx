@@ -12,12 +12,12 @@ export const GenerateSecret = () => {
 				onClick={() => {
 					const elements = document.getElementsByTagName("code"); // or any other selector
 					for (let i = 0; i < elements.length; i++) {
-						if (elements[i].textContent === "BETTER_AUTH_SECRET=") {
+						if (elements[i].textContent === "DATEZONE_SECRET=") {
 							elements[i].textContent =
-								`BETTER_AUTH_SECRET=${generateRandomString(32)}`;
+								`DATEZONE_SECRET=${generateRandomString(32)}`;
 							setGenerated(true);
 							setTimeout(() => {
-								elements[i].textContent = "BETTER_AUTH_SECRET=";
+								elements[i].textContent = "DATEZONE_SECRET=";
 								setGenerated(false);
 							}, 5000);
 						}

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggler";
-import DarkPng from "../public/branding/better-auth-logo-dark.png";
-import WhitePng from "../public/branding/better-auth-logo-light.png";
+import DarkPng from "../public/branding/datezone-logo-dark.png";
+import WhitePng from "../public/branding/datezone-logo-light.png";
 import { Logo } from "./logo";
 import LogoContextMenu from "./logo-context-menu";
 import { NavLink } from "./nav-link";
@@ -65,7 +65,7 @@ export const Navbar = () => {
 							logo={
 								<div className="flex items-center gap-2">
 									<Logo />
-									<p className="select-none">BETTER-AUTH.</p>
+									<p className="select-none">DATEZONE.</p>
 								</div>
 							}
 							logoAssets={logoAssets}
@@ -82,7 +82,7 @@ export const Navbar = () => {
 						<NavLink
 							className=" bg-muted/20"
 							external
-							href="https://github.com/better-auth/better-auth"
+							href="https://github.com/cjkihl/datezone"
 						>
 							<svg
 								height="1.4em"

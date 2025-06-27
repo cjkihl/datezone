@@ -1,0 +1,257 @@
+---
+title: Day Utilities
+---
+
+# Day Utilities (`@/datezone/day`)
+
+This page documents all exported functions from the `day` module in `@/datezone`.
+
+## Functions
+
+### addDays
+
+Adds a number of days to a timestamp or options object.
+
+```ts
+addDays(ts: DayOptions | number, days: number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+addDays(Date.now(), 5)
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+addDays(Date.now(), 5, "America/New_York")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### subDays
+
+Subtracts a number of days from a timestamp or options object.
+
+```ts
+subDays(ts: DayOptions | number, days: number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+subDays(Date.now(), 2)
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+subDays(Date.now(), 2, "Europe/London")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### startOfDay
+
+Returns the start of the day (00:00:00.000) in the given timezone.
+
+```ts
+startOfDay(ts: DayOptions | number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+startOfDay(Date.now())
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+startOfDay(Date.now(), "Asia/Tokyo")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### endOfDay
+
+Returns the end of the day (23:59:59.999) in the given timezone.
+
+```ts
+endOfDay(ts: DayOptions | number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+endOfDay(Date.now())
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+endOfDay(Date.now(), "UTC")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### nextDay
+
+Returns the start of the next day (00:00:00.000) in the given timezone.
+
+```ts
+nextDay(ts: DayOptions | number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+nextDay(Date.now())
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+nextDay(Date.now(), "America/Los_Angeles")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### previousDay
+
+Returns the start of the previous day (00:00:00.000) in the given timezone.
+
+```ts
+previousDay(ts: DayOptions | number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+previousDay(Date.now())
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+previousDay(Date.now(), "Australia/Sydney")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### dayOfWeek
+
+Returns the ISO day of week (1=Monday, 7=Sunday) in the given timezone.
+
+```ts
+dayOfWeek(ts: DayOptions | number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+dayOfWeek(Date.now()) // e.g. 3 for Wednesday
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+dayOfWeek(Date.now(), "Europe/Berlin")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### dayOfYear
+
+Returns the day of year (1-366) in the given timezone.
+
+```ts
+dayOfYear(ts: DayOptions | number, timeZone?: TimeZone): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+  <Tab value="Local">
+
+```ts title="Local time"
+dayOfYear(Date.now())
+```
+  </Tab>
+  <Tab value="Timezone">
+
+```ts title="With timezone"
+dayOfYear(Date.now(), "America/Sao_Paulo")
+```
+  </Tab>
+</Tabs>
+
+---
+
+### weekDayName
+
+Returns the localized weekday name.
+
+```ts
+weekDayName(locale: string, type: "long" | "short" | "narrow", day: number): string
+```
+
+<Tabs items={["en-US", "fr-FR"]}>
+  <Tab value="en-US">
+
+```ts title="en-US"
+weekDayName("en-US", "long", 1) // "Monday"
+```
+  </Tab>
+  <Tab value="fr-FR">
+
+```ts title="fr-FR"
+weekDayName("fr-FR", "short", 3) // "mer."
+```
+  </Tab>
+</Tabs>
+
+---
+
+### getDayPeriod
+
+Returns the localized day period (AM/PM) string for the given hour.
+
+```ts
+getDayPeriod(locale: string, hour: number): string
+```
+
+<Tabs items={["AM", "PM"]}>
+  <Tab value="AM">
+
+```ts title="AM"
+getDayPeriod("en-US", 9) // "AM"
+```
+  </Tab>
+  <Tab value="PM">
+
+```ts title="PM"
+getDayPeriod("en-US", 15) // "PM"
+```
+  </Tab>
+</Tabs> 

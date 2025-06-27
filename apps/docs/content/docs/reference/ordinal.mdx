@@ -1,0 +1,234 @@
+---
+title: Ordinal Utilities
+description: Functions for formatting ordinal numbers with locale support
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+
+# Ordinal Utilities
+
+Ordinal utilities provide functions for formatting numbers with ordinal suffixes (1st, 2nd, 3rd, etc.) with internationalization support for multiple locales.
+
+## formatOrdinal
+
+Format a number with its ordinal suffix for a given locale.
+
+```typescript
+function formatOrdinal(number: number, locale = "en"): string
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+```typescript
+import { formatOrdinal } from '@/datezone';
+
+// English ordinals (default)
+console.log(formatOrdinal(1)); // "1st"
+console.log(formatOrdinal(2)); // "2nd"
+console.log(formatOrdinal(3)); // "3rd"
+console.log(formatOrdinal(4)); // "4th"
+console.log(formatOrdinal(11)); // "11th"
+console.log(formatOrdinal(21)); // "21st"
+console.log(formatOrdinal(22)); // "22nd"
+console.log(formatOrdinal(23)); // "23rd"
+console.log(formatOrdinal(101)); // "101st"
+
+// Larger numbers
+console.log(formatOrdinal(1001)); // "1,001st"
+console.log(formatOrdinal(1000000)); // "1,000,000th"
+```
+
+</Tab>
+<Tab value="Timezone">
+
+```typescript
+import { formatOrdinal } from '@/datezone';
+
+// Different locales have different ordinal rules and number formatting
+
+// English (en)
+console.log(formatOrdinal(1, 'en')); // "1st"
+console.log(formatOrdinal(21, 'en')); // "21st"
+
+// Spanish (es) - uses º for ordinals
+console.log(formatOrdinal(1, 'es')); // "1º"
+console.log(formatOrdinal(21, 'es')); // "21º"
+
+// French (fr) - uses er for 1st, e for others
+console.log(formatOrdinal(1, 'fr')); // "1er"
+console.log(formatOrdinal(2, 'fr')); // "2e"
+console.log(formatOrdinal(21, 'fr')); // "21e"
+
+// German (de) - uses period
+console.log(formatOrdinal(1, 'de')); // "1."
+console.log(formatOrdinal(21, 'de')); // "21."
+
+// Italian (it) - uses º
+console.log(formatOrdinal(1, 'it')); // "1º"
+console.log(formatOrdinal(2, 'it')); // "2º"
+
+// Portuguese (pt) - uses º for masculine ordinals
+console.log(formatOrdinal(1, 'pt')); // "1º"
+console.log(formatOrdinal(2, 'pt')); // "2º"
+
+// Dutch (nl) - uses e
+console.log(formatOrdinal(1, 'nl')); // "1e"
+console.log(formatOrdinal(21, 'nl')); // "21e"
+```
+
+</Tab>
+</Tabs>
+
+## Supported Locales
+
+The `formatOrdinal` function supports the following locales with their specific ordinal formatting rules:
+
+### English (en)
+- **1st, 21st, 31st, etc.**: Numbers ending in 1 (except 11) use "st"
+- **2nd, 22nd, 32nd, etc.**: Numbers ending in 2 (except 12) use "nd"  
+- **3rd, 23rd, 33rd, etc.**: Numbers ending in 3 (except 13) use "rd"
+- **4th, 5th, 6th, etc.**: All other numbers use "th"
+- **11th, 12th, 13th**: Special cases that use "th"
+
+### Spanish (es)
+- **All numbers**: Use "º" suffix (masculine ordinal indicator)
+
+### French (fr)
+- **1st**: Uses "er" (premier)
+- **All others**: Use "e" (deuxième, troisième, etc.)
+
+### German (de)
+- **All numbers**: Use "." (period) suffix
+
+### Italian (it)
+- **All numbers**: Use "º" suffix
+
+### Portuguese (pt)
+- **All numbers**: Use "º" suffix (masculine form)
+
+### Dutch (nl)
+- **All numbers**: Use "e" suffix
+
+## Usage Examples
+
+### Date Formatting with Ordinals
+
+```typescript
+import { formatOrdinal } from '@/datezone';
+
+function formatDateWithOrdinal(date: Date, locale = 'en'): string {
+  const day = date.getDate();
+  const month = date.toLocaleDateString(locale, { month: 'long' });
+  const year = date.getFullYear();
+  
+  const ordinalDay = formatOrdinal(day, locale);
+  
+  if (locale === 'en') {
+    return `${month} ${ordinalDay}, ${year}`;
+  } else if (locale === 'fr') {
+    return `${ordinalDay} ${month} ${year}`;
+  } else {
+    return `${ordinalDay} ${month} ${year}`;
+  }
+}
+
+const date = new Date(2024, 0, 21); // January 21, 2024
+
+console.log(formatDateWithOrdinal(date, 'en')); // "January 21st, 2024"
+console.log(formatDateWithOrdinal(date, 'fr')); // "21e janvier 2024"
+console.log(formatDateWithOrdinal(date, 'es')); // "21º enero 2024"
+console.log(formatDateWithOrdinal(date, 'de')); // "21. Januar 2024"
+```
+
+### Ranking Lists
+
+```typescript
+import { formatOrdinal } from '@/datezone';
+
+function createRankingList(items: string[], locale = 'en'): string[] {
+  return items.map((item, index) => {
+    const rank = formatOrdinal(index + 1, locale);
+    return `${rank} place: ${item}`;
+  });
+}
+
+const competitors = ['Alice', 'Bob', 'Charlie', 'Diana'];
+
+console.log(createRankingList(competitors, 'en'));
+// ["1st place: Alice", "2nd place: Bob", "3rd place: Charlie", "4th place: Diana"]
+
+console.log(createRankingList(competitors, 'es'));
+// ["1º place: Alice", "2º place: Bob", "3º place: Charlie", "4º place: Diana"]
+
+console.log(createRankingList(competitors, 'fr'));
+// ["1er place: Alice", "2e place: Bob", "3e place: Charlie", "4e place: Diana"]
+```
+
+### Century and Millennium Formatting
+
+```typescript
+import { formatOrdinal } from '@/datezone';
+
+function getCentury(year: number, locale = 'en'): string {
+  const century = Math.ceil(year / 100);
+  const ordinalCentury = formatOrdinal(century, locale);
+  
+  const centuryWord = {
+    en: 'century',
+    fr: 'siècle',
+    es: 'siglo',
+    de: 'Jahrhundert',
+    it: 'secolo',
+    pt: 'século',
+    nl: 'eeuw'
+  }[locale] || 'century';
+  
+  return `${ordinalCentury} ${centuryWord}`;
+}
+
+console.log(getCentury(2024, 'en')); // "21st century"
+console.log(getCentury(2024, 'fr')); // "21e siècle"
+console.log(getCentury(2024, 'es')); // "21º siglo"
+console.log(getCentury(2024, 'de')); // "21. Jahrhundert"
+
+console.log(getCentury(1500, 'en')); // "15th century"
+console.log(getCentury(800, 'en')); // "8th century"
+console.log(getCentury(1, 'en')); // "1st century"
+```
+
+### Fallback Behavior
+
+```typescript
+import { formatOrdinal } from '@/datezone';
+
+// Unsupported locales fall back to English rules
+console.log(formatOrdinal(1, 'ja')); // "1st" (falls back to English)
+console.log(formatOrdinal(2, 'zh')); // "2nd" (falls back to English)
+console.log(formatOrdinal(3, 'ru')); // "3rd" (falls back to English)
+
+// Invalid locales also fall back to English
+console.log(formatOrdinal(1, 'invalid-locale')); // "1st"
+
+// Languages without ordinal suffixes return just the number
+console.log(formatOrdinal(1, 'ja')); // "1" (Japanese doesn't use ordinal suffixes)
+console.log(formatOrdinal(1, 'zh')); // "1" (Chinese doesn't use ordinal suffixes)
+```
+
+## Number Formatting
+
+The function also respects locale-specific number formatting:
+
+```typescript
+import { formatOrdinal } from '@/datezone';
+
+// Large numbers with locale-specific formatting
+const largeNumber = 1234567;
+
+console.log(formatOrdinal(largeNumber, 'en')); // "1,234,567th"
+console.log(formatOrdinal(largeNumber, 'de')); // "1.234.567." (German uses dots for thousands)
+console.log(formatOrdinal(largeNumber, 'fr')); // "1 234 567e" (French uses spaces)
+
+// For Arabic numerals in RTL locales, Western numerals are used
+console.log(formatOrdinal(123, 'ar')); // "123" (uses Western numerals)
+``` 
