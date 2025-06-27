@@ -33,6 +33,7 @@ ${
 				? `socialProviders: ${JSON.stringify(
 						options.socialProviders.reduce((acc, provider) => {
 							return {
+								// biome-ignore lint/performance/noAccumulatingSpread: Allowing this for now
 								...acc,
 								[provider]: {
 									clientId: `process.env.${provider.toUpperCase()}_CLIENT_ID!`,

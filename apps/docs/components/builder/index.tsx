@@ -317,8 +317,9 @@ export function Builder() {
 								<Card className="rounded-none flex-grow h-full">
 									<CardHeader className="flex flex-row justify-between">
 										<CardTitle>Configuration</CardTitle>
-										<div
-											className="cursor-pointer"
+										<button
+											aria-label="Toggle theme"
+											className="cursor-pointer bg-transparent border-none p-0 m-0"
 											onClick={() => {
 												if (resolvedTheme === "dark") {
 													setTheme("light");
@@ -328,11 +329,11 @@ export function Builder() {
 											}}
 										>
 											{resolvedTheme === "dark" ? (
-												<Moon onClick={() => setTheme("light")} size={18} />
+												<Moon size={18} />
 											) : (
-												<Sun onClick={() => setTheme("dark")} size={18} />
+												<Sun size={18} />
 											)}
-										</div>
+										</button>
 									</CardHeader>
 									<CardContent className="max-h-[400px] overflow-scroll">
 										<div className="flex flex-col gap-2">
@@ -564,18 +565,23 @@ export function Builder() {
 								<Card className="rounded-none flex-grow  h-full">
 									<CardHeader>
 										<CardTitle>Choose Framework</CardTitle>
-										<p
+										<button
 											className="text-blue-400 hover:underline mt-1 text-sm cursor-pointer"
 											onClick={() => {
 												setCurrentStep(0);
 											}}
+											onKeyDown={(e) => {
+												if (e.key === "Enter" || e.key === " ") {
+													setCurrentStep(0);
+												}
+											}}
 										>
 											Go Back
-										</p>
+										</button>
 									</CardHeader>
 									<CardContent className="flex items-start gap-2 flex-wrap justify-between">
 										{frameworks.map((fm) => (
-											<div
+											<button
 												className={cn(
 													"flex flex-col items-center gap-4 border p-6 rounded-md w-5/12 flex-grow h-44 relative",
 													fm.title !== "Next.js"
@@ -588,6 +594,15 @@ export function Builder() {
 														setCurrentStep(currentStep + 1);
 													}
 												}}
+												onKeyDown={(e) => {
+													if (
+														(e.key === "Enter" || e.key === " ") &&
+														fm.title === "Next.js"
+													) {
+														setCurrentStep(currentStep + 1);
+													}
+												}}
+												tabIndex={fm.title === "Next.js" ? 0 : -1}
 											>
 												{fm.title !== "Next.js" && (
 													<span className="absolute top-4 right-4 text-xs">
@@ -597,7 +612,7 @@ export function Builder() {
 												<fm.Icon />
 												<Label className="text-2xl">{fm.title}</Label>
 												<p className="text-sm">{fm.description}</p>
-											</div>
+											</button>
 										))}
 									</CardContent>
 								</Card>
@@ -614,14 +629,19 @@ export function Builder() {
 												Copy the code below and paste it in your application to
 												get started.
 											</p>
-											<p
+											<button
 												className="text-blue-400 hover:underline mt-1 text-sm cursor-pointer"
 												onClick={() => {
 													setCurrentStep(0);
 												}}
+												onKeyDown={(e) => {
+													if (e.key === "Enter" || e.key === " ") {
+														setCurrentStep(0);
+													}
+												}}
 											>
 												Go Back
-											</p>
+											</button>
 										</div>
 										<div>
 											<CodeTabs />

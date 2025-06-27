@@ -34,6 +34,7 @@ export function ResourceCard({
 				</div>
 				<p
 					className="p-4 py-0 text-sm md:decoration-none text-muted-foreground"
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: Allowing this for now
 					dangerouslySetInnerHTML={{ __html: `${description}` }}
 				/>
 			</div>

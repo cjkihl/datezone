@@ -3,7 +3,7 @@ import { Icons } from "./icons";
 type TechStackIconType = {
 	[key: string]: {
 		name: string;
-		icon: any;
+		icon: React.ReactNode;
 	};
 };
 export const techStackIcons: TechStackIconType = {

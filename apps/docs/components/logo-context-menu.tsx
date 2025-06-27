@@ -27,10 +27,10 @@ export default function LogoContextMenu({
 }: ContextMenuProps) {
 	const [showMenu, setShowMenu] = useState<boolean>(false);
 	const menuRef = useRef<HTMLDivElement>(null);
-	const logoRef = useRef<HTMLDivElement>(null);
+	const logoRef = useRef<HTMLButtonElement>(null);
 	const { theme } = useTheme();
 
-	const handleContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
+	const handleContextMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 		e.stopPropagation();
 		const rect = logoRef.current?.getBoundingClientRect();
@@ -115,13 +115,13 @@ export default function LogoContextMenu({
 
 	return (
 		<div className="relative">
-			<div
+			<button
 				className="cursor-pointer"
 				onContextMenu={handleContextMenu}
 				ref={logoRef}
 			>
 				{logo}
-			</div>
+			</button>
 
 			{showMenu && (
 				<div

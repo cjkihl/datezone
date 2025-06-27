@@ -32,10 +32,14 @@
 		"@types/semver": "^7.7.0",
 		"date-fns": "^4.1.0",
 		"date-fns-tz": "^3.2.0",
+		"fumadocs-core": "^15.5.5",
+		"fumadocs-mdx": "^11.6.9",
+		"fumadocs-ui": "^15.5.5",
 		"mitata": "^1.0.34",
 		"semver": "^7.7.2",
 		"turbo": "^2.5.4",
-		"typescript": "^5"
+		"typescript": "^5",
+		"zod": "^3.25.67"
 	},
 	"peerDependencies": {
 		"typescript": "^5"
@@ -45,11 +49,5 @@
 		"packages/*",
 		"shared/*",
 		"tools/*"
-	],
-	"dependencies": {
-		"fumadocs-core": "^15.5.5",
-		"fumadocs-mdx": "^11.6.9",
-		"fumadocs-ui": "^15.5.5",
-		"zod": "^3.25.67"
-	}
+	]
 }

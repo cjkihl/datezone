@@ -23,7 +23,6 @@ export function CodeTab({
 	isActive,
 	brightnessLevel = 0,
 	onClick,
-	onClose,
 }: TabProps) {
 	const activeBrightnessClass = isActive
 		? brightnessLevels[brightnessLevel % brightnessLevels.length]
@@ -35,7 +34,7 @@ export function CodeTab({
 		: "border-t-transparent hover:bg-background/50";
 
 	return (
-		<div
+		<button
 			className={cn(
 				"flex items-center px-3 py-2 gap-2 text-sm font-medium border-t-2 cursor-pointer transition-colors duration-200",
 				activeBrightnessClass,
@@ -72,6 +71,6 @@ export function CodeTab({
 				</svg>
 			)}
 			<span className="truncate max-w-[100px]">{fileName}</span>
-		</div>
+		</button>
 	);
 }

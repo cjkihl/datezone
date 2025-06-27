@@ -117,9 +117,10 @@ const ChangelogPage = async () => {
 				<div className="max-w-2xl relative">
 					<Markdown
 						components={{
-							a: ({ className, ...props }: any) => (
+							a: ({ className, href, ...props }: React.ComponentProps<"a">) => (
 								<Link
 									className={cn("font-medium underline", className)}
+									href={href ?? "#"}
 									target="_blank"
 									{...props}
 								/>
@@ -170,7 +171,9 @@ const ChangelogPage = async () => {
 								</h3>
 							),
 							img: (props) => (
+								// biome-ignore lint/performance/noImgElement: Allowing this for now
 								<img
+									alt={props.alt || props.title}
 									className="rounded-full w-6 h-6 border opacity-70 inline-block"
 									{...props}
 									style={{ maxWidth: "100%" }}

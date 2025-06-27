@@ -80,6 +80,7 @@ export const SparklesCore = (props: ParticlesProps) => {
 									enable: false,
 									mode: "repulse",
 								},
+								// biome-ignore lint/suspicious/noExplicitAny: Allowing this for now
 								resize: true as any,
 							},
 							modes: {

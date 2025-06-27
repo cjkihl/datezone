@@ -218,6 +218,7 @@ const PeopleSay = ({
 								</p>
 								<div className="flex overflow-hidden h-[28%] gap-1 w-full border-t-[1.2px]">
 									<div className="flex items-center w-3/4 gap-3 px-4 py-3">
+										{/* biome-ignore lint/performance/noImgElement: Allowing this for now */}
 										<img
 											alt="avatar"
 											className="w-10 h-10 rounded-full"
