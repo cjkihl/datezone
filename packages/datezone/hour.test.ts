@@ -8,7 +8,6 @@ import {
 	to12Hour,
 	to24Hour,
 } from "./hour";
-import type { TimeZone } from "./iana";
 import { HOUR } from "./index.pub.js";
 
 describe("Hour Functions", () => {

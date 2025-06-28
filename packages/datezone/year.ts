@@ -1,5 +1,5 @@
 import { formatToParts, isUTC, type TimeZone } from "./index.pub.js";
-import { wallTimeToUTC as wallTimeToUTCBase } from "./utils.js";
+import { wallTimeToTS } from "./utils.js";
 
 const YEAR_OPTS = { year: "numeric" } as const;
 type YearOptions = { year: number };
@@ -7,28 +7,6 @@ type OptionsOrTimestamp = YearOptions | number;
 
 function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): YearOptions {
 	return typeof ts === "number" ? formatToParts(ts, timeZone, YEAR_OPTS) : ts;
-}
-
-function wallTimeToUTC(
-	year: number,
-	month: number,
-	day: number,
-	hour: number,
-	minute: number,
-	second: number,
-	ms: number,
-	timeZone: TimeZone,
-): number {
-	return wallTimeToUTCBase(
-		year,
-		month,
-		day,
-		hour,
-		minute,
-		second,
-		ms,
-		timeZone,
-	);
 }
 
 export function year(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
@@ -59,7 +37,7 @@ export function startOfYear(
 	if (isUTC(timeZone)) {
 		return Date.UTC(y, 0, 1);
 	}
-	return wallTimeToUTC(y, 1, 1, 0, 0, 0, 0, timeZone);
+	return wallTimeToTS(y, 1, 1, 0, 0, 0, 0, timeZone);
 }
 
 export function endOfYear(
@@ -73,7 +51,7 @@ export function endOfYear(
 	if (isUTC(timeZone)) {
 		return Date.UTC(y, 11, 31, 23, 59, 59, 999);
 	}
-	return wallTimeToUTC(y, 12, 31, 23, 59, 59, 999, timeZone);
+	return wallTimeToTS(y, 12, 31, 23, 59, 59, 999, timeZone);
 }
 
 export function addYears(
@@ -121,7 +99,7 @@ export function addYears(
 		targetDay = 28;
 	}
 
-	return wallTimeToUTC(
+	return wallTimeToTS(
 		targetYear,
 		month,
 		targetDay,

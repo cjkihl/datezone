@@ -6,6 +6,7 @@ export const FULL_TS = {
 	era: "short",
 	hour: "2-digit",
 	hour12: false,
+	millisecond: "3-digit",
 	minute: "2-digit",
 	month: "2-digit",
 	second: "2-digit",
@@ -21,7 +22,8 @@ type DatePartType =
 	| "second"
 	| "weekday"
 	| "era"
-	| "timeZoneName";
+	| "timeZoneName"
+	| "millisecond";
 
 // Helper type to extract only the DatePartType keys from the options
 type ExtractDatePartKeys<T> = Extract<keyof T, DatePartType>;
@@ -36,10 +38,18 @@ export function formatToParts<
 	const formatter = getCachedFormatter(timeZone, opts);
 	const parts = formatter.formatToParts(date);
 	const result = {} as { [K in ExtractDatePartKeys<T>]: number };
+
+	// Handle standard parts that INTL supports
 	for (const part of parts) {
 		if (part.type in opts) {
 			result[part.type as ExtractDatePartKeys<T>] = Number(part.value);
 		}
 	}
+
+	// Handle milliseconds separately since INTL doesn't support it
+	if ("millisecond" in opts) {
+		result["millisecond" as ExtractDatePartKeys<T>] = date % 1000;
+	}
+
 	return result;
 }

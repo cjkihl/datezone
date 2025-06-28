@@ -1,7 +1,7 @@
 import { getCachedFormatterLocale } from "./cache.js";
 import { formatToParts } from "./format-parts.js";
 import { isUTC, type TimeZone } from "./iana.js";
-import { wallTimeToUTC } from "./utils.js";
+import { wallTimeToTS } from "./utils.js";
 import { isLeapYear } from "./year.js";
 
 type YearMonthOptions = { year: number; month: number };
@@ -37,7 +37,7 @@ export function startOfMonth(
 	}
 
 	const { year, month } = getOptions(ts, timeZone!);
-	return wallTimeToUTC(year, month, 1, 0, 0, 0, 0, timeZone!);
+	return wallTimeToTS(year, month, 1, 0, 0, 0, 0, timeZone!);
 }
 
 export function endOfMonth(
@@ -98,7 +98,7 @@ export function addMonths(
 	const maxDay = daysInMonth({ month: newMonth, year: newYear }, timeZone);
 	const newDay = day > maxDay ? maxDay : day;
 
-	return wallTimeToUTC(
+	return wallTimeToTS(
 		newYear,
 		newMonth,
 		newDay,
@@ -151,7 +151,7 @@ export function startOfNthMonth(
 		month,
 		n,
 	);
-	return wallTimeToUTC(nextYear, nextMonth, 1, 0, 0, 0, 0, timeZone);
+	return wallTimeToTS(nextYear, nextMonth, 1, 0, 0, 0, 0, timeZone);
 }
 
 export function endOfNthMonth(

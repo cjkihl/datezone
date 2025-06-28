@@ -6,7 +6,7 @@ import {
 	startOfSecond,
 	subMilliseconds,
 	subSeconds,
-} from "./seconds";
+} from "./second";
 
 describe("Second Functions", () => {
 	describe("startOfSecond", () => {

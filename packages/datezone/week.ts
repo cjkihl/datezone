@@ -1,5 +1,5 @@
 import { dayOfWeek, formatToParts, isUTC, type TimeZone } from "./index.pub.js";
-import { wallTimeToUTC as wallTimeToUTCBase } from "./utils.js";
+import { wallTimeToTS } from "./utils.js";
 
 const WEEK_OPTS = {
 	day: "2-digit",
@@ -17,28 +17,6 @@ export enum WeekStartsOn {
 
 function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): WeekOptions {
 	return typeof ts === "number" ? formatToParts(ts, timeZone, WEEK_OPTS) : ts;
-}
-
-function wallTimeToUTC(
-	year: number,
-	month: number,
-	day: number,
-	hour: number,
-	minute: number,
-	second: number,
-	ms: number,
-	timeZone: TimeZone,
-): number {
-	return wallTimeToUTCBase(
-		year,
-		month,
-		day,
-		hour,
-		minute,
-		second,
-		ms,
-		timeZone,
-	);
 }
 
 function getWeekOptions(
@@ -115,7 +93,7 @@ export function startOfWeek(
 	const jsDay = dayNum === 7 ? 0 : dayNum;
 	const daysFromWeekStart = (jsDay - weekStartsOn + 7) % 7;
 
-	return wallTimeToUTC(
+	return wallTimeToTS(
 		dt.year,
 		dt.month,
 		dt.day - daysFromWeekStart,
@@ -158,7 +136,7 @@ export function endOfWeek(
 	const weekEnd = (weekStartsOn + 6) % 7;
 	const daysToWeekEnd = (weekEnd - jsDay + 7) % 7;
 
-	return wallTimeToUTC(
+	return wallTimeToTS(
 		dt.year,
 		dt.month,
 		dt.day + daysToWeekEnd,
@@ -189,7 +167,7 @@ export function addWeeks(
 	}
 
 	const dt = getOptions(date, timeZone);
-	return wallTimeToUTC(
+	return wallTimeToTS(
 		dt.year,
 		dt.month,
 		dt.day + amount * 7,

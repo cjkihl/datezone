@@ -1,6 +1,6 @@
 # 🏁 Datezone vs Date-fns Performance Comparison
 
-**Generated:** 2025-06-26T18:09:50.127Z  \n**Node.js:** v22.6.0  \n**Platform:** darwin arm64
+**Generated:** 2025-06-28T03:37:32.949Z  \n**Node.js:** v22.6.0  \n**Platform:** darwin arm64
 
 ## 📊 Performance Overview
 
@@ -23,75 +23,75 @@ This report compares **Datezone** against **Date-fns v4** with timezone support 
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addDays | **170.44 ns**<br/>**<sub>5867199 ops/sec</sub>** | 196.23 µs<br/><sub>5096 ops/sec</sub> | 🚀 <sub>+115033%</sub> |
-| subDays | **203.44 ns**<br/>**<sub>4915433 ops/sec</sub>** | 67.94 µs<br/><sub>14720 ops/sec</sub> | 🚀 <sub>+33293%</sub> |
-| nextDay | 74.47 µs<br/><sub>13428 ops/sec</sub> | **71.57 µs**<br/>**<sub>13972 ops/sec</sub>** | 🤝 |
-| previousDay | 73.72 µs<br/><sub>13564 ops/sec</sub> | **68.40 µs**<br/>**<sub>14620 ops/sec</sub>** | 🤝 |
-| startOfDay | 71.59 µs<br/><sub>13968 ops/sec</sub> | **67.78 µs**<br/>**<sub>14754 ops/sec</sub>** | 🤝 |
-| endOfDay | 74.52 µs<br/><sub>13418 ops/sec</sub> | **67.84 µs**<br/>**<sub>14740 ops/sec</sub>** | 🤝 |
-| dayOfWeek | 42.68 µs<br/><sub>23432 ops/sec</sub> | **35.59 µs**<br/>**<sub>28099 ops/sec</sub>** | ⚠️ <sub>-17%</sub> |
-| dayOfYear | **54.31 µs**<br/>**<sub>18412 ops/sec</sub>** | 382.25 µs<br/><sub>2616 ops/sec</sub> | 🚀 <sub>+604%</sub> |
+| addDays | **87.08 ns**<br/>**<sub>11483828 ops/sec</sub>** | 83.38 µs<br/><sub>11993 ops/sec</sub> | 🚀 <sub>+95654%</sub> |
+| subDays | **112.05 ns**<br/>**<sub>8924977 ops/sec</sub>** | 38.42 µs<br/><sub>26028 ops/sec</sub> | 🚀 <sub>+34190%</sub> |
+| nextDay | **41.17 µs**<br/>**<sub>24287 ops/sec</sub>** | 41.95 µs<br/><sub>23839 ops/sec</sub> | 🤝 |
+| previousDay | 43.10 µs<br/><sub>23204 ops/sec</sub> | **40.14 µs**<br/>**<sub>24910 ops/sec</sub>** | 🤝 |
+| startOfDay | 42.01 µs<br/><sub>23806 ops/sec</sub> | **38.97 µs**<br/>**<sub>25658 ops/sec</sub>** | 🤝 |
+| endOfDay | 41.61 µs<br/><sub>24031 ops/sec</sub> | **39.05 µs**<br/>**<sub>25607 ops/sec</sub>** | 🤝 |
+| dayOfWeek | 25.01 µs<br/><sub>39976 ops/sec</sub> | **20.79 µs**<br/>**<sub>48095 ops/sec</sub>** | ⚠️ <sub>-17%</sub> |
+| dayOfYear | **33.54 µs**<br/>**<sub>29814 ops/sec</sub>** | 217.95 µs<br/><sub>4588 ops/sec</sub> | 🚀 <sub>+550%</sub> |
 
 ## Non-Timezone: Month Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addMonths | **295.59 µs**<br/>**<sub>3383 ops/sec</sub>** | 377.08 µs<br/><sub>2652 ops/sec</sub> | ⚡ <sub>+28%</sub> |
-| subMonths | **218.80 µs**<br/>**<sub>4570 ops/sec</sub>** | 300.02 µs<br/><sub>3333 ops/sec</sub> | ⚡ <sub>+37%</sub> |
-| startOfMonth | 155.36 µs<br/><sub>6437 ops/sec</sub> | **145.43 µs**<br/>**<sub>6876 ops/sec</sub>** | 🤝 |
-| endOfMonth | 194.32 µs<br/><sub>5146 ops/sec</sub> | **185.59 µs**<br/>**<sub>5388 ops/sec</sub>** | 🤝 |
-| endOfNthMonth | 321.15 µs<br/><sub>3114 ops/sec</sub> | -<br/>- | 🔥 |
-| daysInMonth | **40.98 µs**<br/>**<sub>24403 ops/sec</sub>** | 373.16 µs<br/><sub>2680 ops/sec</sub> | 🚀 <sub>+811%</sub> |
+| addMonths | **173.24 µs**<br/>**<sub>5772 ops/sec</sub>** | 216.49 µs<br/><sub>4619 ops/sec</sub> | ✅ <sub>+25%</sub> |
+| subMonths | **124.05 µs**<br/>**<sub>8061 ops/sec</sub>** | 175.19 µs<br/><sub>5708 ops/sec</sub> | ⚡ <sub>+41%</sub> |
+| startOfMonth | 89.56 µs<br/><sub>11166 ops/sec</sub> | **84.42 µs**<br/>**<sub>11846 ops/sec</sub>** | 🤝 |
+| endOfMonth | 114.37 µs<br/><sub>8743 ops/sec</sub> | **108.27 µs**<br/>**<sub>9236 ops/sec</sub>** | 🤝 |
+| endOfNthMonth | 185.36 µs<br/><sub>5395 ops/sec</sub> | -<br/>- | 🔥 |
+| daysInMonth | **25.01 µs**<br/>**<sub>39977 ops/sec</sub>** | 204.77 µs<br/><sub>4883 ops/sec</sub> | 🚀 <sub>+719%</sub> |
 
 ## Non-Timezone: Year Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addYears | **299.44 µs**<br/>**<sub>3340 ops/sec</sub>** | 353.42 µs<br/><sub>2829 ops/sec</sub> | ✅ <sub>+18%</sub> |
-| startOfYear | **105.43 µs**<br/>**<sub>9485 ops/sec</sub>** | 347.87 µs<br/><sub>2875 ops/sec</sub> | 🚀 <sub>+230%</sub> |
-| endOfYear | **66.64 µs**<br/>**<sub>15006 ops/sec</sub>** | 305.93 µs<br/><sub>3269 ops/sec</sub> | 🚀 <sub>+359%</sub> |
+| addYears | **169.56 µs**<br/>**<sub>5898 ops/sec</sub>** | 207.73 µs<br/><sub>4814 ops/sec</sub> | ✅ <sub>+23%</sub> |
+| startOfYear | **63.23 µs**<br/>**<sub>15816 ops/sec</sub>** | 198.81 µs<br/><sub>5030 ops/sec</sub> | 🚀 <sub>+214%</sub> |
+| endOfYear | **40.05 µs**<br/>**<sub>24971 ops/sec</sub>** | 157.96 µs<br/><sub>6331 ops/sec</sub> | 🚀 <sub>+294%</sub> |
 
 ## Timezone-Aware: Day Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addDays | **3.95 ms**<br/>**<sub>253.46 ops/sec</sub>** | 9.80 ms<br/><sub>102.02 ops/sec</sub> | 🚀 <sub>+148%</sub> |
-| subDays | **3.00 ms**<br/>**<sub>332.87 ops/sec</sub>** | 9.44 ms<br/><sub>105.93 ops/sec</sub> | 🚀 <sub>+214%</sub> |
-| nextDay | **2.95 ms**<br/>**<sub>338.47 ops/sec</sub>** | 9.28 ms<br/><sub>107.81 ops/sec</sub> | 🚀 <sub>+214%</sub> |
-| previousDay | **3.00 ms**<br/>**<sub>333.18 ops/sec</sub>** | 9.38 ms<br/><sub>106.60 ops/sec</sub> | 🚀 <sub>+213%</sub> |
-| dayOfWeek | **2.90 ms**<br/>**<sub>344.24 ops/sec</sub>** | 5.92 ms<br/><sub>169.00 ops/sec</sub> | 🚀 <sub>+104%</sub> |
-| dayOfYear | **2.94 ms**<br/>**<sub>339.85 ops/sec</sub>** | 13.31 ms<br/><sub>75.12 ops/sec</sub> | 🚀 <sub>+352%</sub> |
+| addDays | **2.03 ms**<br/>**<sub>491.81 ops/sec</sub>** | 5.73 ms<br/><sub>174.43 ops/sec</sub> | 🚀 <sub>+182%</sub> |
+| subDays | **1.82 ms**<br/>**<sub>548.06 ops/sec</sub>** | 5.38 ms<br/><sub>185.77 ops/sec</sub> | 🚀 <sub>+195%</sub> |
+| nextDay | **1.77 ms**<br/>**<sub>563.46 ops/sec</sub>** | 5.34 ms<br/><sub>187.18 ops/sec</sub> | 🚀 <sub>+201%</sub> |
+| previousDay | **1.82 ms**<br/>**<sub>548.04 ops/sec</sub>** | 5.39 ms<br/><sub>185.46 ops/sec</sub> | 🚀 <sub>+196%</sub> |
+| dayOfWeek | **1.76 ms**<br/>**<sub>568.84 ops/sec</sub>** | 3.36 ms<br/><sub>297.27 ops/sec</sub> | ⚡ <sub>+91%</sub> |
+| dayOfYear | **1.79 ms**<br/>**<sub>559.47 ops/sec</sub>** | 7.68 ms<br/><sub>130.25 ops/sec</sub> | 🚀 <sub>+330%</sub> |
 
 ## Timezone-Aware: Month Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addMonths | **5.48 ms**<br/>**<sub>182.48 ops/sec</sub>** | 16.71 ms<br/><sub>59.84 ops/sec</sub> | 🚀 <sub>+205%</sub> |
-| subMonths | **5.00 ms**<br/>**<sub>199.91 ops/sec</sub>** | 16.58 ms<br/><sub>60.31 ops/sec</sub> | 🚀 <sub>+231%</sub> |
-| startOfMonth | **2.78 ms**<br/>**<sub>360.18 ops/sec</sub>** | 12.65 ms<br/><sub>79.07 ops/sec</sub> | 🚀 <sub>+356%</sub> |
-| endOfMonth | **2.38 ms**<br/>**<sub>419.75 ops/sec</sub>** | 12.77 ms<br/><sub>78.28 ops/sec</sub> | 🚀 <sub>+436%</sub> |
-| endOfNthMonth | 2.69 ms<br/><sub>371.56 ops/sec</sub> | -<br/>- | 🔥 |
-| daysInMonth | **2.34 ms**<br/>**<sub>427.26 ops/sec</sub>** | 2.98 ms<br/><sub>335.17 ops/sec</sub> | ⚡ <sub>+27%</sub> |
+| addMonths | **3.19 ms**<br/>**<sub>313.73 ops/sec</sub>** | 9.69 ms<br/><sub>103.19 ops/sec</sub> | 🚀 <sub>+204%</sub> |
+| subMonths | **2.96 ms**<br/>**<sub>338.27 ops/sec</sub>** | 10.07 ms<br/><sub>99.26 ops/sec</sub> | 🚀 <sub>+241%</sub> |
+| startOfMonth | **1.44 ms**<br/>**<sub>696.16 ops/sec</sub>** | 8.09 ms<br/><sub>123.60 ops/sec</sub> | 🚀 <sub>+463%</sub> |
+| endOfMonth | **1.47 ms**<br/>**<sub>679.10 ops/sec</sub>** | 7.30 ms<br/><sub>136.94 ops/sec</sub> | 🚀 <sub>+396%</sub> |
+| endOfNthMonth | 1.46 ms<br/><sub>686.47 ops/sec</sub> | -<br/>- | 🔥 |
+| daysInMonth | **1.40 ms**<br/>**<sub>716.51 ops/sec</sub>** | 1.81 ms<br/><sub>552.70 ops/sec</sub> | ⚡ <sub>+30%</sub> |
 
 ## Timezone-Aware: Year Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addYears | **4.97 ms**<br/>**<sub>201.39 ops/sec</sub>** | 16.19 ms<br/><sub>61.78 ops/sec</sub> | 🚀 <sub>+226%</sub> |
-| startOfYear | **1.97 ms**<br/>**<sub>506.53 ops/sec</sub>** | 13.03 ms<br/><sub>76.74 ops/sec</sub> | 🚀 <sub>+560%</sub> |
-| endOfYear | **1.69 ms**<br/>**<sub>590.31 ops/sec</sub>** | 13.14 ms<br/><sub>76.13 ops/sec</sub> | 🚀 <sub>+675%</sub> |
+| addYears | **2.91 ms**<br/>**<sub>343.22 ops/sec</sub>** | 9.30 ms<br/><sub>107.50 ops/sec</sub> | 🚀 <sub>+219%</sub> |
+| startOfYear | **1.04 ms**<br/>**<sub>960.90 ops/sec</sub>** | 7.52 ms<br/><sub>132.98 ops/sec</sub> | 🚀 <sub>+623%</sub> |
+| endOfYear | **1.05 ms**<br/>**<sub>956.19 ops/sec</sub>** | 7.73 ms<br/><sub>129.32 ops/sec</sub> | 🚀 <sub>+639%</sub> |
 
 ## Non-Timezone: Formatting Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| format | **1.37 ms**<br/>**<sub>730.53 ops/sec</sub>** | 4.67 ms<br/><sub>214.24 ops/sec</sub> | 🚀 <sub>+241%</sub> |
+| format | **956.91 µs**<br/>**<sub>1045 ops/sec</sub>** | 2.88 ms<br/><sub>347.41 ops/sec</sub> | 🚀 <sub>+201%</sub> |
 
 ## Timezone-Aware: Formatting Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| format | **6.97 ms**<br/>**<sub>143.51 ops/sec</sub>** | 14.82 ms<br/><sub>67.47 ops/sec</sub> | 🚀 <sub>+113%</sub> |
+| format | **4.04 ms**<br/>**<sub>247.27 ops/sec</sub>** | 8.50 ms<br/><sub>117.63 ops/sec</sub> | 🚀 <sub>+110%</sub> |
 
 ## 📈 Summary
 

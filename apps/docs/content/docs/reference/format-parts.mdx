@@ -20,7 +20,7 @@ function formatToParts<T extends Partial<Record<DatePartType, string>> & Intl.Da
   opts: T
 ): { [K in ExtractDatePartKeys<T>]: number }
 
-type DatePartType = "year" | "month" | "day" | "hour" | "minute" | "second" | "weekday" | "era" | "timeZoneName"
+type DatePartType = "year" | "month" | "day" | "hour" | "minute" | "second" | "millisecond" | "weekday" | "era" | "timeZoneName"
 ```
 
 <Tabs items={["Local", "Timezone"]}>
@@ -120,6 +120,7 @@ const FULL_TS = {
   minute: "2-digit",
   month: "2-digit",
   second: "2-digit",
+  millisecond: "3-digit",
   year: "numeric",
 } as const
 ```
@@ -142,6 +143,7 @@ console.log(fullParts);
 //   hour: 14,
 //   minute: 30,
 //   second: 45,
+//   millisecond: 0,
 //   era: 1
 // }
 
@@ -229,6 +231,39 @@ console.log('Time components:', timeOnly);
 // Build custom time string
 const customTime = `${timeOnly.hour}:${timeOnly.minute}:${timeOnly.second}`;
 console.log('Custom time:', customTime); // "14:30:45"
+```
+
+### Milliseconds Support
+
+```typescript
+import { formatToParts } from '@/datezone';
+
+const timestamp = new Date(2024, 0, 15, 14, 30, 45, 123).getTime(); // 123ms
+
+// Extract milliseconds along with other time components
+const timeWithMs = formatToParts(timestamp, 'UTC', {
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  millisecond: '3-digit',
+  hour12: false
+});
+
+console.log('Time with milliseconds:', timeWithMs);
+// { hour: 14, minute: 30, second: 45, millisecond: 123 }
+
+// Build precise time string with milliseconds
+const preciseTime = `${timeWithMs.hour}:${timeWithMs.minute}:${timeWithMs.second}.${timeWithMs.millisecond.toString().padStart(3, '0')}`;
+console.log('Precise time:', preciseTime); // "14:30:45.123"
+
+// Milliseconds are timezone-independent (same across all timezones)
+const utcMs = formatToParts(timestamp, 'UTC', { millisecond: '3-digit' });
+const tokyoMs = formatToParts(timestamp, 'Asia/Tokyo', { millisecond: '3-digit' });
+const nyMs = formatToParts(timestamp, 'America/New_York', { millisecond: '3-digit' });
+
+console.log('UTC milliseconds:', utcMs.millisecond);     // 123
+console.log('Tokyo milliseconds:', tokyoMs.millisecond); // 123
+console.log('NY milliseconds:', nyMs.millisecond);       // 123
 ```
 
 ### Weekday Information
@@ -342,7 +377,7 @@ console.table(comparison.map(item => ({
 
 ```typescript
 import { formatToParts, FULL_TS } from '@/datezone';
-import { wallTimeToUTC } from '@/datezone';
+import { wallTimeToTS } from '@/datezone';
 
 function addDaysToTimestamp(timestamp: number, days: number, timeZone = 'UTC'): number {
   // Extract current components
@@ -352,7 +387,7 @@ function addDaysToTimestamp(timestamp: number, days: number, timeZone = 'UTC'): 
   const newDate = new Date(parts.year, parts.month - 1, parts.day + days);
   
   // Convert back to timestamp in the same timezone
-  return wallTimeToUTC(
+  return wallTimeToTS(
     newDate.getFullYear(),
     newDate.getMonth() + 1,
     newDate.getDate(),
@@ -367,7 +402,7 @@ function addDaysToTimestamp(timestamp: number, days: number, timeZone = 'UTC'): 
 function addHoursToTimestamp(timestamp: number, hours: number, timeZone = 'UTC'): number {
   const parts = formatToParts(timestamp, timeZone, FULL_TS);
   
-  return wallTimeToUTC(
+  return wallTimeToTS(
     parts.year,
     parts.month,
     parts.day,
@@ -423,7 +458,7 @@ function getNextBusinessDay(timestamp: number, timeZone: string): number {
     
     // If it's a weekday, return start of business day
     if (parts.weekday >= 1 && parts.weekday <= 5) {
-      return wallTimeToUTC(parts.year, parts.month, parts.day, 9, 0, 0, 0, timeZone);
+      return wallTimeToTS(parts.year, parts.month, parts.day, 9, 0, 0, 0, timeZone);
     }
     
     // Move to next day
@@ -452,6 +487,7 @@ The `formatToParts` function supports extracting the following component types:
 - **hour**: Hour (0-23 or 1-12 depending on hour12 setting)
 - **minute**: Minute (0-59)
 - **second**: Second (0-59)
+- **millisecond**: Millisecond (0-999) - extracted directly from timestamp
 - **weekday**: Day of week (1-7, where 1 = Monday)
 
 ### Text Components (when using appropriate options)
@@ -469,6 +505,7 @@ const options = {
   hour: 'numeric' | '2-digit',
   minute: 'numeric' | '2-digit',
   second: 'numeric' | '2-digit',
+  millisecond: '3-digit' | string, // Custom datezone extension
   weekday: 'long' | 'short' | 'narrow',
   era: 'long' | 'short' | 'narrow',
   timeZoneName: 'long' | 'short',

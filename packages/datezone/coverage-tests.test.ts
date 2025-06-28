@@ -3,7 +3,7 @@ import { addDays, endOfDay, getDayPeriod, startOfDay, subDays } from "./day";
 import { formatGMT, formatTimestamp, formatTimezone } from "./format/utils";
 import { addHours, subHours } from "./hour";
 import { getLocalTimezone } from "./index.pub";
-import { addMinutes, subMinutes } from "./minutes";
+import { addMinutes, subMinutes } from "./minute";
 import { addMonths, daysInMonth } from "./month";
 import { getTimezoneOffsetMinutes } from "./offset";
 import {
@@ -11,7 +11,7 @@ import {
 	addSeconds,
 	subMilliseconds,
 	subSeconds,
-} from "./seconds";
+} from "./second";
 
 describe("Coverage Tests - Missing Lines", () => {
 	describe("Day functions with DayOptions input", () => {
@@ -94,7 +94,7 @@ describe("Coverage Tests - Missing Lines", () => {
 	});
 
 	describe("Hour functions with HourOptions", () => {
-		const hourOptions = { hour: 14 };
+		const _hourOptions = { hour: 14 };
 		const timestamp = Date.now(); // Use actual timestamp for seconds/milliseconds functions
 
 		test("addHours with timestamp", () => {

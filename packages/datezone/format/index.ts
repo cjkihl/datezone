@@ -1,7 +1,7 @@
 import { FULL_TS, formatToParts } from "../format-parts.js";
-import { isUTC, type TimeZone } from "../iana.js";
+import { isDST, isUTC, type TimeZone } from "../iana.js";
 import { getUTCtoTimezoneOffsetMinutes } from "../offset.js";
-import type { PlainDateTime } from "../types.js";
+import type { WallDateTime } from "../types.js";
 import { formatters } from "./formatters.js";
 
 type FormatOptions = {
@@ -286,10 +286,13 @@ export function format(
 	formatString: string,
 	options: FormatOptions,
 ): string {
-	let dt: PlainDateTime;
-	const d = new Date(ts);
+	let dt: WallDateTime;
+
+	// Extract milliseconds directly from timestamp (no Date object needed)
+	const millisecond = ts % 1000;
 
 	if (!options.timeZone) {
+		const d = new Date(ts);
 		// Fast path for local timezone
 		dt = {
 			day: d.getDate(),
@@ -303,6 +306,7 @@ export function format(
 		};
 	} else if (isUTC(options.timeZone)) {
 		// Fast path for UTC
+		const d = new Date(ts);
 		dt = {
 			day: d.getUTCDate(),
 			hour: d.getUTCHours(),
@@ -313,8 +317,30 @@ export function format(
 			timezoneOffsetMinutes: 0,
 			year: d.getUTCFullYear(),
 		};
+	} else if (!isDST(options.timeZone)) {
+		// Fast path for non-DST timezones (fixed offset zones)
+		const timezoneOffsetMinutes = getUTCtoTimezoneOffsetMinutes(
+			ts,
+			options.timeZone,
+		);
+
+		// Calculate timezone time directly from UTC time + offset
+		const offsetMs = timezoneOffsetMinutes * 60 * 1000;
+		const zonedTs = ts + offsetMs;
+		const d = new Date(zonedTs);
+
+		dt = {
+			day: d.getUTCDate(),
+			hour: d.getUTCHours(),
+			millisecond,
+			minute: d.getUTCMinutes(),
+			month: d.getUTCMonth() + 1,
+			second: d.getUTCSeconds(),
+			timezoneOffsetMinutes,
+			year: d.getUTCFullYear(),
+		};
 	} else {
-		// Path for specific IANA timezones
+		// Path for DST timezones (complex calculation required)
 		const parts = formatToParts(ts, options.timeZone, FULL_TS);
 		let year = parts.year;
 		if (ts < 0 && year > 0) {
@@ -329,7 +355,7 @@ export function format(
 		dt = {
 			day: parts.day,
 			hour: parts.hour,
-			millisecond: d.getUTCMilliseconds(),
+			millisecond: parts.millisecond,
 			minute: parts.minute,
 			month: parts.month,
 			second: parts.second,

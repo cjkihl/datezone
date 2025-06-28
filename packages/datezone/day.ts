@@ -1,8 +1,8 @@
 import { getCachedFormatterLocale } from "./cache.js";
 import { DAY } from "./constants.js";
 import { formatToParts } from "./format-parts.js";
-import { isUTC, type TimeZone } from "./iana.js";
-import { wallTimeToUTC as wallTimeToUTCBase } from "./utils.js";
+import { isDST, isUTC, type TimeZone } from "./iana.js";
+import { wallTimeToTS } from "./utils.js";
 import { isLeapYear } from "./year.js";
 
 const DAY_OPTS = { day: "2-digit", month: "2-digit", year: "numeric" } as const;
@@ -25,40 +25,6 @@ function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): DayOptions {
 	const dt =
 		typeof ts === "number" ? formatToParts(ts, timeZone, DAY_OPTS) : ts;
 	return dt;
-}
-
-/**
- * Converts wall time to a UTC timestamp.
- * @param year - The year.
- * @param month - The month.
- * @param day - The day.
- * @param hour - The hour.
- * @param minute - The minute.
- * @param second - The second.
- * @param ms - The millisecond.
- * @param timeZone - The time zone.
- * @returns The UTC timestamp.
- */
-function wallTimeToUTC(
-	year: number,
-	month: number,
-	day: number,
-	hour: number,
-	minute: number,
-	second: number,
-	ms: number,
-	timeZone: TimeZone,
-): number {
-	return wallTimeToUTCBase(
-		year,
-		month,
-		day,
-		hour,
-		minute,
-		second,
-		ms,
-		timeZone,
-	);
 }
 
 /**
@@ -86,9 +52,17 @@ export function addDays(
 		}
 		return Date.UTC(ts.year, ts.month - 1, ts.day + days);
 	}
-	// Fallback to existing logic for other timezones
+	// Optimization: For non-DST timezones, use simple arithmetic since offset is constant
+	if (!isDST(timeZone)) {
+		if (typeof ts === "number") {
+			return ts + days * DAY;
+		}
+		// For DayOptions in non-DST timezone, use wallTimeToTS for correct offset
+		return wallTimeToTS(ts.year, ts.month, ts.day + days, 0, 0, 0, 0, timeZone);
+	}
+	// Fallback to existing logic for DST timezones
 	const { year, month, day } = getOptions(ts, timeZone);
-	return wallTimeToUTC(year, month, day + days, 0, 0, 0, 0, timeZone);
+	return wallTimeToTS(year, month, day + days, 0, 0, 0, 0, timeZone);
 }
 
 /**
@@ -132,8 +106,10 @@ export function startOfDay(
 		d.setUTCHours(0, 0, 0, 0);
 		return d.getTime();
 	}
+	// For both DST and non-DST timezones, we need proper timezone conversion
+	// The optimization for non-DST timezones is in the arithmetic operations, not here
 	const { year, month, day } = getOptions(ts, timeZone);
-	return wallTimeToUTC(year, month, day, 0, 0, 0, 0, timeZone);
+	return wallTimeToTS(year, month, day, 0, 0, 0, 0, timeZone);
 }
 
 /**
@@ -159,8 +135,9 @@ export function endOfDay(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 		d.setUTCHours(23, 59, 59, 999);
 		return d.getTime();
 	}
+	// For both DST and non-DST timezones, we need proper timezone conversion
 	const { year, month, day } = getOptions(ts, timeZone);
-	return wallTimeToUTC(year, month, day, 23, 59, 59, 999, timeZone);
+	return wallTimeToTS(year, month, day, 23, 59, 59, 999, timeZone);
 }
 
 /**
@@ -185,8 +162,17 @@ export function nextDay(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 		}
 		return Date.UTC(ts.year, ts.month - 1, ts.day + 1);
 	}
+	// Optimization: For non-DST timezones, use simple arithmetic since offset is constant
+	if (!isDST(timeZone)) {
+		if (typeof ts === "number") {
+			// Calculate start of current day, then add one day
+			const currentDayStart = startOfDay(ts, timeZone);
+			return currentDayStart + DAY;
+		}
+		return wallTimeToTS(ts.year, ts.month, ts.day + 1, 0, 0, 0, 0, timeZone);
+	}
 	const { year, month, day } = getOptions(ts, timeZone);
-	return wallTimeToUTC(year, month, day + 1, 0, 0, 0, 0, timeZone);
+	return wallTimeToTS(year, month, day + 1, 0, 0, 0, 0, timeZone);
 }
 
 /**
@@ -213,8 +199,17 @@ export function previousDay(
 		}
 		return Date.UTC(ts.year, ts.month - 1, ts.day - 1);
 	}
+	// Optimization: For non-DST timezones, use simple arithmetic since offset is constant
+	if (!isDST(timeZone)) {
+		if (typeof ts === "number") {
+			// Calculate start of current day, then subtract one day
+			const currentDayStart = startOfDay(ts, timeZone);
+			return currentDayStart - DAY;
+		}
+		return wallTimeToTS(ts.year, ts.month, ts.day - 1, 0, 0, 0, 0, timeZone);
+	}
 	const { year, month, day } = getOptions(ts, timeZone);
-	return wallTimeToUTC(year, month, day - 1, 0, 0, 0, 0, timeZone);
+	return wallTimeToTS(year, month, day - 1, 0, 0, 0, 0, timeZone);
 }
 
 /**

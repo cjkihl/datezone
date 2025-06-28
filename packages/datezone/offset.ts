@@ -1,5 +1,5 @@
 import { FULL_TS, formatToParts } from "./format-parts.js";
-import type { TimeZone } from "./iana.js";
+import { isDST, type TimeZone } from "./iana.js";
 
 const HOUR_MS = 60 * 60 * 1000;
 
@@ -12,6 +12,10 @@ let lastOffsetCache: OffsetCache | null = null;
 
 // Local timezone cache for performance
 let localOffsetCache: { hourStart: number; offset: number } | null = null;
+
+// Global cache for non-DST timezones (fixed offset zones)
+// These offsets never change, so we can cache them indefinitely
+const fixedOffsetCache = new Map<TimeZone, number>();
 
 /**
  * Returns the offset in minutes between UTC and the given time zone at the given date.
@@ -30,6 +34,34 @@ export function getUTCtoTimezoneOffsetMinutes(
 
 	if (zone === "Etc/UTC" || zone === "UTC") return 0;
 
+	// Fast path for non-DST timezones (fixed offset zones)
+	// isDST returns true for DST timezones, so we check for !isDST for non-DST timezones
+	if (!isDST(zone)) {
+		let cachedOffset = fixedOffsetCache.get(zone);
+		if (cachedOffset !== undefined) {
+			return cachedOffset;
+		}
+
+		// Calculate offset once and cache it permanently
+		const { year, month, day, hour, minute, second, millisecond } =
+			formatToParts(ts, zone, FULL_TS);
+
+		const wall = Date.UTC(
+			year ?? 0,
+			(month ?? 1) - 1,
+			day ?? 1,
+			hour ?? 0,
+			minute ?? 0,
+			second ?? 0,
+			millisecond,
+		);
+		cachedOffset = (wall - ts) / 60000;
+
+		fixedOffsetCache.set(zone, cachedOffset);
+		return cachedOffset;
+	}
+
+	// For DST timezones, use per-hour cache as offsets can change
 	const hourStart = Math.floor(ts / HOUR_MS) * HOUR_MS;
 	if (
 		lastOffsetCache &&
@@ -39,7 +71,7 @@ export function getUTCtoTimezoneOffsetMinutes(
 		return lastOffsetCache.offset;
 	}
 
-	const { year, month, day, hour, minute, second } = formatToParts(
+	const { year, month, day, hour, minute, second, millisecond } = formatToParts(
 		ts,
 		zone,
 		FULL_TS,
@@ -52,7 +84,7 @@ export function getUTCtoTimezoneOffsetMinutes(
 		hour ?? 0,
 		minute ?? 0,
 		second ?? 0,
-		ts % 1000,
+		millisecond,
 	);
 	const offset = (wall - ts) / 60000;
 
@@ -126,4 +158,25 @@ export function getTimezoneOffsetMinutes(
 	const fromOffset = getUTCtoTimezoneOffsetMinutes(ts, from!);
 	const toOffset = getUTCtoTimezoneOffsetMinutes(ts, to!);
 	return toOffset - fromOffset;
+}
+
+/**
+ * Returns information about the fixed offset cache for debugging purposes.
+ * @returns Object containing cache size and cached timezones
+ */
+export function getFixedOffsetCacheInfo(): {
+	size: number;
+	cachedTimezones: TimeZone[];
+} {
+	return {
+		cachedTimezones: Array.from(fixedOffsetCache.keys()),
+		size: fixedOffsetCache.size,
+	};
+}
+
+/**
+ * Clears the fixed offset cache. Useful for testing or memory management.
+ */
+export function clearFixedOffsetCache(): void {
+	fixedOffsetCache.clear();
 }

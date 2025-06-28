@@ -20,7 +20,7 @@
  * };
  * ```
  */
-export type PlainDateTime = {
+export type WallDateTime = {
 	/** Full year in Gregorian calendar (e.g., 2024) */
 	year: number;
 	/** Month of the year (1-12, where 1=January, 12=December) */
@@ -35,16 +35,6 @@ export type PlainDateTime = {
 	second: number;
 	/** Milliseconds past the second (0-999) */
 	millisecond: number;
-	/**
-	 * ISO 8601 day of the week (1-7, where 1=Monday, 7=Sunday).
-	 * Optional field that can be computed from year, month, day.
-	 */
-	weekday?: number;
-	/**
-	 * Day of the year (1-366, where 366 is possible in leap years).
-	 * Optional field that can be computed from year, month, day.
-	 */
-	dayOfYear?: number;
 	/**
 	 * Timezone offset from UTC in minutes.
 	 * Negative values indicate timezones west of UTC (behind UTC).

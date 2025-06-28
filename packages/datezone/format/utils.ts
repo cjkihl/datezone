@@ -1,4 +1,4 @@
-import type { PlainDateTime } from "../types.js";
+import type { WallDateTime } from "../types.js";
 
 /**
  * Formats a timezone offset according to the given pattern.
@@ -51,7 +51,7 @@ export function formatGMT(offset: number, long: boolean): string {
  * @param ms - Whether to include milliseconds (true for ms, false for seconds).
  * @returns The formatted timestamp string.
  */
-export function formatTimestamp(dt: PlainDateTime, ms: boolean): string {
+export function formatTimestamp(dt: WallDateTime, ms: boolean): string {
 	const d = Date.UTC(
 		dt.year,
 		dt.month - 1,

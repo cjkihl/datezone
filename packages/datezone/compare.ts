@@ -3,7 +3,7 @@ import {
 	dayOfWeek,
 	formatToParts,
 	startOfDay,
-	wallTimeToUTC,
+	wallTimeToTS,
 } from "./index.pub.js";
 
 export type OptionsOrTimestamp =
@@ -24,7 +24,7 @@ function getTimestamp(options: OptionsOrTimestamp, timeZone: TimeZone): number {
 	if (typeof options === "number") {
 		return options;
 	}
-	return wallTimeToUTC(
+	return wallTimeToTS(
 		options.year,
 		options.month,
 		options.day,

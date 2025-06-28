@@ -3,7 +3,7 @@ import { to12Hour } from "../hour.js";
 import type { TimeZone } from "../iana.js";
 import { getMonthName } from "../month.js";
 import { formatOrdinal } from "../ordinal.js";
-import type { PlainDateTime } from "../types.js";
+import type { WallDateTime } from "../types.js";
 import { getISOWeekYear, getWeek } from "../week.js";
 import { quarter } from "../year.js";
 import {
@@ -17,7 +17,7 @@ import {
  * Options passed to each formatter function.
  */
 type Options = {
-	dt: PlainDateTime;
+	dt: WallDateTime;
 	locale: string;
 	tz?: TimeZone;
 	len: number;

@@ -593,10 +593,32 @@ const utcTimeZones =
 const dstTimeZones =
 	"America/Adak,America/Anchorage,America/Asuncion,America/Bahia_Banderas,America/Boise,America/Cambridge_Bay,America/Campo_Grande,America/Cancun,America/Chicago,America/Chihuahua,America/Cuiaba,America/Denver,America/Detroit,America/Edmonton,America/Glace_Bay,America/Godthab,America/Goose_Bay,America/Grand_Turk,America/Halifax,America/Havana,America/Indiana/Indianapolis,America/Indiana/Knox,America/Indiana/Marengo,America/Indiana/Petersburg,America/Indiana/Tell_City,America/Indiana/Vevay,America/Indiana/Vincennes,America/Indiana/Winamac,America/Inuvik,America/Iqaluit,America/Juneau,America/Kentucky/Louisville,America/Kentucky/Monticello,America/Los_Angeles,America/Matamoros,America/Mazatlan,America/Menominee,America/Merida,America/Metlakatla,America/Mexico_City,America/Miquelon,America/Moncton,America/Monterrey,America/Montevideo,America/Nassau,America/New_York,America/Nome,America/North_Dakota/Beulah,America/North_Dakota/Center,America/North_Dakota/New_Salem,America/Ojinaga,America/Pangnirtung,America/Port-au-Prince,America/Rainy_River,America/Rankin_Inlet,America/Resolute,America/Santiago,America/Sao_Paulo,America/Scoresbysund,America/Sitka,America/St_Johns,America/Tijuana,America/Toronto,America/Vancouver,America/Whitehorse,America/Winnipeg,America/Yakutat,Antarctica/Macquarie,Antarctica/Troll,Asia/Amman,Asia/Beirut,Asia/Damascus,Asia/Famagusta,Asia/Gaza,Asia/Hebron,Asia/Jerusalem,Asia/Nicosia,Asia/Tehran,Atlantic/Azores,Atlantic/Bermuda,Atlantic/Canary,Atlantic/Faroe,Atlantic/Madeira,Australia/Adelaide,Australia/Broken_Hill,Australia/Currie,Australia/Hobart,Australia/Lord_Howe,Australia/Melbourne,Australia/Sydney,Europe/Amsterdam,Europe/Andorra,Europe/Astrakhan,Europe/Athens,Europe/Belgrade,Europe/Berlin,Europe/Bratislava,Europe/Brussels,Europe/Bucharest,Europe/Budapest,Europe/Busingen,Europe/Chisinau,Europe/Copenhagen,Europe/Dublin,Europe/Gibraltar,Europe/Guernsey,Europe/Helsinki,Europe/Isle_of_Man,Europe/Jersey,Europe/Kaliningrad,Europe/Kiev,Europe/Kirov,Europe/Lisbon,Europe/Ljubljana,Europe/London,Europe/Luxembourg,Europe/Madrid,Europe/Malta,Europe/Mariehamn,Europe/Monaco,Europe/Oslo,Europe/Paris,Europe/Podgorica,Europe/Prague,Europe/Riga,Europe/Rome,Europe/Samara,Europe/San_Marino,Europe/Sarajevo,Europe/Saratov,Europe/Simferopol,Europe/Skopje,Europe/Sofia,Europe/Stockholm,Europe/Tallinn,Europe/Tirane,Europe/Ulyanovsk,Europe/Vaduz,Europe/Vienna,Europe/Vilnius,Europe/Volgograd,Europe/Warsaw,Europe/Zagreb,Europe/Zurich,Pacific/Auckland,Pacific/Chatham,Pacific/Easter,Pacific/Fiji,Pacific/Norfolk,US/Alaska,US/Aleutian,US/Central,US/Eastern,US/Mountain,US/Pacific";
 
+/**
+ * Checks if a timezone is UTC.
+ *
+ * @param timeZone - The IANA timezone identifier to check
+ * @returns `true` if the timezone is UTC, `false` otherwise
+ */
 export function isUTC(timeZone: TimeZone): boolean {
 	return utcTimeZones.includes(timeZone);
 }
 
+/**
+ * Checks if a timezone is a DST timezone. (DST = Daylight Saving Time)
+ * If the timezone do not have DST we can do simple arithmetic to get the correct time.
+ *
+ * @param timeZone - The IANA timezone identifier to check
+ * @returns `true` if the timezone is a DST timezone, `false` otherwise
+ *
+ * @example
+ * ```typescript
+ * isDST('America/New_York'); // true
+ * isDST('Europe/London'); // false
+ * isDST('UTC'); // false
+ * isDST('GMT'); // false
+ * isDST('Etc/UTC'); // false
+ * ```
+ */
 export function isDST(timeZone: TimeZone): boolean {
-	return isUTC(timeZone) || !dstTimeZones.includes(timeZone);
+	return isUTC(timeZone) || dstTimeZones.includes(timeZone);
 }
