@@ -1,5 +1,13 @@
 import { describe, expect, test } from "bun:test";
-import { addDays, endOfDay, getDayPeriod, startOfDay, subDays } from "./day";
+import {
+	addDays,
+	addDaysBase,
+	endOfDayBase,
+	getDayPeriod,
+	startOfDayBase,
+	subDays,
+	subDaysBase,
+} from "./day";
 import { formatGMT, formatTimestamp, formatTimezone } from "./format/utils";
 import { addHours, subHours } from "./hour";
 import { getLocalTimezone } from "./index.pub";
@@ -16,22 +24,22 @@ import {
 describe("Coverage Tests - Missing Lines", () => {
 	describe("Day functions with DayOptions input", () => {
 		test("addDays with DayOptions object", () => {
-			const result = addDays({ day: 15, month: 3, year: 2024 }, 5, "UTC");
+			const result = addDaysBase(2024, 3, 15, 5, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
 		test("subDays with DayOptions object", () => {
-			const result = subDays({ day: 15, month: 3, year: 2024 }, 5, "UTC");
+			const result = subDaysBase(2024, 3, 15, 5, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
 		test("startOfDay with DayOptions object", () => {
-			const result = startOfDay({ day: 15, month: 3, year: 2024 }, "UTC");
+			const result = startOfDayBase(2024, 3, 15, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
 		test("endOfDay with DayOptions object", () => {
-			const result = endOfDay({ day: 15, month: 3, year: 2024 }, "UTC");
+			const result = endOfDayBase(2024, 3, 15, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 	});
@@ -146,7 +154,8 @@ describe("Coverage Tests - Missing Lines", () => {
 		});
 
 		test("daysInMonth with MonthOptions", () => {
-			const result = daysInMonth({ month: 2, year: 2024 }, "UTC");
+			const timestamp = new Date(2024, 1, 1).getTime(); // February 2024
+			const result = daysInMonth(timestamp, "UTC");
 			expect(result).toBe(29); // 2024 is a leap year
 		});
 

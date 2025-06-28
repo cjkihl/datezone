@@ -5,25 +5,7 @@ import { isDST, isUTC, type TimeZone } from "./timezone.js";
 import { wallTimeToTS } from "./utils.js";
 import { isLeapYearBase } from "./year.js";
 
-type YearMonthOptions = { year: number; month: number };
 const YEAR_MONTH_OPTS = { month: "2-digit", year: "numeric" } as const;
-
-type OptionsOrTimestamp = YearMonthOptions | number;
-
-/**
- * Extracts year and month from either a timestamp or options object.
- * @param ts - Either a timestamp number or year/month options object
- * @param timeZone - The timezone to use for timestamp parsing
- * @returns Year and month as numbers
- */
-function getOptions(
-	ts: OptionsOrTimestamp,
-	timeZone: TimeZone,
-): YearMonthOptions {
-	return typeof ts === "number"
-		? formatToParts(ts, timeZone, YEAR_MONTH_OPTS)
-		: ts;
-}
 
 /**
  * Gets the timestamp for the start of the month containing the given timestamp.
@@ -67,6 +49,21 @@ export function startOfMonth(ts: number, timeZone?: TimeZone): number {
 
 	// Complex path: DST timezones (requires full timezone parsing)
 	const { year, month } = formatToParts(ts, timeZone, YEAR_MONTH_OPTS);
+	return startOfMonthBase(year, month, timeZone);
+}
+
+/**
+ * Gets the timestamp for the start of the month for given year and month.
+ * @param year - The year
+ * @param month - The month (1-12)
+ * @param timeZone - The timezone
+ * @returns Timestamp for the start of the month
+ */
+export function startOfMonthBase(
+	year: number,
+	month: number,
+	timeZone: TimeZone,
+): number {
 	return wallTimeToTS(year, month, 1, 0, 0, 0, 0, timeZone);
 }
 
@@ -95,6 +92,21 @@ export function endOfMonth(ts: number, timeZone?: TimeZone): number {
 
 	// Complex path: DST timezones (requires full timezone parsing)
 	return startOfNextMonth(ts, timeZone) - 1;
+}
+
+/**
+ * Gets the timestamp for the end of the month for given year and month.
+ * @param year - The year
+ * @param month - The month (1-12)
+ * @param timeZone - The timezone
+ * @returns Timestamp for the end of the month (last millisecond)
+ */
+export function endOfMonthBase(
+	year: number,
+	month: number,
+	timeZone: TimeZone,
+): number {
+	return startOfNextMonthBase(year, month, timeZone) - 1;
 }
 
 /**
@@ -155,23 +167,55 @@ export function addMonths(
 
 	// Complex path: DST timezones (requires full timezone parsing)
 	const parts = formatToParts(ts, timeZone, FULL_TS);
-	const [newYear, newMonth] = calculateYearMonth(
+	return addMonthsBase(
 		parts.year,
 		parts.month,
+		parts.day,
+		parts.hour,
+		parts.minute,
+		parts.second,
+		parts.millisecond,
 		months,
+		timeZone,
 	);
+}
 
+/**
+ * Adds the specified number of months to a timestamp with walltime components.
+ * @param year - The year
+ * @param month - The month (1-12)
+ * @param day - The day
+ * @param hour - The hour
+ * @param minute - The minute
+ * @param second - The second
+ * @param millisecond - The millisecond
+ * @param months - Number of months to add (can be negative)
+ * @param timeZone - The timezone
+ * @returns New timestamp with months added
+ */
+export function addMonthsBase(
+	year: number,
+	month: number,
+	day: number,
+	hour: number,
+	minute: number,
+	second: number,
+	millisecond: number,
+	months: number,
+	timeZone: TimeZone,
+): number {
+	const [newYear, newMonth] = calculateYearMonth(year, month, months);
 	const maxDay = daysInMonthBase(newYear, newMonth);
-	const newDay = parts.day > maxDay ? maxDay : parts.day;
+	const newDay = day > maxDay ? maxDay : day;
 
 	return wallTimeToTS(
 		newYear,
 		newMonth,
 		newDay,
-		parts.hour,
-		parts.minute,
-		parts.second,
-		parts.millisecond,
+		hour,
+		minute,
+		second,
+		millisecond,
 		timeZone,
 	);
 }
@@ -192,8 +236,8 @@ export function subMonths(
 }
 
 /**
- * Gets the start of the nth month relative to the given timestamp or month options.
- * @param ts - The reference timestamp or year/month options
+ * Gets the start of the nth month relative to the given timestamp.
+ * @param ts - The reference timestamp
  * @param n - Number of months to offset (0 = current month, 1 = next month, -1 = previous month)
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns Timestamp for the start of the nth month
@@ -260,8 +304,23 @@ function startOfNthMonthBase(
 }
 
 /**
- * Gets the end of the nth month relative to the given timestamp or month options.
- * @param ts - The reference timestamp or year/month options
+ * Gets the start of the next month from year/month values.
+ * @param year - The year
+ * @param month - The month (1-12)
+ * @param timeZone - The timezone
+ * @returns Timestamp for the start of the next month
+ */
+function startOfNextMonthBase(
+	year: number,
+	month: number,
+	timeZone: TimeZone,
+): number {
+	return startOfNthMonthBase(year, month, 1, timeZone);
+}
+
+/**
+ * Gets the end of the nth month relative to the given timestamp.
+ * @param ts - The reference timestamp
  * @param n - Number of months to offset (0 = current month, 1 = next month, -1 = previous month)
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns Timestamp for the end of the nth month (last millisecond)
@@ -275,8 +334,8 @@ export function endOfNthMonth(
 }
 
 /**
- * Gets the start of the next month relative to the given timestamp or month options.
- * @param ts - The reference timestamp or year/month options
+ * Gets the start of the next month relative to the given timestamp.
+ * @param ts - The reference timestamp
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns Timestamp for the start of the next month
  */
@@ -285,8 +344,8 @@ export function startOfNextMonth(ts: number, timeZone?: TimeZone): number {
 }
 
 /**
- * Gets the end of the next month relative to the given timestamp or month options.
- * @param ts - The reference timestamp or year/month options
+ * Gets the end of the next month relative to the given timestamp.
+ * @param ts - The reference timestamp
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns Timestamp for the end of the next month (last millisecond)
  */
@@ -295,8 +354,8 @@ export function endOfNextMonth(ts: number, timeZone?: TimeZone): number {
 }
 
 /**
- * Gets the start of the previous month relative to the given timestamp or month options.
- * @param ts - The reference timestamp or year/month options
+ * Gets the start of the previous month relative to the given timestamp.
+ * @param ts - The reference timestamp
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns Timestamp for the start of the previous month
  */
@@ -305,8 +364,8 @@ export function startOfPrevMonth(ts: number, timeZone?: TimeZone): number {
 }
 
 /**
- * Gets the end of the previous month relative to the given timestamp or month options.
- * @param ts - The reference timestamp or year/month options
+ * Gets the end of the previous month relative to the given timestamp.
+ * @param ts - The reference timestamp
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns Timestamp for the end of the previous month (last millisecond)
  */
@@ -317,53 +376,47 @@ export function endOfPrevMonth(ts: number, timeZone?: TimeZone): number {
 const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 /**
- * Gets the number of days in a month for a given timestamp or year/month.
- * @param ts - Either a timestamp or an object with year and month properties
+ * Gets the number of days in a month for a given timestamp.
+ * @param ts - The timestamp
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns Number of days in the month
- * @throws {RangeError} If the month is invalid (not 1-12)
  */
 export function daysInMonth(ts: number, timeZone?: TimeZone): number {
 	let year: number;
 	let month: number;
 
-	if (typeof ts === "number") {
-		const d = new Date(ts);
-		if (!timeZone) {
-			year = d.getFullYear();
-			month = d.getMonth() + 1;
-		} else if (isUTC(timeZone)) {
-			year = d.getUTCFullYear();
-			month = d.getUTCMonth() + 1;
-		} else if (!isDST(timeZone)) {
-			// Fast path: Non-DST timezones (fixed offset zones)
-			const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
-			const offsetMs = offsetMinutes * 60 * 1000;
+	const d = new Date(ts);
+	if (!timeZone) {
+		year = d.getFullYear();
+		month = d.getMonth() + 1;
+	} else if (isUTC(timeZone)) {
+		year = d.getUTCFullYear();
+		month = d.getUTCMonth() + 1;
+	} else if (!isDST(timeZone)) {
+		// Fast path: Non-DST timezones (fixed offset zones)
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
+		const offsetMs = offsetMinutes * 60 * 1000;
 
-			// Convert to wall time in the timezone
-			const wallTimeTs = ts + offsetMs;
-			const wallTimeDate = new Date(wallTimeTs);
+		// Convert to wall time in the timezone
+		const wallTimeTs = ts + offsetMs;
+		const wallTimeDate = new Date(wallTimeTs);
 
-			year = wallTimeDate.getUTCFullYear();
-			month = wallTimeDate.getUTCMonth() + 1;
-		} else {
-			({ year, month } = getOptions(ts, timeZone));
-		}
+		year = wallTimeDate.getUTCFullYear();
+		month = wallTimeDate.getUTCMonth() + 1;
 	} else {
-		({ year, month } = ts);
+		({ year, month } = formatToParts(ts, timeZone, YEAR_MONTH_OPTS));
 	}
 
-	const maxDay = DAYS_IN_MONTH[month - 1];
-	if (maxDay === undefined) {
-		throw new RangeError(`Invalid month: ${month}`);
-	}
-
-	if (month === 2 && isLeapYearBase(year)) {
-		return 29;
-	}
-	return maxDay;
+	return daysInMonthBase(year, month);
 }
 
+/**
+ * Gets the number of days in a month for given year and month.
+ * @param year - The year
+ * @param month - The month (1-12)
+ * @returns Number of days in the month
+ * @throws {RangeError} If the month is invalid (not 1-12)
+ */
 export function daysInMonthBase(year: number, month: number): number {
 	const maxDay = DAYS_IN_MONTH[month - 1];
 	if (maxDay === undefined) {
@@ -428,39 +481,41 @@ export function getMonthName(
 }
 
 /**
- * Gets the quarter (1-4) for a given timestamp or year/month.
- * @param ts - Either a timestamp or an object with year and month properties
+ * Gets the quarter (1-4) for a given timestamp.
+ * @param ts - The timestamp
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns The quarter number (1-4)
  */
-export function getQuarter(
-	ts: OptionsOrTimestamp,
-	timeZone?: TimeZone,
-): number {
+export function getQuarter(ts: number, timeZone?: TimeZone): number {
 	let month: number;
 
-	if (typeof ts === "number") {
-		const d = new Date(ts);
-		if (!timeZone) {
-			month = d.getMonth() + 1;
-		} else if (isUTC(timeZone)) {
-			month = d.getUTCMonth() + 1;
-		} else if (!isDST(timeZone)) {
-			// Fast path: Non-DST timezones (fixed offset zones)
-			const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
-			const offsetMs = offsetMinutes * 60 * 1000;
+	const d = new Date(ts);
+	if (!timeZone) {
+		month = d.getMonth() + 1;
+	} else if (isUTC(timeZone)) {
+		month = d.getUTCMonth() + 1;
+	} else if (!isDST(timeZone)) {
+		// Fast path: Non-DST timezones (fixed offset zones)
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
+		const offsetMs = offsetMinutes * 60 * 1000;
 
-			// Convert to wall time in the timezone
-			const wallTimeTs = ts + offsetMs;
-			const wallTimeDate = new Date(wallTimeTs);
+		// Convert to wall time in the timezone
+		const wallTimeTs = ts + offsetMs;
+		const wallTimeDate = new Date(wallTimeTs);
 
-			month = wallTimeDate.getUTCMonth() + 1;
-		} else {
-			({ month } = getOptions(ts, timeZone));
-		}
+		month = wallTimeDate.getUTCMonth() + 1;
 	} else {
-		({ month } = ts);
+		({ month } = formatToParts(ts, timeZone, YEAR_MONTH_OPTS));
 	}
 
+	return getQuarterBase(month);
+}
+
+/**
+ * Gets the quarter (1-4) for a given month.
+ * @param month - The month (1-12)
+ * @returns The quarter number (1-4)
+ */
+export function getQuarterBase(month: number): number {
 	return Math.floor((month - 1) / 3) + 1;
 }

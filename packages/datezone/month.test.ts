@@ -3,9 +3,11 @@ import {
 	addMonths,
 	calculateYearMonth,
 	daysInMonth,
+	daysInMonthBase,
 	endOfMonth,
 	getMonthName,
 	getQuarter,
+	getQuarterBase,
 	startOfMonth,
 	startOfNextMonth,
 	startOfPrevMonth,
@@ -192,32 +194,51 @@ describe("endOfMonth additional cases", () => {
 // Tests for daysInMonth
 describe("daysInMonth", () => {
 	it("returns 31 for January", () => {
-		expect(daysInMonth({ month: 1, year: 2024 }, "UTC")).toBe(31);
+		const ts = new Date(2024, 0, 15).getTime(); // Jan 15, 2024
+		expect(daysInMonth(ts)).toBe(31);
 	});
 	it("returns 28 for February in non-leap year", () => {
-		expect(daysInMonth({ month: 2, year: 2023 }, "UTC")).toBe(28);
+		const ts = new Date(2023, 1, 15).getTime(); // Feb 15, 2023
+		expect(daysInMonth(ts)).toBe(28);
 	});
 	it("returns 29 for February in leap year", () => {
-		expect(daysInMonth({ month: 2, year: 2024 }, "UTC")).toBe(29);
+		const ts = new Date(2024, 1, 15).getTime(); // Feb 15, 2024
+		expect(daysInMonth(ts)).toBe(29);
 	});
 	it("returns 30 for April", () => {
-		expect(daysInMonth({ month: 4, year: 2024 }, "UTC")).toBe(30);
+		const ts = new Date(2024, 3, 15).getTime(); // Apr 15, 2024
+		expect(daysInMonth(ts)).toBe(30);
 	});
 	it("returns 31 for December", () => {
-		expect(daysInMonth({ month: 12, year: 2024 }, "UTC")).toBe(31);
+		const ts = new Date(2024, 11, 15).getTime(); // Dec 15, 2024
+		expect(daysInMonth(ts)).toBe(31);
+	});
+});
+
+describe("daysInMonthBase", () => {
+	it("returns 31 for January", () => {
+		expect(daysInMonthBase(2024, 1)).toBe(31);
+	});
+	it("returns 28 for February in non-leap year", () => {
+		expect(daysInMonthBase(2023, 2)).toBe(28);
+	});
+	it("returns 29 for February in leap year", () => {
+		expect(daysInMonthBase(2024, 2)).toBe(29);
+	});
+	it("returns 30 for April", () => {
+		expect(daysInMonthBase(2024, 4)).toBe(30);
+	});
+	it("returns 31 for December", () => {
+		expect(daysInMonthBase(2024, 12)).toBe(31);
 	});
 });
 
 describe("daysInMonth error handling", () => {
 	it("throws RangeError for month 0", () => {
-		expect(() => daysInMonth({ month: 0, year: 2024 }, "UTC")).toThrow(
-			RangeError,
-		);
+		expect(() => daysInMonthBase(2024, 0)).toThrow(RangeError);
 	});
 	it("throws RangeError for month 13", () => {
-		expect(() => daysInMonth({ month: 13, year: 2024 }, "UTC")).toThrow(
-			RangeError,
-		);
+		expect(() => daysInMonthBase(2024, 13)).toThrow(RangeError);
 	});
 });
 
@@ -387,17 +408,17 @@ describe("getMonthName edge case", () => {
 });
 
 describe("getQuarter edge cases", () => {
-	it("returns correct quarter for all months (number input)", () => {
+	it("returns correct quarter for all months (timestamp input)", () => {
 		const expected = [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4];
 		for (let m = 1; m <= 12; m++) {
 			const ts = new Date(2024, m - 1, 1).getTime();
 			expect(getQuarter(ts)).toBe(expected[m - 1]);
 		}
 	});
-	it("returns correct quarter for all months (object input)", () => {
+	it("returns correct quarter for all months (base function)", () => {
 		const expected = [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4];
 		for (let m = 1; m <= 12; m++) {
-			expect(getQuarter({ month: m, year: 2024 })).toBe(expected[m - 1]);
+			expect(getQuarterBase(m)).toBe(expected[m - 1]);
 		}
 	});
 });

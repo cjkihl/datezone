@@ -5,6 +5,7 @@ import {
 	endOfNthMonth,
 	endOfPrevMonth,
 	getQuarter,
+	getQuarterBase,
 	startOfNextMonth,
 	startOfNthMonth,
 	startOfPrevMonth,
@@ -12,41 +13,53 @@ import {
 
 describe("Month function coverage tests", () => {
 	describe("Nth month functions", () => {
-		test("startOfNthMonth with MonthOptions", () => {
-			const result = startOfNthMonth({ month: 3, year: 2024 }, 2, "UTC");
+		test("startOfNthMonth with timestamp", () => {
+			// March 15, 2024
+			const ts = new Date(2024, 2, 15).getTime();
+			const result = startOfNthMonth(ts, 2, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
-		test("endOfNthMonth with MonthOptions", () => {
-			const result = endOfNthMonth({ month: 3, year: 2024 }, 2, "UTC");
+		test("endOfNthMonth with timestamp", () => {
+			// March 15, 2024
+			const ts = new Date(2024, 2, 15).getTime();
+			const result = endOfNthMonth(ts, 2, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
-		test("startOfNextMonth with MonthOptions", () => {
-			const result = startOfNextMonth({ month: 3, year: 2024 }, "UTC");
+		test("startOfNextMonth with timestamp", () => {
+			// March 15, 2024
+			const ts = new Date(2024, 2, 15).getTime();
+			const result = startOfNextMonth(ts, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
-		test("endOfNextMonth with MonthOptions", () => {
-			const result = endOfNextMonth({ month: 3, year: 2024 }, "UTC");
+		test("endOfNextMonth with timestamp", () => {
+			// March 15, 2024
+			const ts = new Date(2024, 2, 15).getTime();
+			const result = endOfNextMonth(ts, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
-		test("startOfPrevMonth with MonthOptions", () => {
-			const result = startOfPrevMonth({ month: 3, year: 2024 }, "UTC");
+		test("startOfPrevMonth with timestamp", () => {
+			// March 15, 2024
+			const ts = new Date(2024, 2, 15).getTime();
+			const result = startOfPrevMonth(ts, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
-		test("endOfPrevMonth with MonthOptions", () => {
-			const result = endOfPrevMonth({ month: 3, year: 2024 }, "UTC");
+		test("endOfPrevMonth with timestamp", () => {
+			// March 15, 2024
+			const ts = new Date(2024, 2, 15).getTime();
+			const result = endOfPrevMonth(ts, "UTC");
 			expect(result).toBeGreaterThan(0);
 		});
 
-		test("getQuarter with MonthOptions", () => {
-			expect(getQuarter({ month: 1, year: 2024 }, "UTC")).toBe(1);
-			expect(getQuarter({ month: 4, year: 2024 }, "UTC")).toBe(2);
-			expect(getQuarter({ month: 7, year: 2024 }, "UTC")).toBe(3);
-			expect(getQuarter({ month: 10, year: 2024 }, "UTC")).toBe(4);
+		test("getQuarter with base function", () => {
+			expect(getQuarterBase(1)).toBe(1);
+			expect(getQuarterBase(4)).toBe(2);
+			expect(getQuarterBase(7)).toBe(3);
+			expect(getQuarterBase(10)).toBe(4);
 		});
 
 		test("getQuarter with timestamp", () => {

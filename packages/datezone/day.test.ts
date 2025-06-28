@@ -1,17 +1,21 @@
 import { describe, expect, it } from "bun:test";
 import {
 	addDays,
+	addDaysBase,
 	dayOfWeek,
+	dayOfWeekBase,
 	dayOfYear,
+	dayOfYearBase,
 	endOfDay,
 	getDayPeriod,
 	nextDay,
 	previousDay,
 	startOfDay,
 	subDays,
+	subDaysBase,
 	weekDayName,
 } from "./day";
-import type { TimeZone } from "./iana";
+import type { TimeZone } from "./timezone";
 
 describe("startOfDay", () => {
 	it("returns 00:00:00.000 in UTC if no timezone", () => {
@@ -265,12 +269,18 @@ describe("addDays", () => {
 	});
 	it("adds days to a DayOptions object (UTC)", () => {
 		const opts = { day: 15, month: 1, year: 2024 };
-		const ts = addDays(opts, 1, "UTC");
+		const ts = addDaysBase(opts.year, opts.month, opts.day, 1, "UTC");
 		expect(new Date(ts).toISOString()).toBe("2024-01-16T00:00:00.000Z");
 	});
 	it("adds days with timezone (Asia/Singapore)", () => {
 		const opts = { day: 22, month: 5, year: 2024 };
-		const ts = addDays(opts, 2, "Asia/Singapore");
+		const ts = addDaysBase(
+			opts.year,
+			opts.month,
+			opts.day,
+			2,
+			"Asia/Singapore",
+		);
 		const result = new Date(ts);
 		expect(result.getUTCDate()).toBe(23);
 	});
@@ -283,12 +293,18 @@ describe("subDays", () => {
 	});
 	it("subtracts days from a DayOptions object (UTC)", () => {
 		const opts = { day: 15, month: 1, year: 2024 };
-		const ts = subDays(opts, 1, "UTC");
+		const ts = subDaysBase(opts.year, opts.month, opts.day, 1, "UTC");
 		expect(new Date(ts).toISOString()).toBe("2024-01-14T00:00:00.000Z");
 	});
 	it("subtracts days with timezone (Asia/Singapore)", () => {
 		const opts = { day: 22, month: 5, year: 2024 };
-		const ts = subDays(opts, 2, "Asia/Singapore");
+		const ts = subDaysBase(
+			opts.year,
+			opts.month,
+			opts.day,
+			2,
+			"Asia/Singapore",
+		);
 		const result = new Date(ts);
 		expect(result.getUTCDate()).toBe(19);
 	});
@@ -301,11 +317,11 @@ describe("dayOfWeek", () => {
 	});
 	it("returns ISO day of week for DayOptions (UTC)", () => {
 		const opts = { day: 14, month: 1, year: 2024 }; // Sunday
-		expect(dayOfWeek(opts, "UTC")).toBe(7);
+		expect(dayOfWeekBase(opts.year, opts.month, opts.day)).toBe(7);
 	});
 	it("returns ISO day of week with timezone (Asia/Singapore)", () => {
 		const opts = { day: 22, month: 5, year: 2024 }; // Wednesday
-		expect(dayOfWeek(opts, "Asia/Singapore")).toBe(3);
+		expect(dayOfWeekBase(opts.year, opts.month, opts.day)).toBe(3);
 	});
 });
 
@@ -316,11 +332,11 @@ describe("dayOfYear", () => {
 	});
 	it("returns day of year for DayOptions (UTC)", () => {
 		const opts = { day: 31, month: 12, year: 2023 };
-		expect(dayOfYear(opts, "UTC")).toBe(365);
+		expect(dayOfYearBase(opts.year, opts.month, opts.day)).toBe(365);
 	});
 	it("returns day of year with timezone (Asia/Singapore)", () => {
 		const opts = { day: 22, month: 5, year: 2024 };
-		expect(dayOfYear(opts, "Asia/Singapore")).toBe(143);
+		expect(dayOfYearBase(opts.year, opts.month, opts.day)).toBe(143);
 	});
 });
 

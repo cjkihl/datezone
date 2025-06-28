@@ -1,15 +1,21 @@
 import { describe, expect, it } from "bun:test";
 import { formatToParts } from "./format-parts";
-import type { TimeZone } from "./iana";
+import type { TimeZone } from "./index.pub";
 import {
 	addWeeks,
+	addWeeksBase,
 	endOfISOWeek,
 	endOfWeek,
+	endOfWeekBase,
 	getISOWeekYear,
+	getISOWeekYearBase,
 	getWeek,
+	getWeekBase,
 	getWeeksInMonth,
+	getWeeksInMonthBase,
 	startOfISOWeek,
 	startOfWeek,
+	startOfWeekBase,
 	subWeeks,
 	WeekStartsOn,
 } from "./week";
@@ -25,10 +31,10 @@ describe("Week functions", () => {
 
 	describe("getWeek", () => {
 		it("should return correct ISO week number for various dates", () => {
-			// Test with known ISO week numbers
-			expect(getWeek({ day: 1, month: 1, year: 2023 }, "UTC")).toBe(52); // 2023-01-01 is week 52 of 2022
-			expect(getWeek({ day: 2, month: 1, year: 2023 }, "UTC")).toBe(1); // 2023-01-02 is week 1 of 2023
-			expect(getWeek({ day: 31, month: 12, year: 2023 }, "UTC")).toBe(52); // 2023-12-31 is week 52 of 2023
+			// Test with known ISO week numbers using base function
+			expect(getWeekBase(2023, 1, 1, "UTC")).toBe(52); // 2023-01-01 is week 52 of 2022
+			expect(getWeekBase(2023, 1, 2, "UTC")).toBe(1); // 2023-01-02 is week 1 of 2023
+			expect(getWeekBase(2023, 12, 31, "UTC")).toBe(52); // 2023-12-31 is week 52 of 2023
 
 			// Test with timestamp input
 			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023
@@ -36,17 +42,16 @@ describe("Week functions", () => {
 		});
 
 		it("should handle timezone-specific dates correctly", () => {
-			// Test DST transition dates
-			const dstTransition = { day: 12, month: 3, year: 2023 }; // DST starts in US
-			expect(getWeek(dstTransition, "America/New_York")).toBe(10);
-			expect(getWeek(dstTransition, "UTC")).toBe(10);
+			// Test DST transition dates using base function
+			expect(getWeekBase(2023, 3, 12, "America/New_York")).toBe(10); // DST starts in US
+			expect(getWeekBase(2023, 3, 12, "UTC")).toBe(10);
 		});
 
 		it("should handle edge cases around year boundaries", () => {
-			// January 1st that belongs to previous year's week
-			expect(getWeek({ day: 1, month: 1, year: 2018 }, "UTC")).toBe(1);
-			expect(getWeek({ day: 1, month: 1, year: 2019 }, "UTC")).toBe(1);
-			expect(getWeek({ day: 1, month: 1, year: 2021 }, "UTC")).toBe(53); // 2021-01-01 is week 53 of 2020
+			// January 1st that belongs to previous year's week using base function
+			expect(getWeekBase(2018, 1, 1, "UTC")).toBe(1);
+			expect(getWeekBase(2019, 1, 1, "UTC")).toBe(1);
+			expect(getWeekBase(2021, 1, 1, "UTC")).toBe(53); // 2021-01-01 is week 53 of 2020
 		});
 
 		it("defaults to local timezone when timezone is undefined", () => {
@@ -70,15 +75,10 @@ describe("Week functions", () => {
 
 	describe("getISOWeekYear", () => {
 		it("should return correct ISO week year", () => {
-			expect(getISOWeekYear({ day: 1, month: 1, year: 2023 }, "UTC")).toBe(
-				2022,
-			); // Belongs to 2022 ISO year
-			expect(getISOWeekYear({ day: 2, month: 1, year: 2023 }, "UTC")).toBe(
-				2023,
-			); // Belongs to 2023 ISO year
-			expect(getISOWeekYear({ day: 31, month: 12, year: 2023 }, "UTC")).toBe(
-				2023,
-			);
+			// Use base function for walltime parameters
+			expect(getISOWeekYearBase(2023, 1, 1, "UTC")).toBe(2022); // Belongs to 2022 ISO year
+			expect(getISOWeekYearBase(2023, 1, 2, "UTC")).toBe(2023); // Belongs to 2023 ISO year
+			expect(getISOWeekYearBase(2023, 12, 31, "UTC")).toBe(2023);
 		});
 
 		it("should handle timestamp input", () => {
@@ -87,10 +87,10 @@ describe("Week functions", () => {
 		});
 
 		it("should work with different timezones", () => {
-			const date = { day: 1, month: 1, year: 2023 };
-			expect(getISOWeekYear(date, "UTC")).toBe(2022);
-			expect(getISOWeekYear(date, "America/New_York")).toBe(2022);
-			expect(getISOWeekYear(date, "Asia/Tokyo")).toBe(2022);
+			// Use base function for walltime parameters
+			expect(getISOWeekYearBase(2023, 1, 1, "UTC")).toBe(2022);
+			expect(getISOWeekYearBase(2023, 1, 1, "America/New_York")).toBe(2022);
+			expect(getISOWeekYearBase(2023, 1, 1, "Asia/Tokyo")).toBe(2022);
 		});
 
 		it("defaults to local timezone when timezone is undefined", () => {
@@ -114,8 +114,8 @@ describe("Week functions", () => {
 
 	describe("startOfWeek", () => {
 		it("should return start of week (Monday) by default", () => {
-			// Test Monday (should return same day at 00:00)
-			const monday = startOfWeek({ day: 5, month: 6, year: 2023 }, "UTC"); // June 5, 2023 is Monday
+			// Test Monday (should return same day at 00:00) using base function
+			const monday = startOfWeekBase(2023, 6, 5, WeekStartsOn.MONDAY, "UTC"); // June 5, 2023 is Monday
 			const mondayParts = formatToParts(monday, "UTC", {
 				day: "2-digit",
 				hour: "2-digit",
@@ -130,8 +130,8 @@ describe("Week functions", () => {
 			expect(mondayParts.minute).toBe(0);
 			expect(mondayParts.second).toBe(0);
 
-			// Test Sunday (should return previous Monday)
-			const sunday = startOfWeek({ day: 11, month: 6, year: 2023 }, "UTC"); // June 11, 2023 is Sunday
+			// Test Sunday (should return previous Monday) using base function
+			const sunday = startOfWeekBase(2023, 6, 11, WeekStartsOn.MONDAY, "UTC"); // June 11, 2023 is Sunday
 			const sundayParts = formatToParts(sunday, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -139,8 +139,8 @@ describe("Week functions", () => {
 			});
 			expect(sundayParts.day).toBe(5); // Should be June 5 (previous Monday)
 
-			// Test Friday
-			const friday = startOfWeek({ day: 9, month: 6, year: 2023 }, "UTC"); // June 9, 2023 is Friday
+			// Test Friday using base function
+			const friday = startOfWeekBase(2023, 6, 9, WeekStartsOn.MONDAY, "UTC"); // June 9, 2023 is Friday
 			const fridayParts = formatToParts(friday, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -150,10 +150,15 @@ describe("Week functions", () => {
 		});
 
 		it("should handle different week start days", () => {
-			const thursday = { day: 8, month: 6, year: 2023 }; // June 8, 2023 is Thursday
-
+			// June 8, 2023 is Thursday - use base function
 			// Sunday start (US style)
-			const sundayStart = startOfWeek(thursday, "UTC", WeekStartsOn.SUNDAY);
+			const sundayStart = startOfWeekBase(
+				2023,
+				6,
+				8,
+				WeekStartsOn.SUNDAY,
+				"UTC",
+			);
 			const sundayParts = formatToParts(sundayStart, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -162,7 +167,13 @@ describe("Week functions", () => {
 			expect(sundayParts.day).toBe(4); // Should be June 4 (Sunday)
 
 			// Monday start (ISO style)
-			const mondayStart = startOfWeek(thursday, "UTC", WeekStartsOn.MONDAY);
+			const mondayStart = startOfWeekBase(
+				2023,
+				6,
+				8,
+				WeekStartsOn.MONDAY,
+				"UTC",
+			);
 			const mondayParts = formatToParts(mondayStart, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -171,7 +182,13 @@ describe("Week functions", () => {
 			expect(mondayParts.day).toBe(5); // Should be June 5 (Monday)
 
 			// Saturday start (Middle East style)
-			const saturdayStart = startOfWeek(thursday, "UTC", WeekStartsOn.SATURDAY);
+			const saturdayStart = startOfWeekBase(
+				2023,
+				6,
+				8,
+				WeekStartsOn.SATURDAY,
+				"UTC",
+			);
 			const saturdayParts = formatToParts(saturdayStart, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -181,9 +198,12 @@ describe("Week functions", () => {
 		});
 
 		it("should handle DST transitions correctly", () => {
-			// DST start in US (spring forward)
-			const dstStart = startOfWeek(
-				{ day: 12, month: 3, year: 2023 },
+			// DST start in US (spring forward) using base function
+			const dstStart = startOfWeekBase(
+				2023,
+				3,
+				12,
+				WeekStartsOn.MONDAY,
 				"America/New_York",
 			);
 			const dstStartParts = formatToParts(dstStart, "America/New_York", {
@@ -193,9 +213,12 @@ describe("Week functions", () => {
 			});
 			expect(dstStartParts.day).toBe(6); // Should be March 6 (Monday of that week)
 
-			// DST end in US (fall back)
-			const dstEnd = startOfWeek(
-				{ day: 5, month: 11, year: 2023 },
+			// DST end in US (fall back) using base function
+			const dstEnd = startOfWeekBase(
+				2023,
+				11,
+				5,
+				WeekStartsOn.MONDAY,
 				"America/New_York",
 			);
 			const dstEndParts = formatToParts(dstEnd, "America/New_York", {
@@ -238,8 +261,8 @@ describe("Week functions", () => {
 
 	describe("endOfWeek", () => {
 		it("should return end of week (Sunday) by default", () => {
-			// Test Monday (should return Sunday of same week)
-			const monday = endOfWeek({ day: 5, month: 6, year: 2023 }, "UTC"); // June 5, 2023 is Monday
+			// Test Monday (should return Sunday of same week) using base function
+			const monday = endOfWeekBase(2023, 6, 5, WeekStartsOn.MONDAY, "UTC"); // June 5, 2023 is Monday
 			const mondayParts = formatToParts(monday, "UTC", {
 				day: "2-digit",
 				hour: "2-digit",
@@ -254,8 +277,8 @@ describe("Week functions", () => {
 			expect(mondayParts.minute).toBe(59);
 			expect(mondayParts.second).toBe(59);
 
-			// Test Sunday (should return same day at 23:59:59)
-			const sunday = endOfWeek({ day: 11, month: 6, year: 2023 }, "UTC"); // June 11, 2023 is Sunday
+			// Test Sunday (should return same day at 23:59:59) using base function
+			const sunday = endOfWeekBase(2023, 6, 11, WeekStartsOn.MONDAY, "UTC"); // June 11, 2023 is Sunday
 			const sundayParts = formatToParts(sunday, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -265,10 +288,9 @@ describe("Week functions", () => {
 		});
 
 		it("should handle different week start days", () => {
-			const thursday = { day: 8, month: 6, year: 2023 }; // June 8, 2023 is Thursday
-
+			// June 8, 2023 is Thursday - use base function
 			// Sunday start (US style) - week ends on Saturday
-			const sundayStart = endOfWeek(thursday, "UTC", WeekStartsOn.SUNDAY);
+			const sundayStart = endOfWeekBase(2023, 6, 8, WeekStartsOn.SUNDAY, "UTC");
 			const sundayParts = formatToParts(sundayStart, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -277,7 +299,7 @@ describe("Week functions", () => {
 			expect(sundayParts.day).toBe(10); // Should be June 10 (Saturday)
 
 			// Monday start (ISO style) - week ends on Sunday
-			const mondayStart = endOfWeek(thursday, "UTC", WeekStartsOn.MONDAY);
+			const mondayStart = endOfWeekBase(2023, 6, 8, WeekStartsOn.MONDAY, "UTC");
 			const mondayParts = formatToParts(mondayStart, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -286,7 +308,13 @@ describe("Week functions", () => {
 			expect(mondayParts.day).toBe(11); // Should be June 11 (Sunday)
 
 			// Saturday start (Middle East style) - week ends on Friday
-			const saturdayStart = endOfWeek(thursday, "UTC", WeekStartsOn.SATURDAY);
+			const saturdayStart = endOfWeekBase(
+				2023,
+				6,
+				8,
+				WeekStartsOn.SATURDAY,
+				"UTC",
+			);
 			const saturdayParts = formatToParts(saturdayStart, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -296,8 +324,8 @@ describe("Week functions", () => {
 		});
 
 		it("should handle month boundaries", () => {
-			// Test last day of month
-			const lastDay = endOfWeek({ day: 31, month: 5, year: 2023 }, "UTC"); // May 31, 2023 is Wednesday
+			// Test last day of month using base function
+			const lastDay = endOfWeekBase(2023, 5, 31, WeekStartsOn.MONDAY, "UTC"); // May 31, 2023 is Wednesday
 			const parts = formatToParts(lastDay, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -308,8 +336,12 @@ describe("Week functions", () => {
 		});
 
 		it("should handle DST transitions", () => {
-			const dstDate = endOfWeek(
-				{ day: 12, month: 3, year: 2023 },
+			// DST transition using base function
+			const dstDate = endOfWeekBase(
+				2023,
+				3,
+				12,
+				WeekStartsOn.MONDAY,
 				"America/New_York",
 			);
 			const parts = formatToParts(dstDate, "America/New_York", {
@@ -341,7 +373,8 @@ describe("Week functions", () => {
 
 	describe("addWeeks", () => {
 		it("should add weeks correctly", () => {
-			const result = addWeeks({ day: 15, month: 6, year: 2023 }, 2, "UTC");
+			// Use base function for walltime parameters
+			const result = addWeeksBase(2023, 6, 15, 2, "UTC");
 			const parts = formatToParts(result, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -351,7 +384,8 @@ describe("Week functions", () => {
 		});
 
 		it("should handle negative weeks", () => {
-			const result = addWeeks({ day: 15, month: 6, year: 2023 }, -1, "UTC");
+			// Use base function for walltime parameters
+			const result = addWeeksBase(2023, 6, 15, -1, "UTC");
 			const parts = formatToParts(result, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -361,7 +395,8 @@ describe("Week functions", () => {
 		});
 
 		it("should handle month boundaries", () => {
-			const result = addWeeks({ day: 31, month: 5, year: 2023 }, 1, "UTC");
+			// Use base function for walltime parameters
+			const result = addWeeksBase(2023, 5, 31, 1, "UTC");
 			const parts = formatToParts(result, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -386,9 +421,8 @@ describe("Week functions", () => {
 		});
 
 		it("should handle DST transitions", () => {
-			// Add weeks across DST transition
-			const beforeDST = { day: 5, month: 3, year: 2023 }; // Before DST
-			const result = addWeeks(beforeDST, 2, "America/New_York"); // Should cross DST boundary
+			// Add weeks across DST transition using base function
+			const result = addWeeksBase(2023, 3, 5, 2, "America/New_York"); // Before DST, should cross DST boundary
 			const parts = formatToParts(result, "America/New_York", {
 				day: "2-digit",
 				month: "2-digit",
@@ -398,8 +432,8 @@ describe("Week functions", () => {
 		});
 
 		it("should handle zero weeks", () => {
-			const date = { day: 15, month: 6, year: 2023 };
-			const result = addWeeks(date, 0, "UTC");
+			// Use base function for walltime parameters
+			const result = addWeeksBase(2023, 6, 15, 0, "UTC");
 			const parts = formatToParts(result, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -433,7 +467,9 @@ describe("Week functions", () => {
 
 	describe("subWeeks", () => {
 		it("should subtract weeks correctly", () => {
-			const result = subWeeks({ day: 15, month: 6, year: 2023 }, 2, "UTC");
+			// Use timestamp for main function
+			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023
+			const result = subWeeks(timestamp, 2, "UTC");
 			const parts = formatToParts(result, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -443,7 +479,9 @@ describe("Week functions", () => {
 		});
 
 		it("should handle negative weeks (equivalent to adding)", () => {
-			const result = subWeeks({ day: 15, month: 6, year: 2023 }, -1, "UTC");
+			// Use timestamp for main function
+			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023
+			const result = subWeeks(timestamp, -1, "UTC");
 			const parts = formatToParts(result, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -453,14 +491,17 @@ describe("Week functions", () => {
 		});
 
 		it("should be equivalent to addWeeks with negative amount", () => {
-			const date = { day: 15, month: 6, year: 2023 };
-			const sub = subWeeks(date, 3, "UTC");
-			const add = addWeeks(date, -3, "UTC");
+			// Use timestamp for both functions
+			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023
+			const sub = subWeeks(timestamp, 3, "UTC");
+			const add = addWeeks(timestamp, -3, "UTC");
 			expect(sub).toBe(add);
 		});
 
 		it("should handle year boundaries", () => {
-			const result = subWeeks({ day: 7, month: 1, year: 2023 }, 2, "UTC");
+			// Use timestamp for main function
+			const timestamp = Date.UTC(2023, 0, 7); // January 7, 2023
+			const result = subWeeks(timestamp, 2, "UTC");
 			const parts = formatToParts(result, "UTC", {
 				day: "2-digit",
 				month: "2-digit",
@@ -496,23 +537,26 @@ describe("Week functions", () => {
 
 	describe("startOfISOWeek", () => {
 		it("should return same result as startOfWeek with Monday", () => {
-			const date = { day: 15, month: 6, year: 2023 };
-			const isoStart = startOfISOWeek(date, "UTC");
-			const regularStart = startOfWeek(date, "UTC", WeekStartsOn.MONDAY);
+			// Use timestamp for main functions
+			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023
+			const isoStart = startOfISOWeek(timestamp, "UTC");
+			const regularStart = startOfWeek(timestamp, "UTC", WeekStartsOn.MONDAY);
 			expect(isoStart).toBe(regularStart);
 		});
 
 		it("should be different from Sunday-based week", () => {
-			const date = { day: 15, month: 6, year: 2023 };
-			const isoStart = startOfISOWeek(date, "UTC");
-			const sundayStart = startOfWeek(date, "UTC", WeekStartsOn.SUNDAY);
+			// Use timestamp for main functions
+			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023
+			const isoStart = startOfISOWeek(timestamp, "UTC");
+			const sundayStart = startOfWeek(timestamp, "UTC", WeekStartsOn.SUNDAY);
 			expect(isoStart).not.toBe(sundayStart);
 		});
 
 		it("should work with different timezones", () => {
-			const date = { day: 15, month: 6, year: 2023 };
-			const utcStart = startOfISOWeek(date, "UTC");
-			const nyStart = startOfISOWeek(date, "America/New_York");
+			// Use timestamp for main functions
+			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023
+			const utcStart = startOfISOWeek(timestamp, "UTC");
+			const nyStart = startOfISOWeek(timestamp, "America/New_York");
 
 			// Should be different timestamps but same logical start of week
 			expect(utcStart).not.toBe(nyStart);
@@ -551,16 +595,18 @@ describe("Week functions", () => {
 
 	describe("endOfISOWeek", () => {
 		it("should return same result as endOfWeek with Monday", () => {
-			const date = { day: 15, month: 6, year: 2023 };
-			const isoEnd = endOfISOWeek(date, "UTC");
-			const regularEnd = endOfWeek(date, "UTC", WeekStartsOn.MONDAY);
+			// Use timestamp for main functions
+			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023
+			const isoEnd = endOfISOWeek(timestamp, "UTC");
+			const regularEnd = endOfWeek(timestamp, "UTC", WeekStartsOn.MONDAY);
 			expect(isoEnd).toBe(regularEnd);
 		});
 
 		it("should be different from Sunday-based week", () => {
-			const date = { day: 15, month: 6, year: 2023 };
-			const isoEnd = endOfISOWeek(date, "UTC");
-			const sundayEnd = endOfWeek(date, "UTC", WeekStartsOn.SUNDAY);
+			// Use timestamp for main functions
+			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023
+			const isoEnd = endOfISOWeek(timestamp, "UTC");
+			const sundayEnd = endOfWeek(timestamp, "UTC", WeekStartsOn.SUNDAY);
 			expect(isoEnd).not.toBe(sundayEnd);
 		});
 
@@ -603,44 +649,57 @@ describe("Week functions", () => {
 
 	describe("getWeeksInMonth", () => {
 		it("should return correct number of weeks for various months with Monday start", () => {
-			// February 2023 (28 days, starts on Wednesday)
-			expect(getWeeksInMonth({ day: 1, month: 2, year: 2023 }, "UTC")).toBe(5);
+			// February 2023 (28 days, starts on Wednesday) - use base function
+			expect(getWeeksInMonthBase(2023, 2, WeekStartsOn.MONDAY, "UTC")).toBe(5);
 
-			// February 2024 (29 days, leap year, starts on Thursday)
-			expect(getWeeksInMonth({ day: 1, month: 2, year: 2024 }, "UTC")).toBe(5);
+			// February 2024 (29 days, leap year, starts on Thursday) - use base function
+			expect(getWeeksInMonthBase(2024, 2, WeekStartsOn.MONDAY, "UTC")).toBe(5);
 
-			// January 2023 (31 days, starts on Sunday)
-			expect(getWeeksInMonth({ day: 1, month: 1, year: 2023 }, "UTC")).toBe(6);
+			// January 2023 (31 days, starts on Sunday) - use base function
+			expect(getWeeksInMonthBase(2023, 1, WeekStartsOn.MONDAY, "UTC")).toBe(6);
 
-			// June 2023 (30 days, starts on Thursday)
-			expect(getWeeksInMonth({ day: 1, month: 6, year: 2023 }, "UTC")).toBe(5);
+			// June 2023 (30 days, starts on Thursday) - use base function
+			expect(getWeeksInMonthBase(2023, 6, WeekStartsOn.MONDAY, "UTC")).toBe(5);
 
-			// May 2023 (31 days, starts on Monday)
-			expect(getWeeksInMonth({ day: 1, month: 5, year: 2023 }, "UTC")).toBe(5);
+			// May 2023 (31 days, starts on Monday) - use base function
+			expect(getWeeksInMonthBase(2023, 5, WeekStartsOn.MONDAY, "UTC")).toBe(5);
 		});
 
 		it("should handle different week start days", () => {
-			// January 2023 starts on Sunday
-			const date = { day: 1, month: 1, year: 2023 };
-
+			// January 2023 starts on Sunday - use base function
 			// With Sunday start, January 2023 should need fewer weeks
-			const sundayWeeks = getWeeksInMonth(date, "UTC", WeekStartsOn.SUNDAY);
+			const sundayWeeks = getWeeksInMonthBase(
+				2023,
+				1,
+				WeekStartsOn.SUNDAY,
+				"UTC",
+			);
 			expect(sundayWeeks).toBe(5);
 
 			// With Monday start, January 2023 should need more weeks
-			const mondayWeeks = getWeeksInMonth(date, "UTC", WeekStartsOn.MONDAY);
+			const mondayWeeks = getWeeksInMonthBase(
+				2023,
+				1,
+				WeekStartsOn.MONDAY,
+				"UTC",
+			);
 			expect(mondayWeeks).toBe(6);
 
 			// With Saturday start (January starts on Sunday, which is day 1 of Saturday-based week)
-			const saturdayWeeks = getWeeksInMonth(date, "UTC", WeekStartsOn.SATURDAY);
+			const saturdayWeeks = getWeeksInMonthBase(
+				2023,
+				1,
+				WeekStartsOn.SATURDAY,
+				"UTC",
+			);
 			expect(saturdayWeeks).toBe(5);
 		});
 
 		it("should work with TimeZone day of the month", () => {
-			// All days in June 2023 should return same number of weeks
-			expect(getWeeksInMonth({ day: 1, month: 6, year: 2023 }, "UTC")).toBe(5);
-			expect(getWeeksInMonth({ day: 15, month: 6, year: 2023 }, "UTC")).toBe(5);
-			expect(getWeeksInMonth({ day: 30, month: 6, year: 2023 }, "UTC")).toBe(5);
+			// All days in June 2023 should return same number of weeks - use timestamps
+			expect(getWeeksInMonth(Date.UTC(2023, 5, 1), "UTC")).toBe(5);
+			expect(getWeeksInMonth(Date.UTC(2023, 5, 15), "UTC")).toBe(5);
+			expect(getWeeksInMonth(Date.UTC(2023, 5, 30), "UTC")).toBe(5);
 		});
 
 		it("should work with timestamp input", () => {
@@ -649,17 +708,18 @@ describe("Week functions", () => {
 		});
 
 		it("should handle edge cases", () => {
-			// Test months that definitely need 6 weeks with Monday start
-			expect(getWeeksInMonth({ day: 1, month: 1, year: 2023 }, "UTC")).toBe(6); // January 2023
-			expect(getWeeksInMonth({ day: 1, month: 7, year: 2023 }, "UTC")).toBe(6); // July 2023
-			expect(getWeeksInMonth({ day: 1, month: 10, year: 2023 }, "UTC")).toBe(6); // October 2023
+			// Test months that definitely need 6 weeks with Monday start - use base function
+			expect(getWeeksInMonthBase(2023, 1, WeekStartsOn.MONDAY, "UTC")).toBe(6); // January 2023
+			expect(getWeeksInMonthBase(2023, 7, WeekStartsOn.MONDAY, "UTC")).toBe(6); // July 2023
+			expect(getWeeksInMonthBase(2023, 10, WeekStartsOn.MONDAY, "UTC")).toBe(6); // October 2023
 		});
 
 		it("should work with different timezones", () => {
-			const date = { day: 15, month: 6, year: 2023 };
-			const utcWeeks = getWeeksInMonth(date, "UTC");
-			const nyWeeks = getWeeksInMonth(date, "America/New_York");
-			const tokyoWeeks = getWeeksInMonth(date, "Asia/Tokyo");
+			// Use timestamps for main functions
+			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023
+			const utcWeeks = getWeeksInMonth(timestamp, "UTC");
+			const nyWeeks = getWeeksInMonth(timestamp, "America/New_York");
+			const tokyoWeeks = getWeeksInMonth(timestamp, "Asia/Tokyo");
 
 			// Should generally be the same for most cases
 			expect(utcWeeks).toBe(5);
@@ -668,11 +728,11 @@ describe("Week functions", () => {
 		});
 
 		it("should handle leap years correctly", () => {
-			// February 2024 (leap year)
-			expect(getWeeksInMonth({ day: 1, month: 2, year: 2024 }, "UTC")).toBe(5);
+			// February 2024 (leap year) - use base function
+			expect(getWeeksInMonthBase(2024, 2, WeekStartsOn.MONDAY, "UTC")).toBe(5);
 
-			// February 2023 (non-leap year)
-			expect(getWeeksInMonth({ day: 1, month: 2, year: 2023 }, "UTC")).toBe(5);
+			// February 2023 (non-leap year) - use base function
+			expect(getWeeksInMonthBase(2023, 2, WeekStartsOn.MONDAY, "UTC")).toBe(5);
 		});
 
 		it("should return values in correct range", () => {
@@ -688,11 +748,7 @@ describe("Week functions", () => {
 			for (const year of years) {
 				for (const month of months) {
 					for (const weekStart of weekStarts) {
-						const weeks = getWeeksInMonth(
-							{ day: 1, month, year },
-							"UTC",
-							weekStart,
-						);
+						const weeks = getWeeksInMonthBase(year, month, weekStart, "UTC");
 						expect(weeks).toBeGreaterThanOrEqual(4);
 						expect(weeks).toBeLessThanOrEqual(6);
 					}
@@ -723,14 +779,14 @@ describe("Week functions", () => {
 		it("should perform well with large number of operations", () => {
 			const start = performance.now();
 
-			// Perform 1000 operations
+			// Perform 1000 operations using timestamps
 			for (let i = 0; i < 1000; i++) {
-				const date = { day: (i % 30) + 1, month: 6, year: 2023 };
-				getWeek(date, "UTC");
-				startOfWeek(date, "UTC");
-				endOfWeek(date, "UTC");
-				addWeeks(date, 1, "UTC");
-				getWeeksInMonth(date, "UTC");
+				const timestamp = Date.UTC(2023, 5, (i % 30) + 1); // June 1-30, 2023
+				getWeek(timestamp, "UTC");
+				startOfWeek(timestamp, "UTC");
+				endOfWeek(timestamp, "UTC");
+				addWeeks(timestamp, 1, "UTC");
+				getWeeksInMonth(timestamp, "UTC");
 			}
 
 			const end = performance.now();
@@ -754,29 +810,25 @@ describe("Week functions", () => {
 
 			// Test with multiple operations to ensure consistency
 			for (let i = 0; i < 10; i++) {
-				const result = addWeeks(timestamp, i, "UTC");
-				const expectedResult = timestamp + i * 7 * 24 * 60 * 60 * 1000;
-				expect(result).toBe(expectedResult);
+				const ts = Date.UTC(2023, 5, i + 1);
+				const weekAdded = addWeeks(ts, i, "UTC");
+				expect(weekAdded).toBe(ts + i * 7 * 24 * 60 * 60 * 1000);
 			}
 		});
 	});
 
 	describe("Edge cases and error handling", () => {
 		it("should handle extreme dates", () => {
-			// Test year 1900
-			expect(getWeek({ day: 1, month: 1, year: 1900 }, "UTC")).toBeGreaterThan(
-				0,
-			);
+			// Test year 1900 - use timestamp
+			expect(getWeek(Date.UTC(1900, 0, 1), "UTC")).toBeGreaterThan(0);
 
-			// Test year 2100
-			expect(
-				getWeek({ day: 31, month: 12, year: 2100 }, "UTC"),
-			).toBeGreaterThan(0);
+			// Test far future date - use timestamp
+			expect(getWeek(Date.UTC(2100, 11, 31), "UTC")).toBeGreaterThan(0);
 		});
 
 		it("should handle DST transition edge cases", () => {
-			// Spring forward (2 AM becomes 3 AM)
-			const springForward = { day: 12, month: 3, year: 2023 };
+			// Spring forward (2 AM becomes 3 AM) - use timestamps
+			const springForward = Date.UTC(2023, 2, 12); // March 12, 2023
 			expect(() =>
 				startOfWeek(springForward, "America/New_York"),
 			).not.toThrow();
@@ -785,21 +837,21 @@ describe("Week functions", () => {
 				addWeeks(springForward, 1, "America/New_York"),
 			).not.toThrow();
 
-			// Fall back (2 AM becomes 1 AM)
-			const fallBack = { day: 5, month: 11, year: 2023 };
+			// Fall back (3 AM becomes 2 AM) - use timestamps
+			const fallBack = Date.UTC(2023, 10, 5); // November 5, 2023
 			expect(() => startOfWeek(fallBack, "America/New_York")).not.toThrow();
 			expect(() => endOfWeek(fallBack, "America/New_York")).not.toThrow();
 			expect(() => addWeeks(fallBack, 1, "America/New_York")).not.toThrow();
 		});
 
 		it("should handle invalid dates gracefully", () => {
-			// These should not throw errors due to the way Date constructor works
-			// but results might be unexpected
-			expect(() =>
-				getWeek({ day: 30, month: 2, year: 2023 }, "UTC"),
+			// Invalid dates should not throw - use timestamps
+			expect(
+				() => getWeek(Date.UTC(2023, 1, 30), "UTC"), // February 30 is invalid but Date.UTC handles it
 			).not.toThrow();
-			expect(() =>
-				getWeek({ day: 1, month: 13, year: 2023 }, "UTC"),
+
+			expect(
+				() => getWeek(Date.UTC(2023, 12, 1), "UTC"), // Month 13 is invalid but Date.UTC handles it
 			).not.toThrow();
 		});
 	});

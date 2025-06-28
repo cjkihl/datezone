@@ -1,5 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { formatters } from "../format/formatters";
+import type { TimeZone } from "../timezone";
 
 const baseDT = {
 	day: 1,
@@ -54,7 +55,7 @@ describe("formatters direct unit tests", () => {
 			dt: { ...baseDT, year: 2024 },
 			len: 4,
 			locale: "en",
-			timeZone: "UTC" as import("../iana").TimeZone,
+			timeZone: "UTC" as TimeZone,
 		};
 		expect(typeof formatters.R(opts)).toBe("string");
 		expect(typeof formatters.RR(opts)).toBe("string");
@@ -196,31 +197,31 @@ describe("formatters - complex and edge cases", () => {
 		dt: dtMidnight,
 		len: 2,
 		locale: "en",
-		timeZone: "UTC" as import("../iana").TimeZone,
+		timeZone: "UTC" as TimeZone,
 	};
 	const optsNoon = {
 		dt: dtNoon,
 		len: 2,
 		locale: "en",
-		timeZone: "UTC" as import("../iana").TimeZone,
+		timeZone: "UTC" as TimeZone,
 	};
 	const optsEvening = {
 		dt: dtEvening,
 		len: 2,
 		locale: "en",
-		timeZone: "UTC" as import("../iana").TimeZone,
+		timeZone: "UTC" as TimeZone,
 	};
 	const optsLeap = {
 		dt: dtLeap,
 		len: 2,
 		locale: "en",
-		timeZone: "UTC" as import("../iana").TimeZone,
+		timeZone: "UTC" as TimeZone,
 	};
 	const optsBC = {
 		dt: dtBC,
 		len: 2,
 		locale: "en",
-		timeZone: "UTC" as import("../iana").TimeZone,
+		timeZone: "UTC" as TimeZone,
 	};
 
 	it("AM/PM formatters (a, aa, aaa, aaaa, aaaaa)", () => {
