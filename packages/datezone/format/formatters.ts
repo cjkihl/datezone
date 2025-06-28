@@ -471,13 +471,13 @@ function BBBBB(o: Options): string {
  * Hour [1-12]
  */
 function h(o: Options): string {
-	return String(to12Hour(o.dt, o.tz));
+	return String(to12Hour(o.dt.hour));
 }
 function ho(o: Options): string {
-	return formatOrdinal(to12Hour(o.dt, o.tz), o.locale);
+	return formatOrdinal(to12Hour(o.dt.hour), o.locale);
 }
 function hh(o: Options): string {
-	return padZeros(to12Hour(o.dt), 2);
+	return padZeros(to12Hour(o.dt.hour), 2);
 }
 
 /**

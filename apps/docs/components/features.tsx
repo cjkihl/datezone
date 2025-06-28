@@ -13,7 +13,6 @@ import {
 import { cn } from "@/lib/utils";
 import { TechStackDisplay } from "./display-techstack";
 import { GithubStat } from "./github-stat";
-import { Testimonial } from "./landing/people-say";
 import { Ripple } from "./ripple";
 
 const features = [
@@ -117,20 +116,20 @@ export default function Features({ stars }: { stars: string | null }) {
 						</div>
 					))}
 				</div>
-				<div className="w-full border-l-2 hidden md:block">
-					<Testimonial />
-				</div>
+
 				<div className="relative col-span-3 border-t-[1.2px] border-l-[1.2px] md:border-b-[1.2px] dark:border-b-0  h-full py-20">
 					<div className="w-full h-full p-16 pt-10 md:px-10">
 						<div className="flex flex-col items-center justify-center w-full h-full gap-3">
 							<div className="flex items-center gap-2">
 								<Globe2Icon className="w-4 h-4" />
 								<p className="text-gray-600 dark:text-gray-400">
-									Own your auth
+									Control your timezones
 								</p>
 							</div>
 							<p className="max-w-md mx-auto mt-4 text-4xl font-normal tracking-tighter text-center md:text-4xl">
-								<strong>Roll your own auth with confidence in minutes!</strong>
+								<strong>
+									Take control of your date and time with confidence!
+								</strong>
 							</p>
 							<div className="flex mt-[10px] z-20 justify-center items-start">
 								<TechStackDisplay

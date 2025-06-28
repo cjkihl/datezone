@@ -1,19 +1,17 @@
 import { describe, expect, test } from "bun:test";
 import { addDays, endOfDay, getDayPeriod, startOfDay, subDays } from "./day";
 import { formatGMT, formatTimestamp, formatTimezone } from "./format/utils";
-import {
-	addHours,
-	addMilliseconds,
-	addMinutes,
-	addSeconds,
-	subHours,
-	subMilliseconds,
-	subMinutes,
-	subSeconds,
-} from "./hour";
+import { addHours, subHours } from "./hour";
 import { getLocalTimezone } from "./index.pub";
+import { addMinutes, subMinutes } from "./minutes";
 import { addMonths, daysInMonth } from "./month";
 import { getTimezoneOffsetMinutes } from "./offset";
+import {
+	addMilliseconds,
+	addSeconds,
+	subMilliseconds,
+	subSeconds,
+} from "./seconds";
 
 describe("Coverage Tests - Missing Lines", () => {
 	describe("Day functions with DayOptions input", () => {
@@ -97,44 +95,45 @@ describe("Coverage Tests - Missing Lines", () => {
 
 	describe("Hour functions with HourOptions", () => {
 		const hourOptions = { hour: 14 };
+		const timestamp = Date.now(); // Use actual timestamp for seconds/milliseconds functions
 
-		test("addHours with HourOptions", () => {
-			const result = addHours(hourOptions, 2, "UTC");
+		test("addHours with timestamp", () => {
+			const result = addHours(timestamp, 2);
 			expect(result).toBeGreaterThan(0);
 		});
 
-		test("subHours with HourOptions", () => {
-			const result = subHours(hourOptions, 2, "UTC");
+		test("subHours with timestamp", () => {
+			const result = subHours(timestamp, 2);
 			expect(result).toBeGreaterThan(0);
 		});
 
-		test("addMinutes with HourOptions", () => {
-			const result = addMinutes(hourOptions, 30, "UTC");
+		test("addMinutes with timestamp", () => {
+			const result = addMinutes(timestamp, 30);
 			expect(result).toBeGreaterThan(0);
 		});
 
-		test("subMinutes with HourOptions", () => {
-			const result = subMinutes(hourOptions, 30, "UTC");
+		test("subMinutes with timestamp", () => {
+			const result = subMinutes(timestamp, 30);
 			expect(result).toBeGreaterThan(0);
 		});
 
-		test("addSeconds with HourOptions", () => {
-			const result = addSeconds(hourOptions, 30, "UTC");
+		test("addSeconds with timestamp", () => {
+			const result = addSeconds(timestamp, 30);
 			expect(result).toBeGreaterThan(0);
 		});
 
-		test("subSeconds with HourOptions", () => {
-			const result = subSeconds(hourOptions, 30, "UTC");
+		test("subSeconds with timestamp", () => {
+			const result = subSeconds(timestamp, 30);
 			expect(result).toBeGreaterThan(0);
 		});
 
-		test("addMilliseconds with HourOptions", () => {
-			const result = addMilliseconds(hourOptions, 500);
+		test("addMilliseconds with timestamp", () => {
+			const result = addMilliseconds(timestamp, 500);
 			expect(result).toBeGreaterThan(0);
 		});
 
-		test("subMilliseconds with HourOptions", () => {
-			const result = subMilliseconds(hourOptions, 500);
+		test("subMilliseconds with timestamp", () => {
+			const result = subMilliseconds(timestamp, 500);
 			expect(result).toBeGreaterThan(0);
 		});
 	});
@@ -192,12 +191,12 @@ describe("Coverage Tests - Missing Lines", () => {
 	describe("Additional edge cases for specific line coverage", () => {
 		test("Hour functions with zero values", () => {
 			const now = Date.now();
-			expect(addHours(now, 0, "UTC")).toBe(now);
-			expect(subHours(now, 0, "UTC")).toBe(now);
-			expect(addMinutes(now, 0, "UTC")).toBe(now);
-			expect(subMinutes(now, 0, "UTC")).toBe(now);
-			expect(addSeconds(now, 0, "UTC")).toBe(now);
-			expect(subSeconds(now, 0, "UTC")).toBe(now);
+			expect(addHours(now, 0)).toBe(now);
+			expect(subHours(now, 0)).toBe(now);
+			expect(addMinutes(now, 0)).toBe(now);
+			expect(subMinutes(now, 0)).toBe(now);
+			expect(addSeconds(now, 0)).toBe(now);
+			expect(subSeconds(now, 0)).toBe(now);
 			expect(addMilliseconds(now, 0)).toBe(now);
 			expect(subMilliseconds(now, 0)).toBe(now);
 		});
