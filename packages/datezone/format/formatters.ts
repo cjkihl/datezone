@@ -1,9 +1,11 @@
 import { dayOfWeek, dayOfYear, getDayPeriod, weekDayName } from "../day.js";
+import { to12Hour } from "../hour.js";
 import type { TimeZone } from "../iana.js";
 import { getMonthName } from "../month.js";
 import { formatOrdinal } from "../ordinal.js";
 import type { PlainDateTime } from "../types.js";
 import { getISOWeekYear, getWeek } from "../week.js";
+import { quarter } from "../year.js";
 import {
 	formatGMT,
 	formatTimestamp,
@@ -12,29 +14,12 @@ import {
 } from "./utils.js";
 
 /**
- * Returns the quarter of the year (1-4) for the given month.
- * @param month 1-12
- */
-function getQuarter(month: number): number {
-	return Math.floor((month - 1) / 3) + 1;
-}
-
-/**
- * Converts 24-hour format to 12-hour format
- * @param hour 0-23
- */
-function get12Hour(hour: number): number {
-	const h = hour % 12;
-	return h === 0 ? 12 : h;
-}
-
-/**
  * Options passed to each formatter function.
  */
 type Options = {
 	dt: PlainDateTime;
 	locale: string;
-	timeZone?: TimeZone;
+	tz?: TimeZone;
 	len: number;
 };
 
@@ -114,20 +99,20 @@ function Yo(o: Options): string {
  */
 function R(o: Options): string {
 	return o.len === 2
-		? padZeros(getISOWeekYear(o.dt, o.timeZone) % 100, 2)
-		: padZeros(getISOWeekYear(o.dt, o.timeZone), o.len);
+		? padZeros(getISOWeekYear(o.dt, o.tz) % 100, 2)
+		: padZeros(getISOWeekYear(o.dt, o.tz), o.len);
 }
 function RR(o: Options): string {
-	return padZeros(getISOWeekYear(o.dt, o.timeZone) % 100, 2);
+	return padZeros(getISOWeekYear(o.dt, o.tz) % 100, 2);
 }
 function RRR(o: Options): string {
-	return padZeros(getISOWeekYear(o.dt, o.timeZone), 3);
+	return padZeros(getISOWeekYear(o.dt, o.tz), 3);
 }
 function RRRR(o: Options): string {
-	return padZeros(getISOWeekYear(o.dt, o.timeZone), 4);
+	return padZeros(getISOWeekYear(o.dt, o.tz), 4);
 }
 function RRRRR(o: Options): string {
-	return padZeros(getISOWeekYear(o.dt, o.timeZone), o.len);
+	return padZeros(getISOWeekYear(o.dt, o.tz), o.len);
 }
 
 /**
@@ -153,44 +138,44 @@ function uuuuu(o: Options): string {
  * Quarter (formatting)
  */
 function Q(o: Options): string {
-	return String(getQuarter(o.dt.month));
+	return String(quarter(o.dt.month));
 }
 function Qo(o: Options): string {
-	return formatOrdinal(getQuarter(o.dt.month), o.locale);
+	return formatOrdinal(quarter(o.dt.month), o.locale);
 }
 function QQ(o: Options): string {
-	return padZeros(getQuarter(o.dt.month), 2);
+	return padZeros(quarter(o.dt.month), 2);
 }
 function QQQ(o: Options): string {
-	return `Q${getQuarter(o.dt.month)}`;
+	return `Q${quarter(o.dt.month)}`;
 }
 function QQQQ(o: Options): string {
-	return `${formatOrdinal(getQuarter(o.dt.month), o.locale)} quarter`;
+	return `${formatOrdinal(quarter(o.dt.month), o.locale)} quarter`;
 }
 function QQQQQ(o: Options): string {
-	return String(getQuarter(o.dt.month));
+	return String(quarter(o.dt.month));
 }
 
 /**
  * Quarter (stand-alone)
  */
 function q(o: Options): string {
-	return String(getQuarter(o.dt.month));
+	return String(quarter(o.dt.month));
 }
 function qo(o: Options): string {
-	return formatOrdinal(getQuarter(o.dt.month), o.locale);
+	return formatOrdinal(quarter(o.dt.month), o.locale);
 }
 function qq(o: Options): string {
-	return padZeros(getQuarter(o.dt.month), 2);
+	return padZeros(quarter(o.dt.month), 2);
 }
 function qqq(o: Options): string {
-	return `Q${getQuarter(o.dt.month)}`;
+	return `Q${quarter(o.dt.month)}`;
 }
 function qqqq(o: Options): string {
-	return `${formatOrdinal(getQuarter(o.dt.month), o.locale)} quarter`;
+	return `${formatOrdinal(quarter(o.dt.month), o.locale)} quarter`;
 }
 function qqqqq(o: Options): string {
-	return String(getQuarter(o.dt.month));
+	return String(quarter(o.dt.month));
 }
 
 /**
@@ -241,26 +226,26 @@ function LLLLL(o: Options): string {
  * Local week of year
  */
 function w(o: Options): string {
-	return String(getWeek(o.dt, o.timeZone));
+	return String(getWeek(o.dt, o.tz));
 }
 function wo(o: Options): string {
-	return formatOrdinal(getWeek(o.dt, o.timeZone), o.locale);
+	return formatOrdinal(getWeek(o.dt, o.tz), o.locale);
 }
 function ww(o: Options): string {
-	return padZeros(getWeek(o.dt, o.timeZone), 2);
+	return padZeros(getWeek(o.dt, o.tz), 2);
 }
 
 /**
  * ISO week of year
  */
 function I(o: Options): string {
-	return String(getWeek(o.dt, o.timeZone));
+	return String(getWeek(o.dt, o.tz));
 }
 function Io(o: Options): string {
-	return formatOrdinal(getWeek(o.dt, o.timeZone), o.locale);
+	return formatOrdinal(getWeek(o.dt, o.tz), o.locale);
 }
 function II(o: Options): string {
-	return padZeros(getWeek(o.dt, o.timeZone), 2);
+	return padZeros(getWeek(o.dt, o.tz), 2);
 }
 
 /**
@@ -288,19 +273,19 @@ function dd(o: Options): string {
  * Day of year
  */
 function D(o: Options): string {
-	return String(dayOfYear(o.dt, o.timeZone));
+	return String(dayOfYear(o.dt, o.tz));
 }
 function Do(o: Options): string {
-	return formatOrdinal(dayOfYear(o.dt, o.timeZone), o.locale);
+	return formatOrdinal(dayOfYear(o.dt, o.tz), o.locale);
 }
 function DD(o: Options): string {
-	return padZeros(dayOfYear(o.dt, o.timeZone), 2);
+	return padZeros(dayOfYear(o.dt, o.tz), 2);
 }
 function DDD(o: Options): string {
-	return padZeros(dayOfYear(o.dt, o.timeZone), 3);
+	return padZeros(dayOfYear(o.dt, o.tz), 3);
 }
 function DDDD(o: Options): string {
-	return padZeros(dayOfYear(o.dt, o.timeZone), o.len);
+	return padZeros(dayOfYear(o.dt, o.tz), o.len);
 }
 
 /**
@@ -308,8 +293,8 @@ function DDDD(o: Options): string {
  */
 function E(o: Options): string {
 	return o.len >= 4
-		? weekDayName(o.locale, "long", dayOfWeek(o.dt, o.timeZone))
-		: weekDayName(o.locale, "short", dayOfWeek(o.dt, o.timeZone));
+		? weekDayName(o.locale, "long", dayOfWeek(o.dt, o.tz))
+		: weekDayName(o.locale, "short", dayOfWeek(o.dt, o.tz));
 }
 function EE(o: Options): string {
 	return E(o);
@@ -318,104 +303,92 @@ function EEE(o: Options): string {
 	return E(o);
 }
 function EEEE(o: Options): string {
-	return weekDayName(o.locale, "long", dayOfWeek(o.dt, o.timeZone));
+	return weekDayName(o.locale, "long", dayOfWeek(o.dt, o.tz));
 }
 function EEEEE(o: Options): string {
-	return weekDayName(o.locale, "narrow", dayOfWeek(o.dt, o.timeZone));
+	return weekDayName(o.locale, "narrow", dayOfWeek(o.dt, o.tz));
 }
 function EEEEEE(o: Options): string {
-	return weekDayName(o.locale, "short", dayOfWeek(o.dt, o.timeZone)).slice(
-		0,
-		2,
-	);
+	return weekDayName(o.locale, "short", dayOfWeek(o.dt, o.tz)).slice(0, 2);
 }
 
 /**
  * ISO day of week (formatting)
  */
 function i(o: Options): string {
-	return String(dayOfWeek(o.dt, o.timeZone));
+	return String(dayOfWeek(o.dt, o.tz));
 }
 function io(o: Options): string {
-	return formatOrdinal(dayOfWeek(o.dt, o.timeZone), o.locale);
+	return formatOrdinal(dayOfWeek(o.dt, o.tz), o.locale);
 }
 function ii(o: Options): string {
-	return padZeros(dayOfWeek(o.dt, o.timeZone), 2);
+	return padZeros(dayOfWeek(o.dt, o.tz), 2);
 }
 function iii(o: Options): string {
-	return weekDayName(o.locale, "short", dayOfWeek(o.dt, o.timeZone));
+	return weekDayName(o.locale, "short", dayOfWeek(o.dt, o.tz));
 }
 function iiii(o: Options): string {
-	return weekDayName(o.locale, "long", dayOfWeek(o.dt, o.timeZone));
+	return weekDayName(o.locale, "long", dayOfWeek(o.dt, o.tz));
 }
 function iiiii(o: Options): string {
-	return weekDayName(o.locale, "narrow", dayOfWeek(o.dt, o.timeZone));
+	return weekDayName(o.locale, "narrow", dayOfWeek(o.dt, o.tz));
 }
 function iiiiii(o: Options): string {
-	return weekDayName(o.locale, "short", dayOfWeek(o.dt, o.timeZone)).slice(
-		0,
-		2,
-	);
+	return weekDayName(o.locale, "short", dayOfWeek(o.dt, o.tz)).slice(0, 2);
 }
 
 /**
  * Local day of week (formatting)
  */
 function e(o: Options): string {
-	return String(dayOfWeek(o.dt, o.timeZone));
+	return String(dayOfWeek(o.dt, o.tz));
 }
 function eo(o: Options): string {
-	return formatOrdinal(dayOfWeek(o.dt, o.timeZone), o.locale);
+	return formatOrdinal(dayOfWeek(o.dt, o.tz), o.locale);
 }
 function ee(o: Options): string {
-	return padZeros(dayOfWeek(o.dt, o.timeZone), 2);
+	return padZeros(dayOfWeek(o.dt, o.tz), 2);
 }
 function eee(o: Options): string {
-	return weekDayName(o.locale, "short", dayOfWeek(o.dt, o.timeZone));
+	return weekDayName(o.locale, "short", dayOfWeek(o.dt, o.tz));
 }
 function eeee(o: Options): string {
-	return weekDayName(o.locale, "long", dayOfWeek(o.dt, o.timeZone));
+	return weekDayName(o.locale, "long", dayOfWeek(o.dt, o.tz));
 }
 function eeeee(o: Options): string {
-	return weekDayName(o.locale, "narrow", dayOfWeek(o.dt, o.timeZone));
+	return weekDayName(o.locale, "narrow", dayOfWeek(o.dt, o.tz));
 }
 function eeeeee(o: Options): string {
-	return weekDayName(o.locale, "short", dayOfWeek(o.dt, o.timeZone)).slice(
-		0,
-		2,
-	);
+	return weekDayName(o.locale, "short", dayOfWeek(o.dt, o.tz)).slice(0, 2);
 }
 
 /**
  * Local day of week (stand-alone)
  */
 function c(o: Options): string {
-	return String(dayOfWeek(o.dt, o.timeZone));
+	return String(dayOfWeek(o.dt, o.tz));
 }
 function co(o: Options): string {
-	return formatOrdinal(dayOfWeek(o.dt, o.timeZone), o.locale);
+	return formatOrdinal(dayOfWeek(o.dt, o.tz), o.locale);
 }
 function cc(o: Options): string {
-	return padZeros(dayOfWeek(o.dt, o.timeZone), 2);
+	return padZeros(dayOfWeek(o.dt, o.tz), 2);
 }
 function ccc(o: Options): string {
-	return weekDayName(o.locale, "short", dayOfWeek(o.dt, o.timeZone));
+	return weekDayName(o.locale, "short", dayOfWeek(o.dt, o.tz));
 }
 function cccc(o: Options): string {
-	return weekDayName(o.locale, "long", dayOfWeek(o.dt, o.timeZone));
+	return weekDayName(o.locale, "long", dayOfWeek(o.dt, o.tz));
 }
 function ccccc(o: Options): string {
-	return weekDayName(o.locale, "narrow", dayOfWeek(o.dt, o.timeZone));
+	return weekDayName(o.locale, "narrow", dayOfWeek(o.dt, o.tz));
 }
 function cccccc(o: Options): string {
-	return weekDayName(o.locale, "short", dayOfWeek(o.dt, o.timeZone)).slice(
-		0,
-		2,
-	);
+	return weekDayName(o.locale, "short", dayOfWeek(o.dt, o.tz)).slice(0, 2);
 }
 
 function ccccccc(o: Options): string {
-	return weekDayName(o.locale, "long", dayOfWeek(o.dt, o.timeZone));
+	return weekDayName(o.locale, "long", dayOfWeek(o.dt, o.tz));
 }
 
 /**
@@ -498,13 +471,13 @@ function BBBBB(o: Options): string {
  * Hour [1-12]
  */
 function h(o: Options): string {
-	return String(get12Hour(o.dt.hour));
+	return String(to12Hour(o.dt, o.tz));
 }
 function ho(o: Options): string {
-	return formatOrdinal(get12Hour(o.dt.hour), o.locale);
+	return formatOrdinal(to12Hour(o.dt, o.tz), o.locale);
 }
 function hh(o: Options): string {
-	return padZeros(get12Hour(o.dt.hour), 2);
+	return padZeros(to12Hour(o.dt), 2);
 }
 
 /**
@@ -689,10 +662,10 @@ function PP(o: Options): string {
 	return `${getMonthName(o.locale, "long", o.dt.month)} ${formatOrdinal(o.dt.day, o.locale)}, ${o.dt.year}`;
 }
 function PPP(o: Options): string {
-	return `${weekDayName(o.locale, "long", dayOfWeek(o.dt, o.timeZone))}, ${getMonthName(o.locale, "long", o.dt.month)} ${formatOrdinal(o.dt.day, o.locale)}, ${o.dt.year}`;
+	return `${weekDayName(o.locale, "long", dayOfWeek(o.dt, o.tz))}, ${getMonthName(o.locale, "long", o.dt.month)} ${formatOrdinal(o.dt.day, o.locale)}, ${o.dt.year}`;
 }
 function PPPP(o: Options): string {
-	return `${weekDayName(o.locale, "long", dayOfWeek(o.dt, o.timeZone))}, ${getMonthName(o.locale, "long", o.dt.month)} ${formatOrdinal(o.dt.day, o.locale)}, ${o.dt.year}`;
+	return `${weekDayName(o.locale, "long", dayOfWeek(o.dt, o.tz))}, ${getMonthName(o.locale, "long", o.dt.month)} ${formatOrdinal(o.dt.day, o.locale)}, ${o.dt.year}`;
 }
 
 /**
@@ -705,13 +678,13 @@ function p(o: Options): string {
 	return `${hour12}:${padZeros(o.dt.minute, 2)} ${ampm}`;
 }
 function pp(o: Options): string {
-	return `${get12Hour(o.dt.hour)}:${padZeros(o.dt.minute, 2)}:${padZeros(o.dt.second, 2)} ${getDayPeriod(o.locale, o.dt.hour)}`;
+	return `${to12Hour(o.dt.hour)}:${padZeros(o.dt.minute, 2)}:${padZeros(o.dt.second, 2)} ${getDayPeriod(o.locale, o.dt.hour)}`;
 }
 function ppp(o: Options): string {
-	return `${get12Hour(o.dt.hour)}:${padZeros(o.dt.minute, 2)}:${padZeros(o.dt.second, 2)} ${getDayPeriod(o.locale, o.dt.hour)} GMT${o.dt.timezoneOffsetMinutes <= 0 ? "+" : "-"}${padZeros(Math.abs(Math.floor(o.dt.timezoneOffsetMinutes / 60)), 2)}`;
+	return `${to12Hour(o.dt.hour)}:${padZeros(o.dt.minute, 2)}:${padZeros(o.dt.second, 2)} ${getDayPeriod(o.locale, o.dt.hour)} GMT${o.dt.timezoneOffsetMinutes <= 0 ? "+" : "-"}${padZeros(Math.abs(Math.floor(o.dt.timezoneOffsetMinutes / 60)), 2)}`;
 }
 function pppp(o: Options): string {
-	return `${get12Hour(o.dt.hour)}:${padZeros(o.dt.minute, 2)}:${padZeros(o.dt.second, 2)} ${getDayPeriod(o.locale, o.dt.hour)} GMT${o.dt.timezoneOffsetMinutes <= 0 ? "+" : "-"}${padZeros(Math.abs(Math.floor(o.dt.timezoneOffsetMinutes / 60)), 2)}:${padZeros(Math.abs(o.dt.timezoneOffsetMinutes % 60), 2)}`;
+	return `${to12Hour(o.dt.hour)}:${padZeros(o.dt.minute, 2)}:${padZeros(o.dt.second, 2)} ${getDayPeriod(o.locale, o.dt.hour)} GMT${o.dt.timezoneOffsetMinutes <= 0 ? "+" : "-"}${padZeros(Math.abs(Math.floor(o.dt.timezoneOffsetMinutes / 60)), 2)}:${padZeros(Math.abs(o.dt.timezoneOffsetMinutes % 60), 2)}`;
 }
 
 /**

@@ -398,7 +398,7 @@ export function format(
 			result += formatter({
 				...ctx,
 				len: token.length,
-				timeZone: ctx.timeZone,
+				tz: ctx.timeZone,
 			});
 			i += token.length;
 			continue;

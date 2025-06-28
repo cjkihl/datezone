@@ -31,10 +31,7 @@ function wallTimeToUTC(
 	);
 }
 
-function getYearFromOptions(
-	ts: OptionsOrTimestamp,
-	timeZone?: TimeZone,
-): number {
+export function year(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 	if (typeof ts === "number") {
 		const d = new Date(ts);
 		if (!timeZone) return d.getFullYear();
@@ -43,44 +40,40 @@ function getYearFromOptions(
 	return getOptions(ts, timeZone!).year;
 }
 
-export function getYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
-	return getYearFromOptions(ts, timeZone);
-}
-
 export function isLeapYear(
 	ts: OptionsOrTimestamp,
 	timeZone?: TimeZone,
 ): boolean {
-	const year = getYearFromOptions(ts, timeZone);
-	return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+	const y = year(ts, timeZone);
+	return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
 }
 
 export function startOfYear(
 	date: OptionsOrTimestamp,
 	timeZone?: TimeZone,
 ): number {
-	const year = getYearFromOptions(date, timeZone);
+	const y = year(date, timeZone);
 	if (!timeZone) {
-		return new Date(year, 0, 1).getTime();
+		return new Date(y, 0, 1).getTime();
 	}
 	if (isUTC(timeZone)) {
-		return Date.UTC(year, 0, 1);
+		return Date.UTC(y, 0, 1);
 	}
-	return wallTimeToUTC(year, 1, 1, 0, 0, 0, 0, timeZone);
+	return wallTimeToUTC(y, 1, 1, 0, 0, 0, 0, timeZone);
 }
 
 export function endOfYear(
 	date: OptionsOrTimestamp,
 	timeZone?: TimeZone,
 ): number {
-	const year = getYearFromOptions(date, timeZone);
+	const y = year(date, timeZone);
 	if (!timeZone) {
-		return new Date(year, 11, 31, 23, 59, 59, 999).getTime();
+		return new Date(y, 11, 31, 23, 59, 59, 999).getTime();
 	}
 	if (isUTC(timeZone)) {
-		return Date.UTC(year, 11, 31, 23, 59, 59, 999);
+		return Date.UTC(y, 11, 31, 23, 59, 59, 999);
 	}
-	return wallTimeToUTC(year, 12, 31, 23, 59, 59, 999, timeZone);
+	return wallTimeToUTC(y, 12, 31, 23, 59, 59, 999, timeZone);
 }
 
 export function addYears(
@@ -148,9 +141,17 @@ export function subYears(
 	return addYears(date, -amount, timeZone);
 }
 
-export function getDaysInYear(
+export function daysInYear(
 	date: OptionsOrTimestamp,
 	timeZone?: TimeZone,
 ): number {
 	return isLeapYear(date, timeZone) ? 366 : 365;
+}
+
+/**
+ * Returns the quarter of the year (1-4) for the given month.
+ * @param month 1-12
+ */
+export function quarter(month: number): number {
+	return Math.floor((month - 1) / 3) + 1;
 }

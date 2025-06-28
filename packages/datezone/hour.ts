@@ -17,12 +17,17 @@ const FULL_HOUR_OPTS = {
 } as const;
 
 type HourOptions = { hour: number };
-type OptionsOrTimestamp = HourOptions | number;
+type TS = HourOptions | number;
 
-function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): HourOptions {
-	const dt =
-		typeof ts === "number" ? formatToParts(ts, timeZone, HOUR_OPTS) : ts;
-	return dt;
+function getOptions(ts: TS, timeZone?: TimeZone): number {
+	if (typeof ts === "number") {
+		const d = new Date(ts);
+		if (!timeZone) return d.getHours();
+		if (isUTC(timeZone)) return d.getUTCHours();
+		// For other timezones, use formatToParts
+		return formatToParts(ts, timeZone, HOUR_OPTS).hour;
+	}
+	return ts.hour;
 }
 
 function wallTimeToUTC(
@@ -47,53 +52,40 @@ function wallTimeToUTC(
 	);
 }
 
-function getHourFromOptionsOrTimestamp(
-	ts: OptionsOrTimestamp,
-	timeZone?: TimeZone,
-): number {
-	if (typeof ts === "number") {
-		const d = new Date(ts);
-		if (!timeZone) return d.getHours();
-		if (isUTC(timeZone)) return d.getUTCHours();
-	}
-	return getOptions(ts, timeZone!).hour;
-}
-
-export function get12Hour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
-	const hour = getHourFromOptionsOrTimestamp(ts, timeZone);
+export function to12Hour(ts: TS, timeZone?: TimeZone): number {
+	const hour = getOptions(ts, timeZone);
 	const h = hour % 12;
 	return h === 0 ? 12 : h;
 }
 
-export function get24Hour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
-	return getHourFromOptionsOrTimestamp(ts, timeZone);
+export function to24Hour(ts: TS, timeZone?: TimeZone): number {
+	return getOptions(ts, timeZone);
 }
 
-export function getHour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
-	return getHourFromOptionsOrTimestamp(ts, timeZone);
+export function hour(ts: TS, timeZone?: TimeZone): number {
+	return getOptions(ts, timeZone);
 }
 
-export function addHours(
-	ts: OptionsOrTimestamp,
-	hours: number,
-	timeZone?: TimeZone,
-): number {
-	const d = typeof ts === "number" ? new Date(ts) : new Date();
-	if (typeof ts !== "number") {
-		if (!timeZone) d.setHours(ts.hour);
-		else if (isUTC(timeZone)) d.setUTCHours(ts.hour);
-	}
+export function addHours(ts: TS, hours: number, timeZone?: TimeZone): number {
+	// Fast path: no timezone or UTC timezone
+	if (!timeZone || isUTC(timeZone)) {
+		const d = typeof ts === "number" ? new Date(ts) : new Date();
+		if (typeof ts !== "number") {
+			if (!timeZone) d.setHours(ts.hour);
+			else d.setUTCHours(ts.hour);
+		}
 
-	if (!timeZone) {
-		d.setHours(d.getHours() + hours);
-		return d.getTime();
-	}
-	if (isUTC(timeZone)) {
-		d.setUTCHours(d.getUTCHours() + hours);
+		if (!timeZone) {
+			d.setHours(d.getHours() + hours);
+		} else {
+			d.setUTCHours(d.getUTCHours() + hours);
+		}
 		return d.getTime();
 	}
 
-	const parts = formatToParts(d.getTime(), timeZone, FULL_HOUR_OPTS);
+	// Slow path: specific timezone
+	const baseTime = typeof ts === "number" ? ts : Date.now();
+	const parts = formatToParts(baseTime, timeZone, FULL_HOUR_OPTS);
 	return wallTimeToUTC(
 		parts.year,
 		parts.month,
@@ -101,39 +93,35 @@ export function addHours(
 		parts.hour + hours,
 		parts.minute,
 		parts.second,
-		d.getMilliseconds(),
+		typeof ts === "number" ? new Date(ts).getMilliseconds() : 0,
 		timeZone,
 	);
 }
 
-export function subHours(
-	ts: OptionsOrTimestamp,
-	hours: number,
-	timeZone?: TimeZone,
-): number {
+export function subHours(ts: TS, hours: number, timeZone?: TimeZone): number {
 	return addHours(ts, -hours, timeZone);
 }
 
-export function startOfHour(
-	ts: OptionsOrTimestamp,
-	timeZone?: TimeZone,
-): number {
-	const d = typeof ts === "number" ? new Date(ts) : new Date();
-	if (typeof ts !== "number") {
-		if (!timeZone) d.setHours(ts.hour);
-		else if (isUTC(timeZone)) d.setUTCHours(ts.hour);
-	}
+export function startOfHour(ts: TS, timeZone?: TimeZone): number {
+	// Fast path: no timezone or UTC timezone
+	if (!timeZone || isUTC(timeZone)) {
+		const d = typeof ts === "number" ? new Date(ts) : new Date();
+		if (typeof ts !== "number") {
+			if (!timeZone) d.setHours(ts.hour);
+			else d.setUTCHours(ts.hour);
+		}
 
-	if (!timeZone) {
-		d.setMinutes(0, 0, 0);
-		return d.getTime();
-	}
-	if (isUTC(timeZone)) {
-		d.setUTCMinutes(0, 0, 0);
+		if (!timeZone) {
+			d.setMinutes(0, 0, 0);
+		} else {
+			d.setUTCMinutes(0, 0, 0);
+		}
 		return d.getTime();
 	}
 
-	const parts = formatToParts(d.getTime(), timeZone, FULL_HOUR_OPTS);
+	// Slow path: specific timezone
+	const baseTime = typeof ts === "number" ? ts : Date.now();
+	const parts = formatToParts(baseTime, timeZone, FULL_HOUR_OPTS);
 	return wallTimeToUTC(
 		parts.year,
 		parts.month,
@@ -146,23 +134,26 @@ export function startOfHour(
 	);
 }
 
-export function endOfHour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
-	const d = typeof ts === "number" ? new Date(ts) : new Date();
-	if (typeof ts !== "number") {
-		if (!timeZone) d.setHours(ts.hour);
-		else if (isUTC(timeZone)) d.setUTCHours(ts.hour);
-	}
+export function endOfHour(ts: TS, timeZone?: TimeZone): number {
+	// Fast path: no timezone or UTC timezone
+	if (!timeZone || isUTC(timeZone)) {
+		const d = typeof ts === "number" ? new Date(ts) : new Date();
+		if (typeof ts !== "number") {
+			if (!timeZone) d.setHours(ts.hour);
+			else d.setUTCHours(ts.hour);
+		}
 
-	if (!timeZone) {
-		d.setMinutes(59, 59, 999);
+		if (!timeZone) {
+			d.setMinutes(59, 59, 999);
+		} else {
+			d.setUTCMinutes(59, 59, 999);
+		}
 		return d.getTime();
 	}
-	if (isUTC(timeZone)) {
-		d.setUTCMinutes(59, 59, 999);
-		return d.getTime();
-	}
 
-	const parts = formatToParts(d.getTime(), timeZone, FULL_HOUR_OPTS);
+	// Slow path: specific timezone
+	const baseTime = typeof ts === "number" ? ts : Date.now();
+	const parts = formatToParts(baseTime, timeZone, FULL_HOUR_OPTS);
 	return wallTimeToUTC(
 		parts.year,
 		parts.month,
@@ -175,26 +166,26 @@ export function endOfHour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
 	);
 }
 
-export function startOfMinute(
-	ts: OptionsOrTimestamp,
-	timeZone?: TimeZone,
-): number {
-	const d = typeof ts === "number" ? new Date(ts) : new Date();
-	if (typeof ts !== "number") {
-		if (!timeZone) d.setHours(ts.hour, 0);
-		else if (isUTC(timeZone)) d.setUTCHours(ts.hour, 0);
-	}
+export function startOfMinute(ts: TS, timeZone?: TimeZone): number {
+	// Fast path: no timezone or UTC timezone
+	if (!timeZone || isUTC(timeZone)) {
+		const d = typeof ts === "number" ? new Date(ts) : new Date();
+		if (typeof ts !== "number") {
+			if (!timeZone) d.setHours(ts.hour, 0);
+			else d.setUTCHours(ts.hour, 0);
+		}
 
-	if (!timeZone) {
-		d.setSeconds(0, 0);
-		return d.getTime();
-	}
-	if (isUTC(timeZone)) {
-		d.setUTCSeconds(0, 0);
+		if (!timeZone) {
+			d.setSeconds(0, 0);
+		} else {
+			d.setUTCSeconds(0, 0);
+		}
 		return d.getTime();
 	}
 
-	const parts = formatToParts(d.getTime(), timeZone, FULL_HOUR_OPTS);
+	// Slow path: specific timezone
+	const baseTime = typeof ts === "number" ? ts : Date.now();
+	const parts = formatToParts(baseTime, timeZone, FULL_HOUR_OPTS);
 	return wallTimeToUTC(
 		parts.year,
 		parts.month,
@@ -207,26 +198,26 @@ export function startOfMinute(
 	);
 }
 
-export function endOfMinute(
-	ts: OptionsOrTimestamp,
-	timeZone?: TimeZone,
-): number {
-	const d = typeof ts === "number" ? new Date(ts) : new Date();
-	if (typeof ts !== "number") {
-		if (!timeZone) d.setHours(ts.hour, 59);
-		else if (isUTC(timeZone)) d.setUTCHours(ts.hour, 59);
-	}
+export function endOfMinute(ts: TS, timeZone?: TimeZone): number {
+	// Fast path: no timezone or UTC timezone
+	if (!timeZone || isUTC(timeZone)) {
+		const d = typeof ts === "number" ? new Date(ts) : new Date();
+		if (typeof ts !== "number") {
+			if (!timeZone) d.setHours(ts.hour, 59);
+			else d.setUTCHours(ts.hour, 59);
+		}
 
-	if (!timeZone) {
-		d.setSeconds(59, 999);
-		return d.getTime();
-	}
-	if (isUTC(timeZone)) {
-		d.setUTCSeconds(59, 999);
+		if (!timeZone) {
+			d.setSeconds(59, 999);
+		} else {
+			d.setUTCSeconds(59, 999);
+		}
 		return d.getTime();
 	}
 
-	const parts = formatToParts(d.getTime(), timeZone, FULL_HOUR_OPTS);
+	// Slow path: specific timezone
+	const baseTime = typeof ts === "number" ? ts : Date.now();
+	const parts = formatToParts(baseTime, timeZone, FULL_HOUR_OPTS);
 	return wallTimeToUTC(
 		parts.year,
 		parts.month,
@@ -239,26 +230,26 @@ export function endOfMinute(
 	);
 }
 
-export function startOfSecond(
-	ts: OptionsOrTimestamp,
-	timeZone?: TimeZone,
-): number {
-	const d = typeof ts === "number" ? new Date(ts) : new Date();
-	if (typeof ts !== "number") {
-		if (!timeZone) d.setHours(ts.hour, 0, 0);
-		else if (isUTC(timeZone)) d.setUTCHours(ts.hour, 0, 0);
-	}
+export function startOfSecond(ts: TS, timeZone?: TimeZone): number {
+	// Fast path: no timezone or UTC timezone
+	if (!timeZone || isUTC(timeZone)) {
+		const d = typeof ts === "number" ? new Date(ts) : new Date();
+		if (typeof ts !== "number") {
+			if (!timeZone) d.setHours(ts.hour, 0, 0);
+			else d.setUTCHours(ts.hour, 0, 0);
+		}
 
-	if (!timeZone) {
-		d.setMilliseconds(0);
-		return d.getTime();
-	}
-	if (isUTC(timeZone)) {
-		d.setUTCMilliseconds(0);
+		if (!timeZone) {
+			d.setMilliseconds(0);
+		} else {
+			d.setUTCMilliseconds(0);
+		}
 		return d.getTime();
 	}
 
-	const parts = formatToParts(d.getTime(), timeZone, FULL_HOUR_OPTS);
+	// Slow path: specific timezone
+	const baseTime = typeof ts === "number" ? ts : Date.now();
+	const parts = formatToParts(baseTime, timeZone, FULL_HOUR_OPTS);
 	return wallTimeToUTC(
 		parts.year,
 		parts.month,
@@ -271,26 +262,26 @@ export function startOfSecond(
 	);
 }
 
-export function endOfSecond(
-	ts: OptionsOrTimestamp,
-	timeZone?: TimeZone,
-): number {
-	const d = typeof ts === "number" ? new Date(ts) : new Date();
-	if (typeof ts !== "number") {
-		if (!timeZone) d.setHours(ts.hour, 59, 59);
-		else if (isUTC(timeZone)) d.setUTCHours(ts.hour, 59, 59);
-	}
+export function endOfSecond(ts: TS, timeZone?: TimeZone): number {
+	// Fast path: no timezone or UTC timezone
+	if (!timeZone || isUTC(timeZone)) {
+		const d = typeof ts === "number" ? new Date(ts) : new Date();
+		if (typeof ts !== "number") {
+			if (!timeZone) d.setHours(ts.hour, 59, 59);
+			else d.setUTCHours(ts.hour, 59, 59);
+		}
 
-	if (!timeZone) {
-		d.setMilliseconds(999);
-		return d.getTime();
-	}
-	if (isUTC(timeZone)) {
-		d.setUTCMilliseconds(999);
+		if (!timeZone) {
+			d.setMilliseconds(999);
+		} else {
+			d.setUTCMilliseconds(999);
+		}
 		return d.getTime();
 	}
 
-	const parts = formatToParts(d.getTime(), timeZone, FULL_HOUR_OPTS);
+	// Slow path: specific timezone
+	const baseTime = typeof ts === "number" ? ts : Date.now();
+	const parts = formatToParts(baseTime, timeZone, FULL_HOUR_OPTS);
 	return wallTimeToUTC(
 		parts.year,
 		parts.month,
@@ -304,26 +295,29 @@ export function endOfSecond(
 }
 
 export function addMinutes(
-	ts: OptionsOrTimestamp,
+	ts: TS,
 	amount: number,
 	timeZone?: TimeZone,
 ): number {
-	const d = typeof ts === "number" ? new Date(ts) : new Date();
-	if (typeof ts !== "number") {
-		if (!timeZone) d.setHours(ts.hour, 0);
-		else if (isUTC(timeZone)) d.setUTCHours(ts.hour, 0);
-	}
+	// Fast path: no timezone or UTC timezone
+	if (!timeZone || isUTC(timeZone)) {
+		const d = typeof ts === "number" ? new Date(ts) : new Date();
+		if (typeof ts !== "number") {
+			if (!timeZone) d.setHours(ts.hour, 0);
+			else d.setUTCHours(ts.hour, 0);
+		}
 
-	if (!timeZone) {
-		d.setMinutes(d.getMinutes() + amount);
+		if (!timeZone) {
+			d.setMinutes(d.getMinutes() + amount);
+		} else {
+			d.setUTCMinutes(d.getUTCMinutes() + amount);
+		}
 		return d.getTime();
 	}
-	if (isUTC(timeZone)) {
-		d.setUTCMinutes(d.getUTCMinutes() + amount);
-		return d.getTime();
-	}
 
-	const parts = formatToParts(d.getTime(), timeZone, FULL_HOUR_OPTS);
+	// Slow path: specific timezone
+	const baseTime = typeof ts === "number" ? ts : Date.now();
+	const parts = formatToParts(baseTime, timeZone, FULL_HOUR_OPTS);
 	return wallTimeToUTC(
 		parts.year,
 		parts.month,
@@ -331,13 +325,13 @@ export function addMinutes(
 		parts.hour,
 		parts.minute + amount,
 		parts.second,
-		d.getMilliseconds(),
+		typeof ts === "number" ? new Date(ts).getMilliseconds() : 0,
 		timeZone,
 	);
 }
 
 export function subMinutes(
-	ts: OptionsOrTimestamp,
+	ts: TS,
 	amount: number,
 	timeZone?: TimeZone,
 ): number {
@@ -345,26 +339,29 @@ export function subMinutes(
 }
 
 export function addSeconds(
-	ts: OptionsOrTimestamp,
+	ts: TS,
 	amount: number,
 	timeZone?: TimeZone,
 ): number {
-	const d = typeof ts === "number" ? new Date(ts) : new Date();
-	if (typeof ts !== "number") {
-		if (!timeZone) d.setHours(ts.hour, 0, 0);
-		else if (isUTC(timeZone)) d.setUTCHours(ts.hour, 0, 0);
-	}
+	// Fast path: no timezone or UTC timezone
+	if (!timeZone || isUTC(timeZone)) {
+		const d = typeof ts === "number" ? new Date(ts) : new Date();
+		if (typeof ts !== "number") {
+			if (!timeZone) d.setHours(ts.hour, 0, 0);
+			else d.setUTCHours(ts.hour, 0, 0);
+		}
 
-	if (!timeZone) {
-		d.setSeconds(d.getSeconds() + amount);
+		if (!timeZone) {
+			d.setSeconds(d.getSeconds() + amount);
+		} else {
+			d.setUTCSeconds(d.getUTCSeconds() + amount);
+		}
 		return d.getTime();
 	}
-	if (isUTC(timeZone)) {
-		d.setUTCSeconds(d.getUTCSeconds() + amount);
-		return d.getTime();
-	}
 
-	const parts = formatToParts(d.getTime(), timeZone, FULL_HOUR_OPTS);
+	// Slow path: specific timezone
+	const baseTime = typeof ts === "number" ? ts : Date.now();
+	const parts = formatToParts(baseTime, timeZone, FULL_HOUR_OPTS);
 	return wallTimeToUTC(
 		parts.year,
 		parts.month,
@@ -372,30 +369,24 @@ export function addSeconds(
 		parts.hour,
 		parts.minute,
 		parts.second + amount,
-		d.getMilliseconds(),
+		typeof ts === "number" ? new Date(ts).getMilliseconds() : 0,
 		timeZone,
 	);
 }
 
 export function subSeconds(
-	ts: OptionsOrTimestamp,
+	ts: TS,
 	amount: number,
 	timeZone?: TimeZone,
 ): number {
 	return addSeconds(ts, -amount, timeZone);
 }
 
-export function addMilliseconds(
-	ts: OptionsOrTimestamp,
-	amount: number,
-): number {
+export function addMilliseconds(ts: TS, amount: number): number {
 	const timestamp = typeof ts === "number" ? ts : Date.now();
 	return timestamp + amount;
 }
 
-export function subMilliseconds(
-	ts: OptionsOrTimestamp,
-	amount: number,
-): number {
+export function subMilliseconds(ts: TS, amount: number): number {
 	return addMilliseconds(ts, -amount);
 }

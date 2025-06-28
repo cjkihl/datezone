@@ -7,9 +7,7 @@ import {
 	endOfHour,
 	endOfMinute,
 	endOfSecond,
-	get12Hour,
-	get24Hour,
-	getHour,
+	hour,
 	startOfHour,
 	startOfMinute,
 	startOfSecond,
@@ -17,105 +15,105 @@ import {
 	subMilliseconds,
 	subMinutes,
 	subSeconds,
+	to12Hour,
+	to24Hour,
 } from "./hour";
 import type { TimeZone } from "./iana";
 
 describe("Hour Functions", () => {
-	describe("get12Hour", () => {
+	describe("to12Hour", () => {
 		it("should convert 24-hour to 12-hour format correctly", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 0)).getTime(); // 2:30 PM UTC
-			expect(get12Hour(timestamp, "Etc/UTC")).toBe(2);
+			expect(to12Hour(timestamp, "Etc/UTC")).toBe(2);
 		});
 
 		it("should handle midnight correctly", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 0, 0, 0)).getTime(); // 12:00 AM UTC
-			expect(get12Hour(timestamp, "Etc/UTC")).toBe(12);
+			expect(to12Hour(timestamp, "Etc/UTC")).toBe(12);
 		});
 
 		it("should handle noon correctly", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 12, 0, 0)).getTime(); // 12:00 PM UTC
-			expect(get12Hour(timestamp, "Etc/UTC")).toBe(12);
+			expect(to12Hour(timestamp, "Etc/UTC")).toBe(12);
 		});
 
 		it("should handle different timezones", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 0, 0, 0)).getTime(); // UTC midnight
-			expect(get12Hour(timestamp, "Asia/Tokyo")).toBe(9); // 9 AM in Tokyo (UTC+9)
-			expect(get12Hour(timestamp, "America/New_York")).toBe(7); // 7 PM in NY (UTC-5 in winter)
+			expect(to12Hour(timestamp, "Asia/Tokyo")).toBe(9); // 9 AM in Tokyo (UTC+9)
+			expect(to12Hour(timestamp, "America/New_York")).toBe(7); // 7 PM in NY (UTC-5 in winter)
 		});
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const hour12 = get12Hour(d.getTime(), undefined);
+			const hour12 = to12Hour(d.getTime(), undefined);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-			const localHour12 = get12Hour(d.getTime(), localTz as TimeZone);
+			const localHour12 = to12Hour(d.getTime(), localTz as TimeZone);
 
 			// Should match local timezone behavior
 			expect(hour12).toBe(localHour12);
 
 			// If local timezone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
-				const utcHour12 = get12Hour(d.getTime(), "UTC");
+				const utcHour12 = to12Hour(d.getTime(), "UTC");
 				expect(hour12).not.toBe(utcHour12);
 			}
 		});
 	});
 
-	describe("get24Hour", () => {
+	describe("to24Hour", () => {
 		it("should return correct 24-hour format", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 0)).getTime(); // 2:30 PM UTC
-			expect(get24Hour(timestamp, "Etc/UTC")).toBe(14);
+			expect(to24Hour(timestamp, "Etc/UTC")).toBe(14);
 		});
 
 		it("should handle different timezones", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 0, 0, 0)).getTime(); // UTC midnight
-			expect(get24Hour(timestamp, "Asia/Tokyo")).toBe(9); // 9 AM in Tokyo
-			expect(get24Hour(timestamp, "America/New_York")).toBe(19); // 7 PM in NY
+			expect(to24Hour(timestamp, "Asia/Tokyo")).toBe(9); // 9 AM in Tokyo
+			expect(to24Hour(timestamp, "America/New_York")).toBe(19); // 7 PM in NY
 		});
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const hour24 = get24Hour(d.getTime(), undefined);
+			const hour24 = to24Hour(d.getTime(), undefined);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-			const localHour24 = get24Hour(d.getTime(), localTz as TimeZone);
+			const localHour24 = to24Hour(d.getTime(), localTz as TimeZone);
 
 			// Should match local timezone behavior
 			expect(hour24).toBe(localHour24);
 
 			// If local timezone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
-				const utcHour24 = get24Hour(d.getTime(), "UTC");
+				const utcHour24 = to24Hour(d.getTime(), "UTC");
 				expect(hour24).not.toBe(utcHour24);
 			}
 		});
 	});
 
-	describe("getHour", () => {
-		it("should return same as get24Hour", () => {
+	describe("hour", () => {
+		it("should return same as to24Hour", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 0)).getTime();
-			expect(getHour(timestamp, "Etc/UTC")).toBe(
-				get24Hour(timestamp, "Etc/UTC"),
-			);
+			expect(hour(timestamp, "Etc/UTC")).toBe(to24Hour(timestamp, "Etc/UTC"));
 		});
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const hour = getHour(d.getTime(), undefined);
+			const h = hour(d.getTime(), undefined);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-			const localHour = getHour(d.getTime(), localTz as TimeZone);
+			const localHour = hour(d.getTime(), localTz as TimeZone);
 
 			// Should match local timezone behavior
-			expect(hour).toBe(localHour);
+			expect(h).toBe(localHour);
 
 			// If local timezone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
-				const utcHour = getHour(d.getTime(), "UTC");
-				expect(hour).not.toBe(utcHour);
+				const utcHour = hour(d.getTime(), "UTC");
+				expect(h).not.toBe(utcHour);
 			}
 		});
 	});

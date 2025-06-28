@@ -2,60 +2,60 @@ import { describe, expect, test } from "bun:test";
 import type { TimeZone } from "./iana";
 import {
 	addYears,
+	daysInYear,
 	endOfYear,
-	getDaysInYear,
-	getYear,
 	isLeapYear,
 	startOfYear,
 	subYears,
+	year,
 } from "./year";
 
 const TEST_TIMEZONE = "America/New_York";
 const UTC_TIMEZONE = "UTC";
 
 describe("year functions", () => {
-	describe("getYear", () => {
+	describe("year", () => {
 		test("should extract year from timestamp", () => {
 			// Jan 1, 2023 12:00:00 UTC
 			const timestamp = 1672574400000;
-			expect(getYear(timestamp, UTC_TIMEZONE)).toBe(2023);
+			expect(year(timestamp, UTC_TIMEZONE)).toBe(2023);
 		});
 
 		test("should extract year from timestamp with timezone", () => {
 			// Dec 31, 2022 19:00:00 UTC = Dec 31, 2022 in EST (EST is UTC-5)
 			const timestamp = 1672513200000; // Dec 31, 2022 19:00:00 UTC
-			expect(getYear(timestamp, TEST_TIMEZONE)).toBe(2022);
-			expect(getYear(timestamp, UTC_TIMEZONE)).toBe(2022);
+			expect(year(timestamp, TEST_TIMEZONE)).toBe(2022);
+			expect(year(timestamp, UTC_TIMEZONE)).toBe(2022);
 
 			// Jan 1, 2023 06:00:00 UTC = Jan 1, 2023 01:00:00 EST
 			const timestampNewYear = 1672549200000;
-			expect(getYear(timestampNewYear, TEST_TIMEZONE)).toBe(2023);
-			expect(getYear(timestampNewYear, UTC_TIMEZONE)).toBe(2023);
+			expect(year(timestampNewYear, TEST_TIMEZONE)).toBe(2023);
+			expect(year(timestampNewYear, UTC_TIMEZONE)).toBe(2023);
 		});
 
 		test("should handle year options object", () => {
-			expect(getYear({ year: 2024 }, UTC_TIMEZONE)).toBe(2024);
+			expect(year({ year: 2024 }, UTC_TIMEZONE)).toBe(2024);
 		});
 
 		test("should return 0 for invalid year", () => {
-			expect(getYear({ year: 0 }, UTC_TIMEZONE)).toBe(0);
+			expect(year({ year: 0 }, UTC_TIMEZONE)).toBe(0);
 		});
 
 		test("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const year = getYear(d.getTime(), undefined);
+			const y = year(d.getTime(), undefined);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-			const localYear = getYear(d.getTime(), localTz as TimeZone);
+			const localYear = year(d.getTime(), localTz as TimeZone);
 
 			// Should match local timezone behavior
-			expect(year).toBe(localYear);
+			expect(y).toBe(localYear);
 
 			// If local timezone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
-				const utcYear = getYear(d.getTime(), "UTC");
-				expect(year).not.toBe(utcYear);
+				const utcYear = year(d.getTime(), "UTC");
+				expect(y).not.toBe(utcYear);
 			}
 		});
 	});
@@ -321,47 +321,47 @@ describe("year functions", () => {
 
 	describe("getDaysInYear", () => {
 		test("should return 366 for leap years", () => {
-			expect(getDaysInYear({ year: 2020 }, UTC_TIMEZONE)).toBe(366);
-			expect(getDaysInYear({ year: 2000 }, UTC_TIMEZONE)).toBe(366);
-			expect(getDaysInYear({ year: 1600 }, UTC_TIMEZONE)).toBe(366);
+			expect(daysInYear({ year: 2020 }, UTC_TIMEZONE)).toBe(366);
+			expect(daysInYear({ year: 2000 }, UTC_TIMEZONE)).toBe(366);
+			expect(daysInYear({ year: 1600 }, UTC_TIMEZONE)).toBe(366);
 		});
 
 		test("should return 365 for non-leap years", () => {
-			expect(getDaysInYear({ year: 2021 }, UTC_TIMEZONE)).toBe(365);
-			expect(getDaysInYear({ year: 1900 }, UTC_TIMEZONE)).toBe(365);
-			expect(getDaysInYear({ year: 2022 }, UTC_TIMEZONE)).toBe(365);
+			expect(daysInYear({ year: 2021 }, UTC_TIMEZONE)).toBe(365);
+			expect(daysInYear({ year: 1900 }, UTC_TIMEZONE)).toBe(365);
+			expect(daysInYear({ year: 2022 }, UTC_TIMEZONE)).toBe(365);
 		});
 
 		test("should handle timestamp input", () => {
 			// Some date in 2020 (leap year)
 			const timestamp2020 = 1583020800000;
-			expect(getDaysInYear(timestamp2020, UTC_TIMEZONE)).toBe(366);
+			expect(daysInYear(timestamp2020, UTC_TIMEZONE)).toBe(366);
 
 			// Some date in 2021 (non-leap year)
 			const timestamp2021 = 1614470400000;
-			expect(getDaysInYear(timestamp2021, UTC_TIMEZONE)).toBe(365);
+			expect(daysInYear(timestamp2021, UTC_TIMEZONE)).toBe(365);
 		});
 
 		test("should work with different timezones", () => {
 			// The days in a year shouldn't change based on timezone
-			expect(getDaysInYear({ year: 2020 }, TEST_TIMEZONE)).toBe(366);
-			expect(getDaysInYear({ year: 2021 }, TEST_TIMEZONE)).toBe(365);
+			expect(daysInYear({ year: 2020 }, TEST_TIMEZONE)).toBe(366);
+			expect(daysInYear({ year: 2021 }, TEST_TIMEZONE)).toBe(365);
 		});
 
 		test("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const days = getDaysInYear(d.getTime(), undefined);
+			const days = daysInYear(d.getTime(), undefined);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-			const localDays = getDaysInYear(d.getTime(), localTz as TimeZone);
+			const localDays = daysInYear(d.getTime(), localTz as TimeZone);
 
 			// Should match local timezone behavior
 			expect(days).toBe(localDays);
 
 			// If local timezone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
-				const utcDays = getDaysInYear(d.getTime(), "UTC");
+				const utcDays = daysInYear(d.getTime(), "UTC");
 				expect(days).not.toBe(utcDays);
 			}
 		});
@@ -395,8 +395,8 @@ describe("year functions", () => {
 			const year1900 = { year: 1900 };
 
 			// Both should work correctly without expensive timezone operations
-			expect(getDaysInYear(year2000, UTC_TIMEZONE)).toBe(366); // Leap year
-			expect(getDaysInYear(year1900, UTC_TIMEZONE)).toBe(365); // Not leap year
+			expect(daysInYear(year2000, UTC_TIMEZONE)).toBe(366); // Leap year
+			expect(daysInYear(year1900, UTC_TIMEZONE)).toBe(365); // Not leap year
 		});
 	});
 });

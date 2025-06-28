@@ -1,16 +1,10 @@
 # Dependencies
 node_modules
 
-# All dot files and directories
-.*
+.turbo
 
-# Whitelist specific dot files/directories we want to track
-!.gitignore
-!.github
-!.vscode
-!.npmrc
-!.changeset
-!.cursor
+*.tmp
+*.gen.*
 
 # Build output
 dist

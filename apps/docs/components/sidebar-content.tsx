@@ -1,4 +1,4 @@
-import { CircleHelp, Database, Gauge, type LucideIcon } from "lucide-react";
+import { CircleHelp, type LucideIcon } from "lucide-react";
 import type { ReactNode, SVGProps } from "react";
 import { Icons } from "./icons";
 
