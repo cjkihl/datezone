@@ -1,68 +1,52 @@
-import { formatToParts, isUTC, type TimeZone } from "./index.pub.js";
+import { FULL_TS, formatToParts, isUTC, type TimeZone } from "./index.pub.js";
 import { wallTimeToTS } from "./utils.js";
 
 const YEAR_OPTS = { year: "numeric" } as const;
-type YearOptions = { year: number };
-type OptionsOrTimestamp = YearOptions | number;
 
-function getOptions(ts: OptionsOrTimestamp, timeZone: TimeZone): YearOptions {
-	return typeof ts === "number" ? formatToParts(ts, timeZone, YEAR_OPTS) : ts;
-}
-
-export function year(ts: OptionsOrTimestamp, timeZone?: TimeZone): number {
-	if (typeof ts === "number") {
-		const d = new Date(ts);
-		if (!timeZone) return d.getFullYear();
-		if (isUTC(timeZone)) return d.getUTCFullYear();
+export function year(ts: number, tz?: TimeZone): number {
+	if (!tz) {
+		return new Date(ts).getFullYear();
 	}
-	return getOptions(ts, timeZone!).year;
+	if (isUTC(tz)) {
+		return new Date(ts).getUTCFullYear();
+	}
+	return formatToParts(ts, tz, YEAR_OPTS).year;
 }
 
-export function isLeapYear(
-	ts: OptionsOrTimestamp,
-	timeZone?: TimeZone,
-): boolean {
-	const y = year(ts, timeZone);
-	return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+export function isLeapYear(ts: number, tz?: TimeZone): boolean {
+	const y = year(ts, tz);
+	return isLeapYearBase(y);
 }
 
-export function startOfYear(
-	date: OptionsOrTimestamp,
-	timeZone?: TimeZone,
-): number {
-	const y = year(date, timeZone);
-	if (!timeZone) {
+export function isLeapYearBase(year: number): boolean {
+	return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+}
+
+export function startOfYear(ts: number, tz?: TimeZone): number {
+	const y = year(ts, tz);
+	if (!tz) {
 		return new Date(y, 0, 1).getTime();
 	}
-	if (isUTC(timeZone)) {
+	if (isUTC(tz)) {
 		return Date.UTC(y, 0, 1);
 	}
-	return wallTimeToTS(y, 1, 1, 0, 0, 0, 0, timeZone);
+	return wallTimeToTS(y, 1, 1, 0, 0, 0, 0, tz);
 }
 
-export function endOfYear(
-	date: OptionsOrTimestamp,
-	timeZone?: TimeZone,
-): number {
-	const y = year(date, timeZone);
-	if (!timeZone) {
+export function endOfYear(ts: number, tz?: TimeZone): number {
+	const y = year(ts, tz);
+	if (!tz) {
 		return new Date(y, 11, 31, 23, 59, 59, 999).getTime();
 	}
-	if (isUTC(timeZone)) {
+	if (isUTC(tz)) {
 		return Date.UTC(y, 11, 31, 23, 59, 59, 999);
 	}
-	return wallTimeToTS(y, 12, 31, 23, 59, 59, 999, timeZone);
+	return wallTimeToTS(y, 12, 31, 23, 59, 59, 999, tz);
 }
 
-export function addYears(
-	date: OptionsOrTimestamp,
-	amount: number,
-	timeZone?: TimeZone,
-): number {
-	const d =
-		typeof date === "number" ? new Date(date) : new Date(date.year, 0, 1);
-
-	if (!timeZone) {
+export function addYears(ts: number, amount: number, tz?: TimeZone): number {
+	if (!tz) {
+		const d = new Date(ts);
 		const originalMonth = d.getMonth();
 		d.setFullYear(d.getFullYear() + amount);
 		if (d.getMonth() !== originalMonth) {
@@ -70,7 +54,8 @@ export function addYears(
 		}
 		return d.getTime();
 	}
-	if (isUTC(timeZone)) {
+	if (isUTC(tz)) {
+		const d = new Date(ts);
 		const originalUTCMonth = d.getUTCMonth();
 		d.setUTCFullYear(d.getUTCFullYear() + amount);
 		if (d.getUTCMonth() !== originalUTCMonth) {
@@ -79,23 +64,16 @@ export function addYears(
 		return d.getTime();
 	}
 
-	const { year, month, day, hour, minute, second } = formatToParts(
-		d.getTime(),
-		timeZone,
-		{
-			day: "2-digit",
-			hour: "2-digit",
-			minute: "2-digit",
-			month: "2-digit",
-			second: "2-digit",
-			year: "numeric",
-		},
+	const { year, month, day, hour, minute, second, millisecond } = formatToParts(
+		ts,
+		tz,
+		FULL_TS,
 	);
 
 	const targetYear = year + amount;
 	let targetDay = day;
 
-	if (month === 2 && day === 29 && !isLeapYear({ year: targetYear })) {
+	if (month === 2 && day === 29 && !isLeapYearBase(targetYear)) {
 		targetDay = 28;
 	}
 
@@ -106,24 +84,21 @@ export function addYears(
 		hour,
 		minute,
 		second,
-		d.getMilliseconds(),
-		timeZone,
+		millisecond,
+		tz,
 	);
 }
 
-export function subYears(
-	date: OptionsOrTimestamp,
-	amount: number,
-	timeZone?: TimeZone,
-): number {
-	return addYears(date, -amount, timeZone);
+export function subYears(ts: number, amount: number, tz?: TimeZone): number {
+	return addYears(ts, -amount, tz);
 }
 
-export function daysInYear(
-	date: OptionsOrTimestamp,
-	timeZone?: TimeZone,
-): number {
-	return isLeapYear(date, timeZone) ? 366 : 365;
+export function daysInYear(ts: number, tz?: TimeZone): number {
+	return isLeapYear(ts, tz) ? 366 : 365;
+}
+
+export function daysInYearBase(year: number): number {
+	return isLeapYearBase(year) ? 366 : 365;
 }
 
 /**
