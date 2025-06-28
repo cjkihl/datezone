@@ -3,6 +3,8 @@ title: Basic Usage
 description: Getting started with Datezone
 ---
 
+import { CodeExample } from '@/components/code-example';
+
 Datezone makes working with dates, times, and timezones simple and reliable.
 
 ## Installation
@@ -19,52 +21,27 @@ yarn add datezone
 
 ## Importing
 
-```ts
-import { parse, format, toTimezone, compare, addDays } from "datezone";
-```
+<CodeExample file="basic/importing.ts" title="Importing Functions" />
 
 ## Parsing Dates
 
-```ts
-import { parse } from "datezone";
-
-const date = parse("2024-06-01T12:00:00Z");
-```
+<CodeExample file="basic/parsing.ts" title="Parsing Dates" />
 
 ## Formatting Dates
 
-```ts
-import { format } from "datezone";
-
-const formatted = format(date, "yyyy-MM-dd HH:mm zzz");
-// => "2024-06-01 12:00 UTC"
-```
+<CodeExample file="basic/formatting.ts" title="Formatting Dates" />
 
 ## Timezone Conversion
 
-```ts
-import { toTimezone } from "datezone";
-
-const ny = toTimezone(date, "America/New_York");
-```
+<CodeExample file="basic/timezone-conversion.ts" title="Timezone Conversion" />
 
 ## Comparing Dates
 
-```ts
-import { compare } from "datezone";
-
-compare("2024-06-01", "2024-06-02"); // -1
-compare("2024-06-01", "2024-06-01"); // 0
-compare("2024-06-02", "2024-06-01"); // 1
-```
+<CodeExample file="basic/comparing.ts" title="Comparing Dates" />
 
 ## Adding/Subtracting Dates
 
-```ts
-import { addDays } from "datezone";
-
-const tomorrow = addDays(date, 1);
-```
+<CodeExample file="basic/adding-dates.ts" title="Adding Days" />
 
 ## More
 

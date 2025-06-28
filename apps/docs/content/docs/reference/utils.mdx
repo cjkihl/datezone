@@ -4,6 +4,7 @@ description: Core utility functions for timezone and date conversions
 ---
 
 import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { CodeExample } from '@/components/code-example';
 
 # General Utils
 
@@ -29,65 +30,12 @@ function wallTimeToTS(
 <Tabs items={["Local", "Timezone"]}>
 <Tab value="Local">
 
-```typescript
-import { wallTimeToTS } from '@/datezone';
-
-// Convert local wall time to UTC
-const utcTimestamp = wallTimeToTS(
-  2024, 1, 15, // January 15, 2024 (month is 1-based)
-  14, 30, 0, 0 // 2:30:00.000 PM
-  // No timezone specified = local timezone
-);
-
-console.log('UTC timestamp:', utcTimestamp);
-console.log('As Date:', new Date(utcTimestamp));
-
-// Compare with Date constructor (which uses 0-based months)
-const jsDate = new Date(2024, 0, 15, 14, 30, 0, 0); // 0-based month
-console.log('JS Date timestamp:', jsDate.getTime());
-console.log('Difference:', utcTimestamp - jsDate.getTime());
-
-// Useful for creating precise timestamps from time components
-const midnight = wallTimeToTS(2024, 1, 1, 0, 0, 0, 0);
-const noon = wallTimeToTS(2024, 1, 1, 12, 0, 0, 0);
-console.log('Midnight UTC:', new Date(midnight));
-console.log('Noon UTC:', new Date(noon));
-```
+<CodeExample file="utils/walltime-local.ts" title="Local Timezone Example" />
 
 </Tab>
 <Tab value="Timezone">
 
-```typescript
-import { wallTimeToTS } from '@/datezone';
-
-// Convert wall time in specific timezones to UTC
-const nyWallTime = wallTimeToTS(
-  2024, 1, 15, // January 15, 2024
-  14, 30, 0, 0, // 2:30 PM
-  'America/New_York'
-);
-
-const tokyoWallTime = wallTimeToTS(
-  2024, 1, 15, // January 15, 2024
-  14, 30, 0, 0, // 2:30 PM
-  'Asia/Tokyo'
-);
-
-const utcWallTime = wallTimeToTS(
-  2024, 1, 15, // January 15, 2024
-  14, 30, 0, 0, // 2:30 PM
-  'UTC'
-);
-
-console.log('2:30 PM in NY as UTC:', new Date(nyWallTime).toUTCString());
-console.log('2:30 PM in Tokyo as UTC:', new Date(tokyoWallTime).toUTCString());
-console.log('2:30 PM UTC as UTC:', new Date(utcWallTime).toUTCString());
-
-// These represent the same wall clock time in different timezones
-// converted to their UTC equivalents
-const nyToTokyoDiff = tokyoWallTime - nyWallTime;
-console.log('Time difference between NY and Tokyo 2:30 PM:', nyToTokyoDiff / (1000 * 60 * 60), 'hours');
-```
+<CodeExample file="utils/walltime-timezone.ts" title="Specific Timezone Example" />
 
 </Tab>
 </Tabs>
@@ -96,156 +44,12 @@ console.log('Time difference between NY and Tokyo 2:30 PM:', nyToTokyoDiff / (10
 
 ### Creating Timezone-Aware Events
 
-```typescript
-import { wallTimeToTS, utcToTimeZone } from '@/datezone';
-
-interface Event {
-  title: string;
-  utcTimestamp: number;
-  timezone: TimeZone;
-}
-
-function createEvent(
-  title: string,
-  year: number, month: number, day: number,
-  hour: number, minute: number,
-  timezone: TimeZone
-): Event {
-  const utcTimestamp = wallTimeToTS(year, month, day, hour, minute, 0, 0, timezone);
-  
-  return {
-    title,
-    utcTimestamp,
-    timezone
-  };
-}
-
-function displayEventInTimezone(event: Event, displayTimezone: TimeZone): string {
-  const localTime = utcToTimeZone(event.utcTimestamp, displayTimezone);
-  const date = new Date(localTime);
-  
-  return `${event.title} at ${date.toLocaleString()} (${displayTimezone})`;
-}
-
-// Create an event at 3 PM NY time
-const meeting = createEvent('Team Meeting', 2024, 1, 15, 15, 0, 'America/New_York');
-
-// Display the same event in different timezones
-console.log(displayEventInTimezone(meeting, 'America/New_York')); // 3:00 PM
-console.log(displayEventInTimezone(meeting, 'Europe/London'));    // 8:00 PM
-console.log(displayEventInTimezone(meeting, 'Asia/Tokyo'));       // 5:00 AM next day
-```
+<CodeExample file="utils/timezone-aware-events.ts" title="Timezone-Aware Events" showLineNumbers />
 
 ### Time Zone Conversion Pipeline
 
-```typescript
-import { utcToTimeZone, wallTimeToTS } from '@/datezone';
-
-class TimeZoneConverter {
-  // Convert from one timezone to another
-  static convert(
-    year: number, month: number, day: number,
-    hour: number, minute: number, second: number,
-    fromTimezone: TimeZone,
-    toTimezone: TimeZone
-  ): Date {
-    // Step 1: Convert wall time to UTC
-    const utcTimestamp = wallTimeToTS(year, month, day, hour, minute, second, 0, fromTimezone);
-    
-    // Step 2: Convert UTC to target timezone
-    const targetTimestamp = utcToTimeZone(utcTimestamp, toTimezone);
-    
-    return new Date(targetTimestamp);
-  }
-  
-  // Convert local Date object to specific timezone
-  static fromLocalDate(localDate: Date, targetTimezone: TimeZone): Date {
-    // Step 1: Convert local Date to UTC
-    const utcTimestamp = localToUTC(localDate);
-    
-    // Step 2: Convert UTC to target timezone
-    const targetTimestamp = utcToTimeZone(utcTimestamp, targetTimezone);
-    
-    return new Date(targetTimestamp);
-  }
-  
-  // Get the same moment in different timezones
-  static getWorldTimes(utcTimestamp: number, timezones: TimeZone[]): Record<TimeZone, string> {
-    const result: Record<string, string> = {};
-    
-    for (const tz of timezones) {
-      const localTime = utcToTimeZone(utcTimestamp, tz);
-      result[tz] = new Date(localTime).toLocaleString();
-    }
-    
-    return result;
-  }
-}
-
-// Example usage
-const nyToTokyo = TimeZoneConverter.convert(
-  2024, 1, 15, 15, 30, 0, // 3:30 PM
-  'America/New_York',
-  'Asia/Tokyo'
-);
-console.log('3:30 PM NY time in Tokyo:', nyToTokyo);
-
-const localDate = new Date(2024, 0, 15, 15, 30); // Local 3:30 PM
-const inLondon = TimeZoneConverter.fromLocalDate(localDate, 'Europe/London');
-console.log('Local 3:30 PM in London time:', inLondon);
-
-const worldTimes = TimeZoneConverter.getWorldTimes(Date.now(), [
-  'UTC',
-  'America/New_York',
-  'Europe/London',
-  'Asia/Tokyo',
-  'Australia/Sydney'
-]);
-console.table(worldTimes);
-```
+<CodeExample file="utils/timezone-conversion-pipeline.ts" title="TimeZone Converter Class" showLineNumbers />
 
 ### DST-Aware Scheduling
 
-```typescript
-import { wallTimeToTS } from '@/datezone';
-
-function scheduleRecurringEvent(
-  startYear: number, startMonth: number, startDay: number,
-  hour: number, minute: number,
-  timezone: TimeZone,
-  occurrences: number
-): number[] {
-  const timestamps: number[] = [];
-  
-  for (let i = 0; i < occurrences; i++) {
-    // Add weeks to the start date
-    const eventDate = new Date(startYear, startMonth - 1, startDay + (i * 7));
-    
-    const timestamp = wallTimeToTS(
-      eventDate.getFullYear(),
-      eventDate.getMonth() + 1, // Convert back to 1-based
-      eventDate.getDate(),
-      hour,
-      minute,
-      0,
-      0,
-      timezone
-    );
-    
-    timestamps.push(timestamp);
-  }
-  
-  return timestamps;
-}
-
-// Schedule weekly meetings at 2 PM NY time, starting March 10, 2024 (before DST)
-const meetings = scheduleRecurringEvent(2024, 3, 10, 14, 0, 'America/New_York', 6);
-
-meetings.forEach((timestamp, index) => {
-  const date = new Date(timestamp);
-  console.log(`Meeting ${index + 1}: ${date.toUTCString()} (UTC)`);
-  console.log(`  Local NY time: ${date.toLocaleString('en-US', { timeZone: 'America/New_York' })}`);
-});
-
-// Notice how the UTC times change when DST kicks in, but NY local time stays consistent
-``` 
+<CodeExample file="utils/dst-scheduling.ts" title="DST-Aware Scheduling" showLineNumbers /> 

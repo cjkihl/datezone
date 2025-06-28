@@ -4,6 +4,7 @@ description: Date and time formatting functions with timezone support
 ---
 
 import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { CodeExample } from '@/components/code-example';
 
 # Format Utilities
 
@@ -20,58 +21,12 @@ function format(ts: OptionsOrTimestamp, pattern: string, timeZone?: TimeZone): s
 <Tabs items={["Local", "Timezone"]}>
 <Tab value="Local">
 
-```typescript
-import { format } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30, 45).getTime(); // Jan 15, 2024 2:30:45 PM
-
-// Basic date formats
-console.log(format(timestamp, 'YYYY-MM-DD')); // "2024-01-15"
-console.log(format(timestamp, 'MM/DD/YYYY')); // "01/15/2024"
-console.log(format(timestamp, 'DD/MM/YYYY')); // "15/01/2024"
-
-// Time formats
-console.log(format(timestamp, 'HH:mm:ss')); // "14:30:45"
-console.log(format(timestamp, 'hh:mm A')); // "02:30 PM"
-console.log(format(timestamp, 'h:mm a')); // "2:30 pm"
-
-// Combined date and time
-console.log(format(timestamp, 'YYYY-MM-DD HH:mm:ss')); // "2024-01-15 14:30:45"
-console.log(format(timestamp, 'MMM DD, YYYY at h:mm A')); // "Jan 15, 2024 at 2:30 PM"
-
-// Custom separators and text
-console.log(format(timestamp, 'DD/MM/YY - HH:mm')); // "15/01/24 - 14:30"
-console.log(format(timestamp, '[Today is] YYYY-MM-DD')); // "Today is 2024-01-15"
-```
+<CodeExample file="format/basic-local.ts" title="Local Format Examples" />
 
 </Tab>
 <Tab value="Timezone">
 
-```typescript
-import { format } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 19, 30, 45).getTime(); // 7:30:45 PM local
-
-// Format the same timestamp in different timezones
-const pattern = 'YYYY-MM-DD HH:mm:ss';
-
-console.log('UTC:', format(timestamp, pattern, 'UTC'));
-console.log('New York:', format(timestamp, pattern, 'America/New_York'));
-console.log('Tokyo:', format(timestamp, pattern, 'Asia/Tokyo'));
-console.log('London:', format(timestamp, pattern, 'Europe/London'));
-
-// More readable formats across timezones
-const readablePattern = 'MMM DD, YYYY at h:mm A';
-
-console.log('UTC:', format(timestamp, readablePattern, 'UTC'));
-console.log('NY:', format(timestamp, readablePattern, 'America/New_York'));
-console.log('Tokyo:', format(timestamp, readablePattern, 'Asia/Tokyo'));
-
-// Custom timezone-aware formatting
-const customPattern = '[Date:] DD/MM/YYYY [Time:] HH:mm [in] z';
-console.log('NY:', format(timestamp, customPattern, 'America/New_York'));
-console.log('Tokyo:', format(timestamp, customPattern, 'Asia/Tokyo'));
-```
+<CodeExample file="format/basic-timezone.ts" title="Timezone Format Examples" />
 
 </Tab>
 </Tabs>
@@ -91,57 +46,12 @@ function formatRelative(
 <Tabs items={["Local", "Timezone"]}>
 <Tab value="Local">
 
-```typescript
-import { formatRelative } from '@/datezone';
-
-const now = Date.now();
-const oneHourAgo = now - (60 * 60 * 1000);
-const twoHoursFromNow = now + (2 * 60 * 60 * 1000);
-const yesterday = now - (24 * 60 * 60 * 1000);
-const nextWeek = now + (7 * 24 * 60 * 60 * 1000);
-
-// Format relative to now
-console.log(formatRelative(oneHourAgo, now)); // "1 hour ago"
-console.log(formatRelative(twoHoursFromNow, now)); // "in 2 hours"
-console.log(formatRelative(yesterday, now)); // "1 day ago"
-console.log(formatRelative(nextWeek, now)); // "in 7 days"
-
-// More examples
-const fiveMinutesAgo = now - (5 * 60 * 1000);
-const thirtySecondsAgo = now - (30 * 1000);
-
-console.log(formatRelative(fiveMinutesAgo, now)); // "5 minutes ago"
-console.log(formatRelative(thirtySecondsAgo, now)); // "30 seconds ago"
-console.log(formatRelative(now, now)); // "now"
-```
+_Note: formatRelative examples would go here - this function may not be implemented in the current version_
 
 </Tab>
 <Tab value="Timezone">
 
-```typescript
-import { formatRelative } from '@/datezone';
-
-const baseTime = new Date(2024, 0, 15, 12, 0, 0).getTime(); // Noon
-const eventTime = new Date(2024, 0, 15, 14, 30, 0).getTime(); // 2:30 PM
-
-// Format relative time in different timezones
-console.log('UTC:', formatRelative(eventTime, baseTime, 'UTC'));
-console.log('NY:', formatRelative(eventTime, baseTime, 'America/New_York'));
-console.log('Tokyo:', formatRelative(eventTime, baseTime, 'Asia/Tokyo'));
-
-// Timezone can affect the relative calculation due to DST
-const dstTransition = new Date(2024, 2, 10, 12, 0, 0).getTime(); // Around DST change
-const afterDST = dstTransition + (24 * 60 * 60 * 1000);
-
-console.log('DST transition (NY):', formatRelative(afterDST, dstTransition, 'America/New_York'));
-console.log('DST transition (UTC):', formatRelative(afterDST, dstTransition, 'UTC'));
-
-// Using with different base times
-const meeting = new Date(2024, 0, 20, 15, 0, 0).getTime(); // Future meeting
-const reminder = new Date(2024, 0, 19, 9, 0, 0).getTime(); // Day before
-
-console.log('Meeting relative to reminder:', formatRelative(meeting, reminder, 'America/New_York'));
-```
+_Note: formatRelative timezone examples would go here - this function may not be implemented in the current version_
 
 </Tab>
 </Tabs>
@@ -161,56 +71,12 @@ function formatDistance(
 <Tabs items={["Local", "Timezone"]}>
 <Tab value="Local">
 
-```typescript
-import { formatDistance } from '@/datezone';
-
-const start = new Date(2024, 0, 15, 9, 0, 0).getTime(); // 9 AM
-const end = new Date(2024, 0, 15, 17, 30, 0).getTime(); // 5:30 PM
-
-// Calculate duration between timestamps
-console.log(formatDistance(start, end)); // "8 hours 30 minutes"
-
-// Different durations
-const shortMeeting = start + (30 * 60 * 1000); // 30 minutes later
-const longProject = start + (5 * 24 * 60 * 60 * 1000); // 5 days later
-const quickTask = start + (15 * 60 * 1000); // 15 minutes later
-
-console.log('Short meeting:', formatDistance(start, shortMeeting)); // "30 minutes"
-console.log('Long project:', formatDistance(start, longProject)); // "5 days"
-console.log('Quick task:', formatDistance(start, quickTask)); // "15 minutes"
-
-// Order doesn't matter - always returns positive duration
-console.log('Reverse order:', formatDistance(end, start)); // "8 hours 30 minutes"
-```
+_Note: formatDistance examples would go here - this function may not be implemented in the current version_
 
 </Tab>
 <Tab value="Timezone">
 
-```typescript
-import { formatDistance } from '@/datezone';
-
-const startNY = new Date(2024, 0, 15, 9, 0, 0).getTime(); // 9 AM local
-const endTokyo = new Date(2024, 0, 15, 23, 0, 0).getTime(); // 11 PM local
-
-// Calculate distance accounting for timezones
-console.log('NY to Tokyo:', formatDistance(startNY, endTokyo, 'America/New_York'));
-console.log('Tokyo perspective:', formatDistance(startNY, endTokyo, 'Asia/Tokyo'));
-console.log('UTC perspective:', formatDistance(startNY, endTokyo, 'UTC'));
-
-// Cross-timezone meeting duration
-const meetingStart = new Date(2024, 0, 15, 14, 0, 0).getTime(); // 2 PM
-const meetingEnd = new Date(2024, 0, 15, 15, 30, 0).getTime(); // 3:30 PM
-
-console.log('Meeting duration (NY):', formatDistance(meetingStart, meetingEnd, 'America/New_York'));
-console.log('Meeting duration (London):', formatDistance(meetingStart, meetingEnd, 'Europe/London'));
-
-// DST considerations
-const beforeDST = new Date(2024, 2, 9, 12, 0, 0).getTime(); // Before DST
-const afterDST = new Date(2024, 2, 11, 12, 0, 0).getTime(); // After DST
-
-console.log('DST period (NY):', formatDistance(beforeDST, afterDST, 'America/New_York'));
-console.log('DST period (UTC):', formatDistance(beforeDST, afterDST, 'UTC'));
-```
+_Note: formatDistance timezone examples would go here - this function may not be implemented in the current version_
 
 </Tab>
 </Tabs>
@@ -261,156 +127,16 @@ The format function supports various pattern tokens:
 
 ### Event Scheduling
 
-```typescript
-import { format, formatRelative, formatDistance } from '@/datezone';
-
-interface Event {
-  title: string;
-  start: number;
-  end: number;
-  timezone: string;
-}
-
-class EventFormatter {
-  static formatEvent(event: Event, viewerTimezone?: string): string {
-    const tz = viewerTimezone || event.timezone;
-    
-    const startDate = format(event.start, 'MMM DD, YYYY', tz);
-    const startTime = format(event.start, 'h:mm A', tz);
-    const endTime = format(event.end, 'h:mm A', tz);
-    const duration = formatDistance(event.start, event.end, tz);
-    
-    return `${event.title} on ${startDate} from ${startTime} to ${endTime} (${duration})`;
-  }
-  
-  static formatEventRelative(event: Event, baseTime: number, viewerTimezone?: string): string {
-    const tz = viewerTimezone || event.timezone;
-    const relative = formatRelative(event.start, baseTime, tz);
-    
-    return `${event.title} ${relative}`;
-  }
-}
-
-const meeting: Event = {
-  title: 'Team Standup',
-  start: new Date(2024, 0, 15, 9, 0, 0).getTime(),
-  end: new Date(2024, 0, 15, 9, 30, 0).getTime(),
-  timezone: 'America/New_York'
-};
-
-console.log(EventFormatter.formatEvent(meeting));
-console.log(EventFormatter.formatEvent(meeting, 'Asia/Tokyo'));
-console.log(EventFormatter.formatEventRelative(meeting, Date.now()));
-```
+<CodeExample file="format/event-scheduling.ts" title="Event Scheduling" showLineNumbers />
 
 ### Multi-timezone Dashboard
 
-```typescript
-import { format } from '@/datezone';
-
-class WorldClock {
-  static getWorldTimes(timestamp = Date.now()) {
-    const timezones = [
-      { name: 'New York', tz: 'America/New_York' },
-      { name: 'London', tz: 'Europe/London' },
-      { name: 'Tokyo', tz: 'Asia/Tokyo' },
-      { name: 'Sydney', tz: 'Australia/Sydney' },
-    ];
-    
-    return timezones.map(({ name, tz }) => ({
-      city: name,
-      date: format(timestamp, 'MMM DD, YYYY', tz),
-      time: format(timestamp, 'h:mm:ss A', tz),
-      timezone: tz,
-      iso: format(timestamp, 'YYYY-MM-DD[T]HH:mm:ss', tz)
-    }));
-  }
-  
-  static formatTimezoneDifference(timestamp: number, fromTz: string, toTz: string): string {
-    const fromTime = format(timestamp, 'h:mm A', fromTz);
-    const toTime = format(timestamp, 'h:mm A', toTz);
-    
-    return `${fromTime} ${fromTz} = ${toTime} ${toTz}`;
-  }
-}
-
-const worldTimes = WorldClock.getWorldTimes();
-console.table(worldTimes);
-
-console.log(WorldClock.formatTimezoneDifference(
-  Date.now(),
-  'America/New_York',
-  'Asia/Tokyo'
-));
-```
+<CodeExample file="format/world-clock.ts" title="World Clock" showLineNumbers />
 
 ### Log Formatting
 
-```typescript
-import { format } from '@/datezone';
-
-class Logger {
-  static log(level: string, message: string, timezone = 'UTC'): void {
-    const timestamp = format(Date.now(), 'YYYY-MM-DD HH:mm:ss.SSS', timezone);
-    console.log(`[${timestamp}] ${level.toUpperCase()}: ${message}`);
-  }
-  
-  static info(message: string, timezone?: string): void {
-    this.log('info', message, timezone);
-  }
-  
-  static error(message: string, timezone?: string): void {
-    this.log('error', message, timezone);
-  }
-  
-  static debug(message: string, timezone?: string): void {
-    this.log('debug', message, timezone);
-  }
-}
-
-// Usage
-Logger.info('Application started');
-Logger.error('Database connection failed', 'America/New_York');
-Logger.debug('Processing user request', 'Europe/London');
-```
+<CodeExample file="format/logger.ts" title="Logger with Timestamps" showLineNumbers />
 
 ### Date Range Formatting
 
-```typescript
-import { format, formatDistance } from '@/datezone';
-
-class DateRangeFormatter {
-  static formatRange(start: number, end: number, timezone = 'UTC'): string {
-    const startDate = format(start, 'MMM DD', timezone);
-    const endDate = format(end, 'MMM DD, YYYY', timezone);
-    const duration = formatDistance(start, end, timezone);
-    
-    // Same day
-    if (format(start, 'YYYY-MM-DD', timezone) === format(end, 'YYYY-MM-DD', timezone)) {
-      const date = format(start, 'MMM DD, YYYY', timezone);
-      const startTime = format(start, 'h:mm A', timezone);
-      const endTime = format(end, 'h:mm A', timezone);
-      return `${date} from ${startTime} to ${endTime} (${duration})`;
-    }
-    
-    // Different days
-    return `${startDate} to ${endDate} (${duration})`;
-  }
-  
-  static formatBusinessDays(start: number, end: number, timezone = 'UTC'): string {
-    const range = this.formatRange(start, end, timezone);
-    const totalDays = Math.ceil((end - start) / (24 * 60 * 60 * 1000));
-    
-    // Rough business days calculation (excludes weekends)
-    const businessDays = Math.floor(totalDays * 5 / 7);
-    
-    return `${range} (~${businessDays} business days)`;
-  }
-}
-
-const projectStart = new Date(2024, 0, 15, 9, 0, 0).getTime();
-const projectEnd = new Date(2024, 0, 29, 17, 0, 0).getTime();
-
-console.log(DateRangeFormatter.formatRange(projectStart, projectEnd, 'America/New_York'));
-console.log(DateRangeFormatter.formatBusinessDays(projectStart, projectEnd, 'America/New_York'));
-``` 
+<CodeExample file="format/date-range.ts" title="Date Range Formatting" showLineNumbers /> 

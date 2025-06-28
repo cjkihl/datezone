@@ -1,0 +1,64 @@
+---
+title: General Utils (Updated)
+description: Core utility functions for timezone and date conversions with external TypeScript examples
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { CodeExample } from '@/components/code-example';
+
+# General Utils (Updated Version)
+
+This demonstrates how to use external TypeScript files for examples with full intellisense and type checking support.
+
+## wallTimeToTS
+
+Converts zoned time (local time in a specific timezone) to UTC timestamp.
+
+```typescript
+function wallTimeToTS(
+  year: number,
+  month: number, // 1-based (1 = January)
+  day: number,
+  hour: number,
+  minute: number,
+  second: number,
+  ms: number,
+  timeZone?: TimeZone
+): number
+```
+
+<Tabs items={["Local", "Timezone"]}>
+<Tab value="Local">
+
+<CodeExample file="utils/walltime-local.ts" title="Local Timezone Example" />
+
+</Tab>
+<Tab value="Timezone">
+
+<CodeExample file="utils/walltime-timezone.ts" title="Specific Timezone Example" />
+
+</Tab>
+</Tabs>
+
+## Usage Examples
+
+### Creating Timezone-Aware Events
+
+<CodeExample file="utils/timezone-events.ts" title="Timezone-Aware Events" showLineNumbers />
+
+### Time Zone Conversion Pipeline
+
+<CodeExample file="utils/timezone-converter.ts" title="TimeZone Converter Class" showLineNumbers />
+
+### DST-Aware Scheduling
+
+<CodeExample file="utils/dst-scheduling.ts" title="DST-Aware Scheduling" showLineNumbers />
+
+## Benefits of This Approach
+
+- ✅ **Full TypeScript Support**: Get intellisense, type checking, and error detection in VSCode
+- ✅ **Refactoring Safe**: Renaming functions updates across all examples
+- ✅ **Syntax Highlighting**: Proper code highlighting in documentation
+- ✅ **Version Control**: Track changes to examples separately from documentation
+- ✅ **Testing**: You can unit test your example code
+- ✅ **Linting**: All examples follow your project's linting rules 

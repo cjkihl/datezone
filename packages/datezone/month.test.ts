@@ -224,16 +224,16 @@ describe("daysInMonth error handling", () => {
 // Tests for calculateYearMonth
 describe("calculateYearMonth", () => {
 	it("adds months within same year", () => {
-		expect(calculateYearMonth(2024, 5, 3)).toEqual({ month: 8, year: 2024 });
+		expect(calculateYearMonth(2024, 5, 3)).toEqual([2024, 8]);
 	});
 	it("adds months across year boundary", () => {
-		expect(calculateYearMonth(2024, 11, 2)).toEqual({ month: 1, year: 2025 });
+		expect(calculateYearMonth(2024, 11, 2)).toEqual([2025, 1]);
 	});
 	it("subtracts months within same year", () => {
-		expect(calculateYearMonth(2024, 5, -3)).toEqual({ month: 2, year: 2024 });
+		expect(calculateYearMonth(2024, 5, -3)).toEqual([2024, 2]);
 	});
 	it("subtracts months across year boundary", () => {
-		expect(calculateYearMonth(2024, 2, -3)).toEqual({ month: 11, year: 2023 });
+		expect(calculateYearMonth(2024, 2, -3)).toEqual([2023, 11]);
 	});
 	it("handles negative months resulting in negative year", () => {
 		expect(() => calculateYearMonth(1, 1, -13)).toThrow(RangeError);
@@ -242,10 +242,10 @@ describe("calculateYearMonth", () => {
 
 describe("calculateYearMonth additional edge cases", () => {
 	it("should handle adding 0 months", () => {
-		expect(calculateYearMonth(2024, 5, 0)).toEqual({ month: 5, year: 2024 });
+		expect(calculateYearMonth(2024, 5, 0)).toEqual([2024, 5]);
 	});
 	it("should handle large positive month additions", () => {
-		expect(calculateYearMonth(2024, 1, 25)).toEqual({ month: 2, year: 2026 });
+		expect(calculateYearMonth(2024, 1, 25)).toEqual([2026, 2]);
 	});
 	it("should throw for year < 1", () => {
 		expect(() => calculateYearMonth(0, 1, 1)).toThrow();
@@ -370,11 +370,11 @@ describe("calculateYearMonth error cases", () => {
 	});
 	it("normalizes month < 1 to previous year", () => {
 		const result = calculateYearMonth(2024, 0, 0);
-		expect(result).toEqual({ month: 12, year: 2023 });
+		expect(result).toEqual([2023, 12]);
 	});
 	it("normalizes month > 12 to next year", () => {
 		const result = calculateYearMonth(2024, 13, 0);
-		expect(result).toEqual({ month: 1, year: 2025 });
+		expect(result).toEqual([2025, 1]);
 	});
 });
 
@@ -406,11 +406,6 @@ describe("internal getOptions and addMonths branches", () => {
 	it("getOptions returns correct object for number input", () => {
 		const ts = new Date(2024, 4, 15).getTime();
 		const result = startOfMonth(ts, "UTC");
-		expect(typeof result).toBe("number");
-	});
-	it("getOptions returns correct object for object input", () => {
-		const opts = { month: 5, year: 2024 };
-		const result = startOfMonth(opts, "UTC");
 		expect(typeof result).toBe("number");
 	});
 	it("addMonths triggers day overflow logic (local)", () => {

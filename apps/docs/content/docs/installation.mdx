@@ -3,6 +3,8 @@ title: Installation
 description: How to install Datezone in your project.
 ---
 
+import { CodeExample } from '@/components/code-example';
+
 ## Install with Bun, npm, or yarn
 
 ```package-install
@@ -15,12 +17,6 @@ datezone
 
 ## Usage Example
 
-```ts
-import { parse, format, toTimezone } from "datezone";
-
-const date = parse("2024-06-01T12:00:00Z");
-const formatted = format(date, "yyyy-MM-dd HH:mm zzz");
-const local = toTimezone(date, "America/New_York");
-```
+<CodeExample file="basic/installation-example.ts" title="Basic Usage" />
 
 See the [Basic Usage](/docs/basic-usage) guide for more details. 

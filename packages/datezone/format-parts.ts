@@ -3,7 +3,6 @@ import { getCachedFormatter } from "./cache.js";
 // Pre-allocated, strictly typed options
 export const FULL_TS = {
 	day: "2-digit",
-	era: "short",
 	hour: "2-digit",
 	hour12: false,
 	millisecond: "3-digit",
