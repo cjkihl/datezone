@@ -1,6 +1,6 @@
+import { isNonDST } from "./iana.js";
 import {
 	formatToParts,
-	isUTC,
 	type TimeZone,
 	wallTimeToUTC as wallTimeToUTCBase,
 } from "./index.pub.js";
@@ -23,8 +23,7 @@ function getOptions(ts: TS, timeZone?: TimeZone): number {
 	if (typeof ts === "number") {
 		const d = new Date(ts);
 		if (!timeZone) return d.getHours();
-		if (isUTC(timeZone)) return d.getUTCHours();
-		// For other timezones, use formatToParts
+		// For specific timezones, use formatToParts
 		return formatToParts(ts, timeZone, HOUR_OPTS).hour;
 	}
 	return ts.hour;
@@ -67,23 +66,23 @@ export function hour(ts: TS, timeZone?: TimeZone): number {
 }
 
 export function addHours(ts: TS, hours: number, timeZone?: TimeZone): number {
-	// Fast path: no timezone or UTC timezone
-	if (!timeZone || isUTC(timeZone)) {
+	// Fast path: no timezone (local)
+	if (!timeZone) {
 		const d = typeof ts === "number" ? new Date(ts) : new Date();
 		if (typeof ts !== "number") {
-			if (!timeZone) d.setHours(ts.hour);
-			else d.setUTCHours(ts.hour);
+			d.setHours(ts.hour);
 		}
-
-		if (!timeZone) {
-			d.setHours(d.getHours() + hours);
-		} else {
-			d.setUTCHours(d.getUTCHours() + hours);
-		}
+		d.setHours(d.getHours() + hours);
 		return d.getTime();
 	}
 
-	// Slow path: specific timezone
+	// Medium-fast path: timezone without DST (use arithmetic)
+	if (isNonDST(timeZone)) {
+		const baseTime = typeof ts === "number" ? ts : Date.now();
+		return baseTime + hours * 60 * 60 * 1000;
+	}
+
+	// Slow path: timezone with DST
 	const baseTime = typeof ts === "number" ? ts : Date.now();
 	const parts = formatToParts(baseTime, timeZone, FULL_HOUR_OPTS);
 	return wallTimeToUTC(
@@ -103,19 +102,13 @@ export function subHours(ts: TS, hours: number, timeZone?: TimeZone): number {
 }
 
 export function startOfHour(ts: TS, timeZone?: TimeZone): number {
-	// Fast path: no timezone or UTC timezone
-	if (!timeZone || isUTC(timeZone)) {
+	// Fast path: no timezone (local)
+	if (!timeZone) {
 		const d = typeof ts === "number" ? new Date(ts) : new Date();
 		if (typeof ts !== "number") {
-			if (!timeZone) d.setHours(ts.hour);
-			else d.setUTCHours(ts.hour);
+			d.setHours(ts.hour);
 		}
-
-		if (!timeZone) {
-			d.setMinutes(0, 0, 0);
-		} else {
-			d.setUTCMinutes(0, 0, 0);
-		}
+		d.setMinutes(0, 0, 0);
 		return d.getTime();
 	}
 
@@ -126,7 +119,7 @@ export function startOfHour(ts: TS, timeZone?: TimeZone): number {
 		parts.year,
 		parts.month,
 		parts.day,
-		parts.hour,
+		typeof ts === "number" ? parts.hour : ts.hour,
 		0,
 		0,
 		0,
@@ -135,19 +128,13 @@ export function startOfHour(ts: TS, timeZone?: TimeZone): number {
 }
 
 export function endOfHour(ts: TS, timeZone?: TimeZone): number {
-	// Fast path: no timezone or UTC timezone
-	if (!timeZone || isUTC(timeZone)) {
+	// Fast path: no timezone (local)
+	if (!timeZone) {
 		const d = typeof ts === "number" ? new Date(ts) : new Date();
 		if (typeof ts !== "number") {
-			if (!timeZone) d.setHours(ts.hour);
-			else d.setUTCHours(ts.hour);
+			d.setHours(ts.hour);
 		}
-
-		if (!timeZone) {
-			d.setMinutes(59, 59, 999);
-		} else {
-			d.setUTCMinutes(59, 59, 999);
-		}
+		d.setMinutes(59, 59, 999);
 		return d.getTime();
 	}
 
@@ -158,7 +145,7 @@ export function endOfHour(ts: TS, timeZone?: TimeZone): number {
 		parts.year,
 		parts.month,
 		parts.day,
-		parts.hour,
+		typeof ts === "number" ? parts.hour : ts.hour,
 		59,
 		59,
 		999,
@@ -167,19 +154,13 @@ export function endOfHour(ts: TS, timeZone?: TimeZone): number {
 }
 
 export function startOfMinute(ts: TS, timeZone?: TimeZone): number {
-	// Fast path: no timezone or UTC timezone
-	if (!timeZone || isUTC(timeZone)) {
+	// Fast path: no timezone (local)
+	if (!timeZone) {
 		const d = typeof ts === "number" ? new Date(ts) : new Date();
 		if (typeof ts !== "number") {
-			if (!timeZone) d.setHours(ts.hour, 0);
-			else d.setUTCHours(ts.hour, 0);
+			d.setHours(ts.hour, 0);
 		}
-
-		if (!timeZone) {
-			d.setSeconds(0, 0);
-		} else {
-			d.setUTCSeconds(0, 0);
-		}
+		d.setSeconds(0, 0);
 		return d.getTime();
 	}
 
@@ -199,19 +180,13 @@ export function startOfMinute(ts: TS, timeZone?: TimeZone): number {
 }
 
 export function endOfMinute(ts: TS, timeZone?: TimeZone): number {
-	// Fast path: no timezone or UTC timezone
-	if (!timeZone || isUTC(timeZone)) {
+	// Fast path: no timezone (local)
+	if (!timeZone) {
 		const d = typeof ts === "number" ? new Date(ts) : new Date();
 		if (typeof ts !== "number") {
-			if (!timeZone) d.setHours(ts.hour, 59);
-			else d.setUTCHours(ts.hour, 59);
+			d.setHours(ts.hour, 59);
 		}
-
-		if (!timeZone) {
-			d.setSeconds(59, 999);
-		} else {
-			d.setUTCSeconds(59, 999);
-		}
+		d.setSeconds(59, 999);
 		return d.getTime();
 	}
 
@@ -231,19 +206,13 @@ export function endOfMinute(ts: TS, timeZone?: TimeZone): number {
 }
 
 export function startOfSecond(ts: TS, timeZone?: TimeZone): number {
-	// Fast path: no timezone or UTC timezone
-	if (!timeZone || isUTC(timeZone)) {
+	// Fast path: no timezone (local)
+	if (!timeZone) {
 		const d = typeof ts === "number" ? new Date(ts) : new Date();
 		if (typeof ts !== "number") {
-			if (!timeZone) d.setHours(ts.hour, 0, 0);
-			else d.setUTCHours(ts.hour, 0, 0);
+			d.setHours(ts.hour, 0, 0);
 		}
-
-		if (!timeZone) {
-			d.setMilliseconds(0);
-		} else {
-			d.setUTCMilliseconds(0);
-		}
+		d.setMilliseconds(0);
 		return d.getTime();
 	}
 
@@ -263,19 +232,13 @@ export function startOfSecond(ts: TS, timeZone?: TimeZone): number {
 }
 
 export function endOfSecond(ts: TS, timeZone?: TimeZone): number {
-	// Fast path: no timezone or UTC timezone
-	if (!timeZone || isUTC(timeZone)) {
+	// Fast path: no timezone (local)
+	if (!timeZone) {
 		const d = typeof ts === "number" ? new Date(ts) : new Date();
 		if (typeof ts !== "number") {
-			if (!timeZone) d.setHours(ts.hour, 59, 59);
-			else d.setUTCHours(ts.hour, 59, 59);
+			d.setHours(ts.hour, 59, 59);
 		}
-
-		if (!timeZone) {
-			d.setMilliseconds(999);
-		} else {
-			d.setUTCMilliseconds(999);
-		}
+		d.setMilliseconds(999);
 		return d.getTime();
 	}
 
@@ -299,23 +262,23 @@ export function addMinutes(
 	amount: number,
 	timeZone?: TimeZone,
 ): number {
-	// Fast path: no timezone or UTC timezone
-	if (!timeZone || isUTC(timeZone)) {
+	// Fast path: no timezone (local)
+	if (!timeZone) {
 		const d = typeof ts === "number" ? new Date(ts) : new Date();
 		if (typeof ts !== "number") {
-			if (!timeZone) d.setHours(ts.hour, 0);
-			else d.setUTCHours(ts.hour, 0);
+			d.setHours(ts.hour, 0);
 		}
-
-		if (!timeZone) {
-			d.setMinutes(d.getMinutes() + amount);
-		} else {
-			d.setUTCMinutes(d.getUTCMinutes() + amount);
-		}
+		d.setMinutes(d.getMinutes() + amount);
 		return d.getTime();
 	}
 
-	// Slow path: specific timezone
+	// Medium-fast path: timezone without DST (use arithmetic)
+	if (isNonDST(timeZone)) {
+		const baseTime = typeof ts === "number" ? ts : Date.now();
+		return baseTime + amount * 60 * 1000;
+	}
+
+	// Slow path: timezone with DST
 	const baseTime = typeof ts === "number" ? ts : Date.now();
 	const parts = formatToParts(baseTime, timeZone, FULL_HOUR_OPTS);
 	return wallTimeToUTC(
@@ -343,23 +306,23 @@ export function addSeconds(
 	amount: number,
 	timeZone?: TimeZone,
 ): number {
-	// Fast path: no timezone or UTC timezone
-	if (!timeZone || isUTC(timeZone)) {
+	// Fast path: no timezone (local)
+	if (!timeZone) {
 		const d = typeof ts === "number" ? new Date(ts) : new Date();
 		if (typeof ts !== "number") {
-			if (!timeZone) d.setHours(ts.hour, 0, 0);
-			else d.setUTCHours(ts.hour, 0, 0);
+			d.setHours(ts.hour, 0, 0);
 		}
-
-		if (!timeZone) {
-			d.setSeconds(d.getSeconds() + amount);
-		} else {
-			d.setUTCSeconds(d.getUTCSeconds() + amount);
-		}
+		d.setSeconds(d.getSeconds() + amount);
 		return d.getTime();
 	}
 
-	// Slow path: specific timezone
+	// Medium-fast path: timezone without DST (use arithmetic)
+	if (isNonDST(timeZone)) {
+		const baseTime = typeof ts === "number" ? ts : Date.now();
+		return baseTime + amount * 1000;
+	}
+
+	// Slow path: timezone with DST
 	const baseTime = typeof ts === "number" ? ts : Date.now();
 	const parts = formatToParts(baseTime, timeZone, FULL_HOUR_OPTS);
 	return wallTimeToUTC(

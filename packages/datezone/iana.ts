@@ -624,6 +624,312 @@ const utcTimeZones = [
 	"Zulu",
 ];
 
+const nonDSTTimeZones = [
+	// Africa - Most African countries don't observe DST
+	"Africa/Addis_Ababa",
+	"Africa/Algiers",
+	"Africa/Asmara",
+	"Africa/Blantyre",
+	"Africa/Brazzaville",
+	"Africa/Bujumbura",
+	"Africa/Cairo", // Egypt stopped DST in 2014
+	"Africa/Dar_es_Salaam",
+	"Africa/Djibouti",
+	"Africa/Douala",
+	"Africa/Gaborone",
+	"Africa/Harare",
+	"Africa/Johannesburg",
+	"Africa/Juba",
+	"Africa/Kampala",
+	"Africa/Khartoum",
+	"Africa/Kigali",
+	"Africa/Kinshasa",
+	"Africa/Lagos",
+	"Africa/Libreville",
+	"Africa/Luanda",
+	"Africa/Lubumbashi",
+	"Africa/Lusaka",
+	"Africa/Malabo",
+	"Africa/Maputo",
+	"Africa/Maseru",
+	"Africa/Mbabane",
+	"Africa/Mogadishu",
+	"Africa/Nairobi",
+	"Africa/Ndjamena",
+	"Africa/Niamey",
+	"Africa/Porto-Novo",
+	"Africa/Tripoli", // Libya doesn't currently observe DST
+
+	// Asia - Most Asian countries don't observe DST
+	"Asia/Aden",
+	"Asia/Almaty",
+	"Asia/Aqtau",
+	"Asia/Aqtobe",
+	"Asia/Ashgabat",
+	"Asia/Ashkhabad",
+	"Asia/Atyrau",
+	"Asia/Baghdad",
+	"Asia/Bahrain",
+	"Asia/Bangkok",
+	"Asia/Barnaul",
+	"Asia/Bishkek",
+	"Asia/Brunei",
+	"Asia/Calcutta", // India
+	"Asia/Chita",
+	"Asia/Choibalsan",
+	"Asia/Chongqing",
+	"Asia/Chungking",
+	"Asia/Colombo",
+	"Asia/Dacca",
+	"Asia/Dhaka",
+	"Asia/Dili",
+	"Asia/Dubai",
+	"Asia/Dushanbe",
+	"Asia/Harbin",
+	"Asia/Ho_Chi_Minh",
+	"Asia/Hong_Kong",
+	"Asia/Hovd",
+	"Asia/Irkutsk",
+	"Asia/Jakarta",
+	"Asia/Jayapura",
+	"Asia/Kabul",
+	"Asia/Kamchatka",
+	"Asia/Karachi",
+	"Asia/Kashgar",
+	"Asia/Kathmandu",
+	"Asia/Katmandu",
+	"Asia/Khandyga",
+	"Asia/Kolkata", // India
+	"Asia/Krasnoyarsk",
+	"Asia/Kuala_Lumpur",
+	"Asia/Kuching",
+	"Asia/Kuwait",
+	"Asia/Macao",
+	"Asia/Macau",
+	"Asia/Magadan",
+	"Asia/Makassar",
+	"Asia/Manila",
+	"Asia/Muscat",
+	"Asia/Novokuznetsk",
+	"Asia/Novosibirsk",
+	"Asia/Omsk",
+	"Asia/Oral",
+	"Asia/Phnom_Penh",
+	"Asia/Pontianak",
+	"Asia/Pyongyang",
+	"Asia/Qatar",
+	"Asia/Qostanay",
+	"Asia/Qyzylorda",
+	"Asia/Rangoon",
+	"Asia/Riyadh",
+	"Asia/Saigon",
+	"Asia/Sakhalin",
+	"Asia/Samarkand",
+	"Asia/Seoul",
+	"Asia/Shanghai",
+	"Asia/Singapore",
+	"Asia/Srednekolymsk",
+	"Asia/Taipei",
+	"Asia/Tashkent",
+	"Asia/Tbilisi",
+	"Asia/Thimbu",
+	"Asia/Thimphu",
+	"Asia/Tokyo",
+	"Asia/Tomsk",
+	"Asia/Ujung_Pandang",
+	"Asia/Ulaanbaatar",
+	"Asia/Ulan_Bator",
+	"Asia/Urumqi",
+	"Asia/Ust-Nera",
+	"Asia/Vientiane",
+	"Asia/Vladivostok",
+	"Asia/Yakutsk",
+	"Asia/Yangon",
+	"Asia/Yekaterinburg",
+	"Asia/Yerevan",
+
+	// Americas - Countries/regions that don't observe DST
+	"America/Anguilla",
+	"America/Antigua",
+	"America/Aruba",
+	"America/Atikokan", // Ontario, Canada - no DST
+	"America/Barbados",
+	"America/Belize",
+	"America/Blanc-Sablon", // Quebec, Canada - no DST
+	"America/Boa_Vista",
+	"America/Bogota",
+	"America/Caracas",
+	"America/Cayenne",
+	"America/Cayman",
+	"America/Coral_Harbour", // Atikokan
+	"America/Costa_Rica",
+	"America/Creston", // British Columbia, Canada - no DST
+	"America/Curacao",
+	"America/Dawson_Creek", // British Columbia, Canada - no DST
+	"America/Dominica",
+	"America/El_Salvador",
+	"America/Fort_Nelson", // British Columbia, Canada - no DST
+	"America/Grenada",
+	"America/Guadeloupe",
+	"America/Guatemala",
+	"America/Guayaquil",
+	"America/Guyana",
+	"America/Hermosillo", // Sonora, Mexico - no DST
+	"America/Jamaica",
+	"America/Kralendijk",
+	"America/La_Paz",
+	"America/Lima",
+	"America/Lower_Princes",
+	"America/Managua",
+	"America/Marigot",
+	"America/Martinique",
+	"America/Montserrat",
+	"America/Panama",
+	"America/Paramaribo",
+	"America/Phoenix", // Arizona - no DST
+	"America/Port_of_Spain",
+	"America/Porto_Acre",
+	"America/Porto_Velho",
+	"America/Puerto_Rico",
+	"America/Punta_Arenas",
+	"America/Regina", // Saskatchewan, Canada - no DST
+	"America/Rio_Branco",
+	"America/Santo_Domingo",
+	"America/St_Barthelemy",
+	"America/St_Kitts",
+	"America/St_Lucia",
+	"America/St_Thomas",
+	"America/St_Vincent",
+	"America/Swift_Current", // Saskatchewan, Canada - no DST
+	"America/Tegucigalpa",
+	"America/Tortola",
+	"America/Virgin",
+
+	// Australia - States/territories that don't observe DST
+	"Australia/Brisbane", // Queensland
+	"Australia/Darwin", // Northern Territory
+	"Australia/Lindeman", // Queensland
+	"Australia/Perth", // Western Australia
+	"Australia/North", // Northern Territory
+	"Australia/Queensland",
+	"Australia/West", // Western Australia
+
+	// Antarctica - Most stations don't observe DST
+	"Antarctica/Casey",
+	"Antarctica/Davis",
+	"Antarctica/DumontDUrville",
+	"Antarctica/Mawson",
+	"Antarctica/McMurdo",
+	"Antarctica/South_Pole",
+	"Antarctica/Syowa",
+	"Antarctica/Vostok",
+
+	// Atlantic
+	"Atlantic/Cape_Verde",
+	"Atlantic/South_Georgia",
+
+	// Pacific - Many Pacific islands don't observe DST
+	"Pacific/Chuuk",
+	"Pacific/Efate",
+	"Pacific/Enderbury",
+	"Pacific/Fakaofo",
+	"Pacific/Funafuti",
+	"Pacific/Galapagos",
+	"Pacific/Gambier",
+	"Pacific/Guadalcanal",
+	"Pacific/Guam",
+	"Pacific/Honolulu", // Hawaii
+	"Pacific/Johnston",
+	"Pacific/Kiritimati",
+	"Pacific/Kosrae",
+	"Pacific/Kwajalein",
+	"Pacific/Majuro",
+	"Pacific/Marquesas",
+	"Pacific/Midway",
+	"Pacific/Nauru",
+	"Pacific/Niue",
+	"Pacific/Noumea",
+	"Pacific/Pago_Pago",
+	"Pacific/Palau",
+	"Pacific/Pitcairn",
+	"Pacific/Pohnpei",
+	"Pacific/Ponape",
+	"Pacific/Port_Moresby",
+	"Pacific/Rarotonga",
+	"Pacific/Saipan",
+	"Pacific/Samoa",
+	"Pacific/Tahiti",
+	"Pacific/Tarawa",
+	"Pacific/Truk",
+	"Pacific/Wake",
+	"Pacific/Wallis",
+	"Pacific/Yap",
+
+	// Indian Ocean
+	"Indian/Antananarivo",
+	"Indian/Chagos",
+	"Indian/Christmas",
+	"Indian/Cocos",
+	"Indian/Comoro",
+	"Indian/Kerguelen",
+	"Indian/Mahe",
+	"Indian/Maldives",
+	"Indian/Mauritius",
+	"Indian/Mayotte",
+	"Indian/Reunion",
+
+	// Fixed offset timezones (Etc/GMT±X)
+	"Etc/GMT+1",
+	"Etc/GMT+2",
+	"Etc/GMT+3",
+	"Etc/GMT+4",
+	"Etc/GMT+5",
+	"Etc/GMT+6",
+	"Etc/GMT+7",
+	"Etc/GMT+8",
+	"Etc/GMT+9",
+	"Etc/GMT+10",
+	"Etc/GMT+11",
+	"Etc/GMT+12",
+	"Etc/GMT-1",
+	"Etc/GMT-2",
+	"Etc/GMT-3",
+	"Etc/GMT-4",
+	"Etc/GMT-5",
+	"Etc/GMT-6",
+	"Etc/GMT-7",
+	"Etc/GMT-8",
+	"Etc/GMT-9",
+	"Etc/GMT-10",
+	"Etc/GMT-11",
+	"Etc/GMT-12",
+	"Etc/GMT-13",
+	"Etc/GMT-14",
+
+	// Legacy timezone names that don't observe DST
+	"Canada/Saskatchewan",
+	"Hongkong",
+	"Iceland", // Iceland doesn't observe DST
+	"Jamaica",
+	"Japan",
+	"Libya",
+	"PRC", // China
+	"ROC", // Taiwan
+	"ROK", // South Korea
+	"Singapore",
+	"US/Arizona",
+	"US/Hawaii",
+
+	// Additional timezone aliases
+	"HST", // Hawaii Standard Time
+	"MST", // Mountain Standard Time (when not observing DST)
+	"EST", // Eastern Standard Time (when not observing DST)
+];
+
 export function isUTC(timeZone: TimeZone): boolean {
 	return utcTimeZones.includes(timeZone);
+}
+
+export function isNonDST(timeZone: TimeZone): boolean {
+	return isUTC(timeZone) || nonDSTTimeZones.includes(timeZone);
 }
