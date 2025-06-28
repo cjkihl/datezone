@@ -1,8 +1,8 @@
 import { dayOfWeek, dayOfYear, getDayPeriod, weekDayName } from "../day.js";
 import { to12Hour } from "../hour.js";
-import type { TimeZone } from "../iana.js";
 import { getMonthName } from "../month.js";
 import { formatOrdinal } from "../ordinal.js";
+import type { TimeZone } from "../timezone.js";
 import type { WallDateTime } from "../types.js";
 import { getISOWeekYear, getWeek } from "../week.js";
 import { quarter } from "../year.js";

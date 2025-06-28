@@ -1,20 +1,18 @@
+import { HOUR } from "./constants.js";
 import { FULL_TS, formatToParts } from "./format-parts.js";
-import { isDST, type TimeZone } from "./iana.js";
+import { isDST, isUTC, type TimeZone } from "./timezone.js";
 
-const HOUR_MS = 60 * 60 * 1000;
-
+// Cache object types
 type OffsetCache = {
 	zone: TimeZone;
 	hourStart: number;
 	offset: number;
 };
-let lastOffsetCache: OffsetCache | null = null;
 
-// Local timezone cache for performance
+let lastOffsetCache: OffsetCache | null = null;
 let localOffsetCache: { hourStart: number; offset: number } | null = null;
 
 // Global cache for non-DST timezones (fixed offset zones)
-// These offsets never change, so we can cache them indefinitely
 const fixedOffsetCache = new Map<TimeZone, number>();
 
 /**
@@ -25,70 +23,74 @@ const fixedOffsetCache = new Map<TimeZone, number>();
  */
 export function getUTCtoTimezoneOffsetMinutes(
 	ts: number,
-	zone?: TimeZone,
+	tz?: TimeZone,
 ): number {
 	// Default to local timezone if not specified
-	if (!zone) {
+	if (!tz) {
 		return getLocalTimezoneOffsetMinutes(ts);
 	}
 
-	if (zone === "Etc/UTC" || zone === "UTC") return 0;
+	// Fast path: Check UTC first with optimized lookup
+	if (isUTC(tz)) return 0;
 
 	// Fast path for non-DST timezones (fixed offset zones)
-	// isDST returns true for DST timezones, so we check for !isDST for non-DST timezones
-	if (!isDST(zone)) {
-		let cachedOffset = fixedOffsetCache.get(zone);
+	// Use optimized DST check - if it's not DST and not UTC, it's fixed offset
+	if (!isDST(tz)) {
+		let cachedOffset = fixedOffsetCache.get(tz);
 		if (cachedOffset !== undefined) {
 			return cachedOffset;
 		}
 
 		// Calculate offset once and cache it permanently
-		const { year, month, day, hour, minute, second, millisecond } =
-			formatToParts(ts, zone, FULL_TS);
-
+		const parts = formatToParts(ts, tz, FULL_TS);
 		const wall = Date.UTC(
-			year ?? 0,
-			(month ?? 1) - 1,
-			day ?? 1,
-			hour ?? 0,
-			minute ?? 0,
-			second ?? 0,
-			millisecond,
+			parts.year ?? 0,
+			(parts.month ?? 1) - 1,
+			parts.day ?? 1,
+			parts.hour ?? 0,
+			parts.minute ?? 0,
+			parts.second ?? 0,
+			parts.millisecond ?? 0,
 		);
 		cachedOffset = (wall - ts) / 60000;
 
-		fixedOffsetCache.set(zone, cachedOffset);
+		fixedOffsetCache.set(tz, cachedOffset);
 		return cachedOffset;
 	}
 
 	// For DST timezones, use per-hour cache as offsets can change
-	const hourStart = Math.floor(ts / HOUR_MS) * HOUR_MS;
+	// Inline hour calculation to avoid repeated computation
+	const hourStart = Math.floor(ts / HOUR) * HOUR;
 	if (
 		lastOffsetCache &&
-		lastOffsetCache.zone === zone &&
+		lastOffsetCache.zone === tz &&
 		lastOffsetCache.hourStart === hourStart
 	) {
 		return lastOffsetCache.offset;
 	}
 
-	const { year, month, day, hour, minute, second, millisecond } = formatToParts(
-		ts,
-		zone,
-		FULL_TS,
-	);
-
+	// Calculate offset for DST timezone
+	const parts = formatToParts(ts, tz, FULL_TS);
 	const wall = Date.UTC(
-		year ?? 0,
-		(month ?? 1) - 1,
-		day ?? 1,
-		hour ?? 0,
-		minute ?? 0,
-		second ?? 0,
-		millisecond,
+		parts.year ?? 0,
+		(parts.month ?? 1) - 1,
+		parts.day ?? 1,
+		parts.hour ?? 0,
+		parts.minute ?? 0,
+		parts.second ?? 0,
+		parts.millisecond ?? 0,
 	);
 	const offset = (wall - ts) / 60000;
 
-	lastOffsetCache = { hourStart, offset, zone };
+	// Reuse cache object to avoid allocation
+	if (!lastOffsetCache) {
+		lastOffsetCache = { hourStart, offset, zone: tz };
+	} else {
+		lastOffsetCache.zone = tz;
+		lastOffsetCache.hourStart = hourStart;
+		lastOffsetCache.offset = offset;
+	}
+
 	return offset;
 }
 
@@ -99,7 +101,7 @@ export function getUTCtoTimezoneOffsetMinutes(
  * @returns Offset in minutes (positive if ahead of UTC, negative if behind)
  */
 export function getLocalTimezoneOffsetMinutes(ts: number): number {
-	const hourStart = Math.floor(ts / HOUR_MS) * HOUR_MS;
+	const hourStart = Math.floor(ts / HOUR) * HOUR;
 
 	if (localOffsetCache && localOffsetCache.hourStart === hourStart) {
 		return localOffsetCache.offset;
@@ -109,7 +111,15 @@ export function getLocalTimezoneOffsetMinutes(ts: number): number {
 	// We want: positive if ahead of UTC, negative if behind
 	// Date.getTimezoneOffset() returns: negative if ahead of UTC, positive if behind
 	const offset = -new Date(ts).getTimezoneOffset();
-	localOffsetCache = { hourStart, offset };
+
+	// Reuse cache object to avoid allocation
+	if (!localOffsetCache) {
+		localOffsetCache = { hourStart, offset };
+	} else {
+		localOffsetCache.hourStart = hourStart;
+		localOffsetCache.offset = offset;
+	}
+
 	return offset;
 }
 
@@ -127,7 +137,7 @@ export function getTimezoneOffsetMinutes(
 	const from = fromZone || undefined;
 	const to = toZone || undefined;
 
-	// Fast path: UTC zones
+	// Fast path: UTC zones with optimized lookups
 	if (from === "Etc/UTC" || from === "UTC") {
 		return getUTCtoTimezoneOffsetMinutes(ts, to);
 	}

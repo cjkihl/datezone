@@ -1,4 +1,4 @@
-import type { TimeZone } from "./iana.js";
+import type { TimeZone } from "./timezone.js";
 
 export * from "./cache.js";
 export * from "./compare.js";
@@ -7,9 +7,9 @@ export * from "./day.js";
 export * from "./format/index.js";
 export * from "./format-parts.js";
 export * from "./hour.js";
-export * from "./iana.js";
 export * from "./month.js";
 export * from "./offset.js";
+export * from "./timezone.js";
 export * from "./utils.js";
 export * from "./week.js";
 export * from "./year.js";

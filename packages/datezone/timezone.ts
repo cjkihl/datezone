@@ -1,26 +1,220 @@
-export type TimeZone =
-	| "Africa/Abidjan"
-	| "Africa/Accra"
+// UTC Timezones - single source of truth
+const UTC_TIMEZONE_NAMES = [
+	"Africa/Abidjan",
+	"Africa/Accra",
+	"Africa/Bamako",
+	"Africa/Banjul",
+	"Africa/Bissau",
+	"Africa/Conakry",
+	"Africa/Dakar",
+	"Africa/Freetown",
+	"Africa/Lome",
+	"Africa/Monrovia",
+	"Africa/Nouakchott",
+	"Africa/Ouagadougou",
+	"Africa/Sao_Tome",
+	"America/Danmarkshavn",
+	"Atlantic/Reykjavik",
+	"Atlantic/St_Helena",
+	"Etc/GMT",
+	"Etc/GMT-0",
+	"Etc/GMT+0",
+	"Etc/GMT0",
+	"Etc/Greenwich",
+	"Etc/UCT",
+	"Etc/Universal",
+	"Etc/UTC",
+	"Etc/Zulu",
+	"GMT",
+	"GMT-0",
+	"GMT+0",
+	"GMT0",
+	"Greenwich",
+	"UCT",
+	"UTC",
+	"Universal",
+	"Zulu",
+] as const;
+
+// DST Timezones - single source of truth
+const DST_TIMEZONE_NAMES = [
+	"America/Adak",
+	"America/Anchorage",
+	"America/Asuncion",
+	"America/Bahia_Banderas",
+	"America/Boise",
+	"America/Cambridge_Bay",
+	"America/Campo_Grande",
+	"America/Cancun",
+	"America/Chicago",
+	"America/Chihuahua",
+	"America/Cuiaba",
+	"America/Denver",
+	"America/Detroit",
+	"America/Edmonton",
+	"America/Glace_Bay",
+	"America/Godthab",
+	"America/Goose_Bay",
+	"America/Grand_Turk",
+	"America/Halifax",
+	"America/Havana",
+	"America/Indiana/Indianapolis",
+	"America/Indiana/Knox",
+	"America/Indiana/Marengo",
+	"America/Indiana/Petersburg",
+	"America/Indiana/Tell_City",
+	"America/Indiana/Vevay",
+	"America/Indiana/Vincennes",
+	"America/Indiana/Winamac",
+	"America/Inuvik",
+	"America/Iqaluit",
+	"America/Juneau",
+	"America/Kentucky/Louisville",
+	"America/Kentucky/Monticello",
+	"America/Los_Angeles",
+	"America/Matamoros",
+	"America/Mazatlan",
+	"America/Menominee",
+	"America/Merida",
+	"America/Metlakatla",
+	"America/Mexico_City",
+	"America/Miquelon",
+	"America/Moncton",
+	"America/Monterrey",
+	"America/Montevideo",
+	"America/Nassau",
+	"America/New_York",
+	"America/Nome",
+	"America/North_Dakota/Beulah",
+	"America/North_Dakota/Center",
+	"America/North_Dakota/New_Salem",
+	"America/Ojinaga",
+	"America/Pangnirtung",
+	"America/Port-au-Prince",
+	"America/Rainy_River",
+	"America/Rankin_Inlet",
+	"America/Resolute",
+	"America/Santiago",
+	"America/Sao_Paulo",
+	"America/Scoresbysund",
+	"America/Sitka",
+	"America/St_Johns",
+	"America/Tijuana",
+	"America/Toronto",
+	"America/Vancouver",
+	"America/Whitehorse",
+	"America/Winnipeg",
+	"America/Yakutat",
+	"Antarctica/Macquarie",
+	"Antarctica/Troll",
+	"Asia/Amman",
+	"Asia/Beirut",
+	"Asia/Damascus",
+	"Asia/Famagusta",
+	"Asia/Gaza",
+	"Asia/Hebron",
+	"Asia/Jerusalem",
+	"Asia/Nicosia",
+	"Asia/Tehran",
+	"Atlantic/Azores",
+	"Atlantic/Bermuda",
+	"Atlantic/Canary",
+	"Atlantic/Faroe",
+	"Atlantic/Madeira",
+	"Australia/Adelaide",
+	"Australia/Broken_Hill",
+	"Australia/Currie",
+	"Australia/Hobart",
+	"Australia/Lord_Howe",
+	"Australia/Melbourne",
+	"Australia/Sydney",
+	"Europe/Amsterdam",
+	"Europe/Andorra",
+	"Europe/Astrakhan",
+	"Europe/Athens",
+	"Europe/Belgrade",
+	"Europe/Berlin",
+	"Europe/Bratislava",
+	"Europe/Brussels",
+	"Europe/Bucharest",
+	"Europe/Budapest",
+	"Europe/Busingen",
+	"Europe/Chisinau",
+	"Europe/Copenhagen",
+	"Europe/Dublin",
+	"Europe/Gibraltar",
+	"Europe/Guernsey",
+	"Europe/Helsinki",
+	"Europe/Isle_of_Man",
+	"Europe/Jersey",
+	"Europe/Kaliningrad",
+	"Europe/Kiev",
+	"Europe/Kirov",
+	"Europe/Lisbon",
+	"Europe/Ljubljana",
+	"Europe/London",
+	"Europe/Luxembourg",
+	"Europe/Madrid",
+	"Europe/Malta",
+	"Europe/Mariehamn",
+	"Europe/Monaco",
+	"Europe/Oslo",
+	"Europe/Paris",
+	"Europe/Podgorica",
+	"Europe/Prague",
+	"Europe/Riga",
+	"Europe/Rome",
+	"Europe/Samara",
+	"Europe/San_Marino",
+	"Europe/Sarajevo",
+	"Europe/Saratov",
+	"Europe/Simferopol",
+	"Europe/Skopje",
+	"Europe/Sofia",
+	"Europe/Stockholm",
+	"Europe/Tallinn",
+	"Europe/Tirane",
+	"Europe/Ulyanovsk",
+	"Europe/Vaduz",
+	"Europe/Vienna",
+	"Europe/Vilnius",
+	"Europe/Volgograd",
+	"Europe/Warsaw",
+	"Europe/Zagreb",
+	"Europe/Zurich",
+	"Pacific/Auckland",
+	"Pacific/Chatham",
+	"Pacific/Easter",
+	"Pacific/Fiji",
+	"Pacific/Norfolk",
+	"US/Alaska",
+	"US/Aleutian",
+	"US/Central",
+	"US/Eastern",
+	"US/Mountain",
+	"US/Pacific",
+] as const;
+
+// Extract TypeScript types from the arrays
+export type UTCTimeZone = (typeof UTC_TIMEZONE_NAMES)[number];
+export type DSTTimeZone = (typeof DST_TIMEZONE_NAMES)[number];
+
+// Other timezones (neither UTC nor DST) - defined as TypeScript union type only
+export type OtherTimeZone =
 	| "Africa/Addis_Ababa"
 	| "Africa/Algiers"
 	| "Africa/Asmara"
-	| "Africa/Bamako"
 	| "Africa/Bangui"
-	| "Africa/Banjul"
-	| "Africa/Bissau"
 	| "Africa/Blantyre"
 	| "Africa/Brazzaville"
 	| "Africa/Bujumbura"
 	| "Africa/Cairo"
 	| "Africa/Casablanca"
 	| "Africa/Ceuta"
-	| "Africa/Conakry"
-	| "Africa/Dakar"
 	| "Africa/Dar_es_Salaam"
 	| "Africa/Djibouti"
 	| "Africa/Douala"
 	| "Africa/El_Aaiun"
-	| "Africa/Freetown"
 	| "Africa/Gaborone"
 	| "Africa/Harare"
 	| "Africa/Johannesburg"
@@ -31,7 +225,6 @@ export type TimeZone =
 	| "Africa/Kinshasa"
 	| "Africa/Lagos"
 	| "Africa/Libreville"
-	| "Africa/Lome"
 	| "Africa/Luanda"
 	| "Africa/Lubumbashi"
 	| "Africa/Lusaka"
@@ -40,19 +233,13 @@ export type TimeZone =
 	| "Africa/Maseru"
 	| "Africa/Mbabane"
 	| "Africa/Mogadishu"
-	| "Africa/Monrovia"
 	| "Africa/Nairobi"
 	| "Africa/Ndjamena"
 	| "Africa/Niamey"
-	| "Africa/Nouakchott"
-	| "Africa/Ouagadougou"
 	| "Africa/Porto-Novo"
-	| "Africa/Sao_Tome"
 	| "Africa/Tripoli"
 	| "Africa/Tunis"
 	| "Africa/Windhoek"
-	| "America/Adak"
-	| "America/Anchorage"
 	| "America/Anguilla"
 	| "America/Antigua"
 	| "America/Araguaina"
@@ -69,77 +256,44 @@ export type TimeZone =
 	| "America/Argentina/Tucuman"
 	| "America/Argentina/Ushuaia"
 	| "America/Aruba"
-	| "America/Asuncion"
 	| "America/Atikokan"
 	| "America/Bahia"
-	| "America/Bahia_Banderas"
 	| "America/Barbados"
 	| "America/Belem"
 	| "America/Belize"
 	| "America/Blanc-Sablon"
 	| "America/Boa_Vista"
 	| "America/Bogota"
-	| "America/Boise"
 	| "America/Buenos_Aires"
-	| "America/Cambridge_Bay"
-	| "America/Campo_Grande"
-	| "America/Cancun"
 	| "America/Caracas"
 	| "America/Catamarca"
 	| "America/Cayenne"
 	| "America/Cayman"
-	| "America/Chicago"
-	| "America/Chihuahua"
 	| "America/Coral_Harbour"
 	| "America/Cordoba"
 	| "America/Costa_Rica"
 	| "America/Creston"
-	| "America/Cuiaba"
 	| "America/Curacao"
-	| "America/Danmarkshavn"
 	| "America/Dawson"
 	| "America/Dawson_Creek"
-	| "America/Denver"
-	| "America/Detroit"
 	| "America/Dominica"
-	| "America/Edmonton"
 	| "America/Eirunepe"
 	| "America/El_Salvador"
 	| "America/Fort_Nelson"
 	| "America/Fortaleza"
-	| "America/Glace_Bay"
-	| "America/Godthab"
-	| "America/Goose_Bay"
-	| "America/Grand_Turk"
 	| "America/Grenada"
 	| "America/Guadeloupe"
 	| "America/Guatemala"
 	| "America/Guayaquil"
 	| "America/Guyana"
-	| "America/Halifax"
-	| "America/Havana"
 	| "America/Hermosillo"
-	| "America/Indiana/Indianapolis"
-	| "America/Indiana/Knox"
-	| "America/Indiana/Marengo"
-	| "America/Indiana/Petersburg"
-	| "America/Indiana/Tell_City"
-	| "America/Indiana/Vevay"
-	| "America/Indiana/Vincennes"
-	| "America/Indiana/Winamac"
 	| "America/Indianapolis"
-	| "America/Inuvik"
-	| "America/Iqaluit"
 	| "America/Jamaica"
 	| "America/Jujuy"
-	| "America/Juneau"
-	| "America/Kentucky/Louisville"
-	| "America/Kentucky/Monticello"
 	| "America/Knox_IN"
 	| "America/Kralendijk"
 	| "America/La_Paz"
 	| "America/Lima"
-	| "America/Los_Angeles"
 	| "America/Louisville"
 	| "America/Lower_Princes"
 	| "America/Maceio"
@@ -147,55 +301,28 @@ export type TimeZone =
 	| "America/Manaus"
 	| "America/Marigot"
 	| "America/Martinique"
-	| "America/Matamoros"
-	| "America/Mazatlan"
 	| "America/Mendoza"
-	| "America/Menominee"
-	| "America/Merida"
-	| "America/Metlakatla"
-	| "America/Mexico_City"
-	| "America/Miquelon"
-	| "America/Moncton"
-	| "America/Monterrey"
-	| "America/Montevideo"
 	| "America/Montreal"
 	| "America/Montserrat"
-	| "America/Nassau"
-	| "America/New_York"
 	| "America/Nipigon"
-	| "America/Nome"
 	| "America/Noronha"
-	| "America/North_Dakota/Beulah"
-	| "America/North_Dakota/Center"
-	| "America/North_Dakota/New_Salem"
-	| "America/Ojinaga"
 	| "America/Panama"
-	| "America/Pangnirtung"
 	| "America/Paramaribo"
 	| "America/Phoenix"
-	| "America/Port-au-Prince"
 	| "America/Port_of_Spain"
 	| "America/Porto_Acre"
 	| "America/Porto_Velho"
 	| "America/Puerto_Rico"
 	| "America/Punta_Arenas"
-	| "America/Rainy_River"
-	| "America/Rankin_Inlet"
 	| "America/Recife"
 	| "America/Regina"
-	| "America/Resolute"
 	| "America/Rio_Branco"
 	| "America/Rosario"
 	| "America/Santa_Isabel"
 	| "America/Santarem"
-	| "America/Santiago"
 	| "America/Santo_Domingo"
-	| "America/Sao_Paulo"
-	| "America/Scoresbysund"
 	| "America/Shiprock"
-	| "America/Sitka"
 	| "America/St_Barthelemy"
-	| "America/St_Johns"
 	| "America/St_Kitts"
 	| "America/St_Lucia"
 	| "America/St_Thomas"
@@ -204,31 +331,22 @@ export type TimeZone =
 	| "America/Tegucigalpa"
 	| "America/Thule"
 	| "America/Thunder_Bay"
-	| "America/Tijuana"
-	| "America/Toronto"
 	| "America/Tortola"
-	| "America/Vancouver"
 	| "America/Virgin"
-	| "America/Whitehorse"
-	| "America/Winnipeg"
-	| "America/Yakutat"
 	| "America/Yellowknife"
 	| "Antarctica/Casey"
 	| "Antarctica/Davis"
 	| "Antarctica/DumontDUrville"
-	| "Antarctica/Macquarie"
 	| "Antarctica/Mawson"
 	| "Antarctica/McMurdo"
 	| "Antarctica/Palmer"
 	| "Antarctica/Rothera"
 	| "Antarctica/South_Pole"
 	| "Antarctica/Syowa"
-	| "Antarctica/Troll"
 	| "Antarctica/Vostok"
 	| "Arctic/Longyearbyen"
 	| "Asia/Aden"
 	| "Asia/Almaty"
-	| "Asia/Amman"
 	| "Asia/Anadyr"
 	| "Asia/Aqtau"
 	| "Asia/Aqtobe"
@@ -240,7 +358,6 @@ export type TimeZone =
 	| "Asia/Baku"
 	| "Asia/Bangkok"
 	| "Asia/Barnaul"
-	| "Asia/Beirut"
 	| "Asia/Bishkek"
 	| "Asia/Brunei"
 	| "Asia/Calcutta"
@@ -250,15 +367,11 @@ export type TimeZone =
 	| "Asia/Chungking"
 	| "Asia/Colombo"
 	| "Asia/Dacca"
-	| "Asia/Damascus"
 	| "Asia/Dhaka"
 	| "Asia/Dili"
 	| "Asia/Dubai"
 	| "Asia/Dushanbe"
-	| "Asia/Famagusta"
-	| "Asia/Gaza"
 	| "Asia/Harbin"
-	| "Asia/Hebron"
 	| "Asia/Ho_Chi_Minh"
 	| "Asia/Hong_Kong"
 	| "Asia/Hovd"
@@ -266,7 +379,6 @@ export type TimeZone =
 	| "Asia/Istanbul"
 	| "Asia/Jakarta"
 	| "Asia/Jayapura"
-	| "Asia/Jerusalem"
 	| "Asia/Kabul"
 	| "Asia/Kamchatka"
 	| "Asia/Karachi"
@@ -285,7 +397,6 @@ export type TimeZone =
 	| "Asia/Makassar"
 	| "Asia/Manila"
 	| "Asia/Muscat"
-	| "Asia/Nicosia"
 	| "Asia/Novokuznetsk"
 	| "Asia/Novosibirsk"
 	| "Asia/Omsk"
@@ -308,7 +419,6 @@ export type TimeZone =
 	| "Asia/Taipei"
 	| "Asia/Tashkent"
 	| "Asia/Tbilisi"
-	| "Asia/Tehran"
 	| "Asia/Tel_Aviv"
 	| "Asia/Thimbu"
 	| "Asia/Thimphu"
@@ -325,37 +435,23 @@ export type TimeZone =
 	| "Asia/Yangon"
 	| "Asia/Yekaterinburg"
 	| "Asia/Yerevan"
-	| "Atlantic/Azores"
-	| "Atlantic/Bermuda"
-	| "Atlantic/Canary"
 	| "Atlantic/Cape_Verde"
 	| "Atlantic/Faeroe"
-	| "Atlantic/Faroe"
 	| "Atlantic/Jan_Mayen"
-	| "Atlantic/Madeira"
-	| "Atlantic/Reykjavik"
 	| "Atlantic/South_Georgia"
-	| "Atlantic/St_Helena"
 	| "Atlantic/Stanley"
 	| "Australia/ACT"
-	| "Australia/Adelaide"
 	| "Australia/Brisbane"
-	| "Australia/Broken_Hill"
 	| "Australia/Canberra"
-	| "Australia/Currie"
 	| "Australia/Darwin"
 	| "Australia/Eucla"
-	| "Australia/Hobart"
 	| "Australia/LHI"
 	| "Australia/Lindeman"
-	| "Australia/Lord_Howe"
-	| "Australia/Melbourne"
 	| "Australia/NSW"
 	| "Australia/North"
 	| "Australia/Perth"
 	| "Australia/Queensland"
 	| "Australia/South"
-	| "Australia/Sydney"
 	| "Australia/Tasmania"
 	| "Australia/Victoria"
 	| "Australia/West"
@@ -382,8 +478,6 @@ export type TimeZone =
 	| "EST5EDT"
 	| "Egypt"
 	| "Eire"
-	| "Etc/GMT"
-	| "Etc/GMT+0"
 	| "Etc/GMT+1"
 	| "Etc/GMT+10"
 	| "Etc/GMT+11"
@@ -396,7 +490,6 @@ export type TimeZone =
 	| "Etc/GMT+7"
 	| "Etc/GMT+8"
 	| "Etc/GMT+9"
-	| "Etc/GMT-0"
 	| "Etc/GMT-1"
 	| "Etc/GMT-10"
 	| "Etc/GMT-11"
@@ -411,82 +504,15 @@ export type TimeZone =
 	| "Etc/GMT-7"
 	| "Etc/GMT-8"
 	| "Etc/GMT-9"
-	| "Etc/GMT0"
-	| "Etc/Greenwich"
-	| "Etc/UCT"
-	| "Etc/UTC"
-	| "Etc/Universal"
-	| "Etc/Zulu"
-	| "Europe/Amsterdam"
-	| "Europe/Andorra"
-	| "Europe/Astrakhan"
-	| "Europe/Athens"
 	| "Europe/Belfast"
-	| "Europe/Belgrade"
-	| "Europe/Berlin"
-	| "Europe/Bratislava"
-	| "Europe/Brussels"
-	| "Europe/Bucharest"
-	| "Europe/Budapest"
-	| "Europe/Busingen"
-	| "Europe/Chisinau"
-	| "Europe/Copenhagen"
-	| "Europe/Dublin"
-	| "Europe/Gibraltar"
-	| "Europe/Guernsey"
-	| "Europe/Helsinki"
-	| "Europe/Isle_of_Man"
-	| "Europe/Istanbul"
-	| "Europe/Jersey"
-	| "Europe/Kaliningrad"
-	| "Europe/Kiev"
-	| "Europe/Kirov"
-	| "Europe/Lisbon"
-	| "Europe/Ljubljana"
-	| "Europe/London"
-	| "Europe/Luxembourg"
-	| "Europe/Madrid"
-	| "Europe/Malta"
-	| "Europe/Mariehamn"
 	| "Europe/Minsk"
-	| "Europe/Monaco"
 	| "Europe/Moscow"
-	| "Europe/Nicosia"
-	| "Europe/Oslo"
-	| "Europe/Paris"
-	| "Europe/Podgorica"
-	| "Europe/Prague"
-	| "Europe/Riga"
-	| "Europe/Rome"
-	| "Europe/Samara"
-	| "Europe/San_Marino"
-	| "Europe/Sarajevo"
-	| "Europe/Saratov"
-	| "Europe/Simferopol"
-	| "Europe/Skopje"
-	| "Europe/Sofia"
-	| "Europe/Stockholm"
-	| "Europe/Tallinn"
-	| "Europe/Tirane"
 	| "Europe/Tiraspol"
-	| "Europe/Ulyanovsk"
 	| "Europe/Uzhgorod"
-	| "Europe/Vaduz"
 	| "Europe/Vatican"
-	| "Europe/Vienna"
-	| "Europe/Vilnius"
-	| "Europe/Volgograd"
-	| "Europe/Warsaw"
-	| "Europe/Zagreb"
 	| "Europe/Zaporozhye"
-	| "Europe/Zurich"
 	| "GB"
 	| "GB-Eire"
-	| "GMT"
-	| "GMT+0"
-	| "GMT-0"
-	| "GMT0"
-	| "Greenwich"
 	| "HST"
 	| "Hongkong"
 	| "Iceland"
@@ -519,15 +545,11 @@ export type TimeZone =
 	| "PRC"
 	| "PST8PDT"
 	| "Pacific/Apia"
-	| "Pacific/Auckland"
 	| "Pacific/Bougainville"
-	| "Pacific/Chatham"
 	| "Pacific/Chuuk"
-	| "Pacific/Easter"
 	| "Pacific/Efate"
 	| "Pacific/Enderbury"
 	| "Pacific/Fakaofo"
-	| "Pacific/Fiji"
 	| "Pacific/Funafuti"
 	| "Pacific/Galapagos"
 	| "Pacific/Gambier"
@@ -543,7 +565,6 @@ export type TimeZone =
 	| "Pacific/Midway"
 	| "Pacific/Nauru"
 	| "Pacific/Niue"
-	| "Pacific/Norfolk"
 	| "Pacific/Noumea"
 	| "Pacific/Pago_Pago"
 	| "Pacific/Palau"
@@ -565,33 +586,23 @@ export type TimeZone =
 	| "Portugal"
 	| "ROC"
 	| "ROK"
-	| "Singapore"
 	| "Turkey"
-	| "UCT"
-	| "US/Alaska"
-	| "US/Aleutian"
 	| "US/Arizona"
-	| "US/Central"
 	| "US/East-Indiana"
-	| "US/Eastern"
 	| "US/Hawaii"
 	| "US/Indiana-Starke"
 	| "US/Michigan"
-	| "US/Mountain"
-	| "US/Pacific"
 	| "US/Pacific-New"
 	| "US/Samoa"
-	| "UTC"
-	| "Universal"
 	| "W-SU"
-	| "WET"
-	| "Zulu";
+	| "WET";
 
-const utcTimeZones =
-	"Africa/Abidjan,Africa/Accra,Africa/Bamako,Africa/Banjul,Africa/Bissau,Africa/Conakry,Africa/Dakar,Africa/Freetown,Africa/Lome,Africa/Monrovia,Africa/Nouakchott,Africa/Ouagadougou,Africa/Sao_Tome,America/Danmarkshavn,Atlantic/Reykjavik,Atlantic/St_Helena,Etc/GMT,Etc/GMT-0,Etc/GMT+0,Etc/GMT0,Etc/Greenwich,Etc/UCT,Etc/Universal,Etc/UTC,Etc/Zulu,GMT,GMT-0,GMT+0,GMT0,Greenwich,UCT,UTC,Universal,Zulu";
+// Complete TimeZone type - each timezone appears only once
+export type TimeZone = UTCTimeZone | DSTTimeZone | OtherTimeZone;
 
-const dstTimeZones =
-	"America/Adak,America/Anchorage,America/Asuncion,America/Bahia_Banderas,America/Boise,America/Cambridge_Bay,America/Campo_Grande,America/Cancun,America/Chicago,America/Chihuahua,America/Cuiaba,America/Denver,America/Detroit,America/Edmonton,America/Glace_Bay,America/Godthab,America/Goose_Bay,America/Grand_Turk,America/Halifax,America/Havana,America/Indiana/Indianapolis,America/Indiana/Knox,America/Indiana/Marengo,America/Indiana/Petersburg,America/Indiana/Tell_City,America/Indiana/Vevay,America/Indiana/Vincennes,America/Indiana/Winamac,America/Inuvik,America/Iqaluit,America/Juneau,America/Kentucky/Louisville,America/Kentucky/Monticello,America/Los_Angeles,America/Matamoros,America/Mazatlan,America/Menominee,America/Merida,America/Metlakatla,America/Mexico_City,America/Miquelon,America/Moncton,America/Monterrey,America/Montevideo,America/Nassau,America/New_York,America/Nome,America/North_Dakota/Beulah,America/North_Dakota/Center,America/North_Dakota/New_Salem,America/Ojinaga,America/Pangnirtung,America/Port-au-Prince,America/Rainy_River,America/Rankin_Inlet,America/Resolute,America/Santiago,America/Sao_Paulo,America/Scoresbysund,America/Sitka,America/St_Johns,America/Tijuana,America/Toronto,America/Vancouver,America/Whitehorse,America/Winnipeg,America/Yakutat,Antarctica/Macquarie,Antarctica/Troll,Asia/Amman,Asia/Beirut,Asia/Damascus,Asia/Famagusta,Asia/Gaza,Asia/Hebron,Asia/Jerusalem,Asia/Nicosia,Asia/Tehran,Atlantic/Azores,Atlantic/Bermuda,Atlantic/Canary,Atlantic/Faroe,Atlantic/Madeira,Australia/Adelaide,Australia/Broken_Hill,Australia/Currie,Australia/Hobart,Australia/Lord_Howe,Australia/Melbourne,Australia/Sydney,Europe/Amsterdam,Europe/Andorra,Europe/Astrakhan,Europe/Athens,Europe/Belgrade,Europe/Berlin,Europe/Bratislava,Europe/Brussels,Europe/Bucharest,Europe/Budapest,Europe/Busingen,Europe/Chisinau,Europe/Copenhagen,Europe/Dublin,Europe/Gibraltar,Europe/Guernsey,Europe/Helsinki,Europe/Isle_of_Man,Europe/Jersey,Europe/Kaliningrad,Europe/Kiev,Europe/Kirov,Europe/Lisbon,Europe/Ljubljana,Europe/London,Europe/Luxembourg,Europe/Madrid,Europe/Malta,Europe/Mariehamn,Europe/Monaco,Europe/Oslo,Europe/Paris,Europe/Podgorica,Europe/Prague,Europe/Riga,Europe/Rome,Europe/Samara,Europe/San_Marino,Europe/Sarajevo,Europe/Saratov,Europe/Simferopol,Europe/Skopje,Europe/Sofia,Europe/Stockholm,Europe/Tallinn,Europe/Tirane,Europe/Ulyanovsk,Europe/Vaduz,Europe/Vienna,Europe/Vilnius,Europe/Volgograd,Europe/Warsaw,Europe/Zagreb,Europe/Zurich,Pacific/Auckland,Pacific/Chatham,Pacific/Easter,Pacific/Fiji,Pacific/Norfolk,US/Alaska,US/Aleutian,US/Central,US/Eastern,US/Mountain,US/Pacific";
+// Create Sets for O(1) lookup performance
+const UTC_TIMEZONES = new Set(UTC_TIMEZONE_NAMES);
+const DST_TIMEZONES = new Set(DST_TIMEZONE_NAMES);
 
 /**
  * Checks if a timezone is UTC.
@@ -600,7 +611,7 @@ const dstTimeZones =
  * @returns `true` if the timezone is UTC, `false` otherwise
  */
 export function isUTC(timeZone: TimeZone): boolean {
-	return utcTimeZones.includes(timeZone);
+	return UTC_TIMEZONES.has(timeZone as UTCTimeZone);
 }
 
 /**
@@ -613,12 +624,12 @@ export function isUTC(timeZone: TimeZone): boolean {
  * @example
  * ```typescript
  * isDST('America/New_York'); // true
- * isDST('Europe/London'); // false
+ * isDST('Europe/London'); // true
  * isDST('UTC'); // false
  * isDST('GMT'); // false
- * isDST('Etc/UTC'); // false
+ * isDST('Asia/Tokyo'); // false
  * ```
  */
 export function isDST(timeZone: TimeZone): boolean {
-	return isUTC(timeZone) || dstTimeZones.includes(timeZone);
+	return DST_TIMEZONES.has(timeZone as DSTTimeZone);
 }

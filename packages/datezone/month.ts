@@ -1,6 +1,7 @@
 import { getCachedFormatterLocale } from "./cache.js";
 import { FULL_TS, formatToParts } from "./format-parts.js";
-import { isUTC, type TimeZone } from "./iana.js";
+import { getUTCtoTimezoneOffsetMinutes } from "./offset.js";
+import { isDST, isUTC, type TimeZone } from "./timezone.js";
 import { wallTimeToTS } from "./utils.js";
 import { isLeapYear } from "./year.js";
 
@@ -43,6 +44,24 @@ export function startOfMonth(ts: number, timeZone?: TimeZone): number {
 		d.setUTCHours(0, 0, 0, 0);
 		return d.getTime();
 	}
+
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(timeZone)) {
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
+		const offsetMs = offsetMinutes * 60 * 1000;
+
+		// Convert to wall time in the timezone
+		const wallTimeTs = ts + offsetMs;
+		const d = new Date(wallTimeTs);
+
+		// Set to start of month in wall time
+		d.setUTCDate(1);
+		d.setUTCHours(0, 0, 0, 0);
+
+		// Convert back to UTC
+		return d.getTime() - offsetMs;
+	}
+
 	const { year, month } = formatToParts(ts, timeZone, YEAR_MONTH_OPTS);
 	return wallTimeToTS(year, month, 1, 0, 0, 0, 0, timeZone);
 }
@@ -82,7 +101,7 @@ export function addMonths(
 	months: number,
 	timeZone?: TimeZone,
 ): number {
-	// Fast path: local time, timestamp input, no timezone
+	// Fast path: local time
 	if (!timeZone) {
 		const d = new Date(ts);
 		const originalDay = d.getDate();
@@ -93,7 +112,7 @@ export function addMonths(
 		return d.getTime();
 	}
 
-	// Fast path: UTC time, timestamp input, no timezone
+	// Fast path: UTC time
 	if (isUTC(timeZone)) {
 		const d = new Date(ts);
 		const originalDay = d.getUTCDate();
@@ -104,6 +123,28 @@ export function addMonths(
 		return d.getTime();
 	}
 
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(timeZone)) {
+		// Get the fixed timezone offset
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
+		const offsetMs = offsetMinutes * 60 * 1000;
+
+		// Convert to wall time in the timezone
+		const wallTimeTs = ts + offsetMs;
+		const d = new Date(wallTimeTs);
+
+		// Do month arithmetic in wall time
+		const originalDay = d.getUTCDate();
+		d.setUTCMonth(d.getUTCMonth() + months);
+		if (d.getUTCDate() !== originalDay) {
+			d.setUTCDate(0); // Go to last day of previous month
+		}
+
+		// Convert back to UTC
+		return d.getTime() - offsetMs;
+	}
+
+	// Complex path: DST timezones (requires full timezone parsing)
 	const parts = formatToParts(ts, timeZone, FULL_TS);
 	const [newYear, newMonth] = calculateYearMonth(
 		parts.year,
@@ -166,6 +207,24 @@ export function startOfNthMonth(
 			d.setUTCHours(0, 0, 0, 0);
 			return d.getTime();
 		}
+
+		// Fast path: Non-DST timezones (fixed offset zones)
+		if (!isDST(timeZone)) {
+			const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
+			const offsetMs = offsetMinutes * 60 * 1000;
+
+			// Convert to wall time in the timezone
+			const wallTimeTs = ts + offsetMs;
+			const d = new Date(wallTimeTs);
+
+			// Do month arithmetic in wall time
+			d.setUTCMonth(d.getUTCMonth() + n, 1);
+			d.setUTCHours(0, 0, 0, 0);
+
+			// Convert back to UTC
+			return d.getTime() - offsetMs;
+		}
+
 		const { year, month } = formatToParts(ts, timeZone, YEAR_MONTH_OPTS);
 		return startOfNthMonthBase(year, month, n, timeZone);
 	}
@@ -286,6 +345,17 @@ export function daysInMonth(
 		} else if (isUTC(timeZone)) {
 			year = d.getUTCFullYear();
 			month = d.getUTCMonth() + 1;
+		} else if (!isDST(timeZone)) {
+			// Fast path: Non-DST timezones (fixed offset zones)
+			const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
+			const offsetMs = offsetMinutes * 60 * 1000;
+
+			// Convert to wall time in the timezone
+			const wallTimeTs = ts + offsetMs;
+			const wallTimeDate = new Date(wallTimeTs);
+
+			year = wallTimeDate.getUTCFullYear();
+			month = wallTimeDate.getUTCMonth() + 1;
 		} else {
 			({ year, month } = getOptions(ts, timeZone));
 		}
@@ -309,7 +379,7 @@ export function daysInMonth(
  * @param year - The starting year
  * @param month - The starting month (1-12)
  * @param monthsToAdd - Number of months to add (can be negative)
- * @returns Object with the new year and month
+ * @returns Tuple with the new year and month [year, month]
  * @throws {RangeError} If the resulting year or month is invalid
  */
 export function calculateYearMonth(
@@ -374,6 +444,16 @@ export function getQuarter(
 			month = d.getMonth() + 1;
 		} else if (isUTC(timeZone)) {
 			month = d.getUTCMonth() + 1;
+		} else if (!isDST(timeZone)) {
+			// Fast path: Non-DST timezones (fixed offset zones)
+			const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
+			const offsetMs = offsetMinutes * 60 * 1000;
+
+			// Convert to wall time in the timezone
+			const wallTimeTs = ts + offsetMs;
+			const wallTimeDate = new Date(wallTimeTs);
+
+			month = wallTimeDate.getUTCMonth() + 1;
 		} else {
 			({ month } = getOptions(ts, timeZone));
 		}

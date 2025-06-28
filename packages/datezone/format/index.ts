@@ -1,6 +1,6 @@
 import { FULL_TS, formatToParts } from "../format-parts.js";
-import { isDST, isUTC, type TimeZone } from "../iana.js";
 import { getUTCtoTimezoneOffsetMinutes } from "../offset.js";
+import { isDST, isUTC, type TimeZone } from "../timezone.js";
 import type { WallDateTime } from "../types.js";
 import { formatters } from "./formatters.js";
 

@@ -277,12 +277,12 @@ describe("addMonths", () => {
 	it("works with timezones (Asia/Singapore)", () => {
 		const d = new Date("2024-01-31T16:00:00.000Z");
 		const result = addMonths(d.getTime(), 1, "Asia/Singapore");
-		expect(new Date(result).toISOString()).toBe("2024-03-01T04:00:00.000Z");
+		expect(new Date(result).toISOString()).toBe("2024-02-29T16:00:00.000Z");
 	});
 	it("works with negative months and timezones", () => {
 		const d = new Date("2024-03-31T16:00:00.000Z");
 		const result = addMonths(d.getTime(), -1, "Asia/Singapore");
-		expect(new Date(result).toISOString()).toBe("2024-03-01T04:00:00.000Z");
+		expect(new Date(result).toISOString()).toBe("2024-02-29T16:00:00.000Z");
 	});
 });
 

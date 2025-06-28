@@ -29,7 +29,7 @@ class EventFormatter {
 
 	static formatEventRelative(
 		event: Event,
-		baseTime: number,
+		_baseTime: number,
 		viewerTimezone?: TimeZone,
 	): string {
 		const tz = viewerTimezone || event.timezone;

@@ -69,16 +69,16 @@ describe("Month function coverage tests", () => {
 
 		test("should handle negative month calculation edge case", () => {
 			// Test case where newMonth calculation results in negative
-			const result = calculateYearMonth(2024, 1, -1);
-			expect(result.year).toBe(2023);
-			expect(result.month).toBe(12);
+			const [year, month] = calculateYearMonth(2024, 1, -1);
+			expect(year).toBe(2023);
+			expect(month).toBe(12);
 		});
 
 		test("should handle large negative month additions", () => {
 			// This should trigger the newMonth < 1 condition
-			const result = calculateYearMonth(2024, 1, -13);
-			expect(result.year).toBe(2022);
-			expect(result.month).toBe(12);
+			const [year, month] = calculateYearMonth(2024, 1, -13);
+			expect(year).toBe(2022);
+			expect(month).toBe(12);
 		});
 	});
 });

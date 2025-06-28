@@ -1,5 +1,5 @@
-import { isUTC, type TimeZone } from "./iana.js";
 import { getUTCtoTimezoneOffsetMinutes } from "./offset.js";
+import { isUTC, type TimeZone } from "./timezone.js";
 
 /**
  * Converts a Wall time in a specific timezone to Timestamp in milliseconds.
@@ -33,13 +33,17 @@ export function wallTimeToTS(
 	minute: number,
 	second: number,
 	ms: number,
-	timeZone: TimeZone,
+	timeZone?: TimeZone,
 ): number {
-	const tz = timeZone;
 	const utcTs = Date.UTC(year, month - 1, day, hour, minute, second, ms);
 
+	// Fast path: no timezone, use local time
+	if (!timeZone) {
+		return new Date(year, month - 1, day, hour, minute, second, ms).getTime();
+	}
+
 	// Fast path: if timeZone is UTC, offset is always 0
-	if (isUTC(tz)) {
+	if (isUTC(timeZone)) {
 		return utcTs;
 	}
 

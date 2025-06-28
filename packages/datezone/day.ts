@@ -1,7 +1,7 @@
 import { getCachedFormatterLocale } from "./cache.js";
 import { DAY } from "./constants.js";
 import { formatToParts } from "./format-parts.js";
-import { isDST, isUTC, type TimeZone } from "./iana.js";
+import { isDST, isUTC, type TimeZone } from "./timezone.js";
 import { wallTimeToTS } from "./utils.js";
 import { isLeapYear } from "./year.js";
 
