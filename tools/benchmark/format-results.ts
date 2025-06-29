@@ -1,10 +1,5 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import {
-	type BenchmarkGroupKey,
-	categorize,
-	GROUP_LABELS,
-} from "./benchmark-categories.js";
 
 interface MitataStats {
 	min: number;
@@ -52,7 +47,7 @@ interface ComparisonRow {
 	variant?: string; // Add timezone variant tracking
 }
 
-function formatTime(avg: number): string {
+function _formatTime(avg: number): string {
 	if (avg < 1) return `${(avg * 1000).toFixed(2)} ns`;
 	if (avg < 1000) return `${avg.toFixed(2)} µs`;
 	return `${(avg / 1000).toFixed(2)} ms`;
@@ -61,7 +56,13 @@ function formatTime(avg: number): string {
 function formatOps(_ticks: number, avg: number): string {
 	if (avg === 0) return "-";
 	const ops = 1_000_000 / avg;
-	return ops > 1000 ? ops.toFixed(0) : ops.toFixed(2);
+	if (ops > 1000000) {
+		return `${(ops / 1000000).toFixed(1)}M`;
+	}
+	if (ops > 1000) {
+		return `${(ops / 1000).toFixed(1)}K`;
+	}
+	return ops.toFixed(0);
 }
 
 function extractComparisonRows(data: MitataOutput): ComparisonRow[] {
@@ -135,7 +136,7 @@ function getPerfIcon(
 }
 
 function formatOpsSub(ops: string): string {
-	return `<sub>${ops} ops/sec</sub>`;
+	return `<sub>\`${ops} ops/sec\`</sub>`;
 }
 
 function boldBest(
@@ -258,9 +259,9 @@ function generateCreativeMarkdown(rows: ComparisonRow[]): string {
 	const summary = summarize(rows);
 
 	let md = "# 🏁 Datezone vs Date-fns Performance Comparison\n\n";
-	md += `**Generated:** ${now}  \\n`;
-	md += `**Node.js:** ${node}  \\n`;
-	md += `**Platform:** ${platform}\n\n`;
+	md += `**Generated:** \`${now}\`  \n`;
+	md += `**Node.js:** \`${node}\`  \n`;
+	md += `**Platform:** \`${platform}\`\n\n`;
 	md += "## 📊 Performance Overview\n\n";
 	md +=
 		"This report compares **Datezone** against **Date-fns v4** with timezone support (@date-fns/tz).\n\n";
@@ -330,7 +331,7 @@ function generateCreativeMarkdown(rows: ComparisonRow[]): string {
 			let perfText = icon;
 			if (pct !== null && Math.abs(pct) > 10) {
 				const sign = pct > 0 ? "+" : "";
-				perfText += ` <sub>${sign}${pct.toFixed(0)}%</sub>`;
+				perfText += ` <sub>\`${sign}${pct.toFixed(0)}%\`</sub>`;
 			}
 
 			// Bold the best
@@ -345,22 +346,22 @@ function generateCreativeMarkdown(rows: ComparisonRow[]): string {
 					[dzOps, dfOps] = boldBest(dzOps, dfOps, "datefns");
 				}
 			}
-			md += `| ${row.operation || ""} | ${dzTime}<br/>${dzOps} | ${dfTime}<br/>${dfOps} | ${perfText} |\n`;
+			md += `| \`${row.operation || ""}\` | ${dzTime}<br/>${dzOps} | ${dfTime}<br/>${dfOps} | ${perfText} |\n`;
 		}
 		md += "\n";
 	}
 
 	md += "## 📈 Summary\n\n";
 	md += "| Metric | Count | Percentage |\n";
-	md += "|--------|-------|------------|\\n";
-	md += `| **Datezone wins** | ${summary.dzWins} | ${((summary.dzWins / summary.total) * 100).toFixed(1)}% |\n`;
-	md += `| **Date-fns wins** | ${summary.dfWins} | ${((summary.dfWins / summary.total) * 100).toFixed(1)}% |\n`;
-	md += `| **Close matches** | ${summary.close} | ${((summary.close / summary.total) * 100).toFixed(1)}% |\n`;
-	md += `| **Datezone unique** | ${summary.dzUnique} | ${((summary.dzUnique / summary.total) * 100).toFixed(1)}% |\n`;
-	md += `| **Total operations** | ${summary.total} | 100% |\n\n`;
+	md += "|--------|-------|------------|\n";
+	md += `| **Datezone wins** | \`${summary.dzWins}\` | \`${((summary.dzWins / summary.total) * 100).toFixed(1)}%\` |\n`;
+	md += `| **Date-fns wins** | \`${summary.dfWins}\` | \`${((summary.dfWins / summary.total) * 100).toFixed(1)}%\` |\n`;
+	md += `| **Close matches** | \`${summary.close}\` | \`${((summary.close / summary.total) * 100).toFixed(1)}%\` |\n`;
+	md += `| **Datezone unique** | \`${summary.dzUnique}\` | \`${((summary.dzUnique / summary.total) * 100).toFixed(1)}%\` |\n`;
+	md += `| **Total operations** | \`${summary.total}\` | \`100%\` |\n\n`;
 
 	md += "## 🔬 Methodology\n\n";
-	md += `### Benchmark Setup\n- **Tool:** [Mitata](https://github.com/evanwashere/mitata) - High-precision JavaScript benchmarking\n- **Iterations:** Multiple samples with statistical significance testing\n- **Environment:** Node.js ${node} on ${platform}\n\n`;
+	md += `### Benchmark Setup\n- **Tool:** [Mitata](https://github.com/evanwashere/mitata) - High-precision JavaScript benchmarking\n- **Iterations:** Multiple samples with statistical significance testing\n- **Environment:** Node.js \`${node}\` on \`${platform}\`\n\n`;
 	md +=
 		"### Comparison Approach\n- **Datezone:** Built-in timezone support with UTC timestamps\n- **Date-fns:** v4.x with @date-fns/tz package for timezone operations\n- **Test Data:** Realistic timestamps across different times and timezones\n- **Fairness:** Both libraries tested with equivalent timezone-aware operations\n\n";
 	md +=
@@ -368,7 +369,7 @@ function generateCreativeMarkdown(rows: ComparisonRow[]): string {
 	md +=
 		"### Timezone Test Categories\n- **Non-Timezone (Local):** Standard local time operations\n- **UTC Fast Path:** Optimized UTC timezone operations\n- **Non-DST Timezone:** Fixed offset timezones (fastest timezone path)\n- **DST Timezone:** Complex DST-aware timezone operations\n\n";
 	md +=
-		"### Notes\n- Results may vary based on system specifications and load\n- Benchmarks focus on equivalent functionality where available\n- Some operations are unique to Datezone (timezone utilities)\n- All operations tested with timezone awareness for fair comparison\n- Non-DST timezones should show the best performance for timezone-aware operations\n\n---\n\n*To regenerate: \n\u001b[36mbun run tools/benchmark/format-results.ts\u001b[0m*\n\n";
+		"### Notes\n- Results may vary based on system specifications and load\n- Benchmarks focus on equivalent functionality where available\n- Some operations are unique to Datezone (timezone utilities)\n- All operations tested with timezone awareness for fair comparison\n- Non-DST timezones should show the best performance for timezone-aware operations\n\n---\n\n*To regenerate:*\n```bash\nbun run tools/benchmark/format-results.ts\n```\n\n";
 
 	// Add internal datezone comparisons
 	md += "## 🔬 Internal Datezone Performance Analysis\n\n";
@@ -393,7 +394,21 @@ function generateCreativeMarkdown(rows: ComparisonRow[]): string {
 							? "✅"
 							: "🤝";
 
-			md += `| ${comp.operation} | **${comp.fastPathName}**<br/>**<sub>${comp.fastPathOps.toLocaleString()} ops/sec</sub>** | ${comp.normalPathName}<br/><sub>${comp.normalPathOps.toLocaleString()} ops/sec</sub> | ${icon} <sub>+${improvement}%</sub> |\n`;
+			const fastPathOpsFormatted =
+				comp.fastPathOps > 1000000
+					? `${(comp.fastPathOps / 1000000).toFixed(1)}M`
+					: comp.fastPathOps > 1000
+						? `${(comp.fastPathOps / 1000).toFixed(1)}K`
+						: comp.fastPathOps.toFixed(0);
+
+			const normalPathOpsFormatted =
+				comp.normalPathOps > 1000000
+					? `${(comp.normalPathOps / 1000000).toFixed(1)}M`
+					: comp.normalPathOps > 1000
+						? `${(comp.normalPathOps / 1000).toFixed(1)}K`
+						: comp.normalPathOps.toFixed(0);
+
+			md += `| \`${comp.operation}\` | **${comp.fastPathName}**<br/>**<sub>\`${fastPathOpsFormatted} ops/sec\`</sub>** | ${comp.normalPathName}<br/><sub>\`${normalPathOpsFormatted} ops/sec\`</sub> | ${icon} <sub>\`+${improvement}%\`</sub> |\n`;
 		}
 		md += "\n";
 	}

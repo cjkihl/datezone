@@ -1,8 +1,6 @@
 // Basic import - most common usage
 
-// Import everything
-import * as dz from "datezone";
-import { addDays, format, startOfDay, type TimeZone } from "datezone";
+import { addDays, format, startOfDay } from "datezone";
 
 // Examples of usage
 const now = Date.now();

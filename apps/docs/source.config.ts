@@ -10,6 +10,16 @@ export const docs = defineDocs({
 	dir: "./content/docs",
 });
 
+export const benchmarksCollection = defineCollections({
+	dir: "../../tools/benchmark/reports",
+	schema: z.object({
+		date: z.date().optional(),
+		description: z.string().optional(),
+		title: z.string().optional(),
+	}),
+	type: "doc",
+});
+
 export const blogCollection = defineCollections({
 	dir: "./content/blogs",
 	schema: z.object({

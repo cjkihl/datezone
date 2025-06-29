@@ -1,10 +1,9 @@
-import { addDays, endOfDay, hour, startOfDay, type TimeZone } from "datezone";
-import { run } from "mitata";
+import { hour, startOfDay, type TimeZone } from "datezone";
 
 const testTimestamp = new Date("2024-06-15T15:45:30.123Z").getTime();
 
 // Test different timezone categories to show fast path improvements
-const utcTimezone: TimeZone = "UTC";
+const _utcTimezone: TimeZone = "UTC";
 const nonDstTimezone: TimeZone = "Asia/Tokyo"; // Non-DST timezone (fixed offset)
 const dstTimezone: TimeZone = "America/New_York"; // DST timezone
 

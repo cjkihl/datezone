@@ -1,6 +1,8 @@
 # 🏁 Datezone vs Date-fns Performance Comparison
 
-**Generated:** 2025-06-29T00:57:28.250Z  \n**Node.js:** v22.6.0  \n**Platform:** darwin arm64
+**Generated:** `2025-06-29T04:14:16.254Z`  
+**Node.js:** `v22.6.0`  
+**Platform:** `darwin arm64`
 
 ## 📊 Performance Overview
 
@@ -23,265 +25,266 @@ This report compares **Datezone** against **Date-fns v4** with timezone support 
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addDays | **addDays**<br/>**<sub>6252539 ops/sec</sub>** | addDays<br/><sub>13668 ops/sec</sub> | 🚀 <sub>+45647%</sub> |
-| startOfDay | startOfDay<br/><sub>14054 ops/sec</sub> | **startOfDay**<br/>**<sub>14841 ops/sec</sub>** | 🤝 |
-| endOfDay | endOfDay<br/><sub>12755 ops/sec</sub> | **endOfDay**<br/>**<sub>14572 ops/sec</sub>** | ⚠️ <sub>-12%</sub> |
-| nextDay | nextDay<br/><sub>13660 ops/sec</sub> | **nextDay**<br/>**<sub>14644 ops/sec</sub>** | 🤝 |
-| dayOfWeek | dayOfWeek<br/><sub>23961 ops/sec</sub> | **dayOfWeek**<br/>**<sub>26450 ops/sec</sub>** | 🤝 |
-| dayOfYear | **dayOfYear**<br/>**<sub>17085 ops/sec</sub>** | dayOfYear<br/><sub>2678 ops/sec</sub> | 🚀 <sub>+538%</sub> |
-| daysInMonth | **daysInMonth**<br/>**<sub>24612 ops/sec</sub>** | daysInMonth<br/><sub>2774 ops/sec</sub> | 🚀 <sub>+787%</sub> |
+| `addDays` | **addDays**<br/>**<sub>`11.0M ops/sec`</sub>** | addDays<br/><sub>`24.1K ops/sec`</sub> | 🚀 <sub>`+45491%`</sub> |
+| `startOfDay` | startOfDay<br/><sub>`23.5K ops/sec`</sub> | **startOfDay**<br/>**<sub>`23.8K ops/sec`</sub>** | 🤝 |
+| `endOfDay` | endOfDay<br/><sub>`22.9K ops/sec`</sub> | **endOfDay**<br/>**<sub>`23.5K ops/sec`</sub>** | 🤝 |
+| `nextDay` | nextDay<br/><sub>`22.3K ops/sec`</sub> | **nextDay**<br/>**<sub>`23.6K ops/sec`</sub>** | 🤝 |
+| `dayOfWeek` | dayOfWeek<br/><sub>`39.1K ops/sec`</sub> | **dayOfWeek**<br/>**<sub>`48.2K ops/sec`</sub>** | ⚠️ <sub>`-19%`</sub> |
+| `dayOfYear` | **dayOfYear**<br/>**<sub>`29.1K ops/sec`</sub>** | dayOfYear<br/><sub>`4.4K ops/sec`</sub> | 🚀 <sub>`+560%`</sub> |
+| `daysInMonth` | **daysInMonth**<br/>**<sub>`39.6K ops/sec`</sub>** | daysInMonth<br/><sub>`4.6K ops/sec`</sub> | 🚀 <sub>`+755%`</sub> |
 
 ## Non-Timezone: Month Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addMonths | **addMonths**<br/>**<sub>3408 ops/sec</sub>** | addMonths<br/><sub>2580 ops/sec</sub> | ⚡ <sub>+32%</sub> |
-| startOfMonth | startOfMonth<br/><sub>6691 ops/sec</sub> | **startOfMonth**<br/>**<sub>6994 ops/sec</sub>** | 🤝 |
-| endOfMonth | endOfMonth<br/><sub>4641 ops/sec</sub> | **endOfMonth**<br/>**<sub>5402 ops/sec</sub>** | ⚠️ <sub>-14%</sub> |
+| `addMonths` | **addMonths**<br/>**<sub>`5.5K ops/sec`</sub>** | addMonths<br/><sub>`4.4K ops/sec`</sub> | ⚡ <sub>`+25%`</sub> |
+| `startOfMonth` | startOfMonth<br/><sub>`11.2K ops/sec`</sub> | **startOfMonth**<br/>**<sub>`11.2K ops/sec`</sub>** | 🤝 |
+| `endOfMonth` | endOfMonth<br/><sub>`8.1K ops/sec`</sub> | **endOfMonth**<br/>**<sub>`8.7K ops/sec`</sub>** | 🤝 |
 
 ## Non-Timezone: Year Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addYears | **addYears**<br/>**<sub>3428 ops/sec</sub>** | addYears<br/><sub>2544 ops/sec</sub> | ⚡ <sub>+35%</sub> |
-| startOfYear | **startOfYear**<br/>**<sub>9363 ops/sec</sub>** | startOfYear<br/><sub>3660 ops/sec</sub> | 🚀 <sub>+156%</sub> |
-| endOfYear | **endOfYear**<br/>**<sub>9278 ops/sec</sub>** | endOfYear<br/><sub>3666 ops/sec</sub> | 🚀 <sub>+153%</sub> |
-| year | year<br/><sub>25068 ops/sec</sub> | **year**<br/>**<sub>31945 ops/sec</sub>** | ⚠️ <sub>-22%</sub> |
+| `addYears` | **addYears**<br/>**<sub>`5.4K ops/sec`</sub>** | addYears<br/><sub>`4.1K ops/sec`</sub> | ⚡ <sub>`+33%`</sub> |
+| `startOfYear` | **startOfYear**<br/>**<sub>`15.2K ops/sec`</sub>** | startOfYear<br/><sub>`5.9K ops/sec`</sub> | 🚀 <sub>`+159%`</sub> |
+| `endOfYear` | **endOfYear**<br/>**<sub>`14.8K ops/sec`</sub>** | endOfYear<br/><sub>`5.6K ops/sec`</sub> | 🚀 <sub>`+165%`</sub> |
+| `year` | year<br/><sub>`41.6K ops/sec`</sub> | **year**<br/>**<sub>`48.9K ops/sec`</sub>** | ⚠️ <sub>`-15%`</sub> |
 
 ## Non-Timezone: Week Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addWeeks | **addWeeks**<br/>**<sub>64845 ops/sec</sub>** | addWeeks<br/><sub>13460 ops/sec</sub> | 🚀 <sub>+382%</sub> |
-| startOfWeek | **startOfWeek**<br/>**<sub>6728 ops/sec</sub>** | startOfWeek<br/><sub>6312 ops/sec</sub> | 🤝 |
-| endOfWeek | **endOfWeek**<br/>**<sub>6676 ops/sec</sub>** | endOfWeek<br/><sub>5924 ops/sec</sub> | ✅ <sub>+13%</sub> |
+| `addWeeks` | **addWeeks**<br/>**<sub>`97.6K ops/sec`</sub>** | addWeeks<br/><sub>`19.2K ops/sec`</sub> | 🚀 <sub>`+409%`</sub> |
+| `startOfWeek` | **startOfWeek**<br/>**<sub>`10.7K ops/sec`</sub>** | startOfWeek<br/><sub>`10.2K ops/sec`</sub> | 🤝 |
+| `endOfWeek` | **endOfWeek**<br/>**<sub>`10.7K ops/sec`</sub>** | endOfWeek<br/><sub>`10.3K ops/sec`</sub> | 🤝 |
 
 ## Non-Timezone: Hour Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| hour | hour<br/><sub>25813 ops/sec</sub> | **hour**<br/>**<sub>30710 ops/sec</sub>** | ⚠️ <sub>-16%</sub> |
-| addHours | **addHours**<br/>**<sub>135046 ops/sec</sub>** | addHours<br/><sub>7775 ops/sec</sub> | 🚀 <sub>+1637%</sub> |
+| `hour` | hour<br/><sub>`41.1K ops/sec`</sub> | **hour**<br/>**<sub>`49.8K ops/sec`</sub>** | ⚠️ <sub>`-17%`</sub> |
+| `addHours` | **addHours**<br/>**<sub>`222.5K ops/sec`</sub>** | addHours<br/><sub>`12.5K ops/sec`</sub> | 🚀 <sub>`+1685%`</sub> |
 
 ## Non-Timezone: Formatting Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| format | **format**<br/>**<sub>651.38 ops/sec</sub>** | format<br/><sub>128.35 ops/sec</sub> | 🚀 <sub>+407%</sub> |
+| `format` | **format**<br/>**<sub>`1.0K ops/sec`</sub>** | format<br/><sub>`333 ops/sec`</sub> | 🚀 <sub>`+215%`</sub> |
 
 ## UTC Fast Path: Day Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addDays | **addDays**<br/>**<sub>38498 ops/sec</sub>** | addDays<br/><sub>202.02 ops/sec</sub> | 🚀 <sub>+18956%</sub> |
-| startOfDay | **startOfDay**<br/>**<sub>14317 ops/sec</sub>** | startOfDay<br/><sub>217.01 ops/sec</sub> | 🚀 <sub>+6497%</sub> |
-| endOfDay | **endOfDay**<br/>**<sub>12940 ops/sec</sub>** | endOfDay<br/><sub>219.50 ops/sec</sub> | 🚀 <sub>+5795%</sub> |
-| nextDay | **nextDay**<br/>**<sub>12543 ops/sec</sub>** | nextDay<br/><sub>213.06 ops/sec</sub> | 🚀 <sub>+5787%</sub> |
-| dayOfWeek | **dayOfWeek**<br/>**<sub>19198 ops/sec</sub>** | dayOfWeek<br/><sub>481.62 ops/sec</sub> | 🚀 <sub>+3886%</sub> |
-| dayOfYear | **dayOfYear**<br/>**<sub>13625 ops/sec</sub>** | dayOfYear<br/><sub>131.30 ops/sec</sub> | 🚀 <sub>+10277%</sub> |
-| daysInMonth | **daysInMonth**<br/>**<sub>20709 ops/sec</sub>** | daysInMonth<br/><sub>99.55 ops/sec</sub> | 🚀 <sub>+20701%</sub> |
+| `addDays` | **addDays**<br/>**<sub>`60.3K ops/sec`</sub>** | addDays<br/><sub>`354 ops/sec`</sub> | 🚀 <sub>`+16927%`</sub> |
+| `startOfDay` | **startOfDay**<br/>**<sub>`20.7K ops/sec`</sub>** | startOfDay<br/><sub>`372 ops/sec`</sub> | 🚀 <sub>`+5462%`</sub> |
+| `endOfDay` | **endOfDay**<br/>**<sub>`20.9K ops/sec`</sub>** | endOfDay<br/><sub>`369 ops/sec`</sub> | 🚀 <sub>`+5560%`</sub> |
+| `nextDay` | **nextDay**<br/>**<sub>`20.8K ops/sec`</sub>** | nextDay<br/><sub>`358 ops/sec`</sub> | 🚀 <sub>`+5702%`</sub> |
+| `dayOfWeek` | **dayOfWeek**<br/>**<sub>`31.6K ops/sec`</sub>** | dayOfWeek<br/><sub>`790 ops/sec`</sub> | 🚀 <sub>`+3895%`</sub> |
+| `dayOfYear` | **dayOfYear**<br/>**<sub>`22.7K ops/sec`</sub>** | dayOfYear<br/><sub>`221 ops/sec`</sub> | 🚀 <sub>`+10172%`</sub> |
+| `daysInMonth` | **daysInMonth**<br/>**<sub>`30.5K ops/sec`</sub>** | daysInMonth<br/><sub>`175 ops/sec`</sub> | 🚀 <sub>`+17369%`</sub> |
 
 ## UTC Fast Path: Month Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addMonths | **addMonths**<br/>**<sub>2288 ops/sec</sub>** | addMonths<br/><sub>34.86 ops/sec</sub> | 🚀 <sub>+6465%</sub> |
-| startOfMonth | **startOfMonth**<br/>**<sub>5900 ops/sec</sub>** | startOfMonth<br/><sub>136.96 ops/sec</sub> | 🚀 <sub>+4208%</sub> |
-| endOfMonth | **endOfMonth**<br/>**<sub>4719 ops/sec</sub>** | endOfMonth<br/><sub>135.03 ops/sec</sub> | 🚀 <sub>+3395%</sub> |
+| `addMonths` | **addMonths**<br/>**<sub>`9.8K ops/sec`</sub>** | addMonths<br/><sub>`154 ops/sec`</sub> | 🚀 <sub>`+6300%`</sub> |
+| `startOfMonth` | **startOfMonth**<br/>**<sub>`11.2K ops/sec`</sub>** | startOfMonth<br/><sub>`227 ops/sec`</sub> | 🚀 <sub>`+4813%`</sub> |
+| `endOfMonth` | **endOfMonth**<br/>**<sub>`7.9K ops/sec`</sub>** | endOfMonth<br/><sub>`224 ops/sec`</sub> | 🚀 <sub>`+3420%`</sub> |
 
 ## UTC Fast Path: Year Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addYears | **addYears**<br/>**<sub>6090 ops/sec</sub>** | addYears<br/><sub>98.25 ops/sec</sub> | 🚀 <sub>+6098%</sub> |
-| startOfYear | **startOfYear**<br/>**<sub>9594 ops/sec</sub>** | startOfYear<br/><sub>130.82 ops/sec</sub> | 🚀 <sub>+7234%</sub> |
-| endOfYear | **endOfYear**<br/>**<sub>9908 ops/sec</sub>** | endOfYear<br/><sub>132.54 ops/sec</sub> | 🚀 <sub>+7375%</sub> |
-| year | year<br/><sub>19342 ops/sec</sub> | **year**<br/>**<sub>102112 ops/sec</sub>** | 🐌 <sub>-81%</sub> |
+| `addYears` | **addYears**<br/>**<sub>`10.0K ops/sec`</sub>** | addYears<br/><sub>`156 ops/sec`</sub> | 🚀 <sub>`+6357%`</sub> |
+| `startOfYear` | **startOfYear**<br/>**<sub>`15.9K ops/sec`</sub>** | startOfYear<br/><sub>`207 ops/sec`</sub> | 🚀 <sub>`+7585%`</sub> |
+| `endOfYear` | **endOfYear**<br/>**<sub>`15.8K ops/sec`</sub>** | endOfYear<br/><sub>`213 ops/sec`</sub> | 🚀 <sub>`+7334%`</sub> |
+| `year` | year<br/><sub>`30.9K ops/sec`</sub> | **year**<br/>**<sub>`176.5K ops/sec`</sub>** | 🐌 <sub>`-83%`</sub> |
 
 ## UTC Fast Path: Week Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addWeeks | **addWeeks**<br/>**<sub>33693 ops/sec</sub>** | addWeeks<br/><sub>203.76 ops/sec</sub> | 🚀 <sub>+16435%</sub> |
-| startOfWeek | **startOfWeek**<br/>**<sub>6512 ops/sec</sub>** | startOfWeek<br/><sub>131.04 ops/sec</sub> | 🚀 <sub>+4869%</sub> |
-| endOfWeek | **endOfWeek**<br/>**<sub>6476 ops/sec</sub>** | endOfWeek<br/><sub>130.39 ops/sec</sub> | 🚀 <sub>+4867%</sub> |
+| `addWeeks` | **addWeeks**<br/>**<sub>`61.2K ops/sec`</sub>** | addWeeks<br/><sub>`330 ops/sec`</sub> | 🚀 <sub>`+18430%`</sub> |
+| `startOfWeek` | **startOfWeek**<br/>**<sub>`10.8K ops/sec`</sub>** | startOfWeek<br/><sub>`213 ops/sec`</sub> | 🚀 <sub>`+4966%`</sub> |
+| `endOfWeek` | **endOfWeek**<br/>**<sub>`10.6K ops/sec`</sub>** | endOfWeek<br/><sub>`216 ops/sec`</sub> | 🚀 <sub>`+4822%`</sub> |
 
 ## UTC Fast Path: Hour Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| hour | hour<br/><sub>19413 ops/sec</sub> | **hour**<br/>**<sub>101506 ops/sec</sub>** | 🐌 <sub>-81%</sub> |
-| addHours | **addHours**<br/>**<sub>135968 ops/sec</sub>** | addHours<br/><sub>233.64 ops/sec</sub> | 🚀 <sub>+58095%</sub> |
+| `hour` | hour<br/><sub>`31.3K ops/sec`</sub> | **hour**<br/>**<sub>`163.2K ops/sec`</sub>** | 🐌 <sub>`-81%`</sub> |
+| `addHours` | **addHours**<br/>**<sub>`211.1K ops/sec`</sub>** | addHours<br/><sub>`335 ops/sec`</sub> | 🚀 <sub>`+62905%`</sub> |
 
 ## UTC Fast Path: Formatting Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| format | **format**<br/>**<sub>505.35 ops/sec</sub>** | format<br/><sub>79.67 ops/sec</sub> | 🚀 <sub>+534%</sub> |
+| `format` | **format**<br/>**<sub>`1.1K ops/sec`</sub>** | format<br/><sub>`160 ops/sec`</sub> | 🚀 <sub>`+579%`</sub> |
 
 ## Non-DST Timezone: Day Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addDays | **addDays**<br/>**<sub>63076 ops/sec</sub>** | addDays<br/><sub>182.70 ops/sec</sub> | 🚀 <sub>+34424%</sub> |
-| startOfDay | **startOfDay**<br/>**<sub>6297 ops/sec</sub>** | startOfDay<br/><sub>179.56 ops/sec</sub> | 🚀 <sub>+3407%</sub> |
-| endOfDay | **endOfDay**<br/>**<sub>14056 ops/sec</sub>** | endOfDay<br/><sub>180.63 ops/sec</sub> | 🚀 <sub>+7682%</sub> |
-| nextDay | **nextDay**<br/>**<sub>13569 ops/sec</sub>** | nextDay<br/><sub>181.12 ops/sec</sub> | 🚀 <sub>+7391%</sub> |
-| dayOfWeek | **dayOfWeek**<br/>**<sub>23042 ops/sec</sub>** | dayOfWeek<br/><sub>394.95 ops/sec</sub> | 🚀 <sub>+5734%</sub> |
-| dayOfYear | **dayOfYear**<br/>**<sub>15377 ops/sec</sub>** | dayOfYear<br/><sub>113.60 ops/sec</sub> | 🚀 <sub>+13437%</sub> |
-| daysInMonth | **daysInMonth**<br/>**<sub>12813 ops/sec</sub>** | daysInMonth<br/><sub>86.28 ops/sec</sub> | 🚀 <sub>+14750%</sub> |
+| `addDays` | **addDays**<br/>**<sub>`95.1K ops/sec`</sub>** | addDays<br/><sub>`303 ops/sec`</sub> | 🚀 <sub>`+31253%`</sub> |
+| `startOfDay` | **startOfDay**<br/>**<sub>`11.1K ops/sec`</sub>** | startOfDay<br/><sub>`301 ops/sec`</sub> | 🚀 <sub>`+3578%`</sub> |
+| `endOfDay` | **endOfDay**<br/>**<sub>`23.7K ops/sec`</sub>** | endOfDay<br/><sub>`298 ops/sec`</sub> | 🚀 <sub>`+7849%`</sub> |
+| `nextDay` | **nextDay**<br/>**<sub>`22.5K ops/sec`</sub>** | nextDay<br/><sub>`289 ops/sec`</sub> | 🚀 <sub>`+7685%`</sub> |
+| `dayOfWeek` | **dayOfWeek**<br/>**<sub>`35.7K ops/sec`</sub>** | dayOfWeek<br/><sub>`557 ops/sec`</sub> | 🚀 <sub>`+6321%`</sub> |
+| `dayOfYear` | **dayOfYear**<br/>**<sub>`27.2K ops/sec`</sub>** | dayOfYear<br/><sub>`166 ops/sec`</sub> | 🚀 <sub>`+16275%`</sub> |
+| `daysInMonth` | **daysInMonth**<br/>**<sub>`21.5K ops/sec`</sub>** | daysInMonth<br/><sub>`142 ops/sec`</sub> | 🚀 <sub>`+15083%`</sub> |
 
 ## Non-DST Timezone: Month Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addMonths | **addMonths**<br/>**<sub>5437 ops/sec</sub>** | addMonths<br/><sub>85.00 ops/sec</sub> | 🚀 <sub>+6297%</sub> |
-| startOfMonth | **startOfMonth**<br/>**<sub>6333 ops/sec</sub>** | startOfMonth<br/><sub>114.95 ops/sec</sub> | 🚀 <sub>+5410%</sub> |
-| endOfMonth | **endOfMonth**<br/>**<sub>4575 ops/sec</sub>** | endOfMonth<br/><sub>115.36 ops/sec</sub> | 🚀 <sub>+3866%</sub> |
+| `addMonths` | **addMonths**<br/>**<sub>`9.4K ops/sec`</sub>** | addMonths<br/><sub>`127 ops/sec`</sub> | 🚀 <sub>`+7314%`</sub> |
+| `startOfMonth` | **startOfMonth**<br/>**<sub>`10.8K ops/sec`</sub>** | startOfMonth<br/><sub>`187 ops/sec`</sub> | 🚀 <sub>`+5646%`</sub> |
+| `endOfMonth` | **endOfMonth**<br/>**<sub>`7.7K ops/sec`</sub>** | endOfMonth<br/><sub>`191 ops/sec`</sub> | 🚀 <sub>`+3917%`</sub> |
 
 ## Non-DST Timezone: Year Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addYears | **addYears**<br/>**<sub>5760 ops/sec</sub>** | addYears<br/><sub>86.04 ops/sec</sub> | 🚀 <sub>+6595%</sub> |
-| startOfYear | **startOfYear**<br/>**<sub>9572 ops/sec</sub>** | startOfYear<br/><sub>112.59 ops/sec</sub> | 🚀 <sub>+8402%</sub> |
-| endOfYear | **endOfYear**<br/>**<sub>9620 ops/sec</sub>** | endOfYear<br/><sub>113.20 ops/sec</sub> | 🚀 <sub>+8398%</sub> |
-| year | year<br/><sub>18322 ops/sec</sub> | **year**<br/>**<sub>104565 ops/sec</sub>** | 🐌 <sub>-82%</sub> |
+| `addYears` | **addYears**<br/>**<sub>`9.6K ops/sec`</sub>** | addYears<br/><sub>`142 ops/sec`</sub> | 🚀 <sub>`+6688%`</sub> |
+| `startOfYear` | **startOfYear**<br/>**<sub>`15.9K ops/sec`</sub>** | startOfYear<br/><sub>`186 ops/sec`</sub> | 🚀 <sub>`+8473%`</sub> |
+| `endOfYear` | **endOfYear**<br/>**<sub>`15.8K ops/sec`</sub>** | endOfYear<br/><sub>`185 ops/sec`</sub> | 🚀 <sub>`+8446%`</sub> |
+| `year` | year<br/><sub>`30.0K ops/sec`</sub> | **year**<br/>**<sub>`172.2K ops/sec`</sub>** | 🐌 <sub>`-83%`</sub> |
 
 ## Non-DST Timezone: Week Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addWeeks | **addWeeks**<br/>**<sub>58033 ops/sec</sub>** | addWeeks<br/><sub>177.39 ops/sec</sub> | 🚀 <sub>+32615%</sub> |
-| startOfWeek | **startOfWeek**<br/>**<sub>6234 ops/sec</sub>** | startOfWeek<br/><sub>112.65 ops/sec</sub> | 🚀 <sub>+5434%</sub> |
-| endOfWeek | **endOfWeek**<br/>**<sub>8591 ops/sec</sub>** | endOfWeek<br/><sub>113.88 ops/sec</sub> | 🚀 <sub>+7444%</sub> |
+| `addWeeks` | **addWeeks**<br/>**<sub>`94.9K ops/sec`</sub>** | addWeeks<br/><sub>`286 ops/sec`</sub> | 🚀 <sub>`+33103%`</sub> |
+| `startOfWeek` | **startOfWeek**<br/>**<sub>`10.3K ops/sec`</sub>** | startOfWeek<br/><sub>`188 ops/sec`</sub> | 🚀 <sub>`+5396%`</sub> |
+| `endOfWeek` | **endOfWeek**<br/>**<sub>`14.1K ops/sec`</sub>** | endOfWeek<br/><sub>`185 ops/sec`</sub> | 🚀 <sub>`+7530%`</sub> |
 
 ## Non-DST Timezone: Hour Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| hour | hour<br/><sub>18145 ops/sec</sub> | **hour**<br/>**<sub>100420 ops/sec</sub>** | 🐌 <sub>-82%</sub> |
-| addHours | **addHours**<br/>**<sub>135577 ops/sec</sub>** | addHours<br/><sub>195.36 ops/sec</sub> | 🚀 <sub>+69298%</sub> |
+| `hour` | hour<br/><sub>`19.8K ops/sec`</sub> | **hour**<br/>**<sub>`143.6K ops/sec`</sub>** | 🐌 <sub>`-86%`</sub> |
+| `addHours` | **addHours**<br/>**<sub>`176.9K ops/sec`</sub>** | addHours<br/><sub>`284 ops/sec`</sub> | 🚀 <sub>`+62260%`</sub> |
 
 ## Non-DST Timezone: Formatting Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| format | **format**<br/>**<sub>565.53 ops/sec</sub>** | format<br/><sub>92.56 ops/sec</sub> | 🚀 <sub>+511%</sub> |
+| `format` | **format**<br/>**<sub>`1.0K ops/sec`</sub>** | format<br/><sub>`160 ops/sec`</sub> | 🚀 <sub>`+556%`</sub> |
 
 ## DST Timezone: Day Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addDays | **addDays**<br/>**<sub>297.94 ops/sec</sub>** | addDays<br/><sub>152.76 ops/sec</sub> | ⚡ <sub>+95%</sub> |
-| startOfDay | **startOfDay**<br/>**<sub>338.77 ops/sec</sub>** | startOfDay<br/><sub>157.04 ops/sec</sub> | 🚀 <sub>+116%</sub> |
-| endOfDay | **endOfDay**<br/>**<sub>337.86 ops/sec</sub>** | endOfDay<br/><sub>157.13 ops/sec</sub> | 🚀 <sub>+115%</sub> |
-| nextDay | **nextDay**<br/>**<sub>340.40 ops/sec</sub>** | nextDay<br/><sub>155.72 ops/sec</sub> | 🚀 <sub>+119%</sub> |
-| dayOfWeek | **dayOfWeek**<br/>**<sub>345.99 ops/sec</sub>** | dayOfWeek<br/><sub>332.78 ops/sec</sub> | 🤝 |
-| dayOfYear | **dayOfYear**<br/>**<sub>348.51 ops/sec</sub>** | dayOfYear<br/><sub>96.04 ops/sec</sub> | 🚀 <sub>+263%</sub> |
-| daysInMonth | **daysInMonth**<br/>**<sub>455.67 ops/sec</sub>** | daysInMonth<br/><sub>72.34 ops/sec</sub> | 🚀 <sub>+530%</sub> |
+| `addDays` | **addDays**<br/>**<sub>`453 ops/sec`</sub>** | addDays<br/><sub>`246 ops/sec`</sub> | ⚡ <sub>`+84%`</sub> |
+| `startOfDay` | **startOfDay**<br/>**<sub>`542 ops/sec`</sub>** | startOfDay<br/><sub>`253 ops/sec`</sub> | 🚀 <sub>`+114%`</sub> |
+| `endOfDay` | **endOfDay**<br/>**<sub>`536 ops/sec`</sub>** | endOfDay<br/><sub>`259 ops/sec`</sub> | 🚀 <sub>`+107%`</sub> |
+| `nextDay` | **nextDay**<br/>**<sub>`552 ops/sec`</sub>** | nextDay<br/><sub>`247 ops/sec`</sub> | 🚀 <sub>`+124%`</sub> |
+| `dayOfWeek` | **dayOfWeek**<br/>**<sub>`560 ops/sec`</sub>** | dayOfWeek<br/><sub>`543 ops/sec`</sub> | 🤝 |
+| `dayOfYear` | **dayOfYear**<br/>**<sub>`542 ops/sec`</sub>** | dayOfYear<br/><sub>`154 ops/sec`</sub> | 🚀 <sub>`+253%`</sub> |
+| `daysInMonth` | **daysInMonth**<br/>**<sub>`298 ops/sec`</sub>** | daysInMonth<br/><sub>`101 ops/sec`</sub> | 🚀 <sub>`+195%`</sub> |
 
 ## DST Timezone: Month Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addMonths | **addMonths**<br/>**<sub>184.84 ops/sec</sub>** | addMonths<br/><sub>74.10 ops/sec</sub> | 🚀 <sub>+149%</sub> |
-| startOfMonth | **startOfMonth**<br/>**<sub>442.39 ops/sec</sub>** | startOfMonth<br/><sub>100.51 ops/sec</sub> | 🚀 <sub>+340%</sub> |
-| endOfMonth | **endOfMonth**<br/>**<sub>419.23 ops/sec</sub>** | endOfMonth<br/><sub>97.97 ops/sec</sub> | 🚀 <sub>+328%</sub> |
+| `addMonths` | **addMonths**<br/>**<sub>`298 ops/sec`</sub>** | addMonths<br/><sub>`124 ops/sec`</sub> | 🚀 <sub>`+141%`</sub> |
+| `startOfMonth` | **startOfMonth**<br/>**<sub>`692 ops/sec`</sub>** | startOfMonth<br/><sub>`162 ops/sec`</sub> | 🚀 <sub>`+327%`</sub> |
+| `endOfMonth` | **endOfMonth**<br/>**<sub>`667 ops/sec`</sub>** | endOfMonth<br/><sub>`34 ops/sec`</sub> | 🚀 <sub>`+1860%`</sub> |
 
 ## DST Timezone: Year Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addYears | **addYears**<br/>**<sub>200.49 ops/sec</sub>** | addYears<br/><sub>73.81 ops/sec</sub> | 🚀 <sub>+172%</sub> |
-| startOfYear | **startOfYear**<br/>**<sub>676.59 ops/sec</sub>** | startOfYear<br/><sub>94.82 ops/sec</sub> | 🚀 <sub>+614%</sub> |
-| endOfYear | **endOfYear**<br/>**<sub>675.39 ops/sec</sub>** | endOfYear<br/><sub>93.21 ops/sec</sub> | 🚀 <sub>+625%</sub> |
-| year | year<br/><sub>720.81 ops/sec</sub> | **year**<br/>**<sub>101213 ops/sec</sub>** | 🐌 <sub>-99%</sub> |
+| `addYears` | **addYears**<br/>**<sub>`309 ops/sec`</sub>** | addYears<br/><sub>`107 ops/sec`</sub> | 🚀 <sub>`+189%`</sub> |
+| `startOfYear` | **startOfYear**<br/>**<sub>`975 ops/sec`</sub>** | startOfYear<br/><sub>`138 ops/sec`</sub> | 🚀 <sub>`+605%`</sub> |
+| `endOfYear` | **endOfYear**<br/>**<sub>`990 ops/sec`</sub>** | endOfYear<br/><sub>`138 ops/sec`</sub> | 🚀 <sub>`+620%`</sub> |
+| `year` | year<br/><sub>`1.0K ops/sec`</sub> | **year**<br/>**<sub>`154.3K ops/sec`</sub>** | 🐌 <sub>`-99%`</sub> |
 
 ## DST Timezone: Week Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addWeeks | **addWeeks**<br/>**<sub>334.85 ops/sec</sub>** | addWeeks<br/><sub>153.95 ops/sec</sub> | 🚀 <sub>+118%</sub> |
-| startOfWeek | **startOfWeek**<br/>**<sub>333.09 ops/sec</sub>** | startOfWeek<br/><sub>97.91 ops/sec</sub> | 🚀 <sub>+240%</sub> |
-| endOfWeek | **endOfWeek**<br/>**<sub>331.99 ops/sec</sub>** | endOfWeek<br/><sub>98.02 ops/sec</sub> | 🚀 <sub>+239%</sub> |
+| `addWeeks` | **addWeeks**<br/>**<sub>`536 ops/sec`</sub>** | addWeeks<br/><sub>`250 ops/sec`</sub> | 🚀 <sub>`+114%`</sub> |
+| `startOfWeek` | **startOfWeek**<br/>**<sub>`532 ops/sec`</sub>** | startOfWeek<br/><sub>`165 ops/sec`</sub> | 🚀 <sub>`+223%`</sub> |
+| `endOfWeek` | **endOfWeek**<br/>**<sub>`535 ops/sec`</sub>** | endOfWeek<br/><sub>`159 ops/sec`</sub> | 🚀 <sub>`+236%`</sub> |
 
 ## DST Timezone: Hour Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| hour | hour<br/><sub>610.56 ops/sec</sub> | **hour**<br/>**<sub>100628 ops/sec</sub>** | 🐌 <sub>-99%</sub> |
-| addHours | **addHours**<br/>**<sub>135466 ops/sec</sub>** | addHours<br/><sub>163.28 ops/sec</sub> | 🚀 <sub>+82867%</sub> |
+| `hour` | hour<br/><sub>`778 ops/sec`</sub> | **hour**<br/>**<sub>`161.1K ops/sec`</sub>** | 🐌 <sub>`-100%`</sub> |
+| `addHours` | **addHours**<br/>**<sub>`224.4K ops/sec`</sub>** | addHours<br/><sub>`269 ops/sec`</sub> | 🚀 <sub>`+83392%`</sub> |
 
 ## DST Timezone: Formatting Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| format | **format**<br/>**<sub>112.33 ops/sec</sub>** | format<br/><sub>47.81 ops/sec</sub> | 🚀 <sub>+135%</sub> |
+| `format` | **format**<br/>**<sub>`210 ops/sec`</sub>** | format<br/><sub>`149 ops/sec`</sub> | ⚡ <sub>`+41%`</sub> |
 
 ## Timezone-Aware: Day Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addDays | addDays<br/><sub>18033 ops/sec</sub> | -<br/>- | 🔥 |
-| addDays | addDays<br/><sub>3200020 ops/sec</sub> | -<br/>- | 🔥 |
-| startOfDay | startOfDay<br/><sub>13937 ops/sec</sub> | -<br/>- | 🔥 |
-| startOfDay | startOfDay<br/><sub>12711 ops/sec</sub> | -<br/>- | 🔥 |
-| addDays | addDays<br/><sub>51902 ops/sec</sub> | -<br/>- | 🔥 |
-| addDays | addDays<br/><sub>343.27 ops/sec</sub> | -<br/>- | 🔥 |
-| addDays | addDays<br/><sub>35233 ops/sec</sub> | -<br/>- | 🔥 |
+| `addDays` | addDays<br/><sub>`4.7M ops/sec`</sub> | -<br/>- | 🔥 |
+| `addDays` | addDays<br/><sub>`2.6M ops/sec`</sub> | -<br/>- | 🔥 |
+| `startOfDay` | startOfDay<br/><sub>`23.3K ops/sec`</sub> | -<br/>- | 🔥 |
+| `startOfDay` | startOfDay<br/><sub>`20.9K ops/sec`</sub> | -<br/>- | 🔥 |
+| `addDays` | addDays<br/><sub>`164.8K ops/sec`</sub> | -<br/>- | 🔥 |
+| `addDays` | addDays<br/><sub>`524 ops/sec`</sub> | -<br/>- | 🔥 |
+| `addDays` | addDays<br/><sub>`61.0K ops/sec`</sub> | -<br/>- | 🔥 |
 
 ## Timezone-Aware: Year Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| year | year<br/><sub>25652 ops/sec</sub> | -<br/>- | 🔥 |
-| year | year<br/><sub>19158 ops/sec</sub> | -<br/>- | 🔥 |
+| `year` | year<br/><sub>`40.3K ops/sec`</sub> | -<br/>- | 🔥 |
+| `year` | year<br/><sub>`31.0K ops/sec`</sub> | -<br/>- | 🔥 |
 
 ## Timezone-Aware: Month Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| startOfMonth | startOfMonth<br/><sub>5969 ops/sec</sub> | -<br/>- | 🔥 |
-| startOfMonth | startOfMonth<br/><sub>380.14 ops/sec</sub> | -<br/>- | 🔥 |
+| `startOfMonth` | startOfMonth<br/><sub>`9.9K ops/sec`</sub> | -<br/>- | 🔥 |
+| `startOfMonth` | startOfMonth<br/><sub>`610 ops/sec`</sub> | -<br/>- | 🔥 |
 
 ## Timezone-Aware: Hour Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| hour | hour<br/><sub>17435 ops/sec</sub> | -<br/>- | 🔥 |
-| hour | hour<br/><sub>605.37 ops/sec</sub> | -<br/>- | 🔥 |
-| addHours | addHours<br/><sub>177170 ops/sec</sub> | -<br/>- | 🔥 |
-| startOfHour | startOfHour<br/><sub>158448 ops/sec</sub> | -<br/>- | 🔥 |
+| `hour` | hour<br/><sub>`32.8K ops/sec`</sub> | -<br/>- | 🔥 |
+| `hour` | hour<br/><sub>`957 ops/sec`</sub> | -<br/>- | 🔥 |
+| `addHours` | addHours<br/><sub>`521.8K ops/sec`</sub> | -<br/>- | 🔥 |
+| `startOfHour` | startOfHour<br/><sub>`252.3K ops/sec`</sub> | -<br/>- | 🔥 |
 
 ## Timezone-Aware: Formatting Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| format | format<br/><sub>672.14 ops/sec</sub> | -<br/>- | 🔥 |
-| format | format<br/><sub>142.20 ops/sec</sub> | -<br/>- | 🔥 |
+| `format` | format<br/><sub>`1.0K ops/sec`</sub> | -<br/>- | 🔥 |
+| `format` | format<br/><sub>`230 ops/sec`</sub> | -<br/>- | 🔥 |
 
 ## Timezone-Aware: Week Operations
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| addWeeks | addWeeks<br/><sub>60482 ops/sec</sub> | -<br/>- | 🔥 |
+| `addWeeks` | addWeeks<br/><sub>`103.3K ops/sec`</sub> | -<br/>- | 🔥 |
 
 ## 📈 Summary
 
 | Metric | Count | Percentage |
-|--------|-------|------------|\n| **Datezone wins** | 64 | 65.3% |
-| **Date-fns wins** | 10 | 10.2% |
-| **Close matches** | 6 | 6.1% |
-| **Datezone unique** | 18 | 18.4% |
-| **Total operations** | 98 | 100% |
+|--------|-------|------------|
+| **Datezone wins** | `63` | `64.3%` |
+| **Date-fns wins** | `9` | `9.2%` |
+| **Close matches** | `8` | `8.2%` |
+| **Datezone unique** | `18` | `18.4%` |
+| **Total operations** | `98` | `100%` |
 
 ## 🔬 Methodology
 
 ### Benchmark Setup
 - **Tool:** [Mitata](https://github.com/evanwashere/mitata) - High-precision JavaScript benchmarking
 - **Iterations:** Multiple samples with statistical significance testing
-- **Environment:** Node.js v22.6.0 on darwin arm64
+- **Environment:** Node.js `v22.6.0` on `darwin arm64`
 
 ### Comparison Approach
 - **Datezone:** Built-in timezone support with UTC timestamps
@@ -309,8 +312,10 @@ This report compares **Datezone** against **Date-fns v4** with timezone support 
 
 ---
 
-*To regenerate: 
-[36mbun run tools/benchmark/format-results.ts[0m*
+*To regenerate:*
+```bash
+bun run tools/benchmark/format-results.ts
+```
 
 ## 🔬 Internal Datezone Performance Analysis
 
@@ -320,9 +325,10 @@ Comparing Datezone's fast paths against normal implementation:
 
 | Operation | Fast Path | Normal Path | Optimization |
 |-----------|-----------|-------------|-------------|
-| addDays | **addDays**<br/>**<sub>3,200,019.635 ops/sec</sub>** | addDays<br/><sub>343.267 ops/sec</sub> | 🚀 <sub>+932123.4%</sub> |
-| year | **year**<br/>**<sub>25,652.413 ops/sec</sub>** | year<br/><sub>19,157.542 ops/sec</sub> | ✅ <sub>+33.9%</sub> |
-| startOfMonth | **startOfMonth**<br/>**<sub>5,969.499 ops/sec</sub>** | startOfMonth<br/><sub>380.144 ops/sec</sub> | 🚀 <sub>+1470.3%</sub> |
-| hour | **hour**<br/>**<sub>17,434.739 ops/sec</sub>** | hour<br/><sub>605.366 ops/sec</sub> | 🚀 <sub>+2780.0%</sub> |
-| format | **format**<br/>**<sub>672.137 ops/sec</sub>** | format<br/><sub>142.195 ops/sec</sub> | 🚀 <sub>+372.7%</sub> |
+| `addDays` | **addDays**<br/>**<sub>`4.7M ops/sec`</sub>** | addDays<br/><sub>`524 ops/sec`</sub> | 🚀 <sub>`+902542.5%`</sub> |
+| `startOfDay` | **startOfDay**<br/>**<sub>`23.3K ops/sec`</sub>** | startOfDay<br/><sub>`20.9K ops/sec`</sub> | ✅ <sub>`+11.5%`</sub> |
+| `year` | **year**<br/>**<sub>`40.3K ops/sec`</sub>** | year<br/><sub>`31.0K ops/sec`</sub> | ✅ <sub>`+30.1%`</sub> |
+| `startOfMonth` | **startOfMonth**<br/>**<sub>`9.9K ops/sec`</sub>** | startOfMonth<br/><sub>`610 ops/sec`</sub> | 🚀 <sub>`+1522.7%`</sub> |
+| `hour` | **hour**<br/>**<sub>`32.8K ops/sec`</sub>** | hour<br/><sub>`957 ops/sec`</sub> | 🚀 <sub>`+3325.3%`</sub> |
+| `format` | **format**<br/>**<sub>`1.0K ops/sec`</sub>** | format<br/><sub>`230 ops/sec`</sub> | 🚀 <sub>`+351.5%`</sub> |
 
