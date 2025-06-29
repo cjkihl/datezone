@@ -3,7 +3,6 @@ title: Format Utilities
 description: Date and time formatting functions with timezone support
 ---
 
-import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
 import { CodeExample } from '@/components/code-example';
 
 # Format Utilities
@@ -18,18 +17,10 @@ Format a timestamp into a string using a format pattern.
 function format(ts: OptionsOrTimestamp, pattern: string, timeZone?: TimeZone): string
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local Format Examples", file: "format/basic-local.ts" }]} />
-
-</Tab>
-<Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "Timezone Format Examples", file: "format/basic-timezone.ts" }]} />
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local Format Examples", file: "format/basic-local.ts" },
+  { name: "Timezone Format Examples", file: "format/basic-timezone.ts" }
+]} />
 
 ## formatRelative
 
@@ -43,18 +34,7 @@ function formatRelative(
 ): string
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-_Note: formatRelative examples would go here - this function may not be implemented in the current version_
-
-</Tab>
-<Tab value="Timezone">
-
-_Note: formatRelative timezone examples would go here - this function may not be implemented in the current version_
-
-</Tab>
-</Tabs>
+_Note: formatRelative function may not be implemented in the current version_
 
 ## formatDistance
 
@@ -68,18 +48,7 @@ function formatDistance(
 ): string
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-_Note: formatDistance examples would go here - this function may not be implemented in the current version_
-
-</Tab>
-<Tab value="Timezone">
-
-_Note: formatDistance timezone examples would go here - this function may not be implemented in the current version_
-
-</Tab>
-</Tabs>
+_Note: formatDistance function may not be implemented in the current version_
 
 ## Format Patterns
 

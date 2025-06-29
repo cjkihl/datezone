@@ -116,9 +116,7 @@ export async function generateMetadata({
 			? "http://localhost:3000"
 			: process.env.VERCEL_URL
 				? `https://${process.env.VERCEL_URL}`
-				: undefined);
-
-	if (!baseUrl) throw new Error("No base URL set for OG image generation");
+				: "http://localhost:3000"); // Always fall back to localhost
 
 	const url = new URL(`${baseUrl}/api/og`);
 	const { title, description } = page.data;

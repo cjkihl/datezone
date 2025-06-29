@@ -14,7 +14,6 @@ import { Features } from "@/components/blocks/features";
 import { DividerText } from "@/components/divider-text";
 import { Endpoint } from "@/components/endpoint";
 import { ForkButton } from "@/components/fork-button";
-import { GenerateSecret } from "@/components/generate-secret";
 import DatabaseTable from "@/components/mdx/database-tables";
 import { contents } from "@/components/sidebar-content";
 import { AnimatePresence } from "@/components/ui/fade-in";
@@ -90,7 +89,6 @@ export default async function Page({
 						Files,
 						Folder,
 						ForkButton,
-						GenerateSecret,
 						iframe: (props: React.ComponentProps<"iframe">) => (
 							<iframe {...props} className="w-full h-[500px]" />
 						),
@@ -176,9 +174,7 @@ export async function generateMetadata({
 			? "http://localhost:3000"
 			: process.env.VERCEL_URL
 				? `https://${process.env.VERCEL_URL}`
-				: undefined);
-
-	if (!baseUrl) throw new Error("No base URL set for OG image generation");
+				: "http://localhost:3000"); // Always fall back to localhost
 
 	const url = new URL(`${baseUrl}/api/og`);
 	const { title, description } = page.data;

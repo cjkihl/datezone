@@ -3,7 +3,7 @@ title: Week Utilities
 description: Functions for working with weeks in dates and timestamps
 ---
 
-import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { CodeExample } from '@/components/code-example';
 
 # Week Utilities
 
@@ -17,36 +17,10 @@ Get the ISO week number of the year (1-53).
 function getWeek(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { getWeek } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15).getTime(); // January 15, 2024
-const weekNumber = getWeek(timestamp);
-console.log(weekNumber); // 3
-
-// Using date options
-const weekFromOptions = getWeek({ year: 2024, month: 1, day: 1 });
-console.log(weekFromOptions); // 1
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { getWeek } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 1, 2, 0).getTime(); // January 1, 2024 2:00 AM
-const weekInNY = getWeek(timestamp, 'America/New_York');
-const weekInTokyo = getWeek(timestamp, 'Asia/Tokyo');
-console.log(weekInNY); // 1
-console.log(weekInTokyo); // 1 (same week, different timezone)
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/week/get-week-local.ts" },
+  { name: "With timezone", file: "reference/week/get-week-timezone.ts" }
+]} />
 
 ## getISOWeekYear
 
@@ -56,37 +30,10 @@ Get the ISO week-numbering year.
 function getISOWeekYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { getISOWeekYear } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 1).getTime(); // January 1, 2024
-const isoYear = getISOWeekYear(timestamp);
-console.log(isoYear); // 2024
-
-// Edge case: early January might belong to previous ISO year
-const earlyJan = new Date(2023, 0, 1).getTime(); // January 1, 2023
-const earlyIsoYear = getISOWeekYear(earlyJan);
-console.log(earlyIsoYear); // 2022 (belongs to last week of 2022)
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { getISOWeekYear } from '@/datezone';
-
-const timestamp = new Date(2023, 0, 1, 2, 0).getTime(); // January 1, 2023
-const isoYearNY = getISOWeekYear(timestamp, 'America/New_York');
-const isoYearTokyo = getISOWeekYear(timestamp, 'Asia/Tokyo');
-console.log(isoYearNY); // 2022
-console.log(isoYearTokyo); // 2022
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/week/get-iso-week-year-local.ts" },
+  { name: "With timezone", file: "reference/week/get-iso-week-year-timezone.ts" }
+]} />
 
 ## startOfWeek
 
@@ -100,37 +47,10 @@ function startOfWeek(
 ): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { startOfWeek, WeekStartsOn } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime(); // Monday, January 15, 2024 2:30 PM
-const weekStart = startOfWeek(timestamp);
-console.log(new Date(weekStart)); // Monday, January 15, 2024 00:00:00
-
-// Start week on Sunday
-const weekStartSunday = startOfWeek(timestamp, undefined, WeekStartsOn.SUNDAY);
-console.log(new Date(weekStartSunday)); // Sunday, January 14, 2024 00:00:00
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { startOfWeek, WeekStartsOn } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15).getTime();
-const weekStartNY = startOfWeek(timestamp, 'America/New_York');
-const weekStartTokyo = startOfWeek(timestamp, 'Asia/Tokyo', WeekStartsOn.SUNDAY);
-
-console.log(new Date(weekStartNY)); // Start of week in NY timezone
-console.log(new Date(weekStartTokyo)); // Start of week (Sunday) in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/week/start-of-week-local.ts" },
+  { name: "With timezone", file: "reference/week/start-of-week-timezone.ts" }
+]} />
 
 ## endOfWeek
 
@@ -144,37 +64,10 @@ function endOfWeek(
 ): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { endOfWeek, WeekStartsOn } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime(); // Monday, January 15, 2024 2:30 PM
-const weekEnd = endOfWeek(timestamp);
-console.log(new Date(weekEnd)); // Sunday, January 21, 2024 23:59:59.999
-
-// End week on Saturday (when starting on Sunday)
-const weekEndSaturday = endOfWeek(timestamp, undefined, WeekStartsOn.SUNDAY);
-console.log(new Date(weekEndSaturday)); // Saturday, January 20, 2024 23:59:59.999
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { endOfWeek, WeekStartsOn } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15).getTime();
-const weekEndNY = endOfWeek(timestamp, 'America/New_York');
-const weekEndTokyo = endOfWeek(timestamp, 'Asia/Tokyo', WeekStartsOn.SUNDAY);
-
-console.log(new Date(weekEndNY)); // End of week in NY timezone
-console.log(new Date(weekEndTokyo)); // End of week (Saturday) in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/week/end-of-week-local.ts" },
+  { name: "With timezone", file: "reference/week/end-of-week-timezone.ts" }
+]} />
 
 ## addWeeks
 
@@ -184,36 +77,10 @@ Add weeks to a date.
 function addWeeks(date: OptionsOrTimestamp, amount: number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { addWeeks } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15).getTime(); // January 15, 2024
-const futureDate = addWeeks(timestamp, 3);
-console.log(new Date(futureDate)); // February 5, 2024
-
-const pastDate = addWeeks(timestamp, -2);
-console.log(new Date(pastDate)); // January 1, 2024
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { addWeeks } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15).getTime();
-const futureInNY = addWeeks(timestamp, 4, 'America/New_York');
-const futureInTokyo = addWeeks(timestamp, 4, 'Asia/Tokyo');
-
-console.log(new Date(futureInNY)); // February 12, 2024 in NY timezone
-console.log(new Date(futureInTokyo)); // February 12, 2024 in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/week/add-weeks-local.ts" },
+  { name: "With timezone", file: "reference/week/add-weeks-timezone.ts" }
+]} />
 
 ## subWeeks
 
@@ -223,108 +90,36 @@ Subtract weeks from a date.
 function subWeeks(date: OptionsOrTimestamp, amount: number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { subWeeks } from '@/datezone';
-
-const timestamp = new Date(2024, 1, 15).getTime(); // February 15, 2024
-const pastDate = subWeeks(timestamp, 2);
-console.log(new Date(pastDate)); // February 1, 2024
-
-const earlierDate = subWeeks(timestamp, 6);
-console.log(new Date(earlierDate)); // January 4, 2024
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { subWeeks } from '@/datezone';
-
-const timestamp = new Date(2024, 1, 15).getTime();
-const pastInNY = subWeeks(timestamp, 3, 'America/New_York');
-const pastInTokyo = subWeeks(timestamp, 3, 'Asia/Tokyo');
-
-console.log(new Date(pastInNY)); // January 25, 2024 in NY timezone
-console.log(new Date(pastInTokyo)); // January 25, 2024 in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/week/sub-weeks-local.ts" },
+  { name: "With timezone", file: "reference/week/sub-weeks-timezone.ts" }
+]} />
 
 ## startOfISOWeek
 
-Get the timestamp for the start of the ISO week (always starts on Monday).
+Get the timestamp for the start of the ISO week.
 
 ```typescript
 function startOfISOWeek(date: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { startOfISOWeek } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 17, 14, 30).getTime(); // Wednesday, January 17, 2024
-const isoWeekStart = startOfISOWeek(timestamp);
-console.log(new Date(isoWeekStart)); // Monday, January 15, 2024 00:00:00
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { startOfISOWeek } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 17).getTime();
-const isoWeekStartNY = startOfISOWeek(timestamp, 'America/New_York');
-const isoWeekStartTokyo = startOfISOWeek(timestamp, 'Asia/Tokyo');
-
-console.log(new Date(isoWeekStartNY)); // Start of ISO week in NY timezone
-console.log(new Date(isoWeekStartTokyo)); // Start of ISO week in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/week/start-of-iso-week-local.ts" },
+  { name: "With timezone", file: "reference/week/start-of-iso-week-timezone.ts" }
+]} />
 
 ## endOfISOWeek
 
-Get the timestamp for the end of the ISO week (always ends on Sunday).
+Get the timestamp for the end of the ISO week.
 
 ```typescript
 function endOfISOWeek(date: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { endOfISOWeek } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 17, 14, 30).getTime(); // Wednesday, January 17, 2024
-const isoWeekEnd = endOfISOWeek(timestamp);
-console.log(new Date(isoWeekEnd)); // Sunday, January 21, 2024 23:59:59.999
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { endOfISOWeek } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 17).getTime();
-const isoWeekEndNY = endOfISOWeek(timestamp, 'America/New_York');
-const isoWeekEndTokyo = endOfISOWeek(timestamp, 'Asia/Tokyo');
-
-console.log(new Date(isoWeekEndNY)); // End of ISO week in NY timezone
-console.log(new Date(isoWeekEndTokyo)); // End of ISO week in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/week/end-of-iso-week-local.ts" },
+  { name: "With timezone", file: "reference/week/end-of-iso-week-timezone.ts" }
+]} />
 
 ## getWeeksInMonth
 
@@ -338,55 +133,21 @@ function getWeeksInMonth(
 ): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { getWeeksInMonth, WeekStartsOn } from '@/datezone';
-
-const timestamp = new Date(2024, 1, 15).getTime(); // February 2024
-const weeksInMonth = getWeeksInMonth(timestamp);
-console.log(weeksInMonth); // 5
-
-// Different week start
-const weeksStartingSunday = getWeeksInMonth(timestamp, undefined, WeekStartsOn.SUNDAY);
-console.log(weeksStartingSunday); // 5
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { getWeeksInMonth, WeekStartsOn } from '@/datezone';
-
-const timestamp = new Date(2024, 1, 15).getTime();
-const weeksInNY = getWeeksInMonth(timestamp, 'America/New_York');
-const weeksInTokyo = getWeeksInMonth(timestamp, 'Asia/Tokyo', WeekStartsOn.SUNDAY);
-
-console.log(weeksInNY); // 5 weeks in February 2024 (NY timezone)
-console.log(weeksInTokyo); // 5 weeks in February 2024 (Tokyo timezone)
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/week/get-weeks-in-month-local.ts" },
+  { name: "With timezone", file: "reference/week/get-weeks-in-month-timezone.ts" }
+]} />
 
 ## WeekStartsOn Enum
-
-Enum for specifying which day the week starts on.
 
 ```typescript
 enum WeekStartsOn {
   SUNDAY = 0,
   MONDAY = 1,
+  TUESDAY = 2,
+  WEDNESDAY = 3,
+  THURSDAY = 4,
+  FRIDAY = 5,
   SATURDAY = 6
 }
-```
-
-```typescript
-import { WeekStartsOn } from '@/datezone';
-
-// Use in functions that accept weekStartsOn parameter
-const weekStart = startOfWeek(timestamp, 'UTC', WeekStartsOn.SUNDAY);
-const weekEnd = endOfWeek(timestamp, 'UTC', WeekStartsOn.MONDAY);
-const weeksCount = getWeeksInMonth(timestamp, 'UTC', WeekStartsOn.SATURDAY);
 ``` 

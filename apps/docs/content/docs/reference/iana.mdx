@@ -3,8 +3,6 @@ title: IANA Timezones
 description: IANA timezone definitions and utilities
 ---
 
-import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
-
 # IANA Timezones
 
 IANA timezone utilities provide the complete set of IANA timezone identifiers and helper functions for working with timezone validation and detection.
@@ -24,11 +22,8 @@ type TimeZone =
   // ... and 600+ more timezone identifiers
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import type { TimeZone } from '@/datezone';
+```typescript title="Common Timezone Usage"
+import type { TimeZone } from 'datezone';
 
 // Type-safe timezone usage
 const validTimezone: TimeZone = 'America/New_York'; // ✅ Valid
@@ -51,11 +46,8 @@ const commonTimezones: TimeZone[] = [
 console.log('Supported timezones:', commonTimezones);
 ```
 
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import type { TimeZone } from '@/datezone';
+```typescript title="Regional Timezone Groups"
+import type { TimeZone } from 'datezone';
 
 // Regional timezone groups
 const northAmericaTimezones: TimeZone[] = [
@@ -100,9 +92,6 @@ const oceaniaTimezones: TimeZone[] = [
 ];
 ```
 
-</Tab>
-</Tabs>
-
 ## isUTC
 
 Check if a timezone identifier represents UTC.
@@ -111,11 +100,8 @@ Check if a timezone identifier represents UTC.
 function isUTC(timeZone: TimeZone): boolean
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { isUTC } from '@/datezone';
+```typescript title="Basic UTC Check"
+import { isUTC } from 'datezone';
 
 // Check various UTC representations
 console.log(isUTC('UTC')); // true
@@ -133,11 +119,8 @@ function getTimezoneOffset(tz: TimeZone): number {
 }
 ```
 
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { isUTC } from '@/datezone';
+```typescript title="Advanced UTC Usage"
+import { isUTC } from 'datezone';
 
 // Use in conditional logic for performance optimization
 function formatTimeInTimezone(timestamp: number, timezone: TimeZone): string {
@@ -164,9 +147,6 @@ timezones.forEach(tz => {
   console.log(`${tz} is UTC: ${isUTC(tz)}`);
 });
 ```
-
-</Tab>
-</Tabs>
 
 ## Timezone Categories
 
@@ -236,7 +216,7 @@ const militaryZones: TimeZone[] = [
 ### Timezone Validation
 
 ```typescript
-import type { TimeZone } from '@/datezone';
+import type { TimeZone } from 'datezone';
 
 function isValidTimezone(tz: string): tz is TimeZone {
   // This is a type guard that checks if a string is a valid TimeZone
@@ -267,7 +247,7 @@ safeTimezoneOperation('Invalid/Zone');     // ❌ Invalid
 ### Timezone Discovery
 
 ```typescript
-import type { TimeZone } from '@/datezone';
+import type { TimeZone } from 'datezone';
 
 class TimezoneHelper {
   // Get timezone by country/region
@@ -347,7 +327,7 @@ console.log('Tokyo observes DST:', TimezoneHelper.likelyObservesDST('Asia/Tokyo'
 ### Timezone Picker Component
 
 ```typescript
-import type { TimeZone } from '@/datezone';
+import type { TimeZone } from 'datezone';
 
 interface TimezoneOption {
   value: TimeZone;

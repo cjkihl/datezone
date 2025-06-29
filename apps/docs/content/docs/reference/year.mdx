@@ -3,7 +3,6 @@ title: Year Utilities
 description: Functions for working with years in dates and timestamps
 ---
 
-import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
 import { CodeExample } from '@/components/code-example';
 
 # Year Utilities
@@ -18,18 +17,10 @@ Get the year from a timestamp or year options.
 function getYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local time", file: "reference/year/get-year-local.ts" }]} />
-
-</Tab>
-<Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "With timezone", file: "reference/year/get-year-timezone.ts" }]} />
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/year/get-year-local.ts" },
+  { name: "With timezone", file: "reference/year/get-year-timezone.ts" }
+]} />
 
 ## isLeapYear
 
@@ -39,18 +30,10 @@ Check if a year is a leap year.
 function isLeapYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): boolean
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local time", file: "reference/year/is-leap-year-local.ts" }]} />
-
-</Tab>
-<Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "With timezone", file: "reference/year/is-leap-year-timezone.ts" }]} />
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/year/is-leap-year-local.ts" },
+  { name: "With timezone", file: "reference/year/is-leap-year-timezone.ts" }
+]} />
 
 ## startOfYear
 
@@ -60,18 +43,10 @@ Get the timestamp for the start of the year.
 function startOfYear(date: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local time", file: "reference/year/start-of-year-local.ts" }]} />
-
-</Tab>
-<Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "With timezone", file: "reference/year/start-of-year-timezone.ts" }]} />
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/year/start-of-year-local.ts" },
+  { name: "With timezone", file: "reference/year/start-of-year-timezone.ts" }
+]} />
 
 ## endOfYear
 
@@ -81,11 +56,8 @@ Get the timestamp for the end of the year.
 function endOfYear(date: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { endOfYear } from '@/datezone';
+```typescript title="Local time"
+import { endOfYear } from 'datezone';
 
 const timestamp = new Date(2024, 5, 15, 14, 30).getTime(); // June 15, 2024 2:30 PM
 const yearEnd = endOfYear(timestamp);
@@ -96,11 +68,8 @@ const yearEndFromOptions = endOfYear({ year: 2023 });
 console.log(new Date(yearEndFromOptions)); // December 31, 2023 23:59:59.999
 ```
 
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { endOfYear } from '@/datezone';
+```typescript title="With timezone"
+import { endOfYear } from 'datezone';
 
 const timestamp = new Date(2024, 5, 15).getTime();
 const yearEndNY = endOfYear(timestamp, 'America/New_York');
@@ -110,9 +79,6 @@ console.log(new Date(yearEndNY)); // December 31, 2024 23:59:59.999 in NY timezo
 console.log(new Date(yearEndTokyo)); // December 31, 2024 23:59:59.999 in Tokyo timezone
 ```
 
-</Tab>
-</Tabs>
-
 ## addYears
 
 Add years to a date.
@@ -121,18 +87,10 @@ Add years to a date.
 function addYears(date: OptionsOrTimestamp, amount: number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local time", file: "reference/year/add-years-local.ts" }]} />
-
-</Tab>
-<Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "With timezone", file: "reference/year/add-years-timezone.ts" }]} />
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/year/add-years-local.ts" },
+  { name: "With timezone", file: "reference/year/add-years-timezone.ts" }
+]} />
 
 ## subYears
 
@@ -142,11 +100,8 @@ Subtract years from a date.
 function subYears(date: OptionsOrTimestamp, amount: number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { subYears } from '@/datezone';
+```typescript title="Local time"
+import { subYears } from 'datezone';
 
 const timestamp = new Date(2024, 1, 29).getTime(); // February 29, 2024 (leap year)
 const pastDate = subYears(timestamp, 1);
@@ -157,11 +112,8 @@ const pastNormal = subYears(normalDate, 5);
 console.log(new Date(pastNormal)); // June 15, 2019
 ```
 
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { subYears } from '@/datezone';
+```typescript title="With timezone"
+import { subYears } from 'datezone';
 
 const timestamp = new Date(2024, 1, 29).getTime(); // February 29, 2024
 const pastInNY = subYears(timestamp, 2, 'America/New_York');
@@ -171,9 +123,6 @@ console.log(new Date(pastInNY)); // February 28, 2022 in NY timezone
 console.log(new Date(pastInTokyo)); // February 28, 2022 in Tokyo timezone
 ```
 
-</Tab>
-</Tabs>
-
 ## getDaysInYear
 
 Get the number of days in a year (365 or 366 for leap years).
@@ -182,11 +131,8 @@ Get the number of days in a year (365 or 366 for leap years).
 function getDaysInYear(date: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { getDaysInYear } from '@/datezone';
+```typescript title="Local time"
+import { getDaysInYear } from 'datezone';
 
 const timestamp2024 = new Date(2024, 0, 1).getTime(); // 2024 (leap year)
 const timestamp2023 = new Date(2023, 0, 1).getTime(); // 2023 (not leap year)
@@ -199,11 +145,8 @@ console.log(getDaysInYear({ year: 2000 })); // 366 (leap year)
 console.log(getDaysInYear({ year: 1900 })); // 365 (not leap year)
 ```
 
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { getDaysInYear } from '@/datezone';
+```typescript title="With timezone"
+import { getDaysInYear } from 'datezone';
 
 const timestamp = new Date(2023, 11, 31, 23, 30).getTime(); // Dec 31, 2023
 const daysInNY = getDaysInYear(timestamp, 'America/New_York');
@@ -211,7 +154,4 @@ const daysInSydney = getDaysInYear(timestamp, 'Australia/Sydney');
 
 console.log(daysInNY); // 365 (2023)
 console.log(daysInSydney); // 366 (2024 due to timezone difference)
-```
-
-</Tab>
-</Tabs> 
+``` 

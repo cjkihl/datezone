@@ -3,7 +3,6 @@ title: Ordinal Utilities
 description: Functions for formatting ordinal numbers with locale support
 ---
 
-import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
 import { CodeExample } from '@/components/code-example';
 
 # Ordinal Utilities
@@ -14,20 +13,11 @@ Ordinal utilities provide functions for formatting numbers with ordinal suffixes
 
 Format a number with its ordinal suffix for a given locale.
 
-<CodeExample tabs={[{ name: "Function Signature", file: "reference/ordinal/format-ordinal-signature.ts" }]} />
-
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-<CodeExample tabs={[{ name: "English Ordinals", file: "reference/ordinal/format-ordinal-signature.ts" }]} />
-
-</Tab>
-<Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "Locale Examples", file: "reference/ordinal/locale-examples.ts" }]} />
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Function Signature", file: "reference/ordinal/format-ordinal-signature.ts" },
+  { name: "English Ordinals", file: "reference/ordinal/format-ordinal-signature.ts" },
+  { name: "Locale Examples", file: "reference/ordinal/locale-examples.ts" }
+]} />
 
 ## Supported Locales
 

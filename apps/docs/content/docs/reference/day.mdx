@@ -2,12 +2,11 @@
 title: Day Utilities
 ---
 
-import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
 import { CodeExample } from '@/components/code-example';
 
-# Day Utilities (`@/datezone/day`)
+# Day Utilities (`datezone/day`)
 
-This page documents all exported functions from the `day` module in `@/datezone`.
+This page documents all exported functions from the `day` module in `datezone`.
 
 ## Functions
 
@@ -19,18 +18,10 @@ Adds a number of days to a timestamp or options object.
 addDays(ts: DayOptions | number, days: number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-  <Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local time", file: "reference/day/add-days-local.ts" }]} />
-
-  </Tab>
-  <Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "With timezone", file: "reference/day/add-days-timezone.ts" }]} />
-
-  </Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/day/add-days-local.ts" },
+  { name: "With timezone", file: "reference/day/add-days-timezone.ts" }
+]} />
 
 ---
 
@@ -42,18 +33,10 @@ Subtracts a number of days from a timestamp or options object.
 subDays(ts: DayOptions | number, days: number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-  <Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local time", file: "reference/day/sub-days-local.ts" }]} />
-
-  </Tab>
-  <Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "With timezone", file: "reference/day/sub-days-timezone.ts" }]} />
-
-  </Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/day/sub-days-local.ts" },
+  { name: "With timezone", file: "reference/day/sub-days-timezone.ts" }
+]} />
 
 ---
 
@@ -65,18 +48,10 @@ Returns the start of the day (00:00:00.000) in the given timezone.
 startOfDay(ts: DayOptions | number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-  <Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local time", file: "reference/day/start-of-day-local.ts" }]} />
-
-  </Tab>
-  <Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "With timezone", file: "reference/day/start-of-day-timezone.ts" }]} />
-
-  </Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/day/start-of-day-local.ts" },
+  { name: "With timezone", file: "reference/day/start-of-day-timezone.ts" }
+]} />
 
 ---
 
@@ -88,18 +63,10 @@ Returns the end of the day (23:59:59.999) in the given timezone.
 endOfDay(ts: DayOptions | number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-  <Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local time", file: "reference/day/end-of-day-local.ts" }]} />
-
-  </Tab>
-  <Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "With timezone", file: "reference/day/end-of-day-timezone.ts" }]} />
-
-  </Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/day/end-of-day-local.ts" },
+  { name: "With timezone", file: "reference/day/end-of-day-timezone.ts" }
+]} />
 
 ---
 
@@ -111,18 +78,10 @@ Returns the start of the next day (00:00:00.000) in the given timezone.
 nextDay(ts: DayOptions | number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-  <Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local time", file: "reference/day/next-day-local.ts" }]} />
-
-  </Tab>
-  <Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "With timezone", file: "reference/day/next-day-timezone.ts" }]} />
-
-  </Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/day/next-day-local.ts" },
+  { name: "With timezone", file: "reference/day/next-day-timezone.ts" }
+]} />
 
 ---
 
@@ -134,18 +93,10 @@ Returns the start of the previous day (00:00:00.000) in the given timezone.
 previousDay(ts: DayOptions | number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-  <Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local time", file: "reference/day/previous-day-local.ts" }]} />
-
-  </Tab>
-  <Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "With timezone", file: "reference/day/previous-day-timezone.ts" }]} />
-
-  </Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/day/previous-day-local.ts" },
+  { name: "With timezone", file: "reference/day/previous-day-timezone.ts" }
+]} />
 
 ---
 
@@ -157,18 +108,10 @@ Returns the ISO day of week (1=Monday, 7=Sunday) in the given timezone.
 dayOfWeek(ts: DayOptions | number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-  <Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local time", file: "reference/day/day-of-week-local.ts" }]} />
-
-  </Tab>
-  <Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "With timezone", file: "reference/day/day-of-week-timezone.ts" }]} />
-
-  </Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/day/day-of-week-local.ts" },
+  { name: "With timezone", file: "reference/day/day-of-week-timezone.ts" }
+]} />
 
 ---
 
@@ -180,18 +123,10 @@ Returns the day of year (1-366) in the given timezone.
 dayOfYear(ts: DayOptions | number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-  <Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local time", file: "reference/day/day-of-year-local.ts" }]} />
-
-  </Tab>
-  <Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "With timezone", file: "reference/day/day-of-year-timezone.ts" }]} />
-
-  </Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/day/day-of-year-local.ts" },
+  { name: "With timezone", file: "reference/day/day-of-year-timezone.ts" }
+]} />
 
 ---
 

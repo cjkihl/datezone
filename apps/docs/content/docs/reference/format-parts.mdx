@@ -3,7 +3,7 @@ title: Format Parts
 description: Extract individual date and time components with timezone awareness
 ---
 
-import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { CodeExample } from '@/components/code-example';
 
 # Format Parts
 
@@ -23,89 +23,10 @@ function formatToParts<T extends Partial<Record<DatePartType, string>> & Intl.Da
 type DatePartType = "year" | "month" | "day" | "hour" | "minute" | "second" | "millisecond" | "weekday" | "era" | "timeZoneName"
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { formatToParts } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30, 45).getTime(); // Jan 15, 2024 2:30:45 PM
-
-// Extract basic date components
-const dateComponents = formatToParts(timestamp, 'UTC', {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit'
-});
-console.log(dateComponents); // { year: 2024, month: 1, day: 15 }
-
-// Extract time components
-const timeComponents = formatToParts(timestamp, 'UTC', {
-  hour: '2-digit',
-  minute: '2-digit', 
-  second: '2-digit',
-  hour12: false
-});
-console.log(timeComponents); // { hour: 14, minute: 30, second: 45 }
-
-// Extract full timestamp components
-const fullComponents = formatToParts(timestamp, 'UTC', {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-  hour: '2-digit',
-  minute: '2-digit',
-  second: '2-digit',
-  hour12: false
-});
-console.log(fullComponents); // { year: 2024, month: 1, day: 15, hour: 14, minute: 30, second: 45 }
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { formatToParts } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 19, 30, 45).getTime(); // 7:30:45 PM local
-
-// Extract components in different timezones
-const nyComponents = formatToParts(timestamp, 'America/New_York', {
-  year: 'numeric',
-  month: '2-digit', 
-  day: '2-digit',
-  hour: '2-digit',
-  minute: '2-digit',
-  hour12: false
-});
-
-const tokyoComponents = formatToParts(timestamp, 'Asia/Tokyo', {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit', 
-  hour: '2-digit',
-  minute: '2-digit',
-  hour12: false
-});
-
-const utcComponents = formatToParts(timestamp, 'UTC', {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-  hour: '2-digit', 
-  minute: '2-digit',
-  hour12: false
-});
-
-console.log('NY:', nyComponents);    // { year: 2024, month: 1, day: 15, hour: 19, minute: 30 }
-console.log('Tokyo:', tokyoComponents); // { year: 2024, month: 1, day: 16, hour: 9, minute: 30 }
-console.log('UTC:', utcComponents);  // { year: 2024, month: 1, day: 16, hour: 0, minute: 30 }
-
-// Notice how the date changes across timezones
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local timezone examples", file: "reference/format-parts/format-to-parts-local.ts" },
+  { name: "Timezone examples", file: "reference/format-parts/format-to-parts-timezone.ts" }
+]} />
 
 ## FULL_TS Constant
 
@@ -125,172 +46,37 @@ const FULL_TS = {
 } as const
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { formatToParts, FULL_TS } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30, 45).getTime();
-
-// Use the pre-defined FULL_TS options
-const fullParts = formatToParts(timestamp, 'UTC', FULL_TS);
-console.log(fullParts);
-// {
-//   year: 2024,
-//   month: 1,
-//   day: 15,
-//   hour: 14,
-//   minute: 30,
-//   second: 45,
-//   millisecond: 0,
-//   era: 1
-// }
-
-// Access individual components
-console.log('Year:', fullParts.year);     // 2024
-console.log('Month:', fullParts.month);   // 1
-console.log('Day:', fullParts.day);       // 15
-console.log('Hour:', fullParts.hour);     // 14
-console.log('Minute:', fullParts.minute); // 30
-console.log('Second:', fullParts.second); // 45
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { formatToParts, FULL_TS } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30, 45).getTime();
-
-// Extract full components across different timezones
-const timeZones = ['UTC', 'America/New_York', 'Asia/Tokyo', 'Europe/London'];
-
-timeZones.forEach(tz => {
-  const parts = formatToParts(timestamp, tz, FULL_TS);
-  console.log(`${tz}:`, {
-    date: `${parts.year}-${parts.month.toString().padStart(2, '0')}-${parts.day.toString().padStart(2, '0')}`,
-    time: `${parts.hour.toString().padStart(2, '0')}:${parts.minute.toString().padStart(2, '0')}:${parts.second.toString().padStart(2, '0')}`
-  });
-});
-
-// Output shows how the same moment appears in different timezones:
-// UTC: { date: '2024-01-15', time: '14:30:45' }
-// America/New_York: { date: '2024-01-15', time: '09:30:45' }
-// Asia/Tokyo: { date: '2024-01-16', time: '23:30:45' }
-// Europe/London: { date: '2024-01-15', time: '14:30:45' }
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Using FULL_TS constant - Local", file: "reference/format-parts/full-ts-local.ts" },
+  { name: "Using FULL_TS constant - Multiple timezones", file: "reference/format-parts/full-ts-timezones.ts" }
+]} />
 
 ## Component Extraction Examples
 
 ### Date Components Only
 
-```typescript
-import { formatToParts } from '@/datezone';
-
-const timestamp = new Date(2024, 5, 15, 14, 30).getTime(); // June 15, 2024
-
-// Extract only date-related components
-const dateOnly = formatToParts(timestamp, 'UTC', {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-  weekday: 'long'
-});
-
-console.log('Date components:', dateOnly);
-// { year: 2024, month: 6, day: 15, weekday: 6 }
-
-// Use components to build custom date string
-const customDate = `${dateOnly.year}-${dateOnly.month.toString().padStart(2, '0')}-${dateOnly.day.toString().padStart(2, '0')}`;
-console.log('Custom date:', customDate); // "2024-06-15"
-```
+<CodeExample tabs={[
+  { name: "Date Components", file: "reference/format-parts/date-components.ts" }
+]} />
 
 ### Time Components Only
 
-```typescript
-import { formatToParts } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30, 45, 123).getTime();
-
-// Extract only time-related components
-const timeOnly = formatToParts(timestamp, 'UTC', {
-  hour: '2-digit',
-  minute: '2-digit',
-  second: '2-digit',
-  hour12: false
-});
-
-console.log('Time components:', timeOnly);
-// { hour: 14, minute: 30, second: 45 }
-
-// Build custom time string
-const customTime = `${timeOnly.hour}:${timeOnly.minute}:${timeOnly.second}`;
-console.log('Custom time:', customTime); // "14:30:45"
-```
+<CodeExample tabs={[
+  { name: "Time Components", file: "reference/format-parts/time-components.ts" }
+]} />
 
 ### Milliseconds Support
 
-```typescript
-import { formatToParts } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30, 45, 123).getTime(); // 123ms
-
-// Extract milliseconds along with other time components
-const timeWithMs = formatToParts(timestamp, 'UTC', {
-  hour: '2-digit',
-  minute: '2-digit',
-  second: '2-digit',
-  millisecond: '3-digit',
-  hour12: false
-});
-
-console.log('Time with milliseconds:', timeWithMs);
-// { hour: 14, minute: 30, second: 45, millisecond: 123 }
-
-// Build precise time string with milliseconds
-const preciseTime = `${timeWithMs.hour}:${timeWithMs.minute}:${timeWithMs.second}.${timeWithMs.millisecond.toString().padStart(3, '0')}`;
-console.log('Precise time:', preciseTime); // "14:30:45.123"
-
-// Milliseconds are timezone-independent (same across all timezones)
-const utcMs = formatToParts(timestamp, 'UTC', { millisecond: '3-digit' });
-const tokyoMs = formatToParts(timestamp, 'Asia/Tokyo', { millisecond: '3-digit' });
-const nyMs = formatToParts(timestamp, 'America/New_York', { millisecond: '3-digit' });
-
-console.log('UTC milliseconds:', utcMs.millisecond);     // 123
-console.log('Tokyo milliseconds:', tokyoMs.millisecond); // 123
-console.log('NY milliseconds:', nyMs.millisecond);       // 123
-```
-
-### Weekday Information
-
-```typescript
-import { formatToParts } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime(); // Monday
-
-// Extract weekday information
-const weekdayInfo = formatToParts(timestamp, 'UTC', {
-  weekday: 'long'
-});
-
-console.log('Weekday number:', weekdayInfo.weekday); // 1 (Monday = 1 in ISO format)
-
-// Map weekday numbers to names
-const weekdayNames = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-console.log('Weekday name:', weekdayNames[weekdayInfo.weekday]); // "Monday"
-```
+<CodeExample tabs={[
+  { name: "Milliseconds Examples", file: "reference/format-parts/milliseconds-support.ts" }
+]} />
 
 ## Practical Applications
 
 ### Custom Date Builder
 
 ```typescript
-import { formatToParts, FULL_TS } from '@/datezone';
+import { formatToParts, FULL_TS } from 'datezone';
 
 class DateBuilder {
   static fromTimestamp(timestamp: number, timeZone = 'UTC') {
@@ -344,7 +130,7 @@ console.log('NY Object:', nyDate.toObject());
 ### Timezone Comparison Tool
 
 ```typescript
-import { formatToParts, FULL_TS } from '@/datezone';
+import { formatToParts, FULL_TS } from 'datezone';
 
 function compareTimezones(timestamp: number, timezones: string[]) {
   return timezones.map(tz => {
@@ -376,8 +162,8 @@ console.table(comparison.map(item => ({
 ### Date Arithmetic with Components
 
 ```typescript
-import { formatToParts, FULL_TS } from '@/datezone';
-import { wallTimeToTS } from '@/datezone';
+import { formatToParts, FULL_TS } from 'datezone';
+import { wallTimeToTS } from 'datezone';
 
 function addDaysToTimestamp(timestamp: number, days: number, timeZone = 'UTC'): number {
   // Extract current components
@@ -426,7 +212,7 @@ console.log('In 3 hours (NY):', formatToParts(inThreeHours, 'America/New_York', 
 ### Validation with Components
 
 ```typescript
-import { formatToParts } from '@/datezone';
+import { formatToParts } from 'datezone';
 
 function validateBusinessHours(timestamp: number, timeZone: string): boolean {
   const parts = formatToParts(timestamp, timeZone, {

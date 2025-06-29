@@ -13,7 +13,7 @@ This is a monorepo for the datezone library - a lightweight and comprehensive da
 ```
 datezone/
 ├── apps/
-│   └── site/                 # Next.js demo/documentation site
+│   └── docs/                 # Next.js demo/documentation site
 ├── packages/
 │   └── datezone/            # Main library package
 ├── tools/

@@ -3,7 +3,7 @@ title: Hour Utilities
 description: Functions for working with hours, minutes, seconds, and milliseconds
 ---
 
-import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { CodeExample } from '@/components/code-example';
 
 # Hour Utilities
 
@@ -17,36 +17,10 @@ Get the hour in 12-hour format (1-12).
 function get12Hour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { get12Hour } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime(); // 2:30 PM
-const hour12 = get12Hour(timestamp);
-console.log(hour12); // 2
-
-const morningTime = new Date(2024, 0, 15, 0, 30).getTime(); // 12:30 AM
-const morningHour = get12Hour(morningTime);
-console.log(morningHour); // 12
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { get12Hour } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime(); // 2:30 PM local
-const hour12NY = get12Hour(timestamp, 'America/New_York');
-const hour12Tokyo = get12Hour(timestamp, 'Asia/Tokyo');
-console.log(hour12NY); // Hour in 12-format for NY timezone
-console.log(hour12Tokyo); // Hour in 12-format for Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/get-12-hour-local.ts" },
+  { name: "With timezone", file: "reference/hour/get-12-hour-timezone.ts" }
+]} />
 
 ## get24Hour
 
@@ -56,36 +30,10 @@ Get the hour in 24-hour format (0-23).
 function get24Hour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { get24Hour } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime(); // 2:30 PM
-const hour24 = get24Hour(timestamp);
-console.log(hour24); // 14
-
-const morningTime = new Date(2024, 0, 15, 0, 30).getTime(); // 12:30 AM
-const morningHour = get24Hour(morningTime);
-console.log(morningHour); // 0
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { get24Hour } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime();
-const hour24NY = get24Hour(timestamp, 'America/New_York');
-const hour24Tokyo = get24Hour(timestamp, 'Asia/Tokyo');
-console.log(hour24NY); // Hour in 24-format for NY timezone
-console.log(hour24Tokyo); // Hour in 24-format for Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/get-24-hour-local.ts" },
+  { name: "With timezone", file: "reference/hour/get-24-hour-timezone.ts" }
+]} />
 
 ## getHour
 
@@ -95,32 +43,10 @@ Get the hour (same as get24Hour).
 function getHour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { getHour } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime(); // 2:30 PM
-const hour = getHour(timestamp);
-console.log(hour); // 14
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { getHour } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime();
-const hourNY = getHour(timestamp, 'America/New_York');
-const hourTokyo = getHour(timestamp, 'Asia/Tokyo');
-console.log(hourNY); // Hour for NY timezone
-console.log(hourTokyo); // Hour for Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/hour-local.ts" },
+  { name: "With timezone", file: "reference/hour/hour-timezone.ts" }
+]} />
 
 ## addHours
 
@@ -130,36 +56,10 @@ Add hours to a timestamp.
 function addHours(ts: OptionsOrTimestamp, hours: number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { addHours } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime(); // 2:30 PM
-const futureTime = addHours(timestamp, 3);
-console.log(new Date(futureTime)); // 5:30 PM same day
-
-const pastTime = addHours(timestamp, -6);
-console.log(new Date(pastTime)); // 8:30 AM same day
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { addHours } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime();
-const futureInNY = addHours(timestamp, 5, 'America/New_York');
-const futureInTokyo = addHours(timestamp, 5, 'Asia/Tokyo');
-
-console.log(new Date(futureInNY)); // 5 hours later in NY timezone
-console.log(new Date(futureInTokyo)); // 5 hours later in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/add-hours-local.ts" },
+  { name: "With timezone", file: "reference/hour/add-hours-timezone.ts" }
+]} />
 
 ## subHours
 
@@ -169,36 +69,10 @@ Subtract hours from a timestamp.
 function subHours(ts: OptionsOrTimestamp, hours: number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { subHours } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime(); // 2:30 PM
-const pastTime = subHours(timestamp, 4);
-console.log(new Date(pastTime)); // 10:30 AM same day
-
-const earlierTime = subHours(timestamp, 20);
-console.log(new Date(earlierTime)); // 6:30 PM previous day
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { subHours } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime();
-const pastInNY = subHours(timestamp, 8, 'America/New_York');
-const pastInTokyo = subHours(timestamp, 8, 'Asia/Tokyo');
-
-console.log(new Date(pastInNY)); // 8 hours earlier in NY timezone
-console.log(new Date(pastInTokyo)); // 8 hours earlier in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/sub-hours-local.ts" },
+  { name: "With timezone", file: "reference/hour/sub-hours-timezone.ts" }
+]} />
 
 ## startOfHour
 
@@ -208,33 +82,10 @@ Get the timestamp for the start of the hour.
 function startOfHour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { startOfHour } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 45, 30).getTime(); // 2:45:30 PM
-const hourStart = startOfHour(timestamp);
-console.log(new Date(hourStart)); // 2:00:00 PM same day
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { startOfHour } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 45, 30).getTime();
-const hourStartNY = startOfHour(timestamp, 'America/New_York');
-const hourStartTokyo = startOfHour(timestamp, 'Asia/Tokyo');
-
-console.log(new Date(hourStartNY)); // Start of hour in NY timezone
-console.log(new Date(hourStartTokyo)); // Start of hour in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/start-of-hour-local.ts" },
+  { name: "With timezone", file: "reference/hour/start-of-hour-timezone.ts" }
+]} />
 
 ## endOfHour
 
@@ -244,33 +95,10 @@ Get the timestamp for the end of the hour.
 function endOfHour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { endOfHour } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 15, 30).getTime(); // 2:15:30 PM
-const hourEnd = endOfHour(timestamp);
-console.log(new Date(hourEnd)); // 2:59:59.999 PM same day
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { endOfHour } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 15, 30).getTime();
-const hourEndNY = endOfHour(timestamp, 'America/New_York');
-const hourEndTokyo = endOfHour(timestamp, 'Asia/Tokyo');
-
-console.log(new Date(hourEndNY)); // End of hour in NY timezone
-console.log(new Date(hourEndTokyo)); // End of hour in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/end-of-hour-local.ts" },
+  { name: "With timezone", file: "reference/hour/end-of-hour-timezone.ts" }
+]} />
 
 ## startOfMinute
 
@@ -280,33 +108,10 @@ Get the timestamp for the start of the minute.
 function startOfMinute(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { startOfMinute } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 45, 30, 500).getTime(); // 2:45:30.500 PM
-const minuteStart = startOfMinute(timestamp);
-console.log(new Date(minuteStart)); // 2:45:00.000 PM same day
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { startOfMinute } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 45, 30, 500).getTime();
-const minuteStartNY = startOfMinute(timestamp, 'America/New_York');
-const minuteStartTokyo = startOfMinute(timestamp, 'Asia/Tokyo');
-
-console.log(new Date(minuteStartNY)); // Start of minute in NY timezone
-console.log(new Date(minuteStartTokyo)); // Start of minute in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/start-of-minute-local.ts" },
+  { name: "With timezone", file: "reference/hour/start-of-minute-timezone.ts" }
+]} />
 
 ## endOfMinute
 
@@ -316,33 +121,10 @@ Get the timestamp for the end of the minute.
 function endOfMinute(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { endOfMinute } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 45, 15, 500).getTime(); // 2:45:15.500 PM
-const minuteEnd = endOfMinute(timestamp);
-console.log(new Date(minuteEnd)); // 2:45:59.999 PM same day
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { endOfMinute } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 45, 15, 500).getTime();
-const minuteEndNY = endOfMinute(timestamp, 'America/New_York');
-const minuteEndTokyo = endOfMinute(timestamp, 'Asia/Tokyo');
-
-console.log(new Date(minuteEndNY)); // End of minute in NY timezone
-console.log(new Date(minuteEndTokyo)); // End of minute in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/end-of-minute-local.ts" },
+  { name: "With timezone", file: "reference/hour/end-of-minute-timezone.ts" }
+]} />
 
 ## startOfSecond
 
@@ -352,33 +134,10 @@ Get the timestamp for the start of the second.
 function startOfSecond(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { startOfSecond } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 45, 30, 750).getTime(); // 2:45:30.750 PM
-const secondStart = startOfSecond(timestamp);
-console.log(new Date(secondStart)); // 2:45:30.000 PM same day
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { startOfSecond } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 45, 30, 750).getTime();
-const secondStartNY = startOfSecond(timestamp, 'America/New_York');
-const secondStartTokyo = startOfSecond(timestamp, 'Asia/Tokyo');
-
-console.log(new Date(secondStartNY)); // Start of second in NY timezone
-console.log(new Date(secondStartTokyo)); // Start of second in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/start-of-second-local.ts" },
+  { name: "With timezone", file: "reference/hour/start-of-second-timezone.ts" }
+]} />
 
 ## endOfSecond
 
@@ -388,266 +147,85 @@ Get the timestamp for the end of the second.
 function endOfSecond(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { endOfSecond } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 45, 30, 250).getTime(); // 2:45:30.250 PM
-const secondEnd = endOfSecond(timestamp);
-console.log(new Date(secondEnd)); // 2:45:30.999 PM same day
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { endOfSecond } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 45, 30, 250).getTime();
-const secondEndNY = endOfSecond(timestamp, 'America/New_York');
-const secondEndTokyo = endOfSecond(timestamp, 'Asia/Tokyo');
-
-console.log(new Date(secondEndNY)); // End of second in NY timezone
-console.log(new Date(secondEndTokyo)); // End of second in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/end-of-second-local.ts" },
+  { name: "With timezone", file: "reference/hour/end-of-second-timezone.ts" }
+]} />
 
 ## addMinutes
 
 Add minutes to a timestamp.
 
 ```typescript
-function addMinutes(ts: OptionsOrTimestamp, amount: number, timeZone?: TimeZone): number
+function addMinutes(ts: OptionsOrTimestamp, minutes: number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { addMinutes } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime(); // 2:30 PM
-const futureTime = addMinutes(timestamp, 45);
-console.log(new Date(futureTime)); // 3:15 PM same day
-
-const pastTime = addMinutes(timestamp, -90);
-console.log(new Date(pastTime)); // 1:00 PM same day
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { addMinutes } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime();
-const futureInNY = addMinutes(timestamp, 120, 'America/New_York');
-const futureInTokyo = addMinutes(timestamp, 120, 'Asia/Tokyo');
-
-console.log(new Date(futureInNY)); // 2 hours later in NY timezone
-console.log(new Date(futureInTokyo)); // 2 hours later in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/add-minutes-local.ts" },
+  { name: "With timezone", file: "reference/hour/add-minutes-timezone.ts" }
+]} />
 
 ## subMinutes
 
 Subtract minutes from a timestamp.
 
 ```typescript
-function subMinutes(ts: OptionsOrTimestamp, amount: number, timeZone?: TimeZone): number
+function subMinutes(ts: OptionsOrTimestamp, minutes: number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { subMinutes } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime(); // 2:30 PM
-const pastTime = subMinutes(timestamp, 45);
-console.log(new Date(pastTime)); // 1:45 PM same day
-
-const earlierTime = subMinutes(timestamp, 150);
-console.log(new Date(earlierTime)); // 12:00 PM same day
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { subMinutes } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30).getTime();
-const pastInNY = subMinutes(timestamp, 180, 'America/New_York');
-const pastInTokyo = subMinutes(timestamp, 180, 'Asia/Tokyo');
-
-console.log(new Date(pastInNY)); // 3 hours earlier in NY timezone
-console.log(new Date(pastInTokyo)); // 3 hours earlier in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/sub-minutes-local.ts" },
+  { name: "With timezone", file: "reference/hour/sub-minutes-timezone.ts" }
+]} />
 
 ## addSeconds
 
 Add seconds to a timestamp.
 
 ```typescript
-function addSeconds(ts: OptionsOrTimestamp, amount: number, timeZone?: TimeZone): number
+function addSeconds(ts: OptionsOrTimestamp, seconds: number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { addSeconds } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30, 15).getTime(); // 2:30:15 PM
-const futureTime = addSeconds(timestamp, 45);
-console.log(new Date(futureTime)); // 2:31:00 PM same day
-
-const pastTime = addSeconds(timestamp, -30);
-console.log(new Date(pastTime)); // 2:29:45 PM same day
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { addSeconds } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30, 15).getTime();
-const futureInNY = addSeconds(timestamp, 3600, 'America/New_York'); // 1 hour
-const futureInTokyo = addSeconds(timestamp, 3600, 'Asia/Tokyo');
-
-console.log(new Date(futureInNY)); // 1 hour later in NY timezone
-console.log(new Date(futureInTokyo)); // 1 hour later in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/add-seconds-local.ts" },
+  { name: "With timezone", file: "reference/hour/add-seconds-timezone.ts" }
+]} />
 
 ## subSeconds
 
 Subtract seconds from a timestamp.
 
 ```typescript
-function subSeconds(ts: OptionsOrTimestamp, amount: number, timeZone?: TimeZone): number
+function subSeconds(ts: OptionsOrTimestamp, seconds: number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { subSeconds } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30, 45).getTime(); // 2:30:45 PM
-const pastTime = subSeconds(timestamp, 30);
-console.log(new Date(pastTime)); // 2:30:15 PM same day
-
-const earlierTime = subSeconds(timestamp, 3600); // 1 hour
-console.log(new Date(earlierTime)); // 1:30:45 PM same day
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { subSeconds } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30, 45).getTime();
-const pastInNY = subSeconds(timestamp, 7200, 'America/New_York'); // 2 hours
-const pastInTokyo = subSeconds(timestamp, 7200, 'Asia/Tokyo');
-
-console.log(new Date(pastInNY)); // 2 hours earlier in NY timezone
-console.log(new Date(pastInTokyo)); // 2 hours earlier in Tokyo timezone
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/sub-seconds-local.ts" },
+  { name: "With timezone", file: "reference/hour/sub-seconds-timezone.ts" }
+]} />
 
 ## addMilliseconds
 
 Add milliseconds to a timestamp.
 
 ```typescript
-function addMilliseconds(ts: OptionsOrTimestamp, amount: number): number
+function addMilliseconds(ts: OptionsOrTimestamp, ms: number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { addMilliseconds } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30, 15, 500).getTime(); // 2:30:15.500 PM
-const futureTime = addMilliseconds(timestamp, 250);
-console.log(new Date(futureTime)); // 2:30:15.750 PM same day
-
-const pastTime = addMilliseconds(timestamp, -1000); // 1 second
-console.log(new Date(pastTime)); // 2:30:14.500 PM same day
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { addMilliseconds } from '@/datezone';
-
-// Note: addMilliseconds doesn't take timezone parameter as it operates on raw timestamps
-const timestamp = new Date(2024, 0, 15, 14, 30, 15, 500).getTime();
-const futureTime = addMilliseconds(timestamp, 5000); // 5 seconds
-console.log(new Date(futureTime)); // 2:30:20.500 PM
-
-// For timezone-aware operations, combine with other functions
-const futureInTZ = addSeconds(futureTime, 0, 'America/New_York');
-```
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/add-milliseconds-local.ts" },
+  { name: "With timezone", file: "reference/hour/add-milliseconds-timezone.ts" }
+]} />
 
 ## subMilliseconds
 
 Subtract milliseconds from a timestamp.
 
 ```typescript
-function subMilliseconds(ts: OptionsOrTimestamp, amount: number): number
+function subMilliseconds(ts: OptionsOrTimestamp, ms: number, timeZone?: TimeZone): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-```typescript
-import { subMilliseconds } from '@/datezone';
-
-const timestamp = new Date(2024, 0, 15, 14, 30, 15, 750).getTime(); // 2:30:15.750 PM
-const pastTime = subMilliseconds(timestamp, 250);
-console.log(new Date(pastTime)); // 2:30:15.500 PM same day
-
-const earlierTime = subMilliseconds(timestamp, 2000); // 2 seconds
-console.log(new Date(earlierTime)); // 2:30:13.750 PM same day
-```
-
-</Tab>
-<Tab value="Timezone">
-
-```typescript
-import { subMilliseconds } from '@/datezone';
-
-// Note: subMilliseconds doesn't take timezone parameter as it operates on raw timestamps
-const timestamp = new Date(2024, 0, 15, 14, 30, 15, 750).getTime();
-const pastTime = subMilliseconds(timestamp, 10000); // 10 seconds
-console.log(new Date(pastTime)); // 2:30:05.750 PM
-
-// For timezone-aware operations, combine with other functions
-const pastInTZ = addSeconds(pastTime, 0, 'Asia/Tokyo');
-```
-
-</Tab>
-</Tabs> 
+<CodeExample tabs={[
+  { name: "Local time", file: "reference/hour/sub-milliseconds-local.ts" },
+  { name: "With timezone", file: "reference/hour/sub-milliseconds-timezone.ts" }
+]} /> 

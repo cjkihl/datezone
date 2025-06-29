@@ -12,7 +12,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Features } from "@/components/blocks/features";
 import { ForkButton } from "@/components/fork-button";
-import { GenerateSecret } from "@/components/generate-secret";
 import DatabaseTable from "@/components/mdx/database-tables";
 import { AnimatePresence } from "@/components/ui/fade-in";
 import { blogs } from "@/lib/source";
@@ -125,7 +124,6 @@ export default async function Page({
 							Files,
 							Folder,
 							ForkButton,
-							GenerateSecret,
 							Link: ({
 								className,
 								...props

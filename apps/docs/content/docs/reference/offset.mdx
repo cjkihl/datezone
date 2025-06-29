@@ -3,7 +3,6 @@ title: Offset Utilities
 description: Functions for working with timezone offsets
 ---
 
-import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
 import { CodeExample } from '@/components/code-example';
 
 # Offset Utilities
@@ -14,58 +13,31 @@ Offset utilities provide functions for working with timezone offsets, calculatin
 
 Get the offset in minutes from UTC to a specific timezone.
 
-<CodeExample tabs={[{ name: "Function Signature", file: "reference/offset/utc-to-timezone-signatures.ts" }]} />
-
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local Timezone Examples", file: "reference/offset/utc-to-timezone-local.ts" }]} />
-
-</Tab>
-<Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "Timezone Examples", file: "reference/offset/utc-to-timezone-signatures.ts" }]} />
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Function Signature", file: "reference/offset/utc-to-timezone-signatures.ts" },
+  { name: "Local Timezone Examples", file: "reference/offset/utc-to-timezone-local.ts" },
+  { name: "Timezone Examples", file: "reference/offset/utc-to-timezone-signatures.ts" }
+]} />
 
 ## getLocalTimezoneOffsetMinutes
 
 Get the offset in minutes from UTC to the local system timezone.
 
-<CodeExample tabs={[{ name: "Local Timezone Offset", file: "reference/offset/local-timezone-offset.ts" }]} />
-
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local Examples", file: "reference/offset/local-timezone-offset.ts" }]} />
-
-</Tab>
-<Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "Timezone Comparison", file: "reference/offset/local-timezone-offset.ts" }]} />
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local Timezone Offset", file: "reference/offset/local-timezone-offset.ts" },
+  { name: "Local Examples", file: "reference/offset/local-timezone-offset.ts" },
+  { name: "Timezone Comparison", file: "reference/offset/local-timezone-offset.ts" }
+]} />
 
 ## getTimezoneOffsetMinutes
 
 Get the offset in minutes between two timezones.
 
-<CodeExample tabs={[{ name: "Timezone Offset Comparison", file: "reference/offset/timezone-offset-comparison.ts" }]} />
-
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local to Timezone", file: "reference/offset/timezone-offset-comparison.ts" }]} />
-
-</Tab>
-<Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "Between Timezones", file: "reference/offset/timezone-offset-comparison.ts" }]} />
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Timezone Offset Comparison", file: "reference/offset/timezone-offset-comparison.ts" },
+  { name: "Local to Timezone", file: "reference/offset/timezone-offset-comparison.ts" },
+  { name: "Between Timezones", file: "reference/offset/timezone-offset-comparison.ts" }
+]} />
 
 ## Usage Examples
 

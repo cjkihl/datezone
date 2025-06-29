@@ -3,7 +3,6 @@ title: General Utils (Updated)
 description: Core utility functions for timezone and date conversions with external TypeScript examples
 ---
 
-import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
 import { CodeExample } from '@/components/code-example';
 
 # General Utils (Updated Version)
@@ -27,18 +26,10 @@ function wallTimeToTS(
 ): number
 ```
 
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-<CodeExample tabs={[{ name: "Local Timezone Example", file: "utils/walltime-local.ts" }]} />
-
-</Tab>
-<Tab value="Timezone">
-
-<CodeExample tabs={[{ name: "Specific Timezone Example", file: "utils/walltime-timezone.ts" }]} />
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[
+  { name: "Local Timezone Example", file: "utils/walltime-local.ts" },
+  { name: "Specific Timezone Example", file: "utils/walltime-timezone.ts" }
+]} />
 
 ## Usage Examples
 
