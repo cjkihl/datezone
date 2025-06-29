@@ -1,4 +1,6 @@
 import { formatToParts, HOUR, type TimeZone } from "./index.pub.js";
+import { getUTCtoTimezoneOffsetMinutes } from "./offset.js";
+import { isDST, isUTC } from "./timezone.js";
 
 const HOUR_OPTS = { hour: "2-digit", hour12: false } as const;
 
@@ -64,7 +66,22 @@ export function hour(ts: number, timeZone?: TimeZone): number {
 	if (!timeZone) {
 		return new Date(ts).getHours();
 	}
-	// For specific timezones, use formatToParts
+	// Fast path: UTC time
+	if (isUTC(timeZone)) {
+		return new Date(ts).getUTCHours();
+	}
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(timeZone)) {
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
+		const offsetMs = offsetMinutes * 60000;
+
+		// Convert to wall time in the timezone
+		const wallTimeTs = ts + offsetMs;
+		const d = new Date(wallTimeTs);
+
+		return d.getUTCHours();
+	}
+	// For DST timezones, use formatToParts
 	return formatToParts(ts, timeZone, HOUR_OPTS).hour;
 }
 

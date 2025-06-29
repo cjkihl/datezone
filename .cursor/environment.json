@@ -1,0 +1,35 @@
+{
+	"$schema": "https://www.cursor.com/schemas/environment.schema.json",
+	"install": "bun install && bun run build",
+	"name": "Datezone Development Environment",
+	"ports": [
+		{
+			"name": "Next.js Docs Site",
+			"port": 3000
+		}
+	],
+	"start": "bun run dev",
+	"terminals": [
+		{
+			"command": "bun run dev",
+			"description": "Runs the Next.js documentation site in development mode",
+			"name": "Development Server"
+		},
+		{
+			"command": "bun test --watch",
+			"description": "Runs tests in watch mode for continuous testing during development",
+			"name": "Test Runner"
+		},
+		{
+			"command": "bun run type-check",
+			"description": "Runs Turbo type checking across all packages",
+			"name": "Type Checker"
+		},
+		{
+			"command": "bun run lint-fix",
+			"description": "Runs Biome linting and formatting with auto-fix, plus manypkg fix",
+			"name": "Lint & Format"
+		}
+	],
+	"user": "developer"
+}

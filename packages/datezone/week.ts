@@ -1,5 +1,7 @@
 import { dayOfWeekBase } from "./day.js";
 import { formatToParts, isUTC, type TimeZone } from "./index.pub.js";
+import { getUTCtoTimezoneOffsetMinutes } from "./offset.js";
+import { isDST } from "./timezone.js";
 import { wallTimeToTS } from "./utils.js";
 
 const WEEK_OPTS = {
@@ -26,6 +28,21 @@ function getWalltime(timestamp: number, timeZone?: TimeZone) {
 	}
 	if (isUTC(timeZone)) {
 		const d = new Date(timestamp);
+		return {
+			day: d.getUTCDate(),
+			month: d.getUTCMonth() + 1,
+			year: d.getUTCFullYear(),
+		};
+	}
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(timeZone)) {
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(timestamp, timeZone);
+		const offsetMs = offsetMinutes * 60000;
+
+		// Convert to wall time in the timezone
+		const wallTimeTs = timestamp + offsetMs;
+		const d = new Date(wallTimeTs);
+
 		return {
 			day: d.getUTCDate(),
 			month: d.getUTCMonth() + 1,
@@ -93,8 +110,26 @@ export function startOfWeek(
 		d.setUTCHours(0, 0, 0, 0);
 		return d.getTime();
 	}
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(timeZone)) {
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(timestamp, timeZone);
+		const offsetMs = offsetMinutes * 60000;
 
-	// For both DST and non-DST timezones, we need proper timezone conversion
+		// Convert to wall time in the timezone
+		const wallTimeTs = timestamp + offsetMs;
+		const d = new Date(wallTimeTs);
+
+		// Calculate start of week in wall time
+		const day = d.getUTCDay();
+		const diff = (day - weekStartsOn + 7) % 7;
+		d.setUTCDate(d.getUTCDate() - diff);
+		d.setUTCHours(0, 0, 0, 0);
+
+		// Convert back to UTC
+		return d.getTime() - offsetMs;
+	}
+
+	// Complex path: DST timezones (requires full timezone parsing)
 	const dt = getWalltime(timestamp, timeZone);
 	return startOfWeekBase(dt.year, dt.month, dt.day, weekStartsOn, timeZone);
 }
@@ -144,8 +179,26 @@ export function endOfWeek(
 		d.setUTCHours(23, 59, 59, 999);
 		return d.getTime();
 	}
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(timeZone)) {
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(timestamp, timeZone);
+		const offsetMs = offsetMinutes * 60000;
 
-	// For both DST and non-DST timezones, we need proper timezone conversion
+		// Convert to wall time in the timezone
+		const wallTimeTs = timestamp + offsetMs;
+		const d = new Date(wallTimeTs);
+
+		// Calculate end of week in wall time
+		const day = d.getUTCDay();
+		const diff = (day - weekStartsOn + 7) % 7;
+		d.setUTCDate(d.getUTCDate() - diff + 6);
+		d.setUTCHours(23, 59, 59, 999);
+
+		// Convert back to UTC
+		return d.getTime() - offsetMs;
+	}
+
+	// Complex path: DST timezones (requires full timezone parsing)
 	const dt = getWalltime(timestamp, timeZone);
 	return endOfWeekBase(dt.year, dt.month, dt.day, weekStartsOn, timeZone);
 }
@@ -178,19 +231,22 @@ export function addWeeks(
 	amount: number,
 	timeZone?: TimeZone,
 ): number {
+	const weeksInMs = amount * 604800000; // 7 * 24 * 60 * 60 * 1000
+
 	if (!timeZone) {
 		// Fast path: local time
-		const d = new Date(timestamp);
-		d.setDate(d.getDate() + amount * 7);
-		return d.getTime();
+		return timestamp + weeksInMs;
 	}
 	if (isUTC(timeZone)) {
-		const d = new Date(timestamp);
-		d.setUTCDate(d.getUTCDate() + amount * 7);
-		return d.getTime();
+		// Fast path: UTC time
+		return timestamp + weeksInMs;
+	}
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(timeZone)) {
+		return timestamp + weeksInMs;
 	}
 
-	// For both DST and non-DST timezones, we need proper timezone conversion
+	// Complex path: DST timezones (requires full timezone parsing)
 	const dt = getWalltime(timestamp, timeZone);
 	return addWeeksBase(dt.year, dt.month, dt.day, amount, timeZone);
 }

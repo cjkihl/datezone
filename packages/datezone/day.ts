@@ -1,6 +1,7 @@
 import { getCachedFormatterLocale } from "./cache.js";
 import { DAY } from "./constants.js";
 import { formatToParts } from "./format-parts.js";
+import { getUTCtoTimezoneOffsetMinutes } from "./offset.js";
 import { isDST, isUTC, type TimeZone } from "./timezone.js";
 import { wallTimeToTS } from "./utils.js";
 import { isLeapYearBase } from "./year.js";
@@ -98,7 +99,22 @@ export function startOfDay(ts: number, timeZone?: TimeZone): number {
 		d.setUTCHours(0, 0, 0, 0);
 		return d.getTime();
 	}
-	// For both DST and non-DST timezones, we need proper timezone conversion
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(timeZone)) {
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
+		const offsetMs = offsetMinutes * 60000;
+
+		// Convert to wall time in the timezone
+		const wallTimeTs = ts + offsetMs;
+		const d = new Date(wallTimeTs);
+
+		// Set to start of day in wall time
+		d.setUTCHours(0, 0, 0, 0);
+
+		// Convert back to UTC
+		return d.getTime() - offsetMs;
+	}
+	// For DST timezones, we need proper timezone conversion
 	const { year, month, day } = formatToParts(ts, timeZone, DAY_OPTS);
 	return startOfDayBase(year, month, day, timeZone);
 }
@@ -137,7 +153,22 @@ export function endOfDay(ts: number, timeZone?: TimeZone): number {
 		d.setUTCHours(23, 59, 59, 999);
 		return d.getTime();
 	}
-	// For both DST and non-DST timezones, we need proper timezone conversion
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(timeZone)) {
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
+		const offsetMs = offsetMinutes * 60000;
+
+		// Convert to wall time in the timezone
+		const wallTimeTs = ts + offsetMs;
+		const d = new Date(wallTimeTs);
+
+		// Set to end of day in wall time
+		d.setUTCHours(23, 59, 59, 999);
+
+		// Convert back to UTC
+		return d.getTime() - offsetMs;
+	}
+	// For DST timezones, we need proper timezone conversion
 	const { year, month, day } = formatToParts(ts, timeZone, DAY_OPTS);
 	return endOfDayBase(year, month, day, timeZone);
 }
@@ -176,7 +207,12 @@ export function nextDay(ts: number, timeZone?: TimeZone): number {
 		d.setUTCHours(0, 0, 0, 0);
 		return d.getTime() + DAY;
 	}
-	// For both DST and non-DST timezones, we need proper timezone conversion
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(timeZone)) {
+		const currentDayStart = startOfDay(ts, timeZone);
+		return currentDayStart + DAY;
+	}
+	// For DST timezones, we need proper timezone conversion
 	const { year, month, day } = formatToParts(ts, timeZone, DAY_OPTS);
 	return nextDayBase(year, month, day, timeZone);
 }
@@ -265,8 +301,21 @@ export function dayOfWeek(ts: number, tz?: TimeZone): number {
 		const day = new Date(ts).getUTCDay();
 		return day === 0 ? 7 : day;
 	}
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(tz)) {
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
+		const offsetMs = offsetMinutes * 60000;
 
-	// Slow path: non-UTC time
+		// Convert to wall time in the timezone
+		const wallTimeTs = ts + offsetMs;
+		const d = new Date(wallTimeTs);
+
+		// Get day of week in wall time
+		const day = d.getUTCDay();
+		return day === 0 ? 7 : day;
+	}
+
+	// Slow path: DST timezones
 	const { year, month, day } = formatToParts(ts, tz, DAY_OPTS);
 	return dayOfWeekBase(year, month, day);
 }
@@ -326,7 +375,23 @@ export function dayOfYear(ts: number, tz?: TimeZone): number {
 			d.getUTCDate(),
 		);
 	}
-	// Slow path: non-UTC time
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(tz)) {
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
+		const offsetMs = offsetMinutes * 60000;
+
+		// Convert to wall time in the timezone
+		const wallTimeTs = ts + offsetMs;
+		const d = new Date(wallTimeTs);
+
+		// Get day of year in wall time
+		return dayOfYearBase(
+			d.getUTCFullYear(),
+			d.getUTCMonth() + 1,
+			d.getUTCDate(),
+		);
+	}
+	// Slow path: DST timezones
 	const { year, month, day } = formatToParts(ts, tz, DAY_OPTS);
 	return dayOfYearBase(year, month, day);
 }

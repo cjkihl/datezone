@@ -17,8 +17,8 @@
 		"format": "biome format .",
 		"type-check": "turbo type-check",
 		"up": "bunx npm-check-updates -ws --root --format group -u",
-		"bench-comprehensive": "bun run -F benchmarks comprehensive",
-		"bench-report": "bun run -F benchmarks report",
+		"bench-debug": "bun run -F benchmarks debug",
+		"bench-report": "bun run -F benchmarks comprehensive && bun run -F benchmarks report",
 		"bench-cache": "bun run -F benchmarks cache"
 	},
 	"devDependencies": {

@@ -2,6 +2,9 @@
 title: Day Utilities
 ---
 
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { CodeExample } from '@/components/code-example';
+
 # Day Utilities (`@/datezone/day`)
 
 This page documents all exported functions from the `day` module in `@/datezone`.
@@ -19,15 +22,13 @@ addDays(ts: DayOptions | number, days: number, timeZone?: TimeZone): number
 <Tabs items={["Local", "Timezone"]}>
   <Tab value="Local">
 
-```ts title="Local time"
-addDays(Date.now(), 5)
-```
+<CodeExample file="reference/day/add-days-local.ts" title="Local time" />
+
   </Tab>
   <Tab value="Timezone">
 
-```ts title="With timezone"
-addDays(Date.now(), 5, "America/New_York")
-```
+<CodeExample file="reference/day/add-days-timezone.ts" title="With timezone" />
+
   </Tab>
 </Tabs>
 
@@ -44,15 +45,13 @@ subDays(ts: DayOptions | number, days: number, timeZone?: TimeZone): number
 <Tabs items={["Local", "Timezone"]}>
   <Tab value="Local">
 
-```ts title="Local time"
-subDays(Date.now(), 2)
-```
+<CodeExample file="reference/day/sub-days-local.ts" title="Local time" />
+
   </Tab>
   <Tab value="Timezone">
 
-```ts title="With timezone"
-subDays(Date.now(), 2, "Europe/London")
-```
+<CodeExample file="reference/day/sub-days-timezone.ts" title="With timezone" />
+
   </Tab>
 </Tabs>
 
@@ -69,15 +68,13 @@ startOfDay(ts: DayOptions | number, timeZone?: TimeZone): number
 <Tabs items={["Local", "Timezone"]}>
   <Tab value="Local">
 
-```ts title="Local time"
-startOfDay(Date.now())
-```
+<CodeExample file="reference/day/start-of-day-local.ts" title="Local time" />
+
   </Tab>
   <Tab value="Timezone">
 
-```ts title="With timezone"
-startOfDay(Date.now(), "Asia/Tokyo")
-```
+<CodeExample file="reference/day/start-of-day-timezone.ts" title="With timezone" />
+
   </Tab>
 </Tabs>
 
@@ -94,15 +91,13 @@ endOfDay(ts: DayOptions | number, timeZone?: TimeZone): number
 <Tabs items={["Local", "Timezone"]}>
   <Tab value="Local">
 
-```ts title="Local time"
-endOfDay(Date.now())
-```
+<CodeExample file="reference/day/end-of-day-local.ts" title="Local time" />
+
   </Tab>
   <Tab value="Timezone">
 
-```ts title="With timezone"
-endOfDay(Date.now(), "UTC")
-```
+<CodeExample file="reference/day/end-of-day-timezone.ts" title="With timezone" />
+
   </Tab>
 </Tabs>
 
@@ -119,15 +114,13 @@ nextDay(ts: DayOptions | number, timeZone?: TimeZone): number
 <Tabs items={["Local", "Timezone"]}>
   <Tab value="Local">
 
-```ts title="Local time"
-nextDay(Date.now())
-```
+<CodeExample file="reference/day/next-day-local.ts" title="Local time" />
+
   </Tab>
   <Tab value="Timezone">
 
-```ts title="With timezone"
-nextDay(Date.now(), "America/Los_Angeles")
-```
+<CodeExample file="reference/day/next-day-timezone.ts" title="With timezone" />
+
   </Tab>
 </Tabs>
 
@@ -144,15 +137,13 @@ previousDay(ts: DayOptions | number, timeZone?: TimeZone): number
 <Tabs items={["Local", "Timezone"]}>
   <Tab value="Local">
 
-```ts title="Local time"
-previousDay(Date.now())
-```
+<CodeExample file="reference/day/previous-day-local.ts" title="Local time" />
+
   </Tab>
   <Tab value="Timezone">
 
-```ts title="With timezone"
-previousDay(Date.now(), "Australia/Sydney")
-```
+<CodeExample file="reference/day/previous-day-timezone.ts" title="With timezone" />
+
   </Tab>
 </Tabs>
 
@@ -169,15 +160,13 @@ dayOfWeek(ts: DayOptions | number, timeZone?: TimeZone): number
 <Tabs items={["Local", "Timezone"]}>
   <Tab value="Local">
 
-```ts title="Local time"
-dayOfWeek(Date.now()) // e.g. 3 for Wednesday
-```
+<CodeExample file="reference/day/day-of-week-local.ts" title="Local time" />
+
   </Tab>
   <Tab value="Timezone">
 
-```ts title="With timezone"
-dayOfWeek(Date.now(), "Europe/Berlin")
-```
+<CodeExample file="reference/day/day-of-week-timezone.ts" title="With timezone" />
+
   </Tab>
 </Tabs>
 
@@ -194,15 +183,13 @@ dayOfYear(ts: DayOptions | number, timeZone?: TimeZone): number
 <Tabs items={["Local", "Timezone"]}>
   <Tab value="Local">
 
-```ts title="Local time"
-dayOfYear(Date.now())
-```
+<CodeExample file="reference/day/day-of-year-local.ts" title="Local time" />
+
   </Tab>
   <Tab value="Timezone">
 
-```ts title="With timezone"
-dayOfYear(Date.now(), "America/Sao_Paulo")
-```
+<CodeExample file="reference/day/day-of-year-timezone.ts" title="With timezone" />
+
   </Tab>
 </Tabs>
 

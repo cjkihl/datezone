@@ -90,6 +90,23 @@ export function endOfMonth(ts: number, timeZone?: TimeZone): number {
 		return d.getTime() - 1;
 	}
 
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(timeZone)) {
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
+		const offsetMs = offsetMinutes * 60000;
+
+		// Convert to wall time in the timezone
+		const wallTimeTs = ts + offsetMs;
+		const d = new Date(wallTimeTs);
+
+		// Set to start of next month in wall time, then subtract 1ms
+		d.setUTCMonth(d.getUTCMonth() + 1, 1);
+		d.setUTCHours(0, 0, 0, 0);
+
+		// Convert back to UTC and subtract 1ms
+		return d.getTime() - offsetMs - 1;
+	}
+
 	// Complex path: DST timezones (requires full timezone parsing)
 	return startOfNextMonth(ts, timeZone) - 1;
 }

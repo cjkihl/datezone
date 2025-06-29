@@ -2,6 +2,9 @@
 title: Month Utilities
 ---
 
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { CodeExample } from '@/components/code-example';
+
 # Month Utilities (`@/datezone/month`)
 
 This page documents all exported functions from the `month` module in `@/datezone`.
@@ -19,15 +22,13 @@ startOfMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
 <Tabs items={["Local", "Timezone"]}>
   <Tab value="Local">
 
-```ts title="Local time"
-startOfMonth(Date.now())
-```
+<CodeExample file="reference/month/start-of-month-local.ts" title="Local time" />
+
   </Tab>
   <Tab value="Timezone">
 
-```ts title="With timezone"
-startOfMonth(Date.now(), "America/New_York")
-```
+<CodeExample file="reference/month/start-of-month-timezone.ts" title="With timezone" />
+
   </Tab>
 </Tabs>
 
@@ -44,15 +45,13 @@ endOfMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
 <Tabs items={["Local", "Timezone"]}>
   <Tab value="Local">
 
-```ts title="Local time"
-endOfMonth(Date.now())
-```
+<CodeExample file="reference/month/end-of-month-local.ts" title="Local time" />
+
   </Tab>
   <Tab value="Timezone">
 
-```ts title="With timezone"
-endOfMonth(Date.now(), "Europe/London")
-```
+<CodeExample file="reference/month/end-of-month-timezone.ts" title="With timezone" />
+
   </Tab>
 </Tabs>
 
@@ -69,15 +68,13 @@ addMonths(ts: number, months: number, timeZone?: TimeZone): number
 <Tabs items={["Local", "Timezone"]}>
   <Tab value="Local">
 
-```ts title="Local time"
-addMonths(Date.now(), 2)
-```
+<CodeExample file="reference/month/add-months-local.ts" title="Local time" />
+
   </Tab>
   <Tab value="Timezone">
 
-```ts title="With timezone"
-addMonths(Date.now(), 2, "Asia/Tokyo")
-```
+<CodeExample file="reference/month/add-months-timezone.ts" title="With timezone" />
+
   </Tab>
 </Tabs>
 

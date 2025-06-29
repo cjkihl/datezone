@@ -1,4 +1,6 @@
 import { FULL_TS, formatToParts, isUTC, type TimeZone } from "./index.pub.js";
+import { getUTCtoTimezoneOffsetMinutes } from "./offset.js";
+import { isDST } from "./timezone.js";
 import { wallTimeToTS } from "./utils.js";
 
 const YEAR_OPTS = { year: "numeric" } as const;
@@ -15,6 +17,17 @@ export function year(ts: number, tz?: TimeZone): number {
 	}
 	if (isUTC(tz)) {
 		return new Date(ts).getUTCFullYear();
+	}
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(tz)) {
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
+		const offsetMs = offsetMinutes * 60000;
+
+		// Convert to wall time in the timezone
+		const wallTimeTs = ts + offsetMs;
+		const d = new Date(wallTimeTs);
+
+		return d.getUTCFullYear();
 	}
 	return formatToParts(ts, tz, YEAR_OPTS).year;
 }
@@ -46,13 +59,31 @@ export function isLeapYearBase(year: number): boolean {
  * @returns Timestamp for the start of the year (January 1st, 00:00:00.000)
  */
 export function startOfYear(ts: number, tz?: TimeZone): number {
-	const y = year(ts, tz);
 	if (!tz) {
+		const y = new Date(ts).getFullYear();
 		return new Date(y, 0, 1).getTime();
 	}
 	if (isUTC(tz)) {
+		const y = new Date(ts).getUTCFullYear();
 		return Date.UTC(y, 0, 1);
 	}
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(tz)) {
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
+		const offsetMs = offsetMinutes * 60000;
+
+		// Convert to wall time in the timezone
+		const wallTimeTs = ts + offsetMs;
+		const d = new Date(wallTimeTs);
+
+		// Get start of year in wall time
+		const y = d.getUTCFullYear();
+		const startOfYearWall = Date.UTC(y, 0, 1);
+
+		// Convert back to UTC
+		return startOfYearWall - offsetMs;
+	}
+	const y = year(ts, tz);
 	return wallTimeToTS(y, 1, 1, 0, 0, 0, 0, tz);
 }
 
@@ -63,13 +94,31 @@ export function startOfYear(ts: number, tz?: TimeZone): number {
  * @returns Timestamp for the end of the year (December 31st, 23:59:59.999)
  */
 export function endOfYear(ts: number, tz?: TimeZone): number {
-	const y = year(ts, tz);
 	if (!tz) {
+		const y = new Date(ts).getFullYear();
 		return new Date(y, 11, 31, 23, 59, 59, 999).getTime();
 	}
 	if (isUTC(tz)) {
+		const y = new Date(ts).getUTCFullYear();
 		return Date.UTC(y, 11, 31, 23, 59, 59, 999);
 	}
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(tz)) {
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
+		const offsetMs = offsetMinutes * 60000;
+
+		// Convert to wall time in the timezone
+		const wallTimeTs = ts + offsetMs;
+		const d = new Date(wallTimeTs);
+
+		// Get end of year in wall time
+		const y = d.getUTCFullYear();
+		const endOfYearWall = Date.UTC(y, 11, 31, 23, 59, 59, 999);
+
+		// Convert back to UTC
+		return endOfYearWall - offsetMs;
+	}
+	const y = year(ts, tz);
 	return wallTimeToTS(y, 12, 31, 23, 59, 59, 999, tz);
 }
 
@@ -99,6 +148,25 @@ export function addYears(ts: number, amount: number, tz?: TimeZone): number {
 			d.setUTCDate(0);
 		}
 		return d.getTime();
+	}
+	// Fast path: Non-DST timezones (fixed offset zones)
+	if (!isDST(tz)) {
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
+		const offsetMs = offsetMinutes * 60000;
+
+		// Convert to wall time in the timezone
+		const wallTimeTs = ts + offsetMs;
+		const d = new Date(wallTimeTs);
+
+		// Do year arithmetic in wall time
+		const originalUTCMonth = d.getUTCMonth();
+		d.setUTCFullYear(d.getUTCFullYear() + amount);
+		if (d.getUTCMonth() !== originalUTCMonth) {
+			d.setUTCDate(0);
+		}
+
+		// Convert back to UTC
+		return d.getTime() - offsetMs;
 	}
 
 	const { year, month, day, hour, minute, second, millisecond } = formatToParts(

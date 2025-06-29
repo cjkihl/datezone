@@ -4,6 +4,7 @@ description: Functions for working with years in dates and timestamps
 ---
 
 import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { CodeExample } from '@/components/code-example';
 
 # Year Utilities
 
@@ -20,30 +21,12 @@ function getYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 <Tabs items={["Local", "Timezone"]}>
 <Tab value="Local">
 
-```typescript
-import { getYear } from '@/datezone';
-
-const timestamp = new Date(2024, 2, 15).getTime(); // March 15, 2024
-const year = getYear(timestamp);
-console.log(year); // 2024
-
-// Using year options
-const yearFromOptions = getYear({ year: 2023 });
-console.log(yearFromOptions); // 2023
-```
+<CodeExample file="reference/year/get-year-local.ts" title="Local time" />
 
 </Tab>
 <Tab value="Timezone">
 
-```typescript
-import { getYear } from '@/datezone';
-
-const timestamp = new Date(2024, 11, 31, 23, 30).getTime(); // Dec 31, 2024 11:30 PM
-const yearInNY = getYear(timestamp, 'America/New_York');
-const yearInTokyo = getYear(timestamp, 'Asia/Tokyo');
-console.log(yearInNY); // 2024
-console.log(yearInTokyo); // 2025 (next day due to timezone difference)
-```
+<CodeExample file="reference/year/get-year-timezone.ts" title="With timezone" />
 
 </Tab>
 </Tabs>
@@ -59,32 +42,12 @@ function isLeapYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): boolean
 <Tabs items={["Local", "Timezone"]}>
 <Tab value="Local">
 
-```typescript
-import { isLeapYear } from '@/datezone';
-
-const timestamp2024 = new Date(2024, 0, 1).getTime();
-const timestamp2023 = new Date(2023, 0, 1).getTime();
-
-console.log(isLeapYear(timestamp2024)); // true (2024 is a leap year)
-console.log(isLeapYear(timestamp2023)); // false (2023 is not a leap year)
-
-// Using year options
-console.log(isLeapYear({ year: 2000 })); // true
-console.log(isLeapYear({ year: 1900 })); // false (divisible by 100 but not 400)
-```
+<CodeExample file="reference/year/is-leap-year-local.ts" title="Local time" />
 
 </Tab>
 <Tab value="Timezone">
 
-```typescript
-import { isLeapYear } from '@/datezone';
-
-const timestamp = new Date(2023, 11, 31, 23, 30).getTime(); // Dec 31, 2023
-const isLeapInNY = isLeapYear(timestamp, 'America/New_York');
-const isLeapInSydney = isLeapYear(timestamp, 'Australia/Sydney');
-console.log(isLeapInNY); // false (2023)
-console.log(isLeapInSydney); // true (2024 due to timezone difference)
-```
+<CodeExample file="reference/year/is-leap-year-timezone.ts" title="With timezone" />
 
 </Tab>
 </Tabs>
@@ -100,31 +63,12 @@ function startOfYear(date: OptionsOrTimestamp, timeZone?: TimeZone): number
 <Tabs items={["Local", "Timezone"]}>
 <Tab value="Local">
 
-```typescript
-import { startOfYear } from '@/datezone';
-
-const timestamp = new Date(2024, 5, 15, 14, 30).getTime(); // June 15, 2024 2:30 PM
-const yearStart = startOfYear(timestamp);
-console.log(new Date(yearStart)); // January 1, 2024 00:00:00
-
-// Using year options
-const yearStartFromOptions = startOfYear({ year: 2023 });
-console.log(new Date(yearStartFromOptions)); // January 1, 2023 00:00:00
-```
+<CodeExample file="reference/year/start-of-year-local.ts" title="Local time" />
 
 </Tab>
 <Tab value="Timezone">
 
-```typescript
-import { startOfYear } from '@/datezone';
-
-const timestamp = new Date(2024, 5, 15).getTime();
-const yearStartNY = startOfYear(timestamp, 'America/New_York');
-const yearStartTokyo = startOfYear(timestamp, 'Asia/Tokyo');
-
-console.log(new Date(yearStartNY)); // January 1, 2024 in NY timezone
-console.log(new Date(yearStartTokyo)); // January 1, 2024 in Tokyo timezone
-```
+<CodeExample file="reference/year/start-of-year-timezone.ts" title="With timezone" />
 
 </Tab>
 </Tabs>
@@ -180,31 +124,12 @@ function addYears(date: OptionsOrTimestamp, amount: number, timeZone?: TimeZone)
 <Tabs items={["Local", "Timezone"]}>
 <Tab value="Local">
 
-```typescript
-import { addYears } from '@/datezone';
-
-const timestamp = new Date(2024, 1, 29).getTime(); // February 29, 2024 (leap year)
-const futureDate = addYears(timestamp, 2);
-console.log(new Date(futureDate)); // February 28, 2026 (not a leap year, so adjusted)
-
-const normalDate = new Date(2024, 5, 15).getTime(); // June 15, 2024
-const futureNormal = addYears(normalDate, 3);
-console.log(new Date(futureNormal)); // June 15, 2027
-```
+<CodeExample file="reference/year/add-years-local.ts" title="Local time" />
 
 </Tab>
 <Tab value="Timezone">
 
-```typescript
-import { addYears } from '@/datezone';
-
-const timestamp = new Date(2024, 1, 29).getTime(); // February 29, 2024
-const futureInNY = addYears(timestamp, 1, 'America/New_York');
-const futureInTokyo = addYears(timestamp, 1, 'Asia/Tokyo');
-
-console.log(new Date(futureInNY)); // February 28, 2025 in NY timezone
-console.log(new Date(futureInTokyo)); // February 28, 2025 in Tokyo timezone
-```
+<CodeExample file="reference/year/add-years-timezone.ts" title="With timezone" />
 
 </Tab>
 </Tabs>

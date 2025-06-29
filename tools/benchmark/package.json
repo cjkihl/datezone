@@ -6,6 +6,7 @@
 	"type": "module",
 	"scripts": {
 		"comprehensive": "bun run comprehensive-compare.ts",
+		"debug": "bun run comprehensive-compare.ts --debug",
 		"report": "bun run format-results.ts",
 		"cache": "bun run cache-test.ts",
 		"clean": "rm -rf output/*.json reports/*.md"
