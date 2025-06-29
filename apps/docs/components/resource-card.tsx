@@ -40,7 +40,7 @@ export function ResourceCard({
 			</div>
 			<div>
 				{tags && tags.length > 0 && (
-					<div className="py-3 border-zinc-700/80 border-t-[1.2px] flex flex-wrap items-end gap-2">
+					<div className="py-3 flex flex-wrap items-end gap-2">
 						{tags.map((tag) => (
 							<span
 								className="inline-flex items-end underline underline-offset-2 rounded-md bg-secondary/10 px-2 py-1 text-xs font-medium text-secondary-foreground"

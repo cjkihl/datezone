@@ -217,6 +217,10 @@
 	--color-sidebar-ring: var(--sidebar-ring);
 	--animate-accordion-down: accordion-down 0.2s ease-out;
 	--animate-accordion-up: accordion-up 0.2s ease-out;
+	--animate-float-0: float-0 15s ease-in-out infinite;
+	--animate-float-1: float-1 18s ease-in-out infinite;
+	--animate-float-2: float-2 12s ease-in-out infinite;
+	--animate-float-3: float-3 20s ease-in-out infinite;
 
 	@keyframes accordion-down {
 		from {
@@ -233,6 +237,70 @@
 		}
 		to {
 			height: 0;
+		}
+	}
+
+	@keyframes float-0 {
+		0%,
+		100% {
+			transform: translate(-50%, -50%) translate(0px, 0px) scale(1);
+		}
+		25% {
+			transform: translate(-50%, -50%) translate(20px, -15px) scale(1.1);
+		}
+		50% {
+			transform: translate(-50%, -50%) translate(-10px, -25px) scale(0.9);
+		}
+		75% {
+			transform: translate(-50%, -50%) translate(-20px, 10px) scale(1.05);
+		}
+	}
+
+	@keyframes float-1 {
+		0%,
+		100% {
+			transform: translate(-50%, -50%) translate(0px, 0px) scale(1);
+		}
+		25% {
+			transform: translate(-50%, -50%) translate(-25px, 15px) scale(0.95);
+		}
+		50% {
+			transform: translate(-50%, -50%) translate(15px, 30px) scale(1.1);
+		}
+		75% {
+			transform: translate(-50%, -50%) translate(30px, -10px) scale(0.9);
+		}
+	}
+
+	@keyframes float-2 {
+		0%,
+		100% {
+			transform: translate(-50%, -50%) translate(0px, 0px) scale(1);
+		}
+		33% {
+			transform: translate(-50%, -50%) translate(15px, -20px) scale(1.05);
+		}
+		66% {
+			transform: translate(-50%, -50%) translate(-20px, 25px) scale(0.95);
+		}
+	}
+
+	@keyframes float-3 {
+		0%,
+		100% {
+			transform: translate(-50%, -50%) translate(0px, 0px) scale(1);
+		}
+		20% {
+			transform: translate(-50%, -50%) translate(-15px, -10px) scale(1.1);
+		}
+		40% {
+			transform: translate(-50%, -50%) translate(25px, 5px) scale(0.9);
+		}
+		60% {
+			transform: translate(-50%, -50%) translate(10px, 20px) scale(1.05);
+		}
+		80% {
+			transform: translate(-50%, -50%) translate(-30px, -5px) scale(0.95);
 		}
 	}
 }

@@ -79,8 +79,7 @@ export const NavbarMobile = () => {
 		<div
 			className={cn(
 				"fixed top-[50px] inset-x-0 transform-gpu z-[100] bg-background grid grid-rows-[0fr] duration-300 transition-all md:hidden",
-				isOpen &&
-					"shadow-lg border-b border-[rgba(255,255,255,.1)] grid-rows-[1fr]",
+				isOpen && "shadow-lg grid-rows-[1fr]",
 			)}
 		>
 			<div
@@ -107,7 +106,7 @@ export const NavbarMobile = () => {
 										{menu.child.map((child, _j) => (
 											<Link
 												className={cn(
-													"block py-2 border-b first:pt-0 last:pb-0 last:border-0 text-muted-foreground",
+													"block py-2 first:pt-0 last:pb-0 text-muted-foreground",
 													!isDocs && "text-xl",
 												)}
 												href={child.path}
@@ -164,7 +163,7 @@ function DocsNavBarContent() {
 						<AccordionContent className="pl-5 divide-y">
 							{menu.list.map((child) => (
 								<Link
-									className="block py-2 text-sm border-b first:pt-0 last:pb-0 last:border-0 text-muted-foreground"
+									className="block py-2 text-sm first:pt-0 last:pb-0 text-muted-foreground"
 									href={child.href}
 									key={child.title}
 									onClick={toggleNavbar}

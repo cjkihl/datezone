@@ -39,13 +39,13 @@ export default function ArticleLayout() {
 			<aside
 				className={cn(
 					"md:transition-all",
-					"border-r border-lines top-[55px] md:flex hidden md:w-[268px] lg:w-[286px] overflow-y-auto absolute h-[calc(100dvh-55px)] pb-2 flex-col justify-between w-[var(--fd-sidebar-width)]",
+					"top-[55px] md:flex hidden md:w-[268px] lg:w-[286px] overflow-y-auto absolute h-[calc(100dvh-55px)] pb-2 flex-col justify-between w-[var(--fd-sidebar-width)]",
 				)}
 			>
 				<div>
 					<SidebarTab group={group} setGroup={setGroup} />
 					<button
-						className="flex w-full items-center gap-2 px-5 py-2.5 border-b text-muted-foreground dark:bg-zinc-950 dark:border-t-zinc-900/30 dark:border-t"
+						className="flex w-full items-center gap-2 px-5 py-2.5 text-muted-foreground dark:bg-zinc-950"
 						onClick={() => {
 							setOpenSearch(true);
 						}}
@@ -61,7 +61,7 @@ export default function ArticleLayout() {
 							{cts.map((item, index) => (
 								<div key={item.title}>
 									<button
-										className="border-b w-full hover:underline border-lines text-sm px-5 py-2.5 text-left flex items-center gap-2"
+										className="w-full hover:underline text-sm px-5 py-2.5 text-left flex items-center gap-2"
 										onClick={() => {
 											if (currentOpen === index) {
 												setCurrentOpen(-1);
@@ -230,7 +230,7 @@ function SidebarTab({
 			}}
 			value={group}
 		>
-			<SelectTrigger className="h-16 border border-b border-none rounded-none px-5">
+			<SelectTrigger className="h-16 rounded-none px-5">
 				{selected ? (
 					<div className="flex flex-col gap-1 items-start">
 						<div className="flex items-center gap-1 -ml-0.5">

@@ -3,6 +3,8 @@ title: FAQ
 description: Frequently asked questions about datezone.
 ---
 
+import { CodeExample } from '@/components/code-example';
+
 This page contains frequently asked questions, common issues, and other helpful information about the datezone library.
 
 <Accordions>
@@ -11,25 +13,14 @@ This page contains frequently asked questions, common issues, and other helpful 
 JavaScript Date objects and timestamps serve different purposes:
 
 **Date Objects** are JavaScript's built-in date representation that includes timezone information based on the user's system:
-```ts
-const date = new Date(); // Current date in user's timezone
-console.log(date.toString()); // "Mon Jan 01 2024 12:00:00 GMT-0800 (PST)"
-```
+
+<CodeExample tabs={[{ name: "Date Objects vs Timestamps", file: "reference/faq/date-objects-vs-timestamps.ts" }]} />
 
 **Timestamps** are numbers representing milliseconds since January 1, 1970 UTC:
-```ts
-const timestamp = Date.now(); // 1704067200000
-const timestamp2 = new Date().getTime(); // Same as above
-```
 
-With datezone, you can easily work with both:
-```ts
-import { day } from '@/datezone';
+<CodeExample tabs={[{ name: "Working with Timestamps", file: "reference/faq/date-objects-vs-timestamps.ts" }]} />
 
-const today = day(); // Current date
-const timestamp = today.timestamp(); // Get timestamp
-const fromTimestamp = day(1704067200000); // Create from timestamp
-```
+With datezone, you can easily work with both formats and convert between them seamlessly.
 
 </Accordion>
 
@@ -38,31 +29,12 @@ const fromTimestamp = day(1704067200000); // Create from timestamp
 For REST APIs, always use UTC timestamps or ISO 8601 strings to avoid timezone confusion:
 
 **Recommended approach - UTC timestamps:**
-```ts
-// API Response
-{
-  "createdAt": 1704067200000, // UTC timestamp
-  "updatedAt": 1704070800000
-}
 
-// Client-side handling with datezone
-import { day } from '@/datezone';
-
-const createdDate = day(apiResponse.createdAt).tz('America/New_York');
-console.log(createdDate.format('YYYY-MM-DD HH:mm')); // Displayed in user's timezone
-```
+<CodeExample tabs={[{ name: "UTC Timestamps for APIs", file: "reference/faq/api-utc-timestamps.ts" }]} />
 
 **Alternative - ISO 8601 strings:**
-```ts
-// API Response
-{
-  "createdAt": "2024-01-01T12:00:00.000Z", // Always include 'Z' for UTC
-  "updatedAt": "2024-01-01T13:00:00.000Z"
-}
 
-// Client-side handling
-const createdDate = day(apiResponse.createdAt).tz('user-timezone');
-```
+<CodeExample tabs={[{ name: "ISO 8601 Strings for APIs", file: "reference/faq/api-iso-strings.ts" }]} />
 
 <Callout type="warn">
   Never send timezone-specific dates without explicit timezone information in APIs.
@@ -80,17 +52,7 @@ JavaScript's built-in Date object has several limitations:
 3. **Limited formatting**: Basic formatting options without locale support
 4. **Mutation issues**: Date objects are mutable, leading to bugs
 
-```ts
-// Problems with native Date
-const date = new Date('2024-01-01'); // What timezone is this?
-date.setHours(date.getHours() + 1); // Mutates original date!
-
-// Solutions with datezone
-import { day } from '@/datezone';
-
-const date = day('2024-01-01').tz('America/New_York'); // Explicit timezone
-const newDate = date.add(1, 'hour'); // Immutable operations
-```
+<CodeExample tabs={[{ name: "JavaScript Date Problems & Solutions", file: "reference/faq/javascript-date-problems.ts" }]} />
 
 Datezone solves these issues by providing:
 - Explicit timezone handling
@@ -102,24 +64,9 @@ Datezone solves these issues by providing:
 
 <Accordion title="How do I convert between timezones?">
 
-Use the `tz()` method to convert dates between timezones:
+Use the formatting functions with explicit timezone parameters to convert dates between timezones:
 
-```ts
-import { day } from '@/datezone';
-
-// Start with a date in one timezone
-const nyTime = day('2024-01-01 15:30').tz('America/New_York');
-
-// Convert to different timezones
-const londonTime = nyTime.tz('Europe/London');
-const tokyoTime = nyTime.tz('Asia/Tokyo');
-const utcTime = nyTime.tz('UTC');
-
-console.log(nyTime.format('HH:mm z'));    // "15:30 EST"
-console.log(londonTime.format('HH:mm z')); // "20:30 GMT"
-console.log(tokyoTime.format('HH:mm z'));  // "05:30 JST" (next day)
-console.log(utcTime.format('HH:mm z'));    // "20:30 UTC"
-```
+<CodeExample tabs={[{ name: "Timezone Conversion", file: "reference/faq/timezone-conversion.ts" }]} />
 
 <Callout type="info">
   The underlying timestamp remains the same - only the display changes based on timezone.
@@ -131,27 +78,7 @@ console.log(utcTime.format('HH:mm z'));    // "20:30 UTC"
 
 Datezone supports multiple timezone formats for maximum flexibility:
 
-**IANA timezone names (recommended):**
-```ts
-day().tz('America/New_York')
-day().tz('Europe/London')  
-day().tz('Asia/Tokyo')
-day().tz('UTC')
-```
-
-**UTC offsets:**
-```ts
-day().tz('+05:30')  // India Standard Time
-day().tz('-08:00')  // Pacific Standard Time
-day().tz('Z')       // UTC (same as 'UTC')
-```
-
-**Common abbreviations:**
-```ts
-day().tz('EST')     // Eastern Standard Time
-day().tz('PST')     // Pacific Standard Time
-day().tz('GMT')     // Greenwich Mean Time
-```
+<CodeExample tabs={[{ name: "Timezone Formats", file: "reference/faq/timezone-formats.ts" }]} />
 
 <Callout type="warn">
   IANA timezone names are preferred because they handle daylight saving time automatically.
@@ -164,23 +91,7 @@ day().tz('GMT')     // Greenwich Mean Time
 
 When using IANA timezone names, datezone automatically handles daylight saving time (DST):
 
-```ts
-import { day } from '@/datezone';
-
-// Winter time (Standard Time)
-const winter = day('2024-01-15 12:00').tz('America/New_York');
-console.log(winter.format('HH:mm z')); // "12:00 EST"
-
-// Summer time (Daylight Time)  
-const summer = day('2024-07-15 12:00').tz('America/New_York');
-console.log(summer.format('HH:mm z')); // "12:00 EDT"
-
-// DST transition handling
-const beforeDST = day('2024-03-10 01:30').tz('America/New_York');
-const afterDST = beforeDST.add(1, 'hour');
-console.log(beforeDST.format('HH:mm z')); // "01:30 EST"
-console.log(afterDST.format('HH:mm z'));  // "03:30 EDT" (skips 2:30)
-```
+<CodeExample tabs={[{ name: "Daylight Saving Time", file: "reference/faq/daylight-saving-time.ts" }]} />
 
 <Callout type="info">
   DST transitions are handled automatically - you don't need to worry about the complexities.
@@ -192,22 +103,7 @@ console.log(afterDST.format('HH:mm z'));  // "03:30 EDT" (skips 2:30)
 
 Use the formatting system with locale-specific patterns:
 
-```ts
-import { day } from '@/datezone';
-
-const date = day('2024-01-15');
-
-// Different date formats
-console.log(date.format('MM/DD/YYYY'));     // "01/15/2024" (US)
-console.log(date.format('DD/MM/YYYY'));     // "15/01/2024" (UK)
-console.log(date.format('YYYY-MM-DD'));     // "2024-01-15" (ISO)
-
-// With time
-console.log(date.format('DD MMM YYYY, HH:mm')); // "15 Jan 2024, 00:00"
-
-// Full customization
-console.log(date.format('dddd, MMMM Do, YYYY')); // "Monday, January 15th, 2024"
-```
+<CodeExample tabs={[{ name: "Date Formatting", file: "reference/faq/date-formatting.ts" }]} />
 
 For more formatting options, see the <Link href="/docs/reference/format">format documentation</Link>.
 
@@ -227,26 +123,9 @@ If you're facing TypeScript errors with datezone:
 }
 ```
 
-**Import issues:**
-```ts
-// ✅ Correct import
-import { day, month, year } from '@/datezone';
+**Import and usage examples:**
 
-// ❌ Incorrect - no default export
-import datezone from '@/datezone';
-```
-
-**Type inference:**
-```ts
-// TypeScript will infer the correct types
-const today = day(); // DayInstance
-const currentMonth = month(); // MonthInstance
-const thisYear = year(); // YearInstance
-
-// Explicit typing if needed
-import type { DayInstance } from '@/datezone';
-const date: DayInstance = day('2024-01-01');
-```
+<CodeExample tabs={[{ name: "TypeScript Configuration", file: "reference/faq/typescript-config.ts" }]} />
 
 </Accordion>
 

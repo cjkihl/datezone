@@ -14,44 +14,22 @@ Compare utilities provide functions for comparing dates and timestamps, includin
 
 Check if dates are today, tomorrow, or yesterday.
 
-```typescript
-function isToday(date: OptionsOrTimestamp, timeZone: TimeZone): boolean
-function isTomorrow(date: OptionsOrTimestamp, timeZone: TimeZone): boolean
-function isYesterday(date: OptionsOrTimestamp, timeZone: TimeZone): boolean
-```
+<CodeExample tabs={[{ name: "Function Signatures", file: "reference/compare/function-signatures.ts" }]} />
 
-<CodeExample file="reference/compare/basic-comparisons.ts" title="Daily Comparisons" showLineNumbers />
+<CodeExample tabs={[{ name: "Daily Comparisons", file: "reference/compare/basic-comparisons.ts" }]} />
 
 ## Time-based Comparisons
 
 Check if dates are in the past or future.
 
-```typescript
-function isPast(date: OptionsOrTimestamp, timeZone: TimeZone): boolean
-function isFuture(date: OptionsOrTimestamp, timeZone: TimeZone): boolean
-```
+<CodeExample tabs={[{ name: "Time-based Signatures", file: "reference/compare/time-based-signatures.ts" }]} />
 
-<CodeExample file="reference/compare/time-comparisons.ts" title="Past/Future Comparisons" showLineNumbers />
+<CodeExample tabs={[{ name: "Past/Future Comparisons", file: "reference/compare/time-comparisons.ts" }]} />
 
 ## isWeekend
 
 Check if a date is a weekend.
 
-```typescript
-function isWeekend(date: OptionsOrTimestamp, timeZone: TimeZone): boolean
-```
-
-<Tabs items={["Local", "Timezone"]}>
-<Tab value="Local">
-
-_Note: Weekend examples would go here_
-
-</Tab>
-<Tab value="Timezone">
-
-_Note: Weekend timezone examples would go here_
-
-</Tab>
-</Tabs>
+<CodeExample tabs={[{ name: "Weekend Examples", file: "reference/compare/weekend-examples.ts" }]} />
 
 _Note: The remaining comparison functions (isBefore, isAfter, isEqual, isSameDay, isSameWeek, isSameMonth, isSameYear) would follow the same pattern with their own CodeExample components._ 

@@ -24,7 +24,7 @@ export function ThemeToggle(props: ComponentProps<typeof Button>) {
 					variant="ghost"
 					{...props}
 					className={cn(
-						"flex ring-0 shrink-0 md:w-[3.56rem] md:h-14 md:border-l md:text-muted-foreground max-md:-mr-1.5 max-md:hover:bg-transparent",
+						"flex ring-0 shrink-0 md:w-[3.56rem] md:h-14 md:text-muted-foreground max-md:-mr-1.5 max-md:hover:bg-transparent",
 						props.className,
 					)}
 				>

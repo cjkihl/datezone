@@ -6,7 +6,7 @@ export function Features() {
 			<div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 md:gap-6 max-w-7xl mx-auto">
 				{grid.map((feature, i) => (
 					<div
-						className="relative bg-gradient-to-br dark:from-slate-800/50 from-slate-100/80 dark:to-slate-900/80 to-slate-50/60 px-8 py-6 overflow-hidden rounded-2xl border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300 hover:scale-[1.02] group"
+						className="relative bg-gradient-to-br dark:from-slate-800/50 from-slate-100/80 dark:to-slate-900/80 to-slate-50/60 px-8 py-6 overflow-hidden rounded-2xl backdrop-blur-sm hover:shadow-lg transition-all duration-300 hover:scale-[1.02] group"
 						key={feature.title}
 					>
 						<Grid size={i * 5 + 10} />
