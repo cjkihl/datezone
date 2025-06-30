@@ -1,0 +1,26 @@
+---
+title: Title
+description: Description
+---
+
+Explain why the Date() in javascript is evil.
+
+
+It doent support timezones.
+
+Opaque internal state.
+
+date.getHour() will execute different on where the code is executed.
+
+hard to make unit tests. 
+
+Unpredicable code.
+
+Not serializble. Libraries like superjson have work around like this. But it adds a lot of overload every time you need to send a Date over https.
+
+Whats the alternative?
+
+Luckily Javascript have an alterative native type for handling dates. number. 
+
+
+Read in (/guides/why-use-timestamps) why timestampts is great.

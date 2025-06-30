@@ -1,0 +1,47 @@
+---
+title: Title
+description: Description
+---
+
+Always set timestamp explicit.
+
+Relying on the browser timestone is not a great user experience. It's better for the user to be able to select timezone with default set to browser timezone.
+
+This is how Outlook works for example. 
+
+
+Dont to artimetic even for simple date math.
+
+If you have a timestamp it might be tempting to just add 86400 seconds to the timestamp if you want to add one day.
+
+However this might lead to really hard to track bugs along the way.
+
+Becuase of DST in a lot of timezones. Some days are 25 hours and some days are 23 hours!
+
+For dateMath always use datezone addDays, subDays.
+
+Datezone keeps a registry of all timezones that have DST and not.
+
+For non DST timezones. datezone use simple arithmetic as a fast path optimization.
+
+For DST timezones, it's doing some magic to compesate for DST differenses.
+
+
+Dont use the Date object. 
+
+Date object is horrible. Read about it here. (Link)
+
+Instead store timestamps. They dont take space on the JavaScript heap and are easy to sent over https.
+
+If you want to display a timestmapt use datezone toIsoString (Example below.)
+
+
+Don't do DST calculations more than once, 
+
+For most functions datezone have 2 functions one that takes a timestamp as parameter and a base function that takes wall time as parameter.
+
+If you do multiple calculations in a row or already know the walltime you can in most cases skip the DST calculation completely when calling a lot of functions after each other.
+
+
+(Example here)
+
