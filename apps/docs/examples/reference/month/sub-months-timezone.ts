@@ -1,3 +1,3 @@
-import { subMonths } from 'datezone';
+import { subMonths } from "datezone";
 
-subMonths(Date.now(), 1, "UTC"); 
+subMonths(Date.now(), 1, "UTC");

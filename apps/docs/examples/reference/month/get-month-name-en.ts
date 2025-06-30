@@ -1,3 +1,3 @@
-import { getMonthName } from 'datezone';
+import { getMonthName } from "datezone";
 
-getMonthName("en-US", "long", 1); // "January" 
+getMonthName("en-US", "long", 1); // "January"

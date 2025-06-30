@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
-import type { TimeZone } from "../iana";
-import { format } from "./index";
+import type { TimeZone } from "../timezone";
+import { format, toISOString } from "./index";
 
 describe("format", () => {
 	const UTC: TimeZone = "UTC" as TimeZone;
@@ -134,5 +134,69 @@ describe("format", () => {
 		const ts = Date.UTC(2019, 11, 31); // Dec 31, 2019
 		const result = format(ts, "DDD", optionsUTC);
 		expect(Number(result)).toBe(365);
+	});
+});
+
+describe("toISOString", () => {
+	const timestamp = 1640995200000; // 2022-01-01T00:00:00.000Z
+
+	it("should format timestamp as ISO string in UTC", () => {
+		const result = toISOString(timestamp, "UTC");
+		expect(result).toBe("2022-01-01T00:00:00.000Z");
+	});
+
+	it("should format timestamp as ISO string in America/New_York", () => {
+		const result = toISOString(timestamp, "America/New_York");
+		expect(result).toBe("2021-12-31T19:00:00.000-05:00");
+	});
+
+	it("should format timestamp as ISO string in Europe/London", () => {
+		const result = toISOString(timestamp, "Europe/London");
+		// London is UTC in winter (no DST), so it should return Z for UTC
+		expect(result).toBe("2022-01-01T00:00:00.000Z");
+	});
+
+	it("should format timestamp as ISO string in Asia/Tokyo", () => {
+		const result = toISOString(timestamp, "Asia/Tokyo");
+		expect(result).toBe("2022-01-01T09:00:00.000+09:00");
+	});
+
+	it("should format timestamp as ISO string in Australia/Sydney", () => {
+		const result = toISOString(timestamp, "Australia/Sydney");
+		expect(result).toBe("2022-01-01T11:00:00.000+11:00");
+	});
+
+	it("should format timestamp as ISO string with local timezone when no timezone provided", () => {
+		// This test will depend on the local timezone of the test runner
+		const result = toISOString(timestamp);
+		// Accept both Z (for UTC) and offset format
+		expect(result).toMatch(
+			/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}(Z|[+-]\d{2}:\d{2})$/,
+		);
+	});
+
+	it("should handle milliseconds correctly", () => {
+		const timestampWithMs = 1640995200123; // 2022-01-01T00:00:00.123Z
+		const result = toISOString(timestampWithMs, "UTC");
+		expect(result).toBe("2022-01-01T00:00:00.123Z");
+	});
+
+	it("should handle negative timestamps (before epoch)", () => {
+		const negativeTimestamp = -86400000; // 1969-12-31T00:00:00.000Z
+		const result = toISOString(negativeTimestamp, "UTC");
+		expect(result).toBe("1969-12-31T00:00:00.000Z");
+	});
+
+	it("should handle DST transitions correctly", () => {
+		// March 14, 2021 at 2:00 AM EST becomes 3:00 AM EDT (spring forward)
+		const springForward = 1615708800000; // 2021-03-14T07:00:00.000Z
+		const result = toISOString(springForward, "America/New_York");
+		// The actual result shows 04:00, which is correct for this timestamp
+		expect(result).toBe("2021-03-14T04:00:00.000-04:00");
+	});
+
+	it("should format fixed offset timezones correctly", () => {
+		const result = toISOString(timestamp, "America/Argentina/Buenos_Aires");
+		expect(result).toBe("2021-12-31T21:00:00.000-03:00");
 	});
 });

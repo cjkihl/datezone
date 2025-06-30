@@ -1,3 +1,3 @@
-import { getQuarter } from 'datezone';
+import { getQuarter } from "datezone";
 
-getQuarter(Date.now()); 
+getQuarter(Date.now());

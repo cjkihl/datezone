@@ -1,20 +1,13 @@
-import { format } from "datezone";
+import { addDays, toISOString, TimeZone } from "datezone";
 
-// Parse a date from string manually (or use wallTimeToTS for precise control)
-const date = new Date("2024-06-01T12:00:00Z").getTime();
+// Save timezone, preferably in a user setting
+const timezone: TimeZone = "Asia/Tokyo"
 
-// Format with timezone
-const formatted = format(date, "yyyy-MM-dd HH:mm zzz", {
-	locale: "en-US",
-	timeZone: "UTC",
-});
+const now = Date.now();
 
-// Convert to New York timezone
-const local = format(date, "yyyy-MM-dd HH:mm zzz", {
-	locale: "en-US",
-	timeZone: "America/New_York",
-});
+// Add 5 days in the Asia/Tokyo timezone
+const result = addDays(now, 5, timezone);
 
-console.log("Original timestamp:", date);
-console.log("Formatted UTC:", formatted);
-console.log("In NY timezone:", local);
+// Format the result in ISO string format in the Asia/Tokyo timezone 
+// (YYYY-MM-DDTHH:mm:ss.sss+09:00)
+console.log(toISOString(result, timezone))

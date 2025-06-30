@@ -444,3 +444,131 @@ export function format(
 
 	return result;
 }
+
+/**
+ * @name toISOString
+ * @category Common Helpers
+ * @summary Create an ISO string for a specific timezone.
+ *
+ * @description
+ * Return the ISO 8601 formatted date string in the given timezone.
+ * The result will be in the format: YYYY-MM-DDTHH:mm:ss.sss±HH:MM or YYYY-MM-DDTHH:mm:ss.sssZ for UTC.
+ *
+ * @param ts - The timestamp to format
+ * @param timeZone - Optional timezone. If not provided, uses the system's local timezone.
+ *
+ * @returns The ISO formatted date string
+ *
+ * @example
+ * // Create ISO string for UTC timezone:
+ * const result = toISOString(1640995200000, 'UTC')
+ * //=> '2022-01-01T00:00:00.000Z'
+ *
+ * @example
+ * // Create ISO string for New York timezone:
+ * const result = toISOString(1640995200000, 'America/New_York')
+ * //=> '2021-12-31T19:00:00.000-05:00'
+ *
+ * @example
+ * // Create ISO string for local timezone:
+ * const result = toISOString(1640995200000)
+ * //=> '2022-01-01T01:00:00.000+01:00' (if local timezone is CET)
+ */
+export function toISOString(ts: number, timeZone?: TimeZone): string {
+	let dt: WallDateTime;
+	let timezoneOffsetMinutes: number;
+
+	// Extract milliseconds directly from timestamp (no Date object needed)
+	const millisecond = ts % 1000;
+
+	if (!timeZone) {
+		const d = new Date(ts);
+		// Fast path for local timezone
+		dt = {
+			day: d.getDate(),
+			hour: d.getHours(),
+			millisecond: d.getMilliseconds(),
+			minute: d.getMinutes(),
+			month: d.getMonth() + 1,
+			second: d.getSeconds(),
+			timezoneOffsetMinutes: -d.getTimezoneOffset(),
+			year: d.getFullYear(),
+		};
+		timezoneOffsetMinutes = dt.timezoneOffsetMinutes;
+	} else if (isUTC(timeZone)) {
+		// Fast path for UTC
+		const d = new Date(ts);
+		dt = {
+			day: d.getUTCDate(),
+			hour: d.getUTCHours(),
+			millisecond: d.getUTCMilliseconds(),
+			minute: d.getUTCMinutes(),
+			month: d.getUTCMonth() + 1,
+			second: d.getUTCSeconds(),
+			timezoneOffsetMinutes: 0,
+			year: d.getUTCFullYear(),
+		};
+		timezoneOffsetMinutes = 0;
+	} else if (!isDST(timeZone)) {
+		// Fast path for non-DST timezones (fixed offset zones)
+		timezoneOffsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
+
+		// Calculate timezone time directly from UTC time + offset
+		const offsetMs = timezoneOffsetMinutes * 60 * 1000;
+		const zonedTs = ts + offsetMs;
+		const d = new Date(zonedTs);
+
+		dt = {
+			day: d.getUTCDate(),
+			hour: d.getUTCHours(),
+			millisecond,
+			minute: d.getUTCMinutes(),
+			month: d.getUTCMonth() + 1,
+			second: d.getUTCSeconds(),
+			timezoneOffsetMinutes,
+			year: d.getUTCFullYear(),
+		};
+	} else {
+		// Path for DST timezones (complex calculation required)
+		const parts = formatToParts(ts, timeZone, FULL_TS);
+		let year = parts.year;
+		if (ts < 0 && year > 0) {
+			year = 1 - year;
+		}
+
+		timezoneOffsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
+
+		dt = {
+			day: parts.day,
+			hour: parts.hour,
+			millisecond: parts.millisecond,
+			minute: parts.minute,
+			month: parts.month,
+			second: parts.second,
+			timezoneOffsetMinutes,
+			year,
+		};
+	}
+
+	// Format as ISO string: YYYY-MM-DDTHH:mm:ss.sss±HH:MM or Z for UTC
+	const year = String(dt.year).padStart(4, "0");
+	const month = String(dt.month).padStart(2, "0");
+	const day = String(dt.day).padStart(2, "0");
+	const hour = String(dt.hour).padStart(2, "0");
+	const minute = String(dt.minute).padStart(2, "0");
+	const second = String(dt.second).padStart(2, "0");
+	const ms = String(dt.millisecond).padStart(3, "0");
+
+	let offsetString: string;
+	if (timezoneOffsetMinutes === 0) {
+		offsetString = "Z";
+	} else {
+		const sign = timezoneOffsetMinutes >= 0 ? "+" : "-";
+		const absOffset = Math.abs(timezoneOffsetMinutes);
+		const offsetHours = Math.floor(absOffset / 60);
+		const offsetMinutes = absOffset % 60;
+		offsetString = `${sign}${String(offsetHours).padStart(2, "0")}:${String(offsetMinutes).padStart(2, "0")}`;
+	}
+
+	return `${year}-${month}-${day}T${hour}:${minute}:${second}.${ms}${offsetString}`;
+}

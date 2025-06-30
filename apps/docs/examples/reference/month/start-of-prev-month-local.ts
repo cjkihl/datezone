@@ -1,3 +1,3 @@
-import { startOfPrevMonth } from 'datezone';
+import { startOfPrevMonth } from "datezone";
 
-startOfPrevMonth(Date.now()); 
+startOfPrevMonth(Date.now());

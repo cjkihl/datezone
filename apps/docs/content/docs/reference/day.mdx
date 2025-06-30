@@ -13,9 +13,24 @@ addDays(ts: DayOptions | number, days: number, timeZone?: TimeZone): number
 ```
 
 <CodeExample tabs={[
-  { name: "Local time", file: "reference/day/add-days-local.ts" },
-  { name: "With timezone", file: "reference/day/add-days-timezone.ts" }
+  { name: "With timezone", file: "reference/day/add-days-timezone.ts" },
+  { name: "Local time", file: "reference/day/add-days-local.ts" }
 ]} />
+
+<Callout type="info">
+**Why do we need to specify a timezone when adding days?**
+
+Isn't 1 day always 24 hours (86,400 seconds)?
+
+**Not always!** Due to Daylight Saving Time (DST) transitions, some days are 23 or 25 hours long.
+
+**Example:** In the `America/New_York` timezone on March 11, 2023 at 1:00 PM EST:
+- Simply adding 24 hours would result in March 12, 2023 at 2:00 PM EDT
+- But the correct "1 day later" should be March 12, 2023 at 1:00 PM EDT
+- This is because March 12, 2023 was only 23 hours long due to the spring DST transition
+
+**Summary:** The length of a day varies depending on the timezone and DST transitions, which is why timezone-aware day arithmetic is essential for accurate date calculations.
+</Callout>
 
 ---
 

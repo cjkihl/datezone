@@ -1,3 +1,3 @@
-import { startOfNextMonth } from 'datezone';
+import { startOfNextMonth } from "datezone";
 
-startOfNextMonth(Date.now()); 
+startOfNextMonth(Date.now());

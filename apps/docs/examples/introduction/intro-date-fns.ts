@@ -5,5 +5,4 @@ import { startOfDay } from "date-fns";
 const tzDate = TZDate.tz("Asia/Singapore");
 
 // Start of day, not explicit since timezone is a hidden parameter of the TZDate object
-startOfDay(tzDate).getTime()
-
+startOfDay(tzDate).getTime();
