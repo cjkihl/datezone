@@ -3,29 +3,40 @@ title: Introduction
 description: Introduction to Datezone.
 ---
 
+import { CodeExample } from '@/components/code-example';
+
 Datezone is a lightweight, high-performance date and timezone utility library for JavaScript and TypeScript. It provides a modern, ergonomic API for parsing, formatting, comparing, and manipulating dates and times, with full support for IANA timezones and DST.
 
-## Why Datezone?
+<CodeExample tabs={[{ name: "datezone", file: "introduction/intro-datezone.ts" },{ name: "date-fns", file: "introduction/intro-date-fns.ts" }]} />
 
-Working with dates and timezones in JavaScript has long been a source of frustration. Datezone aims to solve this by providing:
+## 🎯 Why Datezone
 
-- **Accurate timezone handling** (IANA, UTC, local)
-- **Fast, tree-shakeable functions** for all common date operations
-- **Strict TypeScript types** for safety and autocompletion
-- **Tiny bundle size** and zero dependencies
-- **Comprehensive formatting and parsing**
-- **Performance-focused**: faster than legacy libraries like Moment.js
+JavaScript's native `Date` object has no timezone support, and existing libraries require additional plugins like `@date-fns/tz` or `date-fns-tz` that add complexity with wrapper objects like `TZDate`.
 
-## Features
+Datezone is built from the ground up with timezones natively integrated into every function, eliminating the need for plugins or special wrapper objects.
 
-- Parse, format, and compare dates and times
-- Convert between timezones (IANA, UTC, local)
-- Handle daylight saving time (DST) correctly
-- Add, subtract, and manipulate dates
-- Get week, month, year, and other calendar info
-- Fully typed API
+### 🏗️ **Modern Architecture**
+- **Built around the modern Intl API** and arithmetic calculations instead of relying on the Date object
+- **Performance first** - works in timestamps to be friendly for the garbage collector
+- **Made to run 10,000 times a second** without performance degradation
+- **Easier to serialize and send over HTTP** with timestamp-based operations
 
-...and much more!
+### 🚀 **Blazing Fast Performance**
+- **18,000%+ faster** in timezone operations
+- **45,000%+ faster** for date arithmetic  
+- **No performance regression** as your app scales
+
+See [Comparison](/docs/comparison) and [Benchmarks](/benchmarks/comparison-report)
+
+### 📦 **Developer Experience**
+- **ESM only** with perfect tree-shaking - only import what you use
+- **100% TypeScript** with strict types that catch errors at compile time
+- **Zero dependencies** - no supply chain bloat
+- **33.76KB** total size, competitive with major alternatives
+
+### 🌍 **Native Timezone Excellence**
+- **Timezones natively built into every function** - no plugins required
+- **Native IANA timezone support** with automatic DST handling
 
 ## Get Started
 

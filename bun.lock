@@ -33,6 +33,7 @@
       "version": "0.0.0",
       "dependencies": {
         "@better-fetch/fetch": "^1.1.18",
+        "@date-fns/tz": "^1.2.0",
         "@hookform/resolvers": "^3.9.1",
         "@radix-ui/react-accordion": "^1.2.3",
         "@radix-ui/react-alert-dialog": "^1.1.6",
@@ -71,7 +72,7 @@
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "cmdk": "1.0.0",
-        "date-fns": "^3.6.0",
+        "date-fns": "^4.1.0",
         "datezone": "workspace:*",
         "embla-carousel-react": "^8.5.1",
         "fumadocs-core": "15.0.15",
@@ -116,14 +117,14 @@
     },
     "packages/datezone": {
       "name": "datezone",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "devDependencies": {
         "@cjkihl/tsconfig": "^1.0.1",
       },
     },
     "tools/benchmark": {
       "name": "benchmarks",
-      "version": "0.0.0",
+      "version": "0.0.1",
       "dependencies": {
         "@date-fns/tz": "^1.2.0",
         "date-fns": "^4.1.0",
@@ -2475,8 +2476,6 @@
     "cosmiconfig-typescript-loader/jiti": ["jiti@1.21.7", "", { "bin": { "jiti": "bin/jiti.js" } }, "sha512-/imKNG4EbWNrVjoNC/1H5/9GFy+tqjGBHCaSsN+P2RnPqjsLmv6UD3Ej+Kj8nBWaRAwyk7kK5ZUc+OEatnTR3A=="],
 
     "decamelize-keys/map-obj": ["map-obj@1.0.1", "", {}, "sha512-7N/q3lyZ+LVCp7PzuxrJr4KMbBE2hW7BT7YNia330OFxIf4d3r5zVpicP2650l7CPN6RM9zOJRl3NGpqSiw3Eg=="],
-
-    "docs/date-fns": ["date-fns@3.6.0", "", {}, "sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww=="],
 
     "docs/fumadocs-core": ["fumadocs-core@15.0.15", "", { "dependencies": { "@formatjs/intl-localematcher": "^0.6.0", "@orama/orama": "^3.1.1", "@shikijs/rehype": "^3.1.0", "@shikijs/transformers": "^3.1.0", "github-slugger": "^2.0.0", "hast-util-to-estree": "^3.1.2", "hast-util-to-jsx-runtime": "^2.3.5", "image-size": "^2.0.0", "negotiator": "^1.0.0", "react-remove-scroll": "^2.6.3", "remark": "^15.0.0", "remark-gfm": "^4.0.1", "scroll-into-view-if-needed": "^3.1.0", "shiki": "^3.1.0", "unist-util-visit": "^5.0.0" }, "peerDependencies": { "@oramacloud/client": "1.x.x || 2.x.x", "algoliasearch": "4.24.0", "next": "14.x.x || 15.x.x", "react": "18.x.x || 19.x.x", "react-dom": "18.x.x || 19.x.x" }, "optionalPeers": ["@oramacloud/client", "algoliasearch", "next", "react", "react-dom"] }, "sha512-roWAf6voyhpLpbdWalCBW4x4h2LVEJZ/J1sGG+3cR27QLn/5Vv/AEjPB0mFRcoH/fkEVU1wilxvgfDOpRXWDcA=="],
 

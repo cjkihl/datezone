@@ -4,13 +4,7 @@ title: Day Utilities
 
 import { CodeExample } from '@/components/code-example';
 
-# Day Utilities (`datezone/day`)
-
-This page documents all exported functions from the `day` module in `datezone`.
-
-## Functions
-
-### addDays
+## addDays
 
 Adds a number of days to a timestamp or options object.
 
@@ -25,7 +19,7 @@ addDays(ts: DayOptions | number, days: number, timeZone?: TimeZone): number
 
 ---
 
-### subDays
+## subDays
 
 Subtracts a number of days from a timestamp or options object.
 
@@ -40,7 +34,7 @@ subDays(ts: DayOptions | number, days: number, timeZone?: TimeZone): number
 
 ---
 
-### startOfDay
+## startOfDay
 
 Returns the start of the day (00:00:00.000) in the given timezone.
 
@@ -55,7 +49,7 @@ startOfDay(ts: DayOptions | number, timeZone?: TimeZone): number
 
 ---
 
-### endOfDay
+## endOfDay
 
 Returns the end of the day (23:59:59.999) in the given timezone.
 
@@ -70,7 +64,7 @@ endOfDay(ts: DayOptions | number, timeZone?: TimeZone): number
 
 ---
 
-### nextDay
+## nextDay
 
 Returns the start of the next day (00:00:00.000) in the given timezone.
 
@@ -85,7 +79,7 @@ nextDay(ts: DayOptions | number, timeZone?: TimeZone): number
 
 ---
 
-### previousDay
+## previousDay
 
 Returns the start of the previous day (00:00:00.000) in the given timezone.
 
@@ -100,7 +94,7 @@ previousDay(ts: DayOptions | number, timeZone?: TimeZone): number
 
 ---
 
-### dayOfWeek
+## dayOfWeek
 
 Returns the ISO day of week (1=Monday, 7=Sunday) in the given timezone.
 
@@ -115,7 +109,7 @@ dayOfWeek(ts: DayOptions | number, timeZone?: TimeZone): number
 
 ---
 
-### dayOfYear
+## dayOfYear
 
 Returns the day of year (1-366) in the given timezone.
 
@@ -130,7 +124,7 @@ dayOfYear(ts: DayOptions | number, timeZone?: TimeZone): number
 
 ---
 
-### weekDayName
+## weekDayName
 
 Returns the localized weekday name.
 
@@ -155,7 +149,7 @@ weekDayName("fr-FR", "short", 3) // "mer."
 
 ---
 
-### getDayPeriod
+## getDayPeriod
 
 Returns the localized day period (AM/PM) string for the given hour.
 

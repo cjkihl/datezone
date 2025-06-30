@@ -65,16 +65,16 @@ export function CodePreview({
 			<MotionConfig transition={{ bounce: 0, duration: 0.5, type: "spring" }}>
 				<motion.div
 					animate={{ height: height > 0 ? height : undefined }}
-					className="from-stone-100 to-stone-200 dark:to-black/90 dark:via-stone-950/10 dark:from-stone-950/90 relative overflow-y-hidden overflow-x-auto rounded-sm bg-gradient-to-tr ring-1 ring-white/10 backdrop-blur-lg"
+					className="from-stone-100 to-stone-200 dark:to-black/90 dark:via-stone-950/10 dark:from-stone-950/90 relative overflow-y-hidden overflow-x-hidden rounded-sm bg-gradient-to-tr ring-1 ring-white/10 backdrop-blur-lg"
 				>
 					<div ref={ref}>
 						<div className="absolute -top-px left-0 right-0 h-px" />
 						<div className="absolute -bottom-px left-11 right-20 h-px" />
-						<div className={clsx("pl-4", isSingleTab ? "pt-2" : "pt-4")}>
-							<TrafficLightsIcon className="stroke-slate-500/30 h-2.5 w-auto" />
+						<div className={clsx(isSingleTab ? "pt-2" : "pt-4")}>
+							<TrafficLightsIcon className="ml-4 stroke-slate-500/30 h-2.5 w-auto" />
 
 							{!isSingleTab && (
-								<div className="mt-4 flex space-x-2 text-xs">
+								<div className="pl-4 mt-4 flex space-x-2 text-xs">
 									{tabs.map((tab) => (
 										<button
 											className={clsx(
@@ -100,7 +100,7 @@ export function CodePreview({
 
 							<div
 								className={clsx(
-									"flex flex-col items-start px-1 text-sm",
+									"px-4 flex flex-col items-start text-sm overflow-x-auto",
 									isSingleTab ? "mt-4" : "mt-6",
 								)}
 							>
