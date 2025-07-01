@@ -8,7 +8,7 @@ interface Event {
 }
 
 class EventFormatter {
-	static formatEvent(event: Event, _viewertimeZone: TimeZone | null): string {
+	static formatEvent(event: Event, viewertimeZone: TimeZone | null): string {
 		const tz = viewerTimezone || event.timezone;
 
 		const startDate = format(event.start, "MMM DD, YYYY", {
@@ -30,7 +30,7 @@ class EventFormatter {
 	static formatEventRelative(
 		event: Event,
 		_baseTime: number,
-		_viewertimeZone: TimeZone | null,
+		viewertimeZone: TimeZone | null,
 	): string {
 		const tz = viewerTimezone || event.timezone;
 		const eventTime = format(event.start, "MMM DD at h:mm A", {
