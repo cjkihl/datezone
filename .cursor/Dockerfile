@@ -2,11 +2,11 @@
 FROM oven/bun:latest
 
 # Install Node.js and other development tools
-RUN apk add --no-cache nodejs npm git
+RUN apt-get update && apt-get install -y nodejs npm git && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user
-RUN addgroup -g 1000 ubuntu && \
-    adduser -D -s /bin/sh -u 1000 -G ubuntu ubuntu
+RUN groupadd -g 1000 ubuntu && \
+    useradd -d /home/ubuntu -s /bin/bash -u 1000 -g ubuntu ubuntu
 
 # Set user and working directory to home
 USER ubuntu
