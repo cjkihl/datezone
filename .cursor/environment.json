@@ -4,7 +4,6 @@
 		"context": ".",
 		"dockerfile": "./Dockerfile"
 	},
-	"install": "bun install && bun run build",
 	"name": "Datezone Development Environment",
 	"ports": [
 		{
@@ -12,16 +11,26 @@
 			"port": 3000
 		}
 	],
-	"start": "bun run dev",
+	"start": "bun install",
 	"terminals": [
+		{
+			"command": "bun install",
+			"description": "Install all dependencies",
+			"name": "Install Dependencies"
+		},
+		{
+			"command": "bun run build",
+			"description": "Builds the datezone package",
+			"name": "Build"
+		},
 		{
 			"command": "bun run dev",
 			"description": "Runs the Next.js documentation site in development mode",
 			"name": "Development Server"
 		},
 		{
-			"command": "bun test --watch",
-			"description": "Runs tests in watch mode for continuous testing during development",
+			"command": "bun test",
+			"description": "Runs tests and calculates coverage",
 			"name": "Test Runner"
 		},
 		{

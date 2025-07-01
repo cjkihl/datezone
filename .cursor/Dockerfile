@@ -16,3 +16,7 @@ WORKDIR /home/developer
 
 # Expose common ports (optional, but useful for development)
 EXPOSE 3000 5173 8080
+
+# IMPORTANT: Do NOT install dependencies or build the project here!
+# The background agent will clone the code and handle builds/installs.
+# This Dockerfile should ONLY set up the development environment.
