@@ -1,17 +1,16 @@
 # Base image with Bun and Node.js
 FROM oven/bun:1.2.18-alpine
 
-# Install Node.js (latest LTS)
-RUN apk add --no-cache nodejs npm
+# Install Node.js and other development tools
+RUN apk add --no-cache nodejs npm git
 
-# Set working directory
-WORKDIR /app
+# Create a non-root user
+RUN addgroup -g 1000 ubuntu && \
+    adduser -D -s /bin/sh -u 1000 -G ubuntu ubuntu
 
-# Copy all files
-COPY . .
+# Set user and working directory to home
+USER ubuntu
+WORKDIR /home/ubuntu
 
-# Install dependencies using Bun
-RUN bun install
-
-# Expose common ports
+# Expose common ports (optional, but useful for development)
 EXPOSE 3000 5173 8080
