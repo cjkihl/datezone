@@ -56,19 +56,19 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const week = week(d.getTime(), null);
+			const calculatedWeek = week(d.getTime(), null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 			const localWeek = week(d.getTime(), localTz as TimeZone);
 
 			// Should match local timezone behavior
-			expect(week).toBe(localWeek);
+			expect(calculatedWeek).toBe(localWeek);
 
 			// If local timezone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 				const utcWeek = week(d.getTime(), "UTC");
-				expect(week).not.toBe(utcWeek);
+				expect(calculatedWeek).not.toBe(utcWeek);
 			}
 		});
 	});
@@ -95,7 +95,7 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const year = getISOWeekYear(d.getTime(), undefined);
+			const year = getISOWeekYear(d.getTime(), null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -242,7 +242,7 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const start = startOfWeek(d.getTime(), undefined);
+			const start = startOfWeek(d.getTime(), null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -354,7 +354,7 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const end = endOfWeek(d.getTime(), undefined);
+			const end = endOfWeek(d.getTime(), null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -444,7 +444,7 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const added = addWeeks(d.getTime(), 1, undefined);
+			const added = addWeeks(d.getTime(), 1, null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -514,7 +514,7 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const subbed = subWeeks(d.getTime(), 1, undefined);
+			const subbed = subWeeks(d.getTime(), 1, null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -576,7 +576,7 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const start = startOfISOWeek(d.getTime(), undefined);
+			const start = startOfISOWeek(d.getTime(), null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -630,7 +630,7 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const end = endOfISOWeek(d.getTime(), undefined);
+			const end = endOfISOWeek(d.getTime(), null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -748,7 +748,7 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const weeks = weeksInMonth(d.getTime(), undefined);
+			const weeks = weeksInMonth(d.getTime(), null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
