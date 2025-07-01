@@ -1,5 +1,9 @@
 {
 	"$schema": "https://www.cursor.com/schemas/environment.schema.json",
+	"build": {
+		"context": ".",
+		"dockerfile": "./Dockerfile"
+	},
 	"install": "bun install && bun run build",
 	"name": "Datezone Development Environment",
 	"ports": [
