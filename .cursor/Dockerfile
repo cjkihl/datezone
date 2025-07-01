@@ -1,5 +1,5 @@
 # Base image with Bun and Node.js
-FROM oven/bun:1.2.18-alpine
+FROM oven/bun:latest
 
 # Install Node.js and other development tools
 RUN apk add --no-cache nodejs npm git
