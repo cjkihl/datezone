@@ -62,7 +62,7 @@ export function to24Hour(hour: number): number {
  * hour(timestamp, 'Asia/Tokyo'); // 0 (JST, UTC+9, next day)
  * ```
  */
-export function hour(ts: number, timeZone?: TimeZone): number {
+export function hour(ts: number, timeZone: TimeZone | null): number {
 	if (!timeZone) {
 		return new Date(ts).getHours();
 	}

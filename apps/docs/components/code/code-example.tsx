@@ -19,19 +19,24 @@ interface CodeExampleProps {
 export async function CodeExample({ tabs }: CodeExampleProps) {
 	try {
 		// Read all the TypeScript files at build time and convert to CodePreviewTab format
-		const codePreviewTabs: CodePreviewTab[] = await Promise.all(tabs.map(async (tab) => {
-			const filePath = join(process.cwd(),"examples", tab.file);
-			const code = await readFile(filePath, "utf-8");
-			return {
-				code: code,
-				name: tab.name,
-			};
-		}));
+		const codePreviewTabs: CodePreviewTab[] = await Promise.all(
+			tabs.map(async (tab) => {
+				const filePath = join(process.cwd(), "examples", tab.file);
+				const code = await readFile(filePath, "utf-8");
+				return {
+					code: code,
+					name: tab.name,
+				};
+			}),
+		);
 
 		// Pre-render first tab
-		const initial = await highlight({code: codePreviewTabs[0].code!, lang: 'ts'});
+		const initial = await highlight({
+			code: codePreviewTabs[0].code!,
+			lang: "ts",
+		});
 
-		return <CodePreview tabs={codePreviewTabs} initial={initial} />;
+		return <CodePreview initial={initial} tabs={codePreviewTabs} />;
 	} catch (error) {
 		return (
 			<div className="rounded-lg bg-destructive/10 p-4">

@@ -1,30 +1,28 @@
-import { 
-	CircleHelp, 
-	type LucideIcon,
-	PlayCircle,
+import {
+	Activity,
+	AlertTriangle,
 	BookOpen,
-	GitCompare,
-	Download,
-	FileText,
-	Clock,
 	Calendar,
-	Globe,
-	ArrowRight,
-	CheckCircle,
-	Library,
 	CalendarDays,
 	CalendarRange,
-	Timer,
-	Hash,
-	Settings,
-	MapPin,
-	Type,
-	Layers,
-	BarChart3,
-	TrendingUp,
-	Activity,
 	ChartNoAxesColumn,
-	AlertTriangle
+	CheckCircle,
+	CircleHelp,
+	Clock,
+	Download,
+	FileText,
+	GitCompare,
+	Globe,
+	Hash,
+	Layers,
+	Library,
+	type LucideIcon,
+	MapPin,
+	PlayCircle,
+	Settings,
+	Timer,
+	TrendingUp,
+	Type,
 } from "lucide-react";
 import type { ReactNode, SVGProps } from "react";
 import { Icons } from "./icons";
@@ -226,27 +224,47 @@ export const examples: Content[] = [
 		list: [
 			{
 				href: "/docs/examples/astro",
-				icon: () => <div className="w-4 h-4 text-muted-foreground"><Icons.astro /></div>,
+				icon: () => (
+					<div className="w-4 h-4 text-muted-foreground">
+						<Icons.astro />
+					</div>
+				),
 				title: "Astro + SolidJs",
 			},
 			{
 				href: "/docs/examples/remix",
-				icon: () => <div className="w-4 h-4 text-muted-foreground"><Icons.remix /></div>,
+				icon: () => (
+					<div className="w-4 h-4 text-muted-foreground">
+						<Icons.remix />
+					</div>
+				),
 				title: "Remix",
 			},
 			{
 				href: "/docs/examples/next-js",
-				icon: () => <div className="w-4 h-4 text-muted-foreground"><Icons.nextJS /></div>,
+				icon: () => (
+					<div className="w-4 h-4 text-muted-foreground">
+						<Icons.nextJS />
+					</div>
+				),
 				title: "Next.js",
 			},
 			{
 				href: "/docs/examples/nuxt",
-				icon: () => <div className="w-4 h-4 text-muted-foreground"><Icons.nuxt /></div>,
+				icon: () => (
+					<div className="w-4 h-4 text-muted-foreground">
+						<Icons.nuxt />
+					</div>
+				),
 				title: "Nuxt",
 			},
 			{
 				href: "/docs/examples/svelte-kit",
-				icon: () => <div className="w-4 h-4 text-muted-foreground"><Icons.svelteKit /></div>,
+				icon: () => (
+					<div className="w-4 h-4 text-muted-foreground">
+						<Icons.svelteKit />
+					</div>
+				),
 				title: "SvelteKit",
 			},
 		],

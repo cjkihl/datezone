@@ -14,7 +14,7 @@ Hour utilities provide functions for working with hours, minutes, seconds, and m
 Get the hour in 12-hour format (1-12).
 
 ```typescript
-function get12Hour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
+function get12Hour(ts: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -27,7 +27,7 @@ function get12Hour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 Get the hour in 24-hour format (0-23).
 
 ```typescript
-function get24Hour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
+function get24Hour(ts: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -40,7 +40,7 @@ function get24Hour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 Get the hour (same as get24Hour).
 
 ```typescript
-function getHour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
+function getHour(ts: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -53,7 +53,7 @@ function getHour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 Add hours to a timestamp.
 
 ```typescript
-function addHours(ts: OptionsOrTimestamp, hours: number, timeZone?: TimeZone): number
+function addHours(ts: OptionsOrTimestamp, hours: number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -66,7 +66,7 @@ function addHours(ts: OptionsOrTimestamp, hours: number, timeZone?: TimeZone): n
 Subtract hours from a timestamp.
 
 ```typescript
-function subHours(ts: OptionsOrTimestamp, hours: number, timeZone?: TimeZone): number
+function subHours(ts: OptionsOrTimestamp, hours: number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -79,7 +79,7 @@ function subHours(ts: OptionsOrTimestamp, hours: number, timeZone?: TimeZone): n
 Get the timestamp for the start of the hour.
 
 ```typescript
-function startOfHour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
+function startOfHour(ts: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -92,7 +92,7 @@ function startOfHour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 Get the timestamp for the end of the hour.
 
 ```typescript
-function endOfHour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
+function endOfHour(ts: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -105,7 +105,7 @@ function endOfHour(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 Get the timestamp for the start of the minute.
 
 ```typescript
-function startOfMinute(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
+function startOfMinute(ts: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -118,7 +118,7 @@ function startOfMinute(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 Get the timestamp for the end of the minute.
 
 ```typescript
-function endOfMinute(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
+function endOfMinute(ts: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -131,7 +131,7 @@ function endOfMinute(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 Get the timestamp for the start of the second.
 
 ```typescript
-function startOfSecond(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
+function startOfSecond(ts: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -144,7 +144,7 @@ function startOfSecond(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 Get the timestamp for the end of the second.
 
 ```typescript
-function endOfSecond(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
+function endOfSecond(ts: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -157,7 +157,7 @@ function endOfSecond(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 Add minutes to a timestamp.
 
 ```typescript
-function addMinutes(ts: OptionsOrTimestamp, minutes: number, timeZone?: TimeZone): number
+function addMinutes(ts: OptionsOrTimestamp, minutes: number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -170,7 +170,7 @@ function addMinutes(ts: OptionsOrTimestamp, minutes: number, timeZone?: TimeZone
 Subtract minutes from a timestamp.
 
 ```typescript
-function subMinutes(ts: OptionsOrTimestamp, minutes: number, timeZone?: TimeZone): number
+function subMinutes(ts: OptionsOrTimestamp, minutes: number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -183,7 +183,7 @@ function subMinutes(ts: OptionsOrTimestamp, minutes: number, timeZone?: TimeZone
 Add seconds to a timestamp.
 
 ```typescript
-function addSeconds(ts: OptionsOrTimestamp, seconds: number, timeZone?: TimeZone): number
+function addSeconds(ts: OptionsOrTimestamp, seconds: number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -196,7 +196,7 @@ function addSeconds(ts: OptionsOrTimestamp, seconds: number, timeZone?: TimeZone
 Subtract seconds from a timestamp.
 
 ```typescript
-function subSeconds(ts: OptionsOrTimestamp, seconds: number, timeZone?: TimeZone): number
+function subSeconds(ts: OptionsOrTimestamp, seconds: number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -209,7 +209,7 @@ function subSeconds(ts: OptionsOrTimestamp, seconds: number, timeZone?: TimeZone
 Add milliseconds to a timestamp.
 
 ```typescript
-function addMilliseconds(ts: OptionsOrTimestamp, ms: number, timeZone?: TimeZone): number
+function addMilliseconds(ts: OptionsOrTimestamp, ms: number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -222,7 +222,7 @@ function addMilliseconds(ts: OptionsOrTimestamp, ms: number, timeZone?: TimeZone
 Subtract milliseconds from a timestamp.
 
 ```typescript
-function subMilliseconds(ts: OptionsOrTimestamp, ms: number, timeZone?: TimeZone): number
+function subMilliseconds(ts: OptionsOrTimestamp, ms: number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[

@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import { Check, Copy } from "lucide-react";
 
-import { Fragment, JSX, useState } from "react";
+import { Fragment, type JSX, useState } from "react";
 import useMeasure from "react-use-measure";
 import { Button } from "@/components/ui/button";
 import { CodeBlock } from "./client";
@@ -131,7 +131,11 @@ export function CodePreview({
 											))}
 										</div>
 									)}
-									<CodeBlock lang="ts" code={code} initial={initial || <div>Loading...</div>} />
+									<CodeBlock
+										code={code}
+										initial={initial || <div>Loading...</div>}
+										lang="ts"
+									/>
 								</motion.div>
 								{actions && (
 									<motion.div className="self-end" layout>

@@ -8,10 +8,33 @@ import {
 	getMonthName,
 	getQuarter,
 	getQuarterBase,
+	month,
 	startOfMonth,
 	startOfNextMonth,
 	startOfPrevMonth,
 } from "./month";
+
+describe("month", () => {
+	it("returns the correct month for a given timestamp", () => {
+		const ts = new Date("2024-07-10T12:00:00.000Z").getTime();
+		expect(month(ts)).toBe(7);
+	});
+
+	it("returns the correct month for a given timestamp in UTC", () => {
+		const ts = new Date("2024-07-10T12:00:00.000Z").getTime();
+		expect(month(ts, "UTC")).toBe(7);
+	});
+
+	it("returns the correct month for a given timestamp in a non-DST timezone", () => {
+		const ts = new Date("2024-07-10T12:00:00.000Z").getTime();
+		expect(month(ts, "Asia/Tokyo")).toBe(7);
+	});
+
+	it("returns the correct month for a given timestamp in a DST timezone", () => {
+		const ts = new Date("2024-07-10T12:00:00.000Z").getTime();
+		expect(month(ts, "America/New_York")).toBe(7);
+	});
+});
 
 describe("startOfMonth", () => {
 	it("returns 1st 00:00:00.000 in UTC if no timezone", () => {
@@ -213,6 +236,21 @@ describe("daysInMonth", () => {
 		const ts = new Date(2024, 11, 15).getTime(); // Dec 15, 2024
 		expect(daysInMonth(ts)).toBe(31);
 	});
+
+	it("returns correct days for a given timestamp in UTC", () => {
+		const ts = new Date("2024-02-10T12:00:00.000Z").getTime();
+		expect(daysInMonth(ts, "UTC")).toBe(29);
+	});
+
+	it("returns correct days for a given timestamp in a non-DST timezone", () => {
+		const ts = new Date("2024-02-10T12:00:00.000Z").getTime();
+		expect(daysInMonth(ts, "Asia/Tokyo")).toBe(29);
+	});
+
+	it("returns correct days for a given timestamp in a DST timezone", () => {
+		const ts = new Date("2024-02-10T12:00:00.000Z").getTime();
+		expect(daysInMonth(ts, "America/New_York")).toBe(29);
+	});
 });
 
 describe("daysInMonthBase", () => {
@@ -323,6 +361,18 @@ describe("addMonths additional edge cases", () => {
 		const result = addMonths(d.getTime(), 1, "UTC");
 		expect(new Date(result).getUTCDate()).toBe(28); // 2021-02-28
 	});
+
+	it("should handle non-DST timezones", () => {
+		const d = new Date("2024-01-15T10:00:00.000Z");
+		const result = addMonths(d.getTime(), 2, "Asia/Tokyo");
+		expect(new Date(result).toISOString()).toBe("2024-03-15T10:00:00.000Z");
+	});
+
+	it("should handle DST timezones", () => {
+		const d = new Date("2024-01-15T10:00:00.000Z");
+		const result = addMonths(d.getTime(), 2, "America/New_York");
+		expect(new Date(result).toISOString()).toBe("2024-03-15T09:00:00.000Z");
+	});
 });
 
 describe("getMonthName", () => {
@@ -420,6 +470,21 @@ describe("getQuarter edge cases", () => {
 		for (let m = 1; m <= 12; m++) {
 			expect(getQuarterBase(m)).toBe(expected[m - 1]);
 		}
+	});
+
+	it("returns correct quarter for a given timestamp in UTC", () => {
+		const ts = new Date("2024-08-10T12:00:00.000Z").getTime();
+		expect(getQuarter(ts, "UTC")).toBe(3);
+	});
+
+	it("returns correct quarter for a given timestamp in a non-DST timezone", () => {
+		const ts = new Date("2024-08-10T12:00:00.000Z").getTime();
+		expect(getQuarter(ts, "Asia/Tokyo")).toBe(3);
+	});
+
+	it("returns correct quarter for a given timestamp in a DST timezone", () => {
+		const ts = new Date("2024-08-10T12:00:00.000Z").getTime();
+		expect(getQuarter(ts, "America/New_York")).toBe(3);
 	});
 });
 

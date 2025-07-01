@@ -15,7 +15,7 @@ This page documents all exported functions from the `month` module in `datezone`
 Returns the start of the month (first day, 00:00:00.000) in the given timezone.
 
 ```ts
-startOfMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
+startOfMonth(ts: YearMonthOptions | number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -30,7 +30,7 @@ startOfMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
 Returns the end of the month (last day, 23:59:59.999) in the given timezone.
 
 ```ts
-endOfMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
+endOfMonth(ts: YearMonthOptions | number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -45,7 +45,7 @@ endOfMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
 Adds a number of months to a timestamp.
 
 ```ts
-addMonths(ts: number, months: number, timeZone?: TimeZone): number
+addMonths(ts: number, months: number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -60,7 +60,7 @@ addMonths(ts: number, months: number, timeZone?: TimeZone): number
 Subtracts a number of months from a timestamp.
 
 ```ts
-subMonths(ts: number, months: number, timeZone?: TimeZone): number
+subMonths(ts: number, months: number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -75,7 +75,7 @@ subMonths(ts: number, months: number, timeZone?: TimeZone): number
 Returns the start of the next month (first day, 00:00:00.000) in the given timezone.
 
 ```ts
-startOfNextMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
+startOfNextMonth(ts: YearMonthOptions | number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -90,7 +90,7 @@ startOfNextMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
 Returns the end of the next month (last day, 23:59:59.999) in the given timezone.
 
 ```ts
-endOfNextMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
+endOfNextMonth(ts: YearMonthOptions | number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -105,7 +105,7 @@ endOfNextMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
 Returns the start of the previous month (first day, 00:00:00.000) in the given timezone.
 
 ```ts
-startOfPrevMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
+startOfPrevMonth(ts: YearMonthOptions | number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -120,7 +120,7 @@ startOfPrevMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
 Returns the end of the previous month (last day, 23:59:59.999) in the given timezone.
 
 ```ts
-endOfPrevMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
+endOfPrevMonth(ts: YearMonthOptions | number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -135,7 +135,7 @@ endOfPrevMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
 Returns the number of days in the month for the given date and timezone.
 
 ```ts
-daysInMonth(ts: YearMonthOptions | number, timeZone?: TimeZone): number
+daysInMonth(ts: YearMonthOptions | number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -165,7 +165,7 @@ getMonthName(locale: string, type: "long" | "short" | "narrow", month: number): 
 Returns the quarter of the year (1-4) for the given date and timezone.
 
 ```ts
-getQuarter(ts: YearMonthOptions | number, timeZone?: TimeZone): number
+getQuarter(ts: YearMonthOptions | number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[

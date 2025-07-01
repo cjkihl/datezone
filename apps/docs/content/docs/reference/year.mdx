@@ -14,7 +14,7 @@ Year utilities provide functions for working with years in dates and timestamps,
 Get the year from a timestamp or year options.
 
 ```typescript
-function getYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
+function getYear(ts: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -27,7 +27,7 @@ function getYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 Check if a year is a leap year.
 
 ```typescript
-function isLeapYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): boolean
+function isLeapYear(ts: OptionsOrTimestamp, timeZone: TimeZone | null): boolean
 ```
 
 <CodeExample tabs={[
@@ -40,7 +40,7 @@ function isLeapYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): boolean
 Get the timestamp for the start of the year.
 
 ```typescript
-function startOfYear(date: OptionsOrTimestamp, timeZone?: TimeZone): number
+function startOfYear(date: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -53,7 +53,7 @@ function startOfYear(date: OptionsOrTimestamp, timeZone?: TimeZone): number
 Get the timestamp for the end of the year.
 
 ```typescript
-function endOfYear(date: OptionsOrTimestamp, timeZone?: TimeZone): number
+function endOfYear(date: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 ```typescript title="Local time"
@@ -84,7 +84,7 @@ console.log(new Date(yearEndTokyo)); // December 31, 2024 23:59:59.999 in Tokyo 
 Add years to a date.
 
 ```typescript
-function addYears(date: OptionsOrTimestamp, amount: number, timeZone?: TimeZone): number
+function addYears(date: OptionsOrTimestamp, amount: number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -97,7 +97,7 @@ function addYears(date: OptionsOrTimestamp, amount: number, timeZone?: TimeZone)
 Subtract years from a date.
 
 ```typescript
-function subYears(date: OptionsOrTimestamp, amount: number, timeZone?: TimeZone): number
+function subYears(date: OptionsOrTimestamp, amount: number, timeZone: TimeZone | null): number
 ```
 
 ```typescript title="Local time"
@@ -128,7 +128,7 @@ console.log(new Date(pastInTokyo)); // February 28, 2022 in Tokyo timezone
 Get the number of days in a year (365 or 366 for leap years).
 
 ```typescript
-function getDaysInYear(date: OptionsOrTimestamp, timeZone?: TimeZone): number
+function getDaysInYear(date: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 ```typescript title="Local time"

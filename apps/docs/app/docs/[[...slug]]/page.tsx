@@ -11,6 +11,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Features } from "@/components/blocks/features";
+import { CodeExample } from "@/components/code/code-example";
 import { DividerText } from "@/components/divider-text";
 import { Endpoint } from "@/components/endpoint";
 import { ForkButton } from "@/components/fork-button";
@@ -19,7 +20,6 @@ import { contents } from "@/components/sidebar-content";
 import { AnimatePresence } from "@/components/ui/fade-in";
 import { source } from "@/lib/source";
 import { absoluteUrl, cn } from "@/lib/utils";
-import { CodeExample } from "@/components/code/code-example";
 
 const { AutoTypeTable } = createTypeTable();
 

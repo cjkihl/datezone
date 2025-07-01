@@ -9,15 +9,15 @@ class Logger {
 		console.log(`[${timestamp}] ${level.toUpperCase()}: ${message}`);
 	}
 
-	static info(message: string, timezone?: TimeZone): void {
+	static info(message: string, timeZone: TimeZone | null): void {
 		Logger.log("info", message, timezone);
 	}
 
-	static error(message: string, timezone?: TimeZone): void {
+	static error(message: string, timeZone: TimeZone | null): void {
 		Logger.log("error", message, timezone);
 	}
 
-	static debug(message: string, timezone?: TimeZone): void {
+	static debug(message: string, timeZone: TimeZone | null): void {
 		Logger.log("debug", message, timezone);
 	}
 }

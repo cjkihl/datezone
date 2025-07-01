@@ -6,7 +6,7 @@ import { formatters } from "./formatters.js";
 
 type FormatOptions = {
 	locale: string;
-	timeZone?: TimeZone;
+	timeZone: TimeZone | null;
 };
 
 /**
@@ -474,7 +474,7 @@ export function format(
  * const result = toISOString(1640995200000)
  * //=> '2022-01-01T01:00:00.000+01:00' (if local timezone is CET)
  */
-export function toISOString(ts: number, timeZone?: TimeZone): string {
+export function toISOString(ts: number, timeZone: TimeZone | null): string {
 	let dt: WallDateTime;
 	let timezoneOffsetMinutes: number;
 

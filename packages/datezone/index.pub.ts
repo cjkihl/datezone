@@ -13,7 +13,7 @@ export * from "./offset.js";
 export * from "./ordinal.js";
 export * from "./second.js";
 export * from "./timezone.js";
-export * from "./utils.js";
+export * from "./walltime.js";
 export * from "./week.js";
 export * from "./year.js";
 

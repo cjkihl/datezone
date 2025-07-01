@@ -14,7 +14,7 @@ Week utilities provide functions for working with weeks in dates and timestamps,
 Get the ISO week number of the year (1-53).
 
 ```typescript
-function getWeek(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
+function getWeek(ts: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -27,7 +27,7 @@ function getWeek(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
 Get the ISO week-numbering year.
 
 ```typescript
-function getISOWeekYear(ts: OptionsOrTimestamp, timeZone?: TimeZone): number
+function getISOWeekYear(ts: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -42,7 +42,7 @@ Get the timestamp for the start of the week.
 ```typescript
 function startOfWeek(
   date: OptionsOrTimestamp, 
-  timeZone?: TimeZone, 
+  timeZone: TimeZone | null, 
   weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY
 ): number
 ```
@@ -59,7 +59,7 @@ Get the timestamp for the end of the week.
 ```typescript
 function endOfWeek(
   date: OptionsOrTimestamp, 
-  timeZone?: TimeZone, 
+  timeZone: TimeZone | null, 
   weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY
 ): number
 ```
@@ -74,7 +74,7 @@ function endOfWeek(
 Add weeks to a date.
 
 ```typescript
-function addWeeks(date: OptionsOrTimestamp, amount: number, timeZone?: TimeZone): number
+function addWeeks(date: OptionsOrTimestamp, amount: number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -87,7 +87,7 @@ function addWeeks(date: OptionsOrTimestamp, amount: number, timeZone?: TimeZone)
 Subtract weeks from a date.
 
 ```typescript
-function subWeeks(date: OptionsOrTimestamp, amount: number, timeZone?: TimeZone): number
+function subWeeks(date: OptionsOrTimestamp, amount: number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -100,7 +100,7 @@ function subWeeks(date: OptionsOrTimestamp, amount: number, timeZone?: TimeZone)
 Get the timestamp for the start of the ISO week.
 
 ```typescript
-function startOfISOWeek(date: OptionsOrTimestamp, timeZone?: TimeZone): number
+function startOfISOWeek(date: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -113,7 +113,7 @@ function startOfISOWeek(date: OptionsOrTimestamp, timeZone?: TimeZone): number
 Get the timestamp for the end of the ISO week.
 
 ```typescript
-function endOfISOWeek(date: OptionsOrTimestamp, timeZone?: TimeZone): number
+function endOfISOWeek(date: OptionsOrTimestamp, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -128,7 +128,7 @@ Get the number of weeks in a month.
 ```typescript
 function getWeeksInMonth(
   date: OptionsOrTimestamp, 
-  timeZone?: TimeZone, 
+  timeZone: TimeZone | null, 
   weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY
 ): number
 ```

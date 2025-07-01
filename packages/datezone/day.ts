@@ -3,7 +3,7 @@ import { DAY } from "./constants.js";
 import { formatToParts } from "./format-parts.js";
 import { getUTCtoTimezoneOffsetMinutes } from "./offset.js";
 import { isDST, isUTC, type TimeZone } from "./timezone.js";
-import { wallTimeToTS } from "./utils.js";
+import { wallTimeToTimestamp } from "./walltime.js";
 import { isLeapYearBase } from "./year.js";
 
 const DAY_OPTS = { day: "2-digit", month: "2-digit", year: "numeric" } as const;
@@ -15,7 +15,11 @@ const DAY_OPTS = { day: "2-digit", month: "2-digit", year: "numeric" } as const;
  * @param timeZone - The time zone.
  * @returns The new timestamp.
  */
-export function addDays(ts: number, days: number, timeZone?: TimeZone): number {
+export function addDays(
+	ts: number,
+	days: number,
+	timeZone: TimeZone | null,
+): number {
 	if (!timeZone) {
 		return ts + days * DAY;
 	}
@@ -28,7 +32,7 @@ export function addDays(ts: number, days: number, timeZone?: TimeZone): number {
 	}
 	// Fallback to existing logic for DST timezones
 	const { year, month, day } = formatToParts(ts, timeZone, DAY_OPTS);
-	return wallTimeToTS(year, month, day + days, 0, 0, 0, 0, timeZone);
+	return wallTimeToTimestamp(year, month, day + days, 0, 0, 0, 0, timeZone);
 }
 
 /**
@@ -47,7 +51,7 @@ export function addDaysBase(
 	days: number,
 	timeZone: TimeZone,
 ): number {
-	return wallTimeToTS(year, month, day + days, 0, 0, 0, 0, timeZone);
+	return wallTimeToTimestamp(year, month, day + days, 0, 0, 0, 0, timeZone);
 }
 
 /**
@@ -57,7 +61,11 @@ export function addDaysBase(
  * @param timeZone - The time zone.
  * @returns The new timestamp.
  */
-export function subDays(ts: number, days: number, timeZone?: TimeZone): number {
+export function subDays(
+	ts: number,
+	days: number,
+	timeZone: TimeZone | null,
+): number {
 	return addDays(ts, -days, timeZone);
 }
 
@@ -77,7 +85,7 @@ export function subDaysBase(
 	days: number,
 	timeZone: TimeZone,
 ): number {
-	return wallTimeToTS(year, month, day - days, 0, 0, 0, 0, timeZone);
+	return wallTimeToTimestamp(year, month, day - days, 0, 0, 0, 0, timeZone);
 }
 
 /**
@@ -86,7 +94,7 @@ export function subDaysBase(
  * @param timeZone - The time zone.
  * @returns The timestamp for the start of the day.
  */
-export function startOfDay(ts: number, timeZone?: TimeZone): number {
+export function startOfDay(ts: number, timeZone: TimeZone | null): number {
 	// Fast path: local time
 	if (!timeZone) {
 		const d = new Date(ts);
@@ -133,7 +141,7 @@ export function startOfDayBase(
 	day: number,
 	tz: TimeZone,
 ): number {
-	return wallTimeToTS(year, month, day, 0, 0, 0, 0, tz);
+	return wallTimeToTimestamp(year, month, day, 0, 0, 0, 0, tz);
 }
 
 /**
@@ -142,7 +150,7 @@ export function startOfDayBase(
  * @param timeZone - The time zone.
  * @returns The timestamp for the end of the day.
  */
-export function endOfDay(ts: number, timeZone?: TimeZone): number {
+export function endOfDay(ts: number, timeZone: TimeZone | null): number {
 	if (!timeZone) {
 		const d = new Date(ts);
 		d.setHours(23, 59, 59, 999);
@@ -187,7 +195,7 @@ export function endOfDayBase(
 	day: number,
 	tz: TimeZone,
 ): number {
-	return wallTimeToTS(year, month, day, 23, 59, 59, 999, tz);
+	return wallTimeToTimestamp(year, month, day, 23, 59, 59, 999, tz);
 }
 
 /**
@@ -196,7 +204,7 @@ export function endOfDayBase(
  * @param timeZone - The time zone.
  * @returns The timestamp for the start of the next day.
  */
-export function nextDay(ts: number, timeZone?: TimeZone): number {
+export function nextDay(ts: number, timeZone: TimeZone | null): number {
 	if (!timeZone) {
 		const d = new Date(ts);
 		d.setHours(0, 0, 0, 0);
@@ -231,7 +239,7 @@ export function nextDayBase(
 	day: number,
 	tz: TimeZone,
 ): number {
-	return wallTimeToTS(year, month, day + 1, 0, 0, 0, 0, tz);
+	return wallTimeToTimestamp(year, month, day + 1, 0, 0, 0, 0, tz);
 }
 
 /**
@@ -240,7 +248,7 @@ export function nextDayBase(
  * @param timeZone - The time zone.
  * @returns The timestamp for the start of the previous day.
  */
-export function previousDay(ts: number, timeZone?: TimeZone): number {
+export function previousDay(ts: number, timeZone: TimeZone | null): number {
 	// Fast path: local time
 	if (!timeZone) {
 		const d = new Date(ts);
@@ -280,7 +288,7 @@ export function previousDayBase(
 	day: number,
 	tz: TimeZone,
 ): number {
-	return wallTimeToTS(year, month, day - 1, 0, 0, 0, 0, tz);
+	return wallTimeToTimestamp(year, month, day - 1, 0, 0, 0, 0, tz);
 }
 
 /**

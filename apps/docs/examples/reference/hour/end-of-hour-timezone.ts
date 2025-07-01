@@ -4,4 +4,4 @@ const now = Date.now();
 const result = endOfHour(now);
 
 console.log("Original date:", new Date(now).toISOString());
-console.log("End of hour:", new Date(result).toISOString()); 
+console.log("End of hour:", new Date(result).toISOString());

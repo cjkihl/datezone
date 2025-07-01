@@ -2,7 +2,7 @@ import { getCachedFormatterLocale } from "./cache.js";
 import { FULL_TS, formatToParts } from "./format-parts.js";
 import { getUTCtoTimezoneOffsetMinutes } from "./offset.js";
 import { isDST, isUTC, type TimeZone } from "./timezone.js";
-import { wallTimeToTS } from "./utils.js";
+import { wallTimeToTimestamp } from "./walltime.js";
 import { isLeapYearBase } from "./year.js";
 
 const YEAR_MONTH_OPTS = { month: "2-digit", year: "numeric" } as const;
@@ -13,8 +13,7 @@ const YEAR_MONTH_OPTS = { month: "2-digit", year: "numeric" } as const;
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns The month of the year (1-12)
  */
-export function month(ts: number, timeZone?: TimeZone): number {
-
+export function month(ts: number, timeZone: TimeZone | null): number {
 	if (!timeZone) {
 		const d = new Date(ts);
 		return d.getMonth() + 1;
@@ -44,7 +43,7 @@ export function month(ts: number, timeZone?: TimeZone): number {
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns Timestamp for the start of the month
  */
-export function startOfMonth(ts: number, timeZone?: TimeZone): number {
+export function startOfMonth(ts: number, timeZone: TimeZone | null): number {
 	// Fast path: local time
 	if (!timeZone) {
 		const d = new Date(ts);
@@ -95,7 +94,7 @@ export function startOfMonthBase(
 	month: number,
 	timeZone: TimeZone,
 ): number {
-	return wallTimeToTS(year, month, 1, 0, 0, 0, 0, timeZone);
+	return wallTimeToTimestamp(year, month, 1, 0, 0, 0, 0, timeZone);
 }
 
 /**
@@ -104,7 +103,7 @@ export function startOfMonthBase(
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns Timestamp for the end of the month (last millisecond)
  */
-export function endOfMonth(ts: number, timeZone?: TimeZone): number {
+export function endOfMonth(ts: number, timeZone: TimeZone | null): number {
 	// Fast path: local time
 	if (!timeZone) {
 		const d = new Date(ts);
@@ -168,7 +167,7 @@ export function endOfMonthBase(
 export function addMonths(
 	ts: number,
 	months: number,
-	timeZone?: TimeZone,
+	timeZone: TimeZone | null,
 ): number {
 	// Fast path: local time
 	if (!timeZone) {
@@ -256,7 +255,7 @@ export function addMonthsBase(
 	const maxDay = daysInMonthBase(newYear, newMonth);
 	const newDay = day > maxDay ? maxDay : day;
 
-	return wallTimeToTS(
+	return wallTimeToTimestamp(
 		newYear,
 		newMonth,
 		newDay,
@@ -278,7 +277,7 @@ export function addMonthsBase(
 export function subMonths(
 	ts: number,
 	months: number,
-	timeZone?: TimeZone,
+	timeZone: TimeZone | null,
 ): number {
 	return addMonths(ts, -months, timeZone);
 }
@@ -293,7 +292,7 @@ export function subMonths(
 export function startOfNthMonth(
 	ts: number,
 	n: number,
-	timeZone?: TimeZone,
+	timeZone: TimeZone | null,
 ): number {
 	// Fast path: local time
 	if (!timeZone) {
@@ -348,7 +347,7 @@ function startOfNthMonthBase(
 	timeZone: TimeZone,
 ): number {
 	const [nextYear, nextMonth] = calculateYearMonth(year, month, n);
-	return wallTimeToTS(nextYear, nextMonth, 1, 0, 0, 0, 0, timeZone);
+	return wallTimeToTimestamp(nextYear, nextMonth, 1, 0, 0, 0, 0, timeZone);
 }
 
 /**
@@ -376,7 +375,7 @@ function startOfNextMonthBase(
 export function endOfNthMonth(
 	ts: number,
 	n: number,
-	timeZone?: TimeZone,
+	timeZone: TimeZone | null,
 ): number {
 	return startOfNthMonth(ts, n + 1, timeZone) - 1;
 }
@@ -387,7 +386,10 @@ export function endOfNthMonth(
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns Timestamp for the start of the next month
  */
-export function startOfNextMonth(ts: number, timeZone?: TimeZone): number {
+export function startOfNextMonth(
+	ts: number,
+	timeZone: TimeZone | null,
+): number {
 	return startOfNthMonth(ts, 1, timeZone);
 }
 
@@ -397,7 +399,7 @@ export function startOfNextMonth(ts: number, timeZone?: TimeZone): number {
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns Timestamp for the end of the next month (last millisecond)
  */
-export function endOfNextMonth(ts: number, timeZone?: TimeZone): number {
+export function endOfNextMonth(ts: number, timeZone: TimeZone | null): number {
 	return startOfNthMonth(ts, 2, timeZone) - 1;
 }
 
@@ -407,7 +409,10 @@ export function endOfNextMonth(ts: number, timeZone?: TimeZone): number {
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns Timestamp for the start of the previous month
  */
-export function startOfPrevMonth(ts: number, timeZone?: TimeZone): number {
+export function startOfPrevMonth(
+	ts: number,
+	timeZone: TimeZone | null,
+): number {
 	return startOfNthMonth(ts, -1, timeZone);
 }
 
@@ -417,7 +422,7 @@ export function startOfPrevMonth(ts: number, timeZone?: TimeZone): number {
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns Timestamp for the end of the previous month (last millisecond)
  */
-export function endOfPrevMonth(ts: number, timeZone?: TimeZone): number {
+export function endOfPrevMonth(ts: number, timeZone: TimeZone | null): number {
 	return startOfNthMonth(ts, 0, timeZone) - 1;
 }
 
@@ -429,7 +434,7 @@ const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns Number of days in the month
  */
-export function daysInMonth(ts: number, timeZone?: TimeZone): number {
+export function daysInMonth(ts: number, timeZone: TimeZone | null): number {
 	let year: number;
 	let month: number;
 
@@ -534,7 +539,7 @@ export function getMonthName(
  * @param timeZone - Optional timezone (defaults to local time)
  * @returns The quarter number (1-4)
  */
-export function getQuarter(ts: number, timeZone?: TimeZone): number {
+export function getQuarter(ts: number, timeZone: TimeZone | null): number {
 	let month: number;
 
 	const d = new Date(ts);

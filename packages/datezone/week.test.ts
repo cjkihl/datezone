@@ -9,15 +9,15 @@ import {
 	endOfWeekBase,
 	getISOWeekYear,
 	getISOWeekYearBase,
-	getWeek,
-	getWeekBase,
-	getWeeksInMonth,
-	getWeeksInMonthBase,
 	startOfISOWeek,
 	startOfWeek,
 	startOfWeekBase,
 	subWeeks,
 	WeekStartsOn,
+	week,
+	weekBase,
+	weeksInMonth,
+	weeksInMonthBase,
 } from "./week";
 
 describe("Week functions", () => {
@@ -29,45 +29,45 @@ describe("Week functions", () => {
 		});
 	});
 
-	describe("getWeek", () => {
+	describe("week", () => {
 		it("should return correct ISO week number for various dates", () => {
 			// Test with known ISO week numbers using base function
-			expect(getWeekBase(2023, 1, 1, "UTC")).toBe(52); // 2023-01-01 is week 52 of 2022
-			expect(getWeekBase(2023, 1, 2, "UTC")).toBe(1); // 2023-01-02 is week 1 of 2023
-			expect(getWeekBase(2023, 12, 31, "UTC")).toBe(52); // 2023-12-31 is week 52 of 2023
+			expect(weekBase(2023, 1, 1, "UTC")).toBe(52); // 2023-01-01 is week 52 of 2022
+			expect(weekBase(2023, 1, 2, "UTC")).toBe(1); // 2023-01-02 is week 1 of 2023
+			expect(weekBase(2023, 12, 31, "UTC")).toBe(52); // 2023-12-31 is week 52 of 2023
 
 			// Test with timestamp input
 			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023
-			expect(getWeek(timestamp, "UTC")).toBe(24);
+			expect(week(timestamp, "UTC")).toBe(24);
 		});
 
 		it("should handle timezone-specific dates correctly", () => {
 			// Test DST transition dates using base function
-			expect(getWeekBase(2023, 3, 12, "America/New_York")).toBe(10); // DST starts in US
-			expect(getWeekBase(2023, 3, 12, "UTC")).toBe(10);
+			expect(weekBase(2023, 3, 12, "America/New_York")).toBe(10); // DST starts in US
+			expect(weekBase(2023, 3, 12, "UTC")).toBe(10);
 		});
 
 		it("should handle edge cases around year boundaries", () => {
 			// January 1st that belongs to previous year's week using base function
-			expect(getWeekBase(2018, 1, 1, "UTC")).toBe(1);
-			expect(getWeekBase(2019, 1, 1, "UTC")).toBe(1);
-			expect(getWeekBase(2021, 1, 1, "UTC")).toBe(53); // 2021-01-01 is week 53 of 2020
+			expect(weekBase(2018, 1, 1, "UTC")).toBe(1);
+			expect(weekBase(2019, 1, 1, "UTC")).toBe(1);
+			expect(weekBase(2021, 1, 1, "UTC")).toBe(53); // 2021-01-01 is week 53 of 2020
 		});
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const week = getWeek(d.getTime(), undefined);
+			const week = week(d.getTime(), null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-			const localWeek = getWeek(d.getTime(), localTz as TimeZone);
+			const localWeek = week(d.getTime(), localTz as TimeZone);
 
 			// Should match local timezone behavior
 			expect(week).toBe(localWeek);
 
 			// If local timezone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
-				const utcWeek = getWeek(d.getTime(), "UTC");
+				const utcWeek = week(d.getTime(), "UTC");
 				expect(week).not.toBe(utcWeek);
 			}
 		});
@@ -647,46 +647,36 @@ describe("Week functions", () => {
 		});
 	});
 
-	describe("getWeeksInMonth", () => {
+	describe("weeksInMonth", () => {
 		it("should return correct number of weeks for various months with Monday start", () => {
 			// February 2023 (28 days, starts on Wednesday) - use base function
-			expect(getWeeksInMonthBase(2023, 2, WeekStartsOn.MONDAY, "UTC")).toBe(5);
+			expect(weeksInMonthBase(2023, 2, WeekStartsOn.MONDAY, "UTC")).toBe(5);
 
 			// February 2024 (29 days, leap year, starts on Thursday) - use base function
-			expect(getWeeksInMonthBase(2024, 2, WeekStartsOn.MONDAY, "UTC")).toBe(5);
+			expect(weeksInMonthBase(2024, 2, WeekStartsOn.MONDAY, "UTC")).toBe(5);
 
 			// January 2023 (31 days, starts on Sunday) - use base function
-			expect(getWeeksInMonthBase(2023, 1, WeekStartsOn.MONDAY, "UTC")).toBe(6);
+			expect(weeksInMonthBase(2023, 1, WeekStartsOn.MONDAY, "UTC")).toBe(6);
 
 			// June 2023 (30 days, starts on Thursday) - use base function
-			expect(getWeeksInMonthBase(2023, 6, WeekStartsOn.MONDAY, "UTC")).toBe(5);
+			expect(weeksInMonthBase(2023, 6, WeekStartsOn.MONDAY, "UTC")).toBe(5);
 
 			// May 2023 (31 days, starts on Monday) - use base function
-			expect(getWeeksInMonthBase(2023, 5, WeekStartsOn.MONDAY, "UTC")).toBe(5);
+			expect(weeksInMonthBase(2023, 5, WeekStartsOn.MONDAY, "UTC")).toBe(5);
 		});
 
 		it("should handle different week start days", () => {
 			// January 2023 starts on Sunday - use base function
 			// With Sunday start, January 2023 should need fewer weeks
-			const sundayWeeks = getWeeksInMonthBase(
-				2023,
-				1,
-				WeekStartsOn.SUNDAY,
-				"UTC",
-			);
+			const sundayWeeks = weeksInMonthBase(2023, 1, WeekStartsOn.SUNDAY, "UTC");
 			expect(sundayWeeks).toBe(5);
 
 			// With Monday start, January 2023 should need more weeks
-			const mondayWeeks = getWeeksInMonthBase(
-				2023,
-				1,
-				WeekStartsOn.MONDAY,
-				"UTC",
-			);
+			const mondayWeeks = weeksInMonthBase(2023, 1, WeekStartsOn.MONDAY, "UTC");
 			expect(mondayWeeks).toBe(6);
 
 			// With Saturday start (January starts on Sunday, which is day 1 of Saturday-based week)
-			const saturdayWeeks = getWeeksInMonthBase(
+			const saturdayWeeks = weeksInMonthBase(
 				2023,
 				1,
 				WeekStartsOn.SATURDAY,
@@ -697,29 +687,29 @@ describe("Week functions", () => {
 
 		it("should work with TimeZone day of the month", () => {
 			// All days in June 2023 should return same number of weeks - use timestamps
-			expect(getWeeksInMonth(Date.UTC(2023, 5, 1), "UTC")).toBe(5);
-			expect(getWeeksInMonth(Date.UTC(2023, 5, 15), "UTC")).toBe(5);
-			expect(getWeeksInMonth(Date.UTC(2023, 5, 30), "UTC")).toBe(5);
+			expect(weeksInMonth(Date.UTC(2023, 5, 1), "UTC")).toBe(5);
+			expect(weeksInMonth(Date.UTC(2023, 5, 15), "UTC")).toBe(5);
+			expect(weeksInMonth(Date.UTC(2023, 5, 30), "UTC")).toBe(5);
 		});
 
 		it("should work with timestamp input", () => {
 			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023
-			expect(getWeeksInMonth(timestamp, "UTC")).toBe(5);
+			expect(weeksInMonth(timestamp, "UTC")).toBe(5);
 		});
 
 		it("should handle edge cases", () => {
 			// Test months that definitely need 6 weeks with Monday start - use base function
-			expect(getWeeksInMonthBase(2023, 1, WeekStartsOn.MONDAY, "UTC")).toBe(6); // January 2023
-			expect(getWeeksInMonthBase(2023, 7, WeekStartsOn.MONDAY, "UTC")).toBe(6); // July 2023
-			expect(getWeeksInMonthBase(2023, 10, WeekStartsOn.MONDAY, "UTC")).toBe(6); // October 2023
+			expect(weeksInMonthBase(2023, 1, WeekStartsOn.MONDAY, "UTC")).toBe(6); // January 2023
+			expect(weeksInMonthBase(2023, 7, WeekStartsOn.MONDAY, "UTC")).toBe(6); // July 2023
+			expect(weeksInMonthBase(2023, 10, WeekStartsOn.MONDAY, "UTC")).toBe(6); // October 2023
 		});
 
 		it("should work with different timezones", () => {
 			// Use timestamps for main functions
 			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023
-			const utcWeeks = getWeeksInMonth(timestamp, "UTC");
-			const nyWeeks = getWeeksInMonth(timestamp, "America/New_York");
-			const tokyoWeeks = getWeeksInMonth(timestamp, "Asia/Tokyo");
+			const utcWeeks = weeksInMonth(timestamp, "UTC");
+			const nyWeeks = weeksInMonth(timestamp, "America/New_York");
+			const tokyoWeeks = weeksInMonth(timestamp, "Asia/Tokyo");
 
 			// Should generally be the same for most cases
 			expect(utcWeeks).toBe(5);
@@ -729,10 +719,10 @@ describe("Week functions", () => {
 
 		it("should handle leap years correctly", () => {
 			// February 2024 (leap year) - use base function
-			expect(getWeeksInMonthBase(2024, 2, WeekStartsOn.MONDAY, "UTC")).toBe(5);
+			expect(weeksInMonthBase(2024, 2, WeekStartsOn.MONDAY, "UTC")).toBe(5);
 
 			// February 2023 (non-leap year) - use base function
-			expect(getWeeksInMonthBase(2023, 2, WeekStartsOn.MONDAY, "UTC")).toBe(5);
+			expect(weeksInMonthBase(2023, 2, WeekStartsOn.MONDAY, "UTC")).toBe(5);
 		});
 
 		it("should return values in correct range", () => {
@@ -748,7 +738,7 @@ describe("Week functions", () => {
 			for (const year of years) {
 				for (const month of months) {
 					for (const weekStart of weekStarts) {
-						const weeks = getWeeksInMonthBase(year, month, weekStart, "UTC");
+						const weeks = weeksInMonthBase(year, month, weekStart, "UTC");
 						expect(weeks).toBeGreaterThanOrEqual(4);
 						expect(weeks).toBeLessThanOrEqual(6);
 					}
@@ -758,18 +748,18 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const weeks = getWeeksInMonth(d.getTime(), undefined);
+			const weeks = weeksInMonth(d.getTime(), undefined);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-			const localWeeks = getWeeksInMonth(d.getTime(), localTz as TimeZone);
+			const localWeeks = weeksInMonth(d.getTime(), localTz as TimeZone);
 
 			// Should match local timezone behavior
 			expect(weeks).toBe(localWeeks);
 
 			// If local timezone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
-				const utcWeeks = getWeeksInMonth(d.getTime(), "UTC");
+				const utcWeeks = weeksInMonth(d.getTime(), "UTC");
 				expect(weeks).not.toBe(utcWeeks);
 			}
 		});
@@ -782,11 +772,11 @@ describe("Week functions", () => {
 			// Perform 1000 operations using timestamps
 			for (let i = 0; i < 1000; i++) {
 				const timestamp = Date.UTC(2023, 5, (i % 30) + 1); // June 1-30, 2023
-				getWeek(timestamp, "UTC");
+				week(timestamp, "UTC");
 				startOfWeek(timestamp, "UTC");
 				endOfWeek(timestamp, "UTC");
 				addWeeks(timestamp, 1, "UTC");
-				getWeeksInMonth(timestamp, "UTC");
+				weeksInMonth(timestamp, "UTC");
 			}
 
 			const end = performance.now();
@@ -820,10 +810,10 @@ describe("Week functions", () => {
 	describe("Edge cases and error handling", () => {
 		it("should handle extreme dates", () => {
 			// Test year 1900 - use timestamp
-			expect(getWeek(Date.UTC(1900, 0, 1), "UTC")).toBeGreaterThan(0);
+			expect(week(Date.UTC(1900, 0, 1), "UTC")).toBeGreaterThan(0);
 
 			// Test far future date - use timestamp
-			expect(getWeek(Date.UTC(2100, 11, 31), "UTC")).toBeGreaterThan(0);
+			expect(week(Date.UTC(2100, 11, 31), "UTC")).toBeGreaterThan(0);
 		});
 
 		it("should handle DST transition edge cases", () => {
@@ -847,11 +837,11 @@ describe("Week functions", () => {
 		it("should handle invalid dates gracefully", () => {
 			// Invalid dates should not throw - use timestamps
 			expect(
-				() => getWeek(Date.UTC(2023, 1, 30), "UTC"), // February 30 is invalid but Date.UTC handles it
+				() => week(Date.UTC(2023, 1, 30), "UTC"), // February 30 is invalid but Date.UTC handles it
 			).not.toThrow();
 
 			expect(
-				() => getWeek(Date.UTC(2023, 12, 1), "UTC"), // Month 13 is invalid but Date.UTC handles it
+				() => week(Date.UTC(2023, 12, 1), "UTC"), // Month 13 is invalid but Date.UTC handles it
 			).not.toThrow();
 		});
 	});

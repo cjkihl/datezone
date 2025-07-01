@@ -2,6 +2,7 @@ import { describe, expect, it } from "bun:test";
 import {
 	addDays,
 	addDaysBase,
+	dayOfMonth,
 	dayOfWeek,
 	dayOfWeekBase,
 	dayOfYear,
@@ -273,16 +274,9 @@ describe("addDays", () => {
 		expect(new Date(ts).toISOString()).toBe("2024-01-16T00:00:00.000Z");
 	});
 	it("adds days with timezone (Asia/Singapore)", () => {
-		const opts = { day: 22, month: 5, year: 2024 };
-		const ts = addDaysBase(
-			opts.year,
-			opts.month,
-			opts.day,
-			2,
-			"Asia/Singapore",
-		);
-		const result = new Date(ts);
-		expect(result.getUTCDate()).toBe(23);
+		const ts = new Date("2024-05-22T15:23:45.123Z").getTime();
+		const result = addDays(ts, 2, "Asia/Singapore");
+		expect(new Date(result).toISOString()).toBe("2024-05-24T15:23:45.123Z");
 	});
 });
 
@@ -310,6 +304,28 @@ describe("subDays", () => {
 	});
 });
 
+describe("dayOfMonth", () => {
+	it("returns the correct day of the month for a given timestamp (local timezone)", () => {
+		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
+		expect(dayOfMonth(ts)).toBe(15);
+	});
+
+	it("returns the correct day of the month for a given timestamp in UTC", () => {
+		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
+		expect(dayOfMonth(ts, "UTC")).toBe(15);
+	});
+
+	it("returns the correct day of the month for a given timestamp in a non-DST timezone", () => {
+		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
+		expect(dayOfMonth(ts, "Asia/Tokyo")).toBe(15);
+	});
+
+	it("returns the correct day of the month for a given timestamp in a DST timezone", () => {
+		const ts = new Date("2024-03-10T12:00:00.000Z").getTime(); // DST start day in America/New_York
+		expect(dayOfMonth(ts, "America/New_York")).toBe(10);
+	});
+});
+
 describe("dayOfWeek", () => {
 	it("returns ISO day of week for timestamp (no timezone)", () => {
 		const d = new Date(Date.UTC(2024, 0, 15)); // Monday
@@ -322,6 +338,16 @@ describe("dayOfWeek", () => {
 	it("returns ISO day of week with timezone (Asia/Singapore)", () => {
 		const opts = { day: 22, month: 5, year: 2024 }; // Wednesday
 		expect(dayOfWeekBase(opts.year, opts.month, opts.day)).toBe(3);
+	});
+
+	it("returns ISO day of week for a given timestamp in a non-DST timezone", () => {
+		const ts = new Date("2024-07-15T12:00:00.000Z").getTime(); // Monday
+		expect(dayOfWeek(ts, "Asia/Tokyo")).toBe(1);
+	});
+
+	it("returns ISO day of week for a given timestamp in a DST timezone", () => {
+		const ts = new Date("2024-03-10T12:00:00.000Z").getTime(); // Sunday in America/New_York
+		expect(dayOfWeek(ts, "America/New_York")).toBe(7);
 	});
 });
 
@@ -337,6 +363,26 @@ describe("dayOfYear", () => {
 	it("returns day of year with timezone (Asia/Singapore)", () => {
 		const opts = { day: 22, month: 5, year: 2024 };
 		expect(dayOfYearBase(opts.year, opts.month, opts.day)).toBe(143);
+	});
+
+	it("returns the correct day of the year for a given timestamp in a non-DST timezone", () => {
+		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
+		expect(dayOfYear(ts, "Asia/Tokyo")).toBe(197);
+	});
+
+	it("returns the correct day of the year for a given timestamp in a DST timezone", () => {
+		const ts = new Date("2024-03-10T12:00:00.000Z").getTime(); // DST start day in America/New_York
+		expect(dayOfYear(ts, "America/New_York")).toBe(70);
+	});
+
+	it("returns the correct day of the year for a given timestamp in UTC", () => {
+		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
+		expect(dayOfYear(ts, "UTC")).toBe(197);
+	});
+
+	it("returns the correct day of the year for a given timestamp (local timezone)", () => {
+		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
+		expect(dayOfYear(ts)).toBe(197);
 	});
 });
 

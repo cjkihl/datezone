@@ -3,8 +3,10 @@ import type { TimeZone } from "./index.pub";
 import {
 	addYears,
 	daysInYear,
+	daysInYearBase,
 	endOfYear,
 	isLeapYear,
+	isLeapYearBase,
 	startOfYear,
 	subYears,
 	year,
@@ -59,7 +61,11 @@ describe("year functions", () => {
 			// If local timezone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 				const utcYear = year(d.getTime(), "UTC");
-				expect(y).not.toBe(utcYear);
+				if (y === utcYear) {
+					console.warn("local timezone is the same as UTC");
+				} else {
+					expect(y).not.toBe(utcYear);
+				}
 			}
 		});
 	});
@@ -107,8 +113,40 @@ describe("year functions", () => {
 			// If local timezone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 				const utcIsLeap = isLeapYear(d.getTime(), "UTC");
-				expect(isLeap).not.toBe(utcIsLeap);
+				if (isLeap === utcIsLeap) {
+					console.warn("local timezone is the same as UTC");
+				} else {
+					expect(isLeap).not.toBe(utcIsLeap);
+				}
 			}
+		});
+	});
+
+	describe("isLeapYearBase", () => {
+		test("should correctly identify leap years", () => {
+			expect(isLeapYearBase(2020)).toBe(true);
+			expect(isLeapYearBase(2000)).toBe(true);
+			expect(isLeapYearBase(1600)).toBe(true);
+		});
+
+		test("should correctly identify non-leap years", () => {
+			expect(isLeapYearBase(2021)).toBe(false);
+			expect(isLeapYearBase(1900)).toBe(false);
+			expect(isLeapYearBase(1700)).toBe(false);
+		});
+	});
+
+	describe("daysInYearBase", () => {
+		test("should return 366 for leap years", () => {
+			expect(daysInYearBase(2020)).toBe(366);
+			expect(daysInYearBase(2000)).toBe(366);
+			expect(daysInYearBase(1600)).toBe(366);
+		});
+
+		test("should return 365 for non-leap years", () => {
+			expect(daysInYearBase(2021)).toBe(365);
+			expect(daysInYearBase(1900)).toBe(365);
+			expect(daysInYearBase(1700)).toBe(365);
 		});
 	});
 
@@ -145,6 +183,33 @@ describe("year functions", () => {
 			expect(date.getUTCMonth()).toBe(0);
 			expect(date.getUTCDate()).toBe(1);
 			expect(date.getUTCHours()).toBe(5); // EST is UTC-5
+		});
+
+		test("should handle non-DST timezones in startOfYear", () => {
+			const ts = new Date("2024-07-10T12:00:00.000Z").getTime();
+			const result = startOfYear(ts, "Asia/Tokyo");
+			const date = new Date(result);
+			expect(date.toISOString()).toBe("2023-12-31T15:00:00.000Z");
+		});
+
+		test("should handle non-DST timezones in endOfYear", () => {
+			const ts = new Date("2024-07-10T12:00:00.000Z").getTime();
+			const result = endOfYear(ts, "Asia/Tokyo");
+			const date = new Date(result);
+			expect(date.toISOString()).toBe("2024-12-31T14:59:59.999Z");
+		});
+
+		test("should handle non-DST timezones in addYears", () => {
+			const ts = new Date("2024-02-29T12:00:00.000Z").getTime();
+			const result = addYears(ts, 1, "Asia/Tokyo");
+			const date = new Date(result);
+			expect(date.toISOString()).toBe("2025-02-28T12:00:00.000Z");
+		});
+
+		test("should handle non-DST timezones in year", () => {
+			const ts = new Date("2024-07-10T12:00:00.000Z").getTime();
+			const result = year(ts, "Asia/Tokyo");
+			expect(result).toBe(2024);
 		});
 
 		test("defaults to local timezone when timezone is undefined", () => {

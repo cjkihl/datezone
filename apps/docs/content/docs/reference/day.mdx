@@ -9,7 +9,7 @@ title: Day Utilities
 Adds a number of days to a timestamp or options object.
 
 ```ts
-addDays(ts: DayOptions | number, days: number, timeZone?: TimeZone): number
+addDays(ts: DayOptions | number, days: number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -39,7 +39,7 @@ Isn't 1 day always 24 hours (86,400 seconds)?
 Subtracts a number of days from a timestamp or options object.
 
 ```ts
-subDays(ts: DayOptions | number, days: number, timeZone?: TimeZone): number
+subDays(ts: DayOptions | number, days: number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -54,7 +54,7 @@ subDays(ts: DayOptions | number, days: number, timeZone?: TimeZone): number
 Returns the start of the day (00:00:00.000) in the given timezone.
 
 ```ts
-startOfDay(ts: DayOptions | number, timeZone?: TimeZone): number
+startOfDay(ts: DayOptions | number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -69,7 +69,7 @@ startOfDay(ts: DayOptions | number, timeZone?: TimeZone): number
 Returns the end of the day (23:59:59.999) in the given timezone.
 
 ```ts
-endOfDay(ts: DayOptions | number, timeZone?: TimeZone): number
+endOfDay(ts: DayOptions | number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -84,7 +84,7 @@ endOfDay(ts: DayOptions | number, timeZone?: TimeZone): number
 Returns the start of the next day (00:00:00.000) in the given timezone.
 
 ```ts
-nextDay(ts: DayOptions | number, timeZone?: TimeZone): number
+nextDay(ts: DayOptions | number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -99,7 +99,7 @@ nextDay(ts: DayOptions | number, timeZone?: TimeZone): number
 Returns the start of the previous day (00:00:00.000) in the given timezone.
 
 ```ts
-previousDay(ts: DayOptions | number, timeZone?: TimeZone): number
+previousDay(ts: DayOptions | number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -114,7 +114,7 @@ previousDay(ts: DayOptions | number, timeZone?: TimeZone): number
 Returns the ISO day of week (1=Monday, 7=Sunday) in the given timezone.
 
 ```ts
-dayOfWeek(ts: DayOptions | number, timeZone?: TimeZone): number
+dayOfWeek(ts: DayOptions | number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[
@@ -129,7 +129,7 @@ dayOfWeek(ts: DayOptions | number, timeZone?: TimeZone): number
 Returns the day of year (1-366) in the given timezone.
 
 ```ts
-dayOfYear(ts: DayOptions | number, timeZone?: TimeZone): number
+dayOfYear(ts: DayOptions | number, timeZone: TimeZone | null): number
 ```
 
 <CodeExample tabs={[

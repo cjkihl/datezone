@@ -14,7 +14,7 @@ Format utilities provide comprehensive date and time formatting functions with f
 Format a timestamp into a string using a format pattern.
 
 ```typescript
-function format(ts: OptionsOrTimestamp, pattern: string, timeZone?: TimeZone): string
+function format(ts: OptionsOrTimestamp, pattern: string, timeZone: TimeZone | null): string
 ```
 
 <CodeExample tabs={[
@@ -30,7 +30,7 @@ Format a timestamp relative to another timestamp (e.g., "2 hours ago", "in 3 day
 function formatRelative(
   ts: OptionsOrTimestamp,
   base: OptionsOrTimestamp,
-  timeZone?: TimeZone
+  timeZone: TimeZone | null
 ): string
 ```
 
@@ -44,7 +44,7 @@ Format the distance between two timestamps (e.g., "2 hours", "3 days").
 function formatDistance(
   ts1: OptionsOrTimestamp,
   ts2: OptionsOrTimestamp,
-  timeZone?: TimeZone
+  timeZone: TimeZone | null
 ): string
 ```
 
