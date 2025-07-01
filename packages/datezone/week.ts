@@ -52,12 +52,12 @@ function getWalltime(timestamp: number, timeZone?: TimeZone) {
 	return formatToParts(timestamp, timeZone, WEEK_OPTS);
 }
 
-export function getWeek(timestamp: number, timeZone?: TimeZone): number {
+export function week(timestamp: number, timeZone?: TimeZone): number {
 	const dt = getWalltime(timestamp, timeZone);
-	return getWeekBase(dt.year, dt.month, dt.day, timeZone);
+	return weekBase(dt.year, dt.month, dt.day, timeZone);
 }
 
-export function getWeekBase(
+export function weekBase(
 	year: number,
 	month: number,
 	day: number,

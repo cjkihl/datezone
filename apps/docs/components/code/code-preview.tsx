@@ -2,11 +2,11 @@
 import clsx from "clsx";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import { Check, Copy } from "lucide-react";
-import { useTheme } from "next-themes";
-import { Highlight, themes } from "prism-react-renderer";
-import { Fragment, useEffect, useState } from "react";
+
+import { Fragment, JSX, useState } from "react";
 import useMeasure from "react-use-measure";
 import { Button } from "@/components/ui/button";
+import { CodeBlock } from "./client";
 
 export type CodePreviewTab = {
 	name: string;
@@ -27,17 +27,16 @@ interface CodePreviewProps {
 	tabs: CodePreviewTab[];
 	showLineNumbers?: boolean;
 	actions?: React.ReactNode;
+	initial?: JSX.Element;
 }
 
 export function CodePreview({
 	tabs,
 	showLineNumbers = false,
 	actions,
+	initial,
 }: CodePreviewProps) {
 	const [currentTab, setCurrentTab] = useState<string>(tabs[0].name);
-
-	const theme = useTheme();
-
 	const code = tabs.find((tab) => tab.name === currentTab)?.code ?? "";
 	const [copyState, setCopyState] = useState(false);
 	const [ref, { height }] = useMeasure();
@@ -49,14 +48,6 @@ export function CodePreview({
 			}, 2000);
 		});
 	};
-
-	const [codeTheme, setCodeTheme] = useState(themes.synthwave84);
-
-	useEffect(() => {
-		setCodeTheme(
-			theme.resolvedTheme === "light" ? themes.oneLight : themes.synthwave84,
-		);
-	}, [theme.resolvedTheme]);
 
 	const isSingleTab = tabs.length === 1;
 
@@ -97,7 +88,6 @@ export function CodePreview({
 									))}
 								</div>
 							)}
-
 							<div
 								className={clsx(
 									"px-4 flex flex-col items-start text-sm overflow-x-auto",
@@ -121,7 +111,7 @@ export function CodePreview({
 								</div>
 								<motion.div
 									animate={{ opacity: 1 }}
-									className="relative flex items-start px-1 text-sm"
+									className="relative flex items-start px-1 text-sm not-prose"
 									initial={{ opacity: 0 }}
 									key={currentTab}
 									transition={{ duration: 0.5 }}
@@ -141,48 +131,7 @@ export function CodePreview({
 											))}
 										</div>
 									)}
-									<Highlight
-										code={code}
-										key={theme.resolvedTheme}
-										language={"javascript"}
-										theme={{
-											...codeTheme,
-											plain: {
-												backgroundColor: "transparent",
-											},
-										}}
-									>
-										{({
-											className,
-											style,
-											tokens,
-											getLineProps,
-											getTokenProps,
-										}) => (
-											<pre
-												className={clsx(className, "flex overflow-x-auto pb-6")}
-												style={style}
-											>
-												<code
-													className={clsx(
-														"not-prose",
-														showLineNumbers ? "px-4" : "px-0",
-													)}
-												>
-													{tokens.map((line, lineIndex) => (
-														<div key={lineIndex} {...getLineProps({ line })}>
-															{line.map((token, tokenIndex) => (
-																<span
-																	key={tokenIndex}
-																	{...getTokenProps({ token })}
-																/>
-															))}
-														</div>
-													))}
-												</code>
-											</pre>
-										)}
-									</Highlight>
+									<CodeBlock lang="ts" code={code} initial={initial || <div>Loading...</div>} />
 								</motion.div>
 								{actions && (
 									<motion.div className="self-end" layout>

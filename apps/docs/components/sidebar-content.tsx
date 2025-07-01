@@ -23,7 +23,8 @@ import {
 	BarChart3,
 	TrendingUp,
 	Activity,
-	ChartNoAxesColumn
+	ChartNoAxesColumn,
+	AlertTriangle
 } from "lucide-react";
 import type { ReactNode, SVGProps } from "react";
 import { Icons } from "./icons";
@@ -68,24 +69,19 @@ export const contents: Content[] = [
 		Icon: () => <FileText className="w-5 h-5" />,
 		list: [
 			{
-				href: "/docs/guides/timezone-basics",
+				href: "/docs/guides/why-date-is-evil",
+				icon: () => <AlertTriangle className="w-4 h-4 text-muted-foreground" />,
+				title: "Why Date is Evil",
+			},
+			{
+				href: "/docs/guides/why-use-timestamps",
 				icon: () => <Clock className="w-4 h-4 text-muted-foreground" />,
-				title: "Timezone Basics",
+				title: "Why Use Timestamps",
 			},
 			{
-				href: "/docs/guides/formatting-dates",
-				icon: () => <Type className="w-4 h-4 text-muted-foreground" />,
-				title: "Formatting Dates",
-			},
-			{
-				href: "/docs/guides/working-with-utc",
+				href: "/docs/guides/how-dst-works",
 				icon: () => <Globe className="w-4 h-4 text-muted-foreground" />,
-				title: "Working with UTC",
-			},
-			{
-				href: "/docs/guides/migration-guide",
-				icon: () => <ArrowRight className="w-4 h-4 text-muted-foreground" />,
-				title: "Migration Guide",
+				title: "How DST Works",
 			},
 			{
 				href: "/docs/guides/best-practices",

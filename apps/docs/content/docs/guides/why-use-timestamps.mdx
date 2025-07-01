@@ -1,10 +1,286 @@
 ---
-title: Title
-description: Description
+title: Why Use Timestamps
+description: Learn why timestamps are the superior choice for handling dates and times in JavaScript applications
 ---
 
-This is a guide why using timestamps is a better idea than using Date() in javascript.
 
 
-Examples on how datezone is using timestamps
+After understanding [why JavaScript Date is problematic](/docs/guides/why-date-is-evil), you might wonder what the alternative is. The answer is simple: **timestamps**. JavaScript's `number` type is actually the perfect data type for representing dates and times.
+
+## What Are Timestamps?
+
+A timestamp is a number representing milliseconds since the Unix epoch (January 1, 1970, 00:00:00 UTC). It's a single number that unambiguously represents a specific moment in time, anywhere in the world.
+
+```ts
+const timestamp = Date.now(); // e.g., 1704067200000
+const specificTime = new Date('2024-01-01T12:00:00Z').getTime(); // 1704110400000
+```
+
+## Why Timestamps Are Superior
+
+### 1. Universal and Unambiguous
+
+Unlike `Date` objects, timestamps represent the exact same moment in time regardless of where your code runs.
+
+```ts
+// This timestamp represents the same moment everywhere
+const timestamp = 1704110400000; // 2024-01-01T12:00:00Z
+
+// Always predictable, always testable
+console.log(timestamp); // Always logs: 1704110400000
+```
+
+### 2. Immutable by Nature
+
+Numbers cannot be mutated in JavaScript, eliminating an entire class of bugs.
+
+```ts
+const original = Date.now();
+const modified = original + (60 * 60 * 1000); // Add 1 hour
+
+// Original is unchanged
+console.log(original); // Still the original value
+console.log(modified); // New value, original untouched
+```
+
+### 3. Perfect Serialization
+
+Timestamps serialize and deserialize perfectly with JSON, databases, and APIs.
+
+```ts
+const data = {
+  createdAt: Date.now(),
+  updatedAt: Date.now(),
+  scheduledFor: new Date('2024-12-31T23:59:59Z').getTime()
+};
+
+const json = JSON.stringify(data);
+const parsed = JSON.parse(json);
+
+// All values are still numbers, ready to use
+console.log(typeof parsed.createdAt); // "number"
+```
+
+### 4. Zero Memory Overhead
+
+Timestamps are primitive values with no object overhead on the JavaScript heap.
+
+```ts
+// Efficient memory usage
+const timestamps = Array.from({ length: 1000000 }, () => Date.now());
+
+// vs expensive Date objects
+// const dates = Array.from({ length: 1000000 }, () => new Date());
+```
+
+### 5. Mathematical Operations
+
+You can perform arithmetic directly on timestamps without special functions.
+
+```ts
+const start = Date.now();
+const oneHour = 60 * 60 * 1000;
+const end = start + oneHour;
+
+const duration = end - start; // Always 3,600,000 milliseconds
+const isAfter = end > start; // Always true
+```
+
+## Working with Timestamps in Datezone
+
+Datezone is designed from the ground up to work with timestamps, providing all the functionality you need while maintaining the benefits of timestamps.
+
+### Basic Operations
+
+```ts
+import { addDays, addHours, subDays } from 'datezone';
+
+const now = Date.now();
+const tomorrow = addDays(now, 1);
+const nextWeek = addDays(now, 7);
+const lastHour = subDays(now, 1);
+```
+
+### Timezone-Aware Operations
+
+```ts
+import { addDays, format } from 'datezone';
+
+const timestamp = Date.now();
+
+// Add a day in New York timezone (handles DST automatically)
+const tomorrowNY = addDays(timestamp, 1, 'America/New_York');
+
+// Format for display
+const formatted = format(tomorrowNY, 'yyyy-MM-dd HH:mm z', {
+  timeZone: 'America/New_York',
+  locale: 'en-US'
+});
+```
+
+### Comparison and Validation
+
+```ts
+import { isSameDay, isAfter, isBefore } from 'datezone';
+
+const timestamp1 = Date.now();
+const timestamp2 = Date.now() + (24 * 60 * 60 * 1000);
+
+// Clear, readable comparisons
+const sameDay = isSameDay(timestamp1, timestamp2, 'America/New_York');
+const isLater = isAfter(timestamp2, timestamp1);
+```
+
+## Converting from Date Objects
+
+When you need to work with existing Date objects, convert them to timestamps immediately:
+
+```ts
+// Convert existing Date to timestamp
+const date = new Date();
+const timestamp = date.getTime();
+
+// Or use Date.now() for current time
+const now = Date.now();
+
+// Parse date strings to timestamps
+const parsed = new Date('2024-01-01T12:00:00Z').getTime();
+```
+
+## Best Practices with Timestamps
+
+### 1. Store Timestamps in Your Database
+
+```ts
+// Database schema (example with Prisma)
+model Event {
+  id        String   @id
+  name      String
+  createdAt BigInt   // Timestamp as BigInt
+  startTime BigInt   // Event start as timestamp
+  endTime   BigInt   // Event end as timestamp
+}
+```
+
+### 2. Use Timestamps in APIs
+
+```ts
+// API responses
+interface Event {
+  id: string;
+  name: string;
+  createdAt: number; // Timestamp
+  startTime: number; // Timestamp
+  endTime: number;   // Timestamp
+}
+```
+
+### 3. Convert to Display Format Only When Needed
+
+```ts
+import { format } from 'datezone';
+
+// Store as timestamp
+const event = {
+  startTime: Date.now(),
+  endTime: Date.now() + (60 * 60 * 1000)
+};
+
+// Convert to display format only when rendering
+const displayStart = format(event.startTime, 'MMM dd, yyyy HH:mm', {
+  timeZone: 'America/New_York',
+  locale: 'en-US'
+});
+```
+
+## Common Timestamp Patterns
+
+### Creating Timestamps
+
+```ts
+// Current time
+const now = Date.now();
+
+// Specific date
+const specific = new Date('2024-01-01T12:00:00Z').getTime();
+
+// From components
+const fromComponents = new Date(2024, 0, 1, 12, 0, 0).getTime();
+```
+
+### Time Calculations
+
+```ts
+const MINUTE = 60 * 1000;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
+
+const now = Date.now();
+const inOneHour = now + HOUR;
+const yesterday = now - DAY;
+```
+
+### Range Checking
+
+```ts
+const isInRange = (timestamp: number, start: number, end: number) => {
+  return timestamp >= start && timestamp <= end;
+};
+
+const start = Date.now();
+const end = start + (7 * 24 * 60 * 60 * 1000); // 7 days later
+const check = Date.now() + (3 * 24 * 60 * 60 * 1000); // 3 days later
+
+console.log(isInRange(check, start, end)); // true
+```
+
+## Migration Strategy
+
+### Step 1: Replace Date.now() Calls
+
+```ts
+// ❌ Creating Date objects
+const date = new Date();
+
+// ✅ Use timestamps directly
+const timestamp = Date.now();
+```
+
+### Step 2: Convert Function Parameters
+
+```ts
+// ❌ Functions taking Date objects
+function scheduleEvent(date: Date) {
+  // ...
+}
+
+// ✅ Functions taking timestamps
+function scheduleEvent(timestamp: number) {
+  // ...
+}
+```
+
+### Step 3: Update Data Storage
+
+```ts
+// ❌ Storing Date objects (often serialized as strings)
+interface OldEvent {
+  startTime: Date;
+}
+
+// ✅ Storing timestamps
+interface NewEvent {
+  startTime: number;
+}
+```
+
+## Summary
+
+Timestamps are the ideal way to handle dates and times in JavaScript applications. They're simple, efficient, predictable, and work seamlessly with the web platform. Combined with datezone's timezone-aware functions, you get all the power you need without any of the pitfalls of Date objects.
+
+<Callout type="success">
+**Key benefits**: Timestamps eliminate timezone ambiguity, serialization issues, mutation bugs, and testing problems while providing better performance and simpler code.
+</Callout>
+
+Next, learn about [how DST affects your applications](/docs/guides/how-dst-works) and why timezone-aware date arithmetic is essential.
 

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useId } from "react";
 import { Button } from "@/components/ui/button";
-import { CodePreview, type CodePreviewTab } from "../code-preview";
+import { CodePreview, type CodePreviewTab } from "../code/code-preview";
 import { GradientBG } from "./gradient-bg";
 import { Spotlight } from "./spotlight";
 

@@ -284,6 +284,32 @@ export function previousDayBase(
 }
 
 /**
+ * Returns the day of the month (1-31) in the given timezone.
+ * @param ts - The timestamp.
+ * @param tz - The time zone.
+ * @returns The day of the month.
+ */
+export function dayOfMonth(ts: number, tz?: TimeZone): number {
+	if (!tz) {
+		const d = new Date(ts);
+		return d.getDate();
+	}
+	if (isUTC(tz)) {
+		const d = new Date(ts);
+		return d.getUTCDate();
+	}
+	if (!isDST(tz)) {
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
+		const offsetMs = offsetMinutes * 60000;
+		const wallTimeTs = ts + offsetMs;
+		const d = new Date(wallTimeTs);
+		return d.getUTCDate();
+	}
+	const { day } = formatToParts(ts, tz, DAY_OPTS);
+	return day;
+}
+
+/**
  * Returns the ISO day of week (1=Monday, 7=Sunday) in the given timezone.
  * @param ts - The timestamp.
  * @param tz - The time zone.

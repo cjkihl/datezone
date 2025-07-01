@@ -1,47 +1,409 @@
 ---
-title: Title
-description: Description
+title: Best Practices
+description: Essential best practices for building robust date and time handling in your applications with datezone
 ---
 
-Always set timestamp explicit.
-
-Relying on the browser timestone is not a great user experience. It's better for the user to be able to select timezone with default set to browser timezone.
-
-This is how Outlook works for example. 
 
 
-Dont to artimetic even for simple date math.
+Building reliable applications that handle dates and times correctly requires following proven best practices. These guidelines will help you avoid common pitfalls and build maintainable, bug-free date logic.
 
-If you have a timestamp it might be tempting to just add 86400 seconds to the timestamp if you want to add one day.
+## Core Principles
 
-However this might lead to really hard to track bugs along the way.
+### 1. Always Specify Timezones Explicitly
 
-Becuase of DST in a lot of timezones. Some days are 25 hours and some days are 23 hours!
+Never rely on the system timezone for date operations. This creates unpredictable behavior that varies between environments.
 
-For dateMath always use datezone addDays, subDays.
+```ts
+// ❌ System-dependent - breaks across environments
+const nextWeek = addDays(Date.now(), 7);
 
-Datezone keeps a registry of all timezones that have DST and not.
+// ✅ Explicit timezone - predictable everywhere
+const nextWeek = addDays(Date.now(), 7, 'America/New_York');
+```
 
-For non DST timezones. datezone use simple arithmetic as a fast path optimization.
+<Callout type="info">
+**User experience tip**: Default to the user's detected timezone, but always allow them to override it. This is how professional applications like Outlook handle timezone selection.
+</Callout>
 
-For DST timezones, it's doing some magic to compesate for DST differenses.
+### 2. Store Timestamps, Display with Timezones
 
+Use timestamps for storage and calculations, but convert to localized formats only for display.
 
-Dont use the Date object. 
+```ts
+// ✅ Store as timestamp
+const event = {
+  id: '123',
+  name: 'Team Meeting',
+  startTime: Date.now(), // Timestamp
+  endTime: Date.now() + (60 * 60 * 1000) // Timestamp + 1 hour
+};
 
-Date object is horrible. Read about it here. (Link)
+// ✅ Display with user's timezone
+const displayTime = format(event.startTime, 'MMM dd, yyyy HH:mm', {
+  timeZone: userTimezone,
+  locale: userLocale
+});
+```
 
-Instead store timestamps. They dont take space on the JavaScript heap and are easy to sent over https.
+### 3. Never Use Date Arithmetic for Calendar Operations
 
-If you want to display a timestmapt use datezone toIsoString (Example below.)
+Don't add milliseconds directly to timestamps for date operations. DST transitions make this unreliable.
 
+```ts
+// ❌ Dangerous - breaks during DST transitions
+const tomorrow = today + (24 * 60 * 60 * 1000);
 
-Don't do DST calculations more than once, 
+// ✅ Safe - handles DST automatically
+const tomorrow = addDays(today, 1, 'America/New_York');
+```
 
-For most functions datezone have 2 functions one that takes a timestamp as parameter and a base function that takes wall time as parameter.
+<Callout type="warning">
+**DST gotcha**: During DST transitions, some days are 23 or 25 hours long. Simple arithmetic will give you the wrong calendar date.
+</Callout>
 
-If you do multiple calculations in a row or already know the walltime you can in most cases skip the DST calculation completely when calling a lot of functions after each other.
+## Database and API Design
 
+### 1. Store Timestamps in Your Database
 
-(Example here)
+Use timestamp columns in your database schema, not datetime strings.
+
+```sql
+-- ✅ PostgreSQL example
+CREATE TABLE events (
+  id UUID PRIMARY KEY,
+  name TEXT NOT NULL,
+  created_at BIGINT NOT NULL,  -- Timestamp
+  start_time BIGINT NOT NULL,  -- Timestamp
+  end_time BIGINT NOT NULL     -- Timestamp
+);
+```
+
+```ts
+// ✅ TypeScript interface
+interface Event {
+  id: string;
+  name: string;
+  createdAt: number; // Timestamp
+  startTime: number; // Timestamp
+  endTime: number;   // Timestamp
+}
+```
+
+### 2. Include Timezone Information in APIs
+
+When an API needs timezone context, include it explicitly in your requests and responses.
+
+```ts
+// ✅ API request with timezone context
+interface CreateEventRequest {
+  name: string;
+  startTime: number; // Timestamp
+  endTime: number;   // Timestamp
+  timeZone: string;  // IANA timezone for context
+}
+
+// ✅ API response with formatted times
+interface EventResponse {
+  id: string;
+  name: string;
+  startTime: number;           // Timestamp for calculations
+  endTime: number;             // Timestamp for calculations
+  displayStartTime: string;    // Formatted for display
+  displayEndTime: string;      // Formatted for display
+  timeZone: string;           // Context timezone
+}
+```
+
+### 3. Validate Timezone Parameters
+
+Always validate timezone strings to prevent runtime errors.
+
+```ts
+// ✅ Timezone validation helper
+function isValidTimezone(timezone: string): boolean {
+  try {
+    Intl.DateTimeFormat(undefined, { timeZone: timezone });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// ✅ Use in API handlers
+app.post('/events', (req, res) => {
+  const { timeZone } = req.body;
+  
+  if (!isValidTimezone(timeZone)) {
+    return res.status(400).json({ 
+      error: 'Invalid timezone provided' 
+    });
+  }
+  
+  // Process event...
+});
+```
+
+## Performance Optimization
+
+### 1. Minimize DST Calculations
+
+Datezone offers base functions that work with wall time to avoid repeated DST calculations.
+
+```ts
+// ❌ Repeated DST calculations
+events.forEach(event => {
+  const hour = getHour(event.startTime, 'America/New_York');
+  const minute = getMinute(event.startTime, 'America/New_York');
+  const second = getSecond(event.startTime, 'America/New_York');
+});
+
+// ✅ Single DST calculation with base functions
+events.forEach(event => {
+  const wallTime = toWallTime(event.startTime, 'America/New_York');
+  const hour = getHourBase(wallTime);
+  const minute = getMinuteBase(wallTime);
+  const second = getSecondBase(wallTime);
+});
+```
+
+### 2. Cache Timezone Operations
+
+For applications with many timezone operations, consider caching formatted results.
+
+```ts
+// ✅ Simple timezone formatter cache
+const formatCache = new Map<string, string>();
+
+function formatWithCache(timestamp: number, pattern: string, timezone: string): string {
+  const key = `${timestamp}-${pattern}-${timezone}`;
+  
+  if (formatCache.has(key)) {
+    return formatCache.get(key)!;
+  }
+  
+  const formatted = format(timestamp, pattern, { timeZone: timezone });
+  formatCache.set(key, formatted);
+  return formatted;
+}
+```
+
+## Testing Best Practices
+
+### 1. Test Around DST Transitions
+
+Always include DST transition dates in your test suite.
+
+```ts
+// ✅ Test critical DST dates
+const dstTestDates = [
+  '2024-03-10', // Spring forward (US)
+  '2024-11-03', // Fall back (US)
+  '2024-03-31', // Spring forward (EU)
+  '2024-10-27', // Fall back (EU)
+];
+
+describe('Date operations during DST', () => {
+  dstTestDates.forEach(dateStr => {
+    it(`handles operations correctly on ${dateStr}`, () => {
+      const testDate = new Date(`${dateStr}T12:00:00Z`).getTime();
+      
+      // Test your date logic here
+      const result = addDays(testDate, 1, 'America/New_York');
+      expect(result).toBeDefined();
+    });
+  });
+});
+```
+
+### 2. Use Fixed Timestamps in Tests
+
+Avoid `Date.now()` in tests. Use fixed timestamps for predictable testing.
+
+```ts
+// ✅ Fixed timestamp for consistent tests
+const FIXED_TIMESTAMP = new Date('2024-01-15T12:00:00Z').getTime();
+
+describe('Event scheduling', () => {
+  it('schedules events correctly', () => {
+    const event = scheduleEvent(FIXED_TIMESTAMP, 'America/New_York');
+    expect(event.startTime).toBe(FIXED_TIMESTAMP);
+  });
+});
+```
+
+### 3. Test Multiple Timezones
+
+Test your logic across different timezone types.
+
+```ts
+// ✅ Test various timezone scenarios
+const testTimezones = [
+  'UTC',                    // No DST
+  'America/New_York',       // DST with different rules
+  'Europe/London',          // DST with different rules  
+  'Asia/Tokyo',             // No DST, different offset
+  'Australia/Sydney',       // Southern hemisphere DST
+];
+
+testTimezones.forEach(timezone => {
+  it(`works correctly in ${timezone}`, () => {
+    const result = addDays(FIXED_TIMESTAMP, 1, timezone);
+    // Test your expectations
+  });
+});
+```
+
+## User Interface Guidelines
+
+### 1. Show Timezone Context
+
+Always display timezone information in your UI when showing times.
+
+```tsx
+// ✅ Clear timezone context
+function EventCard({ event, userTimezone }: { event: Event; userTimezone: string }) {
+  const displayTime = format(event.startTime, 'MMM dd, yyyy HH:mm z', {
+    timeZone: userTimezone,
+    locale: 'en-US'
+  });
+  
+  return (
+    <div>
+      <h3>{event.name}</h3>
+      <p>{displayTime}</p> {/* Shows: "Jan 15, 2024 14:30 EST" */}
+    </div>
+  );
+}
+```
+
+### 2. Handle Timezone Selection
+
+Provide timezone selection with smart defaults.
+
+```tsx
+// ✅ Timezone selector with user-friendly defaults
+function TimezoneSelector({ value, onChange }: TimezoneProps) {
+  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const commonTimezones = [
+    'America/New_York',
+    'America/Chicago', 
+    'America/Denver',
+    'America/Los_Angeles',
+    'Europe/London',
+    'UTC'
+  ];
+  
+  return (
+    <select value={value || userTimezone} onChange={onChange}>
+      <optgroup label="Detected">
+        <option value={userTimezone}>{userTimezone} (Local)</option>
+      </optgroup>
+      <optgroup label="Common">
+        {commonTimezones.map(tz => (
+          <option key={tz} value={tz}>{tz}</option>
+        ))}
+      </optgroup>
+    </select>
+  );
+}
+```
+
+## Error Handling
+
+### 1. Graceful Timezone Fallbacks
+
+Handle invalid timezones gracefully.
+
+```ts
+// ✅ Safe timezone operations with fallbacks
+function safeFormat(timestamp: number, pattern: string, timezone?: string): string {
+  try {
+    return format(timestamp, pattern, { 
+      timeZone: timezone || 'UTC',
+      locale: 'en-US' 
+    });
+  } catch (error) {
+    console.warn(`Invalid timezone: ${timezone}, falling back to UTC`);
+    return format(timestamp, pattern, { 
+      timeZone: 'UTC',
+      locale: 'en-US' 
+    });
+  }
+}
+```
+
+### 2. Validate Date Inputs
+
+Always validate date inputs from users.
+
+```ts
+// ✅ Input validation
+function validateEventTime(timestamp: number): boolean {
+  if (!Number.isInteger(timestamp)) {
+    throw new Error('Timestamp must be an integer');
+  }
+  
+  const minDate = new Date('1900-01-01').getTime();
+  const maxDate = new Date('2100-01-01').getTime();
+  
+  if (timestamp < minDate || timestamp > maxDate) {
+    throw new Error('Date must be between 1900 and 2100');
+  }
+  
+  return true;
+}
+```
+
+## Migration Strategies
+
+### 1. Gradual Migration from Date Objects
+
+Migrate your codebase gradually by introducing wrapper functions.
+
+```ts
+// ✅ Migration wrapper
+function legacyDateToTimestamp(date: Date | number): number {
+  return typeof date === 'number' ? date : date.getTime();
+}
+
+// Use during migration
+function processEvent(eventDate: Date | number) {
+  const timestamp = legacyDateToTimestamp(eventDate);
+  // New datezone logic here
+}
+```
+
+### 2. Database Migration
+
+Migrate database columns gradually with dual storage.
+
+```sql
+-- ✅ Add new timestamp column alongside old datetime
+ALTER TABLE events 
+ADD COLUMN start_time_ts BIGINT;
+
+-- Populate new column
+UPDATE events 
+SET start_time_ts = EXTRACT(EPOCH FROM start_time) * 1000;
+
+-- Eventually drop old column after migration
+-- ALTER TABLE events DROP COLUMN start_time;
+```
+
+## Summary
+
+Following these best practices will help you build robust, maintainable applications with reliable date and time handling:
+
+1. **Always specify timezones explicitly**
+2. **Store timestamps, display with timezone context**
+3. **Never use arithmetic for calendar operations**
+4. **Test around DST transitions**
+5. **Validate all timezone inputs**
+6. **Provide clear timezone context in UIs**
+
+<Callout type="success">
+**Golden rule**: When in doubt, be explicit about timezones. The extra verbosity will save you from hard-to-debug issues in production.
+</Callout>
+
+These practices, combined with datezone's timezone-aware functions, will eliminate the vast majority of date-related bugs in your applications.
 

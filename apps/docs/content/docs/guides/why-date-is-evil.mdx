@@ -1,26 +1,150 @@
 ---
-title: Title
-description: Description
+title: Why JavaScript Date is is Hard
+description: Understanding the fundamental problems with JavaScript's Date object and why you should avoid it
 ---
 
-Explain why the Date() in javascript is evil.
 
 
-It doent support timezones.
+JavaScript's `Date` object is one of the most problematic APIs in the language. While it seems convenient at first, it's the source of countless bugs and unpredictable behavior in applications. Here's why you should avoid it and what to use instead.
 
-Opaque internal state.
+## The Core Problems
 
-date.getHour() will execute different on where the code is executed.
+### 1. No Timezone Support
 
-hard to make unit tests. 
+The `Date` object doesn't properly support timezones. It only knows about the local system timezone and UTC, making it difficult to work with dates in specific timezones reliably.
 
-Unpredicable code.
+```ts
+const date = new Date('2024-01-01');
+console.log(date.getHours()); // Could be 0, 1, 23, etc. depending on timezone
+```
 
-Not serializble. Libraries like superjson have work around like this. But it adds a lot of overload every time you need to send a Date over https.
+<Callout type="warning">
+**Machine-dependent behavior**: The same code produces different results depending on where it's executed. This makes your application unpredictable and hard to test.
+</Callout>
 
-Whats the alternative?
+### 2. Confusing constructor
 
-Luckily Javascript have an alterative native type for handling dates. number. 
+The `Date` object's constructor string parser have strange implicit behavours and is prone to a lot a hard to track errors.
+
+```ts
+// These behave differently:
+new Date('2024-01-01');           // Date-only: interpreted as UTC
+new Date('2024-01-01T12:00:00');  // Date-time: interpreted as LOCAL time
+new Date('2024-01-01T12:00:00Z'); // Date-time with Z: interpreted as UTC
+```
+
+### 3. Mutable State = Bugs
+
+`Date` objects are mutable, which leads to unexpected side effects and hard-to-track bugs.
+
+```ts
+const date = new Date('2024-01-01'); // Creates a new Date 2024-01-01 00:00 UTC
+date.setDate(date.getDate() + 1); // Mutates the original object - now 2024-01-02
+console.log(date); // The original date object has been modified!
+```
+
+<Callout type="danger">
+**Mutation bugs**: Methods like `setHours()`, `setDate()`, etc. modify the original object instead of returning a new one. This violates the principle of immutability and can cause subtle bugs.
+</Callout>
+
+### 4. Unpredictable Results
+
+The same code returns different results depending on the system timezone, making unit testing unreliable.
+
+```ts
+// This represents midnight UTC on Jan 1, 2024
+const date = new Date('2024-01-01');
+
+// But getHours() returns different values on different machines:
+expect(date.getHours()).toBe(0);  // ✅ Works in UTC
+expect(date.getHours()).toBe(19); // ✅ Works in EST (UTC-5) 
+expect(date.getHours()).toBe(16); // ✅ Works in PST (UTC-8)
+expect(date.getHours()).toBe(9);  // ✅ Works in JST (UTC+9)
+```
+
+### 5. Not Serializable
+
+`Date` objects don't serialize well. When you send them over HTTP or store them in JSON, you lose the Date() object.
+
+```ts
+const date = new Date();
+const json = JSON.stringify({ date });
+const parsed = JSON.parse(json);
+
+// parsed.date is now a string, not a Date object
+console.log(typeof parsed.date); // "string"
+```
+
+<Callout type="info">
+**Serialization problems**: Libraries like `superjson` exist to work around this, but they add complexity and overhead to your application.
+</Callout>
+
+## The Alternative: Timestamps
+
+JavaScript has a much better built-in native type for handling dates: `number` (timestamps)!
+
+### Why Timestamps Are Better
+
+- **Immutable**: Numbers can't be mutated
+- **Serializable**: Numbers work perfectly with JSON
+- **Predictable**: Always represent the same moment in time no matter which timezone you are in. 
+- **Efficient**: No memory overhead on the JavaScript heap
+- **Testable**: Same input always produces the same output
+
+```ts
+// Clean, predictable, testable
+const timestamp = Date.now();
+const oneHourLater = timestamp + (60 * 60 * 1000);
+
+// This works the same everywhere
+expect(oneHourLater - timestamp).toBe(3600000);
+```
+
+### Working with Timestamps
+
+Instead of using `Date` methods, use datezone functions that work with timestamps:
+
+```ts
+import { addDays, format } from 'datezone';
+
+const now = Date.now();
+const tomorrow = addDays(now, 1, 'America/New_York');
+const formatted = format(tomorrow, 'yyyy-MM-dd', { 
+  timeZone: 'America/New_York' 
+});
+```
+
+## Migration Strategy
+
+### Step 1: Stop Creating Date Objects
+
+```ts
+// ❌ Don't do this
+const date = new Date();
+const customDate = new Date('2024-01-01');
+
+// ✅ Do this instead
+const timestamp = Date.now();
+const customTimestamp = new Date('2024-01-01').getTime();
+
+// Send timestamps back and forth from your APIs
+```
+
+### Step 2: Replace Date Methods with Timezone-Aware Functions
+
+<CodeExample tabs={[{ name: "Migrate to Datezone", file: "guides/migrate-simple.ts" }]} />
+
+<Callout type="info">
+**Understanding Timezone Parameters**: Most datezone functions require an explicit `timeZone` parameter to ensure predictable behavior across different environments. Functions like `addHours` work with raw timestamps and don't need timezone context since they add fixed durations. However, operations that depend on calendar concepts (days, months, years) need timezone information to handle DST transitions correctly.
+</Callout>
 
 
-Read in (/guides/why-use-timestamps) why timestampts is great.
+## Summary
+
+The JavaScript `Date` object is fundamentally flawed and should be avoided in production applications. By using timestamps and timezone-aware functions like those provided by datezone, you can build more reliable, testable, and maintainable applications.
+
+<Callout type="success">
+**Key takeaway**: Store timestamps, display with explicit timezones. This approach eliminates the vast majority of date-related bugs in JavaScript applications.
+</Callout>
+
+Next, learn about [why timestamps are the better choice](/docs/guides/why-use-timestamps) for your applications.

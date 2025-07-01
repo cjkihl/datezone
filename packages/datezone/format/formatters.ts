@@ -9,7 +9,7 @@ import { getMonthName } from "../month.js";
 import { formatOrdinal } from "../ordinal.js";
 import type { TimeZone } from "../timezone.js";
 import type { WallDateTime } from "../types.js";
-import { getISOWeekYearBase, getWeekBase } from "../week.js";
+import { getISOWeekYearBase, weekBase } from "../week.js";
 import { quarter } from "../year.js";
 import {
 	formatGMT,
@@ -243,32 +243,32 @@ function LLLLL(o: Options): string {
  * Local week of year
  */
 function w(o: Options): string {
-	return String(getWeekBase(o.dt.year, o.dt.month, o.dt.day, o.tz));
+	return String(weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz));
 }
 function wo(o: Options): string {
 	return formatOrdinal(
-		getWeekBase(o.dt.year, o.dt.month, o.dt.day, o.tz),
+		weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz),
 		o.locale,
 	);
 }
 function ww(o: Options): string {
-	return padZeros(getWeekBase(o.dt.year, o.dt.month, o.dt.day, o.tz), 2);
+	return padZeros(weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz), 2);
 }
 
 /**
  * ISO week of year
  */
 function I(o: Options): string {
-	return String(getWeekBase(o.dt.year, o.dt.month, o.dt.day, o.tz));
+	return String(weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz));
 }
 function Io(o: Options): string {
 	return formatOrdinal(
-		getWeekBase(o.dt.year, o.dt.month, o.dt.day, o.tz),
+		weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz),
 		o.locale,
 	);
 }
 function II(o: Options): string {
-	return padZeros(getWeekBase(o.dt.year, o.dt.month, o.dt.day, o.tz), 2);
+	return padZeros(weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz), 2);
 }
 
 /**

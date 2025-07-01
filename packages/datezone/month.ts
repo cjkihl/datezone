@@ -8,6 +8,37 @@ import { isLeapYearBase } from "./year.js";
 const YEAR_MONTH_OPTS = { month: "2-digit", year: "numeric" } as const;
 
 /**
+ * Gets the month of the year for a given timestamp.
+ * @param ts - The timestamp to get the month for
+ * @param timeZone - Optional timezone (defaults to local time)
+ * @returns The month of the year (1-12)
+ */
+export function month(ts: number, timeZone?: TimeZone): number {
+
+	if (!timeZone) {
+		const d = new Date(ts);
+		return d.getMonth() + 1;
+	}
+
+	if (isUTC(timeZone)) {
+		const d = new Date(ts);
+		return d.getUTCMonth() + 1;
+	}
+
+	if (!isDST(timeZone)) {
+		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
+		const offsetMs = offsetMinutes * 60000;
+
+		const wallTimeTs = ts + offsetMs;
+		const d = new Date(wallTimeTs);
+		return d.getUTCMonth() + 1;
+	}
+
+	const { month } = formatToParts(ts, timeZone, YEAR_MONTH_OPTS);
+	return month;
+}
+
+/**
  * Gets the timestamp for the start of the month containing the given timestamp.
  * @param ts - The timestamp to get the start of month for
  * @param timeZone - Optional timezone (defaults to local time)

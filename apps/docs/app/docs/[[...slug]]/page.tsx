@@ -19,6 +19,7 @@ import { contents } from "@/components/sidebar-content";
 import { AnimatePresence } from "@/components/ui/fade-in";
 import { source } from "@/lib/source";
 import { absoluteUrl, cn } from "@/lib/utils";
+import { CodeExample } from "@/components/code/code-example";
 
 const { AutoTypeTable } = createTypeTable();
 
@@ -66,7 +67,6 @@ export default async function Page({
 						Accordions,
 						AnimatePresence,
 						AutoTypeTable,
-
 						Callout: ({ children, ...props }) => (
 							<defaultMdxComponents.Callout
 								{...props}
@@ -81,6 +81,7 @@ export default async function Page({
 								{children}
 							</defaultMdxComponents.Callout>
 						),
+						CodeExample,
 						DatabaseTable,
 						DividerText,
 						Endpoint,
