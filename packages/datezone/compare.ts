@@ -1,28 +1,19 @@
 import { startOfDayBase } from "./day.js";
 import type { TimeZone } from "./index.pub.js";
-import { dayOfWeek, formatToParts, startOfDay } from "./index.pub.js";
+import { dayOfWeek, startOfDay } from "./index.pub.js";
+import { timestampToWalltime } from "./walltime.js";
 
 // Type and helper function for other modules that still use OptionsOrTimestamp
 export type OptionsOrTimestamp =
 	| { year: number; month: number; day: number }
 	| number;
 
-const DAY_OPTS = { day: "2-digit", month: "2-digit", year: "numeric" } as const;
-
-// Helper function for other modules that still support OptionsOrTimestamp
-export function getOptions(
-	ts: OptionsOrTimestamp,
-	timeZone: TimeZone,
-): { year: number; month: number; day: number } {
-	return typeof ts === "number" ? formatToParts(ts, timeZone, DAY_OPTS) : ts;
-}
-
 /**
  * Returns the start of today (00:00:00.000) in the given timezone.
  * @param timeZone - The time zone.
  * @returns The timestamp for the start of today.
  */
-function getTodayStart(timeZone: TimeZone): number {
+function startOfToday(timeZone: TimeZone): number {
 	return startOfDay(Date.now(), timeZone);
 }
 
@@ -30,7 +21,7 @@ function getTodayStart(timeZone: TimeZone): number {
  * Performance: Timezone required for converting timestamp to current day
  */
 export function isToday(ts: number, timeZone: TimeZone): boolean {
-	const todayStart = getTodayStart(timeZone);
+	const todayStart = startOfToday(timeZone);
 	return todayStart === startOfDay(ts, timeZone);
 }
 
@@ -40,7 +31,7 @@ export function isTodayBase(
 	day: number,
 	timeZone: TimeZone,
 ): boolean {
-	const todayStart = getTodayStart(timeZone);
+	const todayStart = startOfToday(timeZone);
 	return todayStart === startOfDayBase(year, month, day, timeZone);
 }
 
@@ -48,7 +39,7 @@ export function isTodayBase(
  * Performance: Timezone required for converting timestamp to current day
  */
 export function isTomorrow(ts: number, timeZone: TimeZone): boolean {
-	const todayStart = getTodayStart(timeZone);
+	const todayStart = startOfToday(timeZone);
 	const tomorrowStart = todayStart + 86_400_000; // Add one day in milliseconds
 	const dateStart = startOfDay(ts, timeZone);
 	return tomorrowStart === dateStart;
@@ -58,7 +49,7 @@ export function isTomorrow(ts: number, timeZone: TimeZone): boolean {
  * Performance: Timezone required for converting timestamp to current day
  */
 export function isYesterday(ts: number, timeZone: TimeZone): boolean {
-	const todayStart = getTodayStart(timeZone);
+	const todayStart = startOfToday(timeZone);
 	const yesterdayStart = todayStart - 86_400_000; // Subtract one day in milliseconds
 	const dateStart = startOfDay(ts, timeZone);
 	return yesterdayStart === dateStart;
@@ -67,7 +58,7 @@ export function isYesterday(ts: number, timeZone: TimeZone): boolean {
 /**
  * Performance: Timezone required for DST-aware comparison with current time
  */
-export function isPast(ts: number, _timeZone: TimeZone): boolean {
+export function isPast(ts: number): boolean {
 	const now = Date.now();
 	return ts < now;
 }
@@ -75,7 +66,7 @@ export function isPast(ts: number, _timeZone: TimeZone): boolean {
 /**
  * Performance: Timezone required for DST-aware comparison with current time
  */
-export function isFuture(ts: number, _timeZone: TimeZone): boolean {
+export function isFuture(ts: number): boolean {
 	const now = Date.now();
 	return ts > now;
 }
@@ -147,8 +138,8 @@ export function isSameMonth(
 	ts2: number,
 	timeZone: TimeZone,
 ): boolean {
-	const d1 = formatToParts(ts1, timeZone, DAY_OPTS);
-	const d2 = formatToParts(ts2, timeZone, DAY_OPTS);
+	const d1 = timestampToWalltime(ts1, timeZone);
+	const d2 = timestampToWalltime(ts2, timeZone);
 	return d1.year === d2.year && d1.month === d2.month;
 }
 
@@ -160,7 +151,7 @@ export function isSameYear(
 	ts2: number,
 	timeZone: TimeZone,
 ): boolean {
-	const d1 = formatToParts(ts1, timeZone, DAY_OPTS);
-	const d2 = formatToParts(ts2, timeZone, DAY_OPTS);
+	const d1 = timestampToWalltime(ts1, timeZone);
+	const d2 = timestampToWalltime(ts2, timeZone);
 	return d1.year === d2.year;
 }

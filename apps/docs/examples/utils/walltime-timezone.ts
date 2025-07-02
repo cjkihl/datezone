@@ -1,7 +1,7 @@
-import { wallTimeToTS } from "datezone";
+import { walltimeToTimestamp } from "datezone";
 
 // Convert wall time in specific timezones to UTC
-const nyWallTime = wallTimeToTS(
+const nyWallTime = walltimeToTimestamp(
 	2024,
 	1,
 	15, // January 15, 2024
@@ -12,7 +12,7 @@ const nyWallTime = wallTimeToTS(
 	"America/New_York",
 );
 
-const tokyoWallTime = wallTimeToTS(
+const tokyoWallTime = walltimeToTimestamp(
 	2024,
 	1,
 	15, // January 15, 2024
@@ -23,7 +23,7 @@ const tokyoWallTime = wallTimeToTS(
 	"Asia/Tokyo",
 );
 
-const utcWallTime = wallTimeToTS(
+const utcWallTime = walltimeToTimestamp(
 	2024,
 	1,
 	15, // January 15, 2024

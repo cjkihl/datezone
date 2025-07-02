@@ -1,3 +1,3 @@
 import { endOfPrevMonth } from "datezone";
 
-endOfPrevMonth(Date.now());
+endOfPrevMonth(Date.now(), null);

@@ -1,4 +1,4 @@
-import { type TimeZone, wallTimeToTS } from "datezone";
+import { type TimeZone, walltimeToTimestamp } from "datezone";
 
 // Note: utcToTimeZone function may need to be implemented or use offset utilities
 function utcToTimeZone(utcTimestamp: number, _timeZone: TimeZone): number {
@@ -22,7 +22,7 @@ function createEvent(
 	minute: number,
 	timezone: TimeZone,
 ): Event {
-	const utcTimestamp = wallTimeToTS(
+	const utcTimestamp = walltimeToTimestamp(
 		year,
 		month,
 		day,

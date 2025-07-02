@@ -1,4 +1,4 @@
-import { type TimeZone, wallTimeToTS } from "datezone";
+import { type TimeZone, walltimeToTimestamp } from "datezone";
 
 function scheduleRecurringEvent(
 	startYear: number,
@@ -15,7 +15,7 @@ function scheduleRecurringEvent(
 		// Add weeks to the start date
 		const eventDate = new Date(startYear, startMonth - 1, startDay + i * 7);
 
-		const timestamp = wallTimeToTS(
+		const timestamp = walltimeToTimestamp(
 			eventDate.getFullYear(),
 			eventDate.getMonth() + 1, // Convert back to 1-based
 			eventDate.getDate(),

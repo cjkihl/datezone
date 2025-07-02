@@ -1,31 +1,31 @@
 import { describe, expect, it } from "bun:test";
-import { wallTimeToTimestamp, walltime } from "./walltime";
+import { timestampToWalltime, walltimeToTimestamp } from "./walltime";
 
-describe("wallTimeToTS", () => {
+describe("walltimeToTimestamp", () => {
 	it("converts wall time in UTC to UTC instant", () => {
 		const d = new Date(
-			wallTimeToTimestamp(2024, 5, 22, 12, 34, 56, 789, "Etc/UTC"),
+			walltimeToTimestamp(2024, 5, 22, 12, 34, 56, 789, "Etc/UTC"),
 		);
 		expect(d.toISOString()).toBe("2024-05-22T12:34:56.789Z");
 	});
 
 	it("converts wall time in Asia/Tokyo to UTC instant", () => {
 		const d = new Date(
-			wallTimeToTimestamp(2024, 5, 22, 9, 0, 0, 0, "Asia/Tokyo"),
+			walltimeToTimestamp(2024, 5, 22, 9, 0, 0, 0, "Asia/Tokyo"),
 		);
 		expect(d.getUTCHours()).toBe(0);
 	});
 
 	it("handles edge case: negative offset (America/Los_Angeles)", () => {
 		const d = new Date(
-			wallTimeToTimestamp(2024, 1, 1, 0, 0, 0, 0, "America/Los_Angeles"),
+			walltimeToTimestamp(2024, 1, 1, 0, 0, 0, 0, "America/Los_Angeles"),
 		);
 		expect(d instanceof Date).toBe(true);
 	});
 
 	it("handles leap second (simulate 60th second)", () => {
 		const d = new Date(
-			wallTimeToTimestamp(2016, 12, 31, 23, 59, 60, 0, "Etc/UTC"),
+			walltimeToTimestamp(2016, 12, 31, 23, 59, 60, 0, "Etc/UTC"),
 		);
 		// JS Date will roll over to next minute
 		expect(d.getUTCSeconds() === 0 || d.getUTCSeconds() === 60).toBe(true);
@@ -36,7 +36,7 @@ describe("walltime", () => {
 	describe("timestamp to WallTime conversion", () => {
 		it("converts UTC timestamp to local wall time", () => {
 			const timestamp = Date.UTC(2024, 4, 22, 12, 34, 56, 789); // May 22, 2024
-			const wallTime = walltime(timestamp); // No timezone = local
+			const wallTime = timestampToWalltime(timestamp, null); // No timezone = local
 
 			// Should return a valid WallTime object
 			expect(wallTime).toHaveProperty("year");
@@ -50,7 +50,7 @@ describe("walltime", () => {
 
 		it("converts UTC timestamp to UTC wall time", () => {
 			const timestamp = Date.UTC(2024, 4, 22, 12, 34, 56, 789); // May 22, 2024
-			const wallTime = walltime(timestamp, "Etc/UTC");
+			const wallTime = timestampToWalltime(timestamp, "Etc/UTC");
 
 			expect(wallTime.year).toBe(2024);
 			expect(wallTime.month).toBe(5);
@@ -63,7 +63,7 @@ describe("walltime", () => {
 
 		it("converts UTC timestamp to Asia/Tokyo wall time", () => {
 			const timestamp = Date.UTC(2024, 4, 22, 0, 0, 0, 0); // May 22, 2024 00:00 UTC
-			const wallTime = walltime(timestamp, "Asia/Tokyo");
+			const wallTime = timestampToWalltime(timestamp, "Asia/Tokyo");
 
 			expect(wallTime.year).toBe(2024);
 			expect(wallTime.month).toBe(5);
@@ -83,7 +83,7 @@ describe("walltime", () => {
 				second: 56,
 				year: 2024,
 			};
-			const timestamp = walltime(wallTimeObj, "Etc/UTC");
+			const timestamp = walltimeToTimestamp(wallTimeObj, "Etc/UTC");
 			const expectedTimestamp = Date.UTC(2024, 4, 22, 12, 34, 56, 789); // milliseconds are preserved
 
 			expect(timestamp).toBe(expectedTimestamp);
@@ -99,7 +99,7 @@ describe("walltime", () => {
 				second: 0,
 				year: 2024,
 			};
-			const timestamp = walltime(wallTimeObj, "Asia/Tokyo");
+			const timestamp = walltimeToTimestamp(wallTimeObj, "Asia/Tokyo");
 			const expectedTimestamp = Date.UTC(2024, 4, 22, 0, 0, 0, 0); // 9 AM JST = 0 AM UTC
 
 			expect(timestamp).toBe(expectedTimestamp);
@@ -115,7 +115,7 @@ describe("walltime", () => {
 				second: 0,
 				year: 2024,
 			};
-			const timestamp = walltime(wallTimeObj); // No timezone = local
+			const timestamp = walltimeToTimestamp(wallTimeObj, null); // No timezone = local
 
 			expect(typeof timestamp).toBe("number");
 			expect(timestamp).toBeGreaterThan(0);
@@ -128,10 +128,10 @@ describe("walltime", () => {
 			const timezone = "America/New_York";
 
 			// Convert timestamp to walltime
-			const wallTimeObj = walltime(originalTimestamp, timezone);
+			const wallTimeObj = timestampToWalltime(originalTimestamp, timezone);
 
 			// Convert walltime back to timestamp
-			const roundTripTimestamp = walltime(wallTimeObj, timezone);
+			const roundTripTimestamp = walltimeToTimestamp(wallTimeObj, timezone);
 
 			expect(roundTripTimestamp).toBe(originalTimestamp);
 		});
@@ -140,10 +140,10 @@ describe("walltime", () => {
 			const originalTimestamp = Date.UTC(2024, 4, 22, 12, 34, 56, 789);
 
 			// Convert timestamp to walltime in UTC
-			const wallTimeObj = walltime(originalTimestamp, "Etc/UTC");
+			const wallTimeObj = timestampToWalltime(originalTimestamp, "Etc/UTC");
 
 			// Convert walltime back to timestamp
-			const roundTripTimestamp = walltime(wallTimeObj, "Etc/UTC");
+			const roundTripTimestamp = walltimeToTimestamp(wallTimeObj, "Etc/UTC");
 
 			expect(roundTripTimestamp).toBe(originalTimestamp);
 		});

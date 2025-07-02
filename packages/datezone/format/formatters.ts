@@ -24,7 +24,7 @@ import {
 type Options = {
 	dt: WallDateTime;
 	locale: string;
-	tz?: TimeZone;
+	tz: TimeZone | null;
 	len: number;
 };
 
@@ -105,29 +105,35 @@ function Yo(o: Options): string {
 function R(o: Options): string {
 	return o.len === 2
 		? padZeros(
-				getISOWeekYearBase(o.dt.year, o.dt.month, o.dt.day, o.tz) % 100,
+				getISOWeekYearBase(o.dt.year, o.dt.month, o.dt.day, o.tz ?? null) % 100,
 				2,
 			)
 		: padZeros(
-				getISOWeekYearBase(o.dt.year, o.dt.month, o.dt.day, o.tz),
+				getISOWeekYearBase(o.dt.year, o.dt.month, o.dt.day, o.tz ?? null),
 				o.len,
 			);
 }
 function RR(o: Options): string {
 	return padZeros(
-		getISOWeekYearBase(o.dt.year, o.dt.month, o.dt.day, o.tz) % 100,
+		getISOWeekYearBase(o.dt.year, o.dt.month, o.dt.day, o.tz ?? null) % 100,
 		2,
 	);
 }
 function RRR(o: Options): string {
-	return padZeros(getISOWeekYearBase(o.dt.year, o.dt.month, o.dt.day, o.tz), 3);
+	return padZeros(
+		getISOWeekYearBase(o.dt.year, o.dt.month, o.dt.day, o.tz ?? null),
+		3,
+	);
 }
 function RRRR(o: Options): string {
-	return padZeros(getISOWeekYearBase(o.dt.year, o.dt.month, o.dt.day, o.tz), 4);
+	return padZeros(
+		getISOWeekYearBase(o.dt.year, o.dt.month, o.dt.day, o.tz ?? null),
+		4,
+	);
 }
 function RRRRR(o: Options): string {
 	return padZeros(
-		getISOWeekYearBase(o.dt.year, o.dt.month, o.dt.day, o.tz),
+		getISOWeekYearBase(o.dt.year, o.dt.month, o.dt.day, o.tz ?? null),
 		o.len,
 	);
 }
@@ -243,32 +249,32 @@ function LLLLL(o: Options): string {
  * Local week of year
  */
 function w(o: Options): string {
-	return String(weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz));
+	return String(weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz ?? null));
 }
 function wo(o: Options): string {
 	return formatOrdinal(
-		weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz),
+		weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz ?? null),
 		o.locale,
 	);
 }
 function ww(o: Options): string {
-	return padZeros(weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz), 2);
+	return padZeros(weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz ?? null), 2);
 }
 
 /**
  * ISO week of year
  */
 function I(o: Options): string {
-	return String(weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz));
+	return String(weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz ?? null));
 }
 function Io(o: Options): string {
 	return formatOrdinal(
-		weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz),
+		weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz ?? null),
 		o.locale,
 	);
 }
 function II(o: Options): string {
-	return padZeros(weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz), 2);
+	return padZeros(weekBase(o.dt.year, o.dt.month, o.dt.day, o.tz ?? null), 2);
 }
 
 /**

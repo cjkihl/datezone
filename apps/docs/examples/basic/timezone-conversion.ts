@@ -12,5 +12,5 @@ const ny = format(date, "yyyy-MM-dd HH:mm zzz", {
 	timeZone: "America/New_York",
 });
 
-console.log("Original UTC:", utc);
-console.log("In New York:", ny);
+console.log(utc); // 2024-06-01 12:00 UTC
+console.log(ny); // 2024-06-01 08:00 EDT

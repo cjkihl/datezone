@@ -1,7 +1,7 @@
 import { hour, to12Hour } from "datezone";
 
 const now = Date.now();
-const hour24 = hour(now);
+const hour24 = hour(now, null);
 const hour12 = to12Hour(hour24);
 
 console.log("Current date:", new Date(now).toISOString());

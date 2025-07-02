@@ -1,9 +1,7 @@
-import { FULL_TS, formatToParts, isUTC, type TimeZone } from "./index.pub.js";
+import { isUTC, type TimeZone } from "./index.pub.js";
 import { getUTCtoTimezoneOffsetMinutes } from "./offset.js";
 import { isDST } from "./timezone.js";
-import { wallTimeToTimestamp } from "./walltime.js";
-
-const YEAR_OPTS = { year: "numeric" } as const;
+import { timestampToWalltime, walltimeToTimestamp } from "./walltime.js";
 
 /**
  * Extracts the year from a timestamp.
@@ -29,7 +27,7 @@ export function year(ts: number, tz?: TimeZone): number {
 
 		return d.getUTCFullYear();
 	}
-	return formatToParts(ts, tz, YEAR_OPTS).year;
+	return timestampToWalltime(ts, tz).year;
 }
 
 /**
@@ -84,7 +82,7 @@ export function startOfYear(ts: number, tz?: TimeZone): number {
 		return startOfYearWall - offsetMs;
 	}
 	const y = year(ts, tz);
-	return wallTimeToTimestamp(y, 1, 1, 0, 0, 0, 0, tz);
+	return walltimeToTimestamp(y, 1, 1, 0, 0, 0, 0, tz);
 }
 
 /**
@@ -119,7 +117,7 @@ export function endOfYear(ts: number, tz?: TimeZone): number {
 		return endOfYearWall - offsetMs;
 	}
 	const y = year(ts, tz);
-	return wallTimeToTimestamp(y, 12, 31, 23, 59, 59, 999, tz);
+	return walltimeToTimestamp(y, 12, 31, 23, 59, 59, 999, tz);
 }
 
 /**
@@ -169,11 +167,8 @@ export function addYears(ts: number, amount: number, tz?: TimeZone): number {
 		return d.getTime() - offsetMs;
 	}
 
-	const { year, month, day, hour, minute, second, millisecond } = formatToParts(
-		ts,
-		tz,
-		FULL_TS,
-	);
+	const { year, month, day, hour, minute, second, millisecond } =
+		timestampToWalltime(ts, tz);
 
 	const targetYear = year + amount;
 	let targetDay = day;
@@ -182,7 +177,7 @@ export function addYears(ts: number, amount: number, tz?: TimeZone): number {
 		targetDay = 28;
 	}
 
-	return wallTimeToTimestamp(
+	return walltimeToTimestamp(
 		targetYear,
 		month,
 		targetDay,

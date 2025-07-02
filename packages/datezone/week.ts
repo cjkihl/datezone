@@ -2,7 +2,7 @@ import { dayOfWeekBase } from "./day.js";
 import { isUTC, type TimeZone } from "./index.pub.js";
 import { getUTCtoTimezoneOffsetMinutes } from "./offset.js";
 import { isDST } from "./timezone.js";
-import { wallTimeToTimestamp, walltime } from "./walltime.js";
+import { timestampToWalltime, walltimeToTimestamp } from "./walltime.js";
 
 export enum WeekStartsOn {
 	SUNDAY = 0,
@@ -11,7 +11,7 @@ export enum WeekStartsOn {
 }
 
 export function week(timestamp: number, timeZone: TimeZone | null): number {
-	const dt = walltime(timestamp, timeZone);
+	const dt = timestampToWalltime(timestamp, timeZone);
 	return weekBase(dt.year, dt.month, dt.day, timeZone);
 }
 
@@ -32,7 +32,7 @@ export function getISOWeekYear(
 	timestamp: number,
 	timeZone: TimeZone | null,
 ): number {
-	const dt = walltime(timestamp, timeZone);
+	const dt = timestampToWalltime(timestamp, timeZone);
 	return getISOWeekYearBase(dt.year, dt.month, dt.day, timeZone);
 }
 
@@ -91,7 +91,7 @@ export function startOfWeek(
 	}
 
 	// Complex path: DST timezones (requires full timezone parsing)
-	const dt = walltime(timestamp, timeZone);
+	const dt = timestampToWalltime(timestamp, timeZone);
 	return startOfWeekBase(dt.year, dt.month, dt.day, weekStartsOn, timeZone);
 }
 
@@ -114,7 +114,7 @@ export function startOfWeekBase(
 	const dayNum = dayOfWeekBase(year, month, day);
 	const jsDay = dayNum === 7 ? 0 : dayNum;
 	const daysFromWeekStart = (jsDay - weekStartsOn + 7) % 7;
-	return wallTimeToTimestamp(
+	return walltimeToTimestamp(
 		year,
 		month,
 		day - daysFromWeekStart,
@@ -169,7 +169,7 @@ export function endOfWeek(
 	}
 
 	// Complex path: DST timezones (requires full timezone parsing)
-	const dt = walltime(timestamp, timeZone);
+	const dt = timestampToWalltime(timestamp, timeZone);
 	return endOfWeekBase(dt.year, dt.month, dt.day, weekStartsOn, timeZone);
 }
 
@@ -193,7 +193,7 @@ export function endOfWeekBase(
 	const jsDay = dayNum === 7 ? 0 : dayNum;
 	const weekEnd = (weekStartsOn + 6) % 7;
 	const daysToWeekEnd = (weekEnd - jsDay + 7) % 7;
-	return wallTimeToTimestamp(
+	return walltimeToTimestamp(
 		year,
 		month,
 		day + daysToWeekEnd,
@@ -226,7 +226,7 @@ export function addWeeks(
 	}
 
 	// Complex path: DST timezones (requires full timezone parsing)
-	const dt = walltime(timestamp, timeZone);
+	const dt = timestampToWalltime(timestamp, timeZone);
 	return addWeeksBase(dt.year, dt.month, dt.day, amount, timeZone);
 }
 
@@ -246,7 +246,7 @@ export function addWeeksBase(
 	amount: number,
 	tz: TimeZone,
 ): number {
-	return wallTimeToTimestamp(year, month, day + amount * 7, 0, 0, 0, 0, tz);
+	return walltimeToTimestamp(year, month, day + amount * 7, 0, 0, 0, 0, tz);
 }
 
 export function subWeeks(
@@ -276,7 +276,7 @@ export function weeksInMonth(
 	timeZone: TimeZone | null,
 	weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY,
 ): number {
-	const dt = walltime(timestamp, timeZone);
+	const dt = timestampToWalltime(timestamp, timeZone);
 	return weeksInMonthBase(dt.year, dt.month, weekStartsOn, timeZone);
 }
 

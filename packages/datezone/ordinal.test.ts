@@ -190,7 +190,7 @@ describe("formatOrdinal", () => {
 		it("should cache plural rules and number formats", () => {
 			// Call formatOrdinal multiple times with the same locale
 			// This tests that the caching mechanism works without throwing errors
-			const results = [];
+			const results: string[] = [];
 			for (let i = 0; i < 5; i++) {
 				results.push(formatOrdinal(1, "en"));
 				results.push(formatOrdinal(2, "fr"));

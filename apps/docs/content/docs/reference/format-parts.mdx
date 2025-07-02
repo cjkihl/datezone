@@ -163,7 +163,7 @@ console.table(comparison.map(item => ({
 
 ```typescript
 import { formatToParts, FULL_TS } from 'datezone';
-import { wallTimeToTS } from 'datezone';
+import { walltimeToTimestamp } from 'datezone';
 
 function addDaysToTimestamp(timestamp: number, days: number, timeZone = 'UTC'): number {
   // Extract current components
@@ -173,7 +173,7 @@ function addDaysToTimestamp(timestamp: number, days: number, timeZone = 'UTC'): 
   const newDate = new Date(parts.year, parts.month - 1, parts.day + days);
   
   // Convert back to timestamp in the same timezone
-  return wallTimeToTS(
+  return walltimeToTimestamp(
     newDate.getFullYear(),
     newDate.getMonth() + 1,
     newDate.getDate(),
@@ -188,7 +188,7 @@ function addDaysToTimestamp(timestamp: number, days: number, timeZone = 'UTC'): 
 function addHoursToTimestamp(timestamp: number, hours: number, timeZone = 'UTC'): number {
   const parts = formatToParts(timestamp, timeZone, FULL_TS);
   
-  return wallTimeToTS(
+  return walltimeToTimestamp(
     parts.year,
     parts.month,
     parts.day,
@@ -244,7 +244,7 @@ function getNextBusinessDay(timestamp: number, timeZone: string): number {
     
     // If it's a weekday, return start of business day
     if (parts.weekday >= 1 && parts.weekday <= 5) {
-      return wallTimeToTS(parts.year, parts.month, parts.day, 9, 0, 0, 0, timeZone);
+      return walltimeToTimestamp(parts.year, parts.month, parts.day, 9, 0, 0, 0, timeZone);
     }
     
     // Move to next day

@@ -56,19 +56,19 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const week = week(d.getTime(), null);
+			const calculatedWeek = week(d.getTime(), null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 			const localWeek = week(d.getTime(), localTz as TimeZone);
 
 			// Should match local timezone behavior
-			expect(week).toBe(localWeek);
+			expect(calculatedWeek).toBe(localWeek);
 
 			// If local timezone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 				const utcWeek = week(d.getTime(), "UTC");
-				expect(week).not.toBe(utcWeek);
+				expect(calculatedWeek).not.toBe(utcWeek);
 			}
 		});
 	});
@@ -95,7 +95,7 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const year = getISOWeekYear(d.getTime(), undefined);
+			const year = getISOWeekYear(d.getTime(), null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -242,7 +242,7 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const start = startOfWeek(d.getTime(), undefined);
+			const start = startOfWeek(d.getTime(), null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -354,7 +354,7 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const end = endOfWeek(d.getTime(), undefined);
+			const end = endOfWeek(d.getTime(), null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -444,7 +444,7 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const added = addWeeks(d.getTime(), 1, undefined);
+			const added = addWeeks(d.getTime(), 1, null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -514,7 +514,7 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const subbed = subWeeks(d.getTime(), 1, undefined);
+			const subbed = subWeeks(d.getTime(), 1, null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -576,7 +576,7 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const start = startOfISOWeek(d.getTime(), undefined);
+			const start = startOfISOWeek(d.getTime(), null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -630,7 +630,7 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const end = endOfISOWeek(d.getTime(), undefined);
+			const end = endOfISOWeek(d.getTime(), null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -748,7 +748,7 @@ describe("Week functions", () => {
 
 		it("defaults to local timezone when timezone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const weeks = weeksInMonth(d.getTime(), undefined);
+			const weeks = weeksInMonth(d.getTime(), null);
 
 			// Get the local timezone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -807,6 +807,262 @@ describe("Week functions", () => {
 		});
 	});
 
+	describe("Fixed offset timezones (non-DST)", () => {
+		// Test fixed offset timezones to cover the !isDST() fast path
+		it("should handle fixed offset timezones in startOfWeek", () => {
+			const timestamp = Date.UTC(2023, 5, 15, 12, 0, 0); // June 15, 2023 12:00 UTC
+
+			// Test Asia/Karachi timezone (UTC+5, fixed offset, no DST)
+			const result = startOfWeek(timestamp, "Asia/Karachi");
+			const parts = formatToParts(result, "Asia/Karachi", {
+				day: "2-digit",
+				hour: "2-digit",
+				hour12: false,
+				month: "2-digit",
+				year: "numeric",
+			});
+			expect(parts.day).toBe(12); // Monday June 12
+			expect(parts.hour).toBe(0); // Should be 00:00 in Asia/Karachi
+		});
+
+		it("should handle fixed offset timezones in endOfWeek", () => {
+			const timestamp = Date.UTC(2023, 5, 15, 12, 0, 0); // June 15, 2023 12:00 UTC
+
+			// Test Pacific/Pitcairn timezone (UTC-8, fixed offset, no DST)
+			const result = endOfWeek(timestamp, "Pacific/Pitcairn");
+			const parts = formatToParts(result, "Pacific/Pitcairn", {
+				day: "2-digit",
+				hour: "2-digit",
+				hour12: false,
+				minute: "2-digit",
+				month: "2-digit",
+				second: "2-digit",
+				year: "numeric",
+			});
+			expect(parts.day).toBe(18); // Sunday June 18
+			expect(parts.hour).toBe(23);
+			expect(parts.minute).toBe(59);
+			expect(parts.second).toBe(59);
+		});
+
+		it("should handle fixed offset timezones in addWeeks", () => {
+			const timestamp = Date.UTC(2023, 5, 15, 12, 0, 0); // June 15, 2023 12:00 UTC
+
+			// Test Asia/Dhaka timezone (UTC+6, fixed offset, no DST)
+			const result = addWeeks(timestamp, 2, "Asia/Dhaka");
+			const expected = timestamp + 2 * 7 * 24 * 60 * 60 * 1000; // Should use fast path
+			expect(result).toBe(expected);
+		});
+	});
+
+	describe("Base functions direct testing", () => {
+		it("should test weekBase directly", () => {
+			// Test specific edge cases with weekBase
+			expect(weekBase(2023, 1, 1, "UTC")).toBe(52); // Week 52 of 2022
+			expect(weekBase(2021, 1, 1, "UTC")).toBe(53); // Week 53 of 2020
+			expect(weekBase(2024, 12, 30, "UTC")).toBe(1); // Week 1 of 2025
+		});
+
+		it("should test getISOWeekYearBase directly", () => {
+			// Test ISO week year edge cases
+			expect(getISOWeekYearBase(2023, 1, 1, "UTC")).toBe(2022);
+			expect(getISOWeekYearBase(2021, 1, 1, "UTC")).toBe(2020);
+			expect(getISOWeekYearBase(2024, 12, 30, "UTC")).toBe(2025);
+		});
+
+		it("should test startOfWeekBase with all WeekStartsOn values", () => {
+			// June 15, 2023 is Thursday
+			const thursday = startOfWeekBase(2023, 6, 15, WeekStartsOn.SUNDAY, "UTC");
+			const thursdayParts = formatToParts(thursday, "UTC", {
+				day: "2-digit",
+				month: "2-digit",
+			});
+			expect(thursdayParts.day).toBe(11); // Sunday June 11
+
+			const thursdayMon = startOfWeekBase(
+				2023,
+				6,
+				15,
+				WeekStartsOn.MONDAY,
+				"UTC",
+			);
+			const thursdayMonParts = formatToParts(thursdayMon, "UTC", {
+				day: "2-digit",
+				month: "2-digit",
+			});
+			expect(thursdayMonParts.day).toBe(12); // Monday June 12
+
+			const thursdaySat = startOfWeekBase(
+				2023,
+				6,
+				15,
+				WeekStartsOn.SATURDAY,
+				"UTC",
+			);
+			const thursdaySatParts = formatToParts(thursdaySat, "UTC", {
+				day: "2-digit",
+				month: "2-digit",
+			});
+			expect(thursdaySatParts.day).toBe(10); // Saturday June 10
+		});
+
+		it("should test endOfWeekBase with all WeekStartsOn values", () => {
+			// June 15, 2023 is Thursday
+			const thursday = endOfWeekBase(2023, 6, 15, WeekStartsOn.SUNDAY, "UTC");
+			const thursdayParts = formatToParts(thursday, "UTC", {
+				day: "2-digit",
+				month: "2-digit",
+			});
+			expect(thursdayParts.day).toBe(17); // Saturday June 17
+
+			const thursdayMon = endOfWeekBase(
+				2023,
+				6,
+				15,
+				WeekStartsOn.MONDAY,
+				"UTC",
+			);
+			const thursdayMonParts = formatToParts(thursdayMon, "UTC", {
+				day: "2-digit",
+				month: "2-digit",
+			});
+			expect(thursdayMonParts.day).toBe(18); // Sunday June 18
+
+			const thursdaySat = endOfWeekBase(
+				2023,
+				6,
+				15,
+				WeekStartsOn.SATURDAY,
+				"UTC",
+			);
+			const thursdaySatParts = formatToParts(thursdaySat, "UTC", {
+				day: "2-digit",
+				month: "2-digit",
+			});
+			expect(thursdaySatParts.day).toBe(16); // Friday June 16
+		});
+
+		it("should test addWeeksBase directly", () => {
+			// Test adding weeks with base function
+			const result = addWeeksBase(2023, 6, 15, 3, "UTC");
+			const parts = formatToParts(result, "UTC", {
+				day: "2-digit",
+				month: "2-digit",
+				year: "numeric",
+			});
+			expect(parts.day).toBe(6); // July 6, 2023 (3 weeks = 21 days later)
+			expect(parts.month).toBe(7);
+		});
+
+		it("should test weeksInMonthBase with all scenarios", () => {
+			// Test edge case: month that starts on different days
+			expect(weeksInMonthBase(2023, 1, WeekStartsOn.SUNDAY, null)).toBe(5); // January 2023 starts Sunday
+			expect(weeksInMonthBase(2023, 1, WeekStartsOn.MONDAY, null)).toBe(6); // Requires 6 weeks
+			expect(weeksInMonthBase(2023, 1, WeekStartsOn.SATURDAY, null)).toBe(5); // Requires 5 weeks
+
+			// Test with timezone parameter
+			expect(weeksInMonthBase(2023, 2, WeekStartsOn.MONDAY, "UTC")).toBe(5);
+			expect(
+				weeksInMonthBase(2023, 2, WeekStartsOn.MONDAY, "America/New_York"),
+			).toBe(5);
+		});
+	});
+
+	describe("WeekStartsOn edge cases", () => {
+		it("should handle all WeekStartsOn values in weeksInMonth", () => {
+			const timestamp = Date.UTC(2023, 6, 15); // July 15, 2023
+
+			// Test all week start values
+			expect(weeksInMonth(timestamp, "UTC", WeekStartsOn.SUNDAY)).toBe(6);
+			expect(weeksInMonth(timestamp, "UTC", WeekStartsOn.MONDAY)).toBe(6);
+			expect(weeksInMonth(timestamp, "UTC", WeekStartsOn.SATURDAY)).toBe(5);
+		});
+
+		it("should handle WeekStartsOn.SATURDAY in all functions", () => {
+			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023 (Thursday)
+
+			// Test Saturday start in all functions
+			const start = startOfWeek(timestamp, "UTC", WeekStartsOn.SATURDAY);
+			const startParts = formatToParts(start, "UTC", { day: "2-digit" });
+			expect(startParts.day).toBe(10); // Saturday June 10
+
+			const end = endOfWeek(timestamp, "UTC", WeekStartsOn.SATURDAY);
+			const endParts = formatToParts(end, "UTC", { day: "2-digit" });
+			expect(endParts.day).toBe(16); // Friday June 16
+		});
+	});
+
+	describe("Month/Year boundary edge cases", () => {
+		it("should handle week calculations across year boundaries", () => {
+			// December 31, 2023 (Sunday) to January 2024
+			const yearEnd = Date.UTC(2023, 11, 31);
+			const nextWeek = addWeeks(yearEnd, 1, "UTC");
+			const parts = formatToParts(nextWeek, "UTC", {
+				day: "2-digit",
+				month: "2-digit",
+				year: "numeric",
+			});
+			expect(parts.year).toBe(2024);
+			expect(parts.month).toBe(1);
+			expect(parts.day).toBe(7); // January 7, 2024
+		});
+
+		it("should handle startOfWeek across month boundaries", () => {
+			// June 3, 2023 is Saturday, week should start in May
+			const result = startOfWeek(
+				Date.UTC(2023, 5, 3),
+				"UTC",
+				WeekStartsOn.MONDAY,
+			);
+			const parts = formatToParts(result, "UTC", {
+				day: "2-digit",
+				month: "2-digit",
+			});
+			expect(parts.month).toBe(5); // May
+			expect(parts.day).toBe(29); // May 29
+		});
+
+		it("should handle endOfWeek across month boundaries", () => {
+			// May 29, 2023 is Monday, week should end in June
+			const result = endOfWeek(
+				Date.UTC(2023, 4, 29),
+				"UTC",
+				WeekStartsOn.MONDAY,
+			);
+			const parts = formatToParts(result, "UTC", {
+				day: "2-digit",
+				month: "2-digit",
+			});
+			expect(parts.month).toBe(6); // June
+			expect(parts.day).toBe(4); // June 4
+		});
+	});
+
+	describe("Special timezone scenarios", () => {
+		it("should handle Etc/UTC timezone", () => {
+			const timestamp = Date.UTC(2023, 5, 15);
+
+			// Etc/UTC should use the same fast path as UTC
+			const result1 = addWeeks(timestamp, 1, "Etc/UTC");
+			const result2 = addWeeks(timestamp, 1, "UTC");
+			expect(result1).toBe(result2);
+
+			const start1 = startOfWeek(timestamp, "Etc/UTC");
+			const start2 = startOfWeek(timestamp, "UTC");
+			expect(start1).toBe(start2);
+		});
+
+		it("should handle timezone with daylight saving transitions", () => {
+			// Test Australia timezone that has DST
+			const timestamp = Date.UTC(2023, 9, 1); // October 1, 2023
+
+			expect(() => week(timestamp, "Australia/Sydney")).not.toThrow();
+			expect(() => startOfWeek(timestamp, "Australia/Sydney")).not.toThrow();
+			expect(() => endOfWeek(timestamp, "Australia/Sydney")).not.toThrow();
+			expect(() => addWeeks(timestamp, 1, "Australia/Sydney")).not.toThrow();
+		});
+	});
+
 	describe("Edge cases and error handling", () => {
 		it("should handle extreme dates", () => {
 			// Test year 1900 - use timestamp
@@ -843,6 +1099,34 @@ describe("Week functions", () => {
 			expect(
 				() => week(Date.UTC(2023, 12, 1), "UTC"), // Month 13 is invalid but Date.UTC handles it
 			).not.toThrow();
+		});
+
+		it("should handle Sunday as day 7 conversion", () => {
+			// Test that Sunday (day 0 in JS) is properly converted to day 7 in ISO format
+			// January 1, 2023 is Sunday
+			const result = startOfWeekBase(2023, 1, 1, WeekStartsOn.MONDAY, "UTC");
+			const parts = formatToParts(result, "UTC", {
+				day: "2-digit",
+				month: "2-digit",
+				year: "numeric",
+			});
+			expect(parts.year).toBe(2022);
+			expect(parts.month).toBe(12);
+			expect(parts.day).toBe(26); // Monday December 26, 2022
+		});
+
+		it("should handle large week additions", () => {
+			// Test adding many weeks
+			const timestamp = Date.UTC(2023, 5, 15);
+			const result = addWeeks(timestamp, 52, "UTC"); // Add one year worth of weeks
+			const parts = formatToParts(result, "UTC", {
+				day: "2-digit",
+				month: "2-digit",
+				year: "numeric",
+			});
+			expect(parts.year).toBe(2024);
+			expect(parts.month).toBe(6);
+			expect(parts.day).toBe(13); // Should be approximately one year later
 		});
 	});
 });

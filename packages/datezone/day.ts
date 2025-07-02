@@ -1,12 +1,9 @@
 import { getCachedFormatterLocale } from "./cache.js";
 import { DAY } from "./constants.js";
-import { formatToParts } from "./format-parts.js";
 import { getUTCtoTimezoneOffsetMinutes } from "./offset.js";
 import { isDST, isUTC, type TimeZone } from "./timezone.js";
-import { wallTimeToTimestamp } from "./walltime.js";
+import { timestampToWalltime, walltimeToTimestamp } from "./walltime.js";
 import { isLeapYearBase } from "./year.js";
-
-const DAY_OPTS = { day: "2-digit", month: "2-digit", year: "numeric" } as const;
 
 /**
  * Adds a number of days to a timestamp.
@@ -31,8 +28,19 @@ export function addDays(
 		return ts + days * DAY;
 	}
 	// Fallback to existing logic for DST timezones
-	const { year, month, day } = formatToParts(ts, timeZone, DAY_OPTS);
-	return wallTimeToTimestamp(year, month, day + days, 0, 0, 0, 0, timeZone);
+	const { year, month, day, hour, minute, second, millisecond } =
+		timestampToWalltime(ts, timeZone);
+
+	return walltimeToTimestamp(
+		year,
+		month,
+		day + days,
+		hour,
+		minute,
+		second,
+		millisecond,
+		timeZone,
+	);
 }
 
 /**
@@ -51,7 +59,7 @@ export function addDaysBase(
 	days: number,
 	timeZone: TimeZone,
 ): number {
-	return wallTimeToTimestamp(year, month, day + days, 0, 0, 0, 0, timeZone);
+	return walltimeToTimestamp(year, month, day + days, 0, 0, 0, 0, timeZone);
 }
 
 /**
@@ -85,7 +93,7 @@ export function subDaysBase(
 	days: number,
 	timeZone: TimeZone,
 ): number {
-	return wallTimeToTimestamp(year, month, day - days, 0, 0, 0, 0, timeZone);
+	return walltimeToTimestamp(year, month, day - days, 0, 0, 0, 0, timeZone);
 }
 
 /**
@@ -123,7 +131,7 @@ export function startOfDay(ts: number, timeZone: TimeZone | null): number {
 		return d.getTime() - offsetMs;
 	}
 	// For DST timezones, we need proper timezone conversion
-	const { year, month, day } = formatToParts(ts, timeZone, DAY_OPTS);
+	const { year, month, day } = timestampToWalltime(ts, timeZone);
 	return startOfDayBase(year, month, day, timeZone);
 }
 
@@ -141,7 +149,7 @@ export function startOfDayBase(
 	day: number,
 	tz: TimeZone,
 ): number {
-	return wallTimeToTimestamp(year, month, day, 0, 0, 0, 0, tz);
+	return walltimeToTimestamp(year, month, day, 0, 0, 0, 0, tz);
 }
 
 /**
@@ -177,7 +185,7 @@ export function endOfDay(ts: number, timeZone: TimeZone | null): number {
 		return d.getTime() - offsetMs;
 	}
 	// For DST timezones, we need proper timezone conversion
-	const { year, month, day } = formatToParts(ts, timeZone, DAY_OPTS);
+	const { year, month, day } = timestampToWalltime(ts, timeZone);
 	return endOfDayBase(year, month, day, timeZone);
 }
 
@@ -195,7 +203,7 @@ export function endOfDayBase(
 	day: number,
 	tz: TimeZone,
 ): number {
-	return wallTimeToTimestamp(year, month, day, 23, 59, 59, 999, tz);
+	return walltimeToTimestamp(year, month, day, 23, 59, 59, 999, tz);
 }
 
 /**
@@ -221,7 +229,7 @@ export function nextDay(ts: number, timeZone: TimeZone | null): number {
 		return currentDayStart + DAY;
 	}
 	// For DST timezones, we need proper timezone conversion
-	const { year, month, day } = formatToParts(ts, timeZone, DAY_OPTS);
+	const { year, month, day } = timestampToWalltime(ts, timeZone);
 	return nextDayBase(year, month, day, timeZone);
 }
 
@@ -239,7 +247,7 @@ export function nextDayBase(
 	day: number,
 	tz: TimeZone,
 ): number {
-	return wallTimeToTimestamp(year, month, day + 1, 0, 0, 0, 0, tz);
+	return walltimeToTimestamp(year, month, day + 1, 0, 0, 0, 0, tz);
 }
 
 /**
@@ -270,7 +278,7 @@ export function previousDay(ts: number, timeZone: TimeZone | null): number {
 	}
 
 	// Fallback to existing logic for DST timezones
-	const { year, month, day } = formatToParts(ts, timeZone, DAY_OPTS);
+	const { year, month, day } = timestampToWalltime(ts, timeZone);
 	return previousDayBase(year, month, day, timeZone);
 }
 
@@ -288,7 +296,7 @@ export function previousDayBase(
 	day: number,
 	tz: TimeZone,
 ): number {
-	return wallTimeToTimestamp(year, month, day - 1, 0, 0, 0, 0, tz);
+	return walltimeToTimestamp(year, month, day - 1, 0, 0, 0, 0, tz);
 }
 
 /**
@@ -313,7 +321,7 @@ export function dayOfMonth(ts: number, tz?: TimeZone): number {
 		const d = new Date(wallTimeTs);
 		return d.getUTCDate();
 	}
-	const { day } = formatToParts(ts, tz, DAY_OPTS);
+	const { day } = timestampToWalltime(ts, tz);
 	return day;
 }
 
@@ -350,7 +358,7 @@ export function dayOfWeek(ts: number, tz?: TimeZone): number {
 	}
 
 	// Slow path: DST timezones
-	const { year, month, day } = formatToParts(ts, tz, DAY_OPTS);
+	const { year, month, day } = timestampToWalltime(ts, tz);
 	return dayOfWeekBase(year, month, day);
 }
 
@@ -426,7 +434,7 @@ export function dayOfYear(ts: number, tz?: TimeZone): number {
 		);
 	}
 	// Slow path: DST timezones
-	const { year, month, day } = formatToParts(ts, tz, DAY_OPTS);
+	const { year, month, day } = timestampToWalltime(ts, tz);
 	return dayOfYearBase(year, month, day);
 }
 

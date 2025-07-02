@@ -1,11 +1,11 @@
-import { FULL_TS, formatToParts } from "../format-parts.js";
 import { getUTCtoTimezoneOffsetMinutes } from "../offset.js";
 import { isDST, isUTC, type TimeZone } from "../timezone.js";
 import type { WallDateTime } from "../types.js";
+import { timestampToWalltime } from "../walltime.js";
 import { formatters } from "./formatters.js";
 
 type FormatOptions = {
-	locale: string;
+	locale?: string;
 	timeZone: TimeZone | null;
 };
 
@@ -341,7 +341,7 @@ export function format(
 		};
 	} else {
 		// Path for DST timezones (complex calculation required)
-		const parts = formatToParts(ts, options.timeZone, FULL_TS);
+		const parts = timestampToWalltime(ts, options.timeZone);
 		let year = parts.year;
 		if (ts < 0 && year > 0) {
 			year = 1 - year;
@@ -424,6 +424,7 @@ export function format(
 			result += formatter({
 				...ctx,
 				len: token.length,
+				locale: ctx.locale ?? "en-US",
 				tz: ctx.timeZone,
 			});
 			i += token.length;
@@ -530,7 +531,7 @@ export function toISOString(ts: number, timeZone: TimeZone | null): string {
 		};
 	} else {
 		// Path for DST timezones (complex calculation required)
-		const parts = formatToParts(ts, timeZone, FULL_TS);
+		const parts = timestampToWalltime(ts, timeZone);
 		let year = parts.year;
 		if (ts < 0 && year > 0) {
 			year = 1 - year;

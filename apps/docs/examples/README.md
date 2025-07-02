@@ -33,10 +33,10 @@ Create `.ts` files in the appropriate subdirectory (e.g., `utils/`, `format/`, e
 
 ```typescript
 // examples/utils/my-example.ts
-import { wallTimeToTS, type TimeZone } from "datezone";
+import { walltimeToTimestamp, type TimeZone } from "datezone";
 
 // Your example code here with full TypeScript support
-const timestamp = wallTimeToTS(2024, 1, 1, 12, 0, 0, 0, "UTC" as TimeZone);
+const timestamp = walltimeToTimestamp(2024, 1, 1, 12, 0, 0, 0, "UTC" as TimeZone);
 console.log(new Date(timestamp));
 ```
 
@@ -85,7 +85,7 @@ The `examples/tsconfig.json` extends the main app's TypeScript configuration wit
 Always import types and functions from the actual package:
 
 ```typescript
-import { wallTimeToTS, type TimeZone } from "datezone";
+import { walltimeToTimestamp, type TimeZone } from "datezone";
 ```
 
 ### Type Safety
@@ -94,11 +94,11 @@ Use proper types for timezone parameters:
 
 ```typescript
 // Good - using the proper TimeZone type
-const timestamp = wallTimeToTS(2024, 1, 1, 12, 0, 0, 0, "America/New_York" as TimeZone);
+const timestamp = walltimeToTimestamp(2024, 1, 1, 12, 0, 0, 0, "America/New_York" as TimeZone);
 
 // Better - if you're creating a helper function
 function createTimestamp(tz: TimeZone) {
-  return wallTimeToTS(2024, 1, 1, 12, 0, 0, 0, tz);
+  return walltimeToTimestamp(2024, 1, 1, 12, 0, 0, 0, tz);
 }
 ```
 
@@ -108,7 +108,7 @@ Include helpful comments for documentation readers:
 
 ```typescript
 // Convert local wall time to UTC
-const utcTimestamp = wallTimeToTS(
+const utcTimestamp = walltimeToTimestamp(
   2024, 1, 15, // January 15, 2024 (month is 1-based)
   14, 30, 0, 0, // 2:30:00.000 PM
   "UTC" // Use UTC timezone

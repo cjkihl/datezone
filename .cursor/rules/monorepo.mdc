@@ -13,19 +13,72 @@ This is a monorepo for the datezone library - a lightweight and comprehensive da
 - **Turborepo** is used for build orchestration and caching
 - **TypeScript** is used throughout with strict configuration
 - **Biome** is used for formatting and linting
+## 📁 Project Structure
 
-## Monorepo Structure
 ```
-datezone/
-├── apps/
-│   └── docs/                 # Next.js demo/documentation site
-├── packages/
-│   └── datezone/            # Main library package
-├── tools/
-│   └── benchmark/           # Performance benchmarking tools
-├── biome.json              # Biome configuration
-├── turbo.json              # Turborepo configuration
-└── package.json            # Root package.json
+apps/docs/
+├── content/              # Documentation content (@/content)
+│   ├── docs/            # Main documentation pages
+│   │   ├── reference/   # API reference (maps 1:1 with @/datezone)
+│   │   ├── guides/      # User guides and tutorials
+│   │   └── meta.json    # Navigation configuration
+│   └── blogs/           # Blog posts and changelog
+├── examples/            # TypeScript code examples (@/examples)
+│   ├── basic/          # Basic usage examples
+│   ├── reference/      # Reference implementation examples
+│   ├── format/         # Formatting examples
+│   ├── utils/          # Utility examples
+│   └── tsconfig.json   # TypeScript config for examples
+├── components/          # Reusable React components
+├── app/                # Next.js app directory
+├── source.config.ts    # Fumadocs configuration
+└── package.json        # Dependencies and scripts
+```
+
+## 📚 Content Organization
+
+### 📖 Documentation Content (`@/content`)
+
+The main documentation lives in the `content/` directory and follows Fumadocs conventions:
+
+- **`content/docs/`** - Main documentation pages written in MDX
+- **`content/docs/reference/`** - API reference documentation that maps **1:1** with code in `@/datezone`
+- **`content/docs/guides/`** - User guides, tutorials, and best practices
+- **`content/blogs/`** - Blog posts, changelogs, and announcements
+
+### 🔗 Reference Documentation Mapping
+
+The `content/docs/reference/` directory maintains a **strict 1:1 mapping** with the codebase in `packages/datezone/`:
+
+| Reference Doc | Datezone Module | Description |
+|---------------|-----------------|-------------|
+| `format.mdx` | `format/index.ts` | Date formatting utilities |
+| `day.mdx` | `day.ts` | Day manipulation functions |
+| `month.mdx` | `month.ts` | Month operations |
+| `year.mdx` | `year.ts` | Year calculations |
+| `hour.mdx` | `hour.ts` | Hour/time utilities |
+| `week.mdx` | `week.ts` | Week-based operations |
+| `minute.mdx` | `minute.ts` | Minute manipulation |
+| `second.mdx` | `second.ts` | Second/millisecond operations |
+| `compare.mdx` | `compare.ts` | Date comparison functions |
+| `offset.mdx` | `offset.ts` | Timezone offset utilities |
+| `ordinal.mdx` | `ordinal.ts` | Ordinal date formatting |
+| `format-parts.mdx` | `format-parts.ts` | Format parts utilities |
+
+> **Important**: Every public function, type, and constant in the datezone package should have corresponding documentation in the reference section.
+
+### 💻 Code Examples (`@/examples`)
+
+The documentation references TypeScript code examples from `examples/` directory:
+
+- **Type-safe examples** with full TypeScript support
+- **Live code examples** embedded in documentation
+- **Organized by feature** matching the documentation structure
+- **Testable and maintainable** - examples are real TypeScript files
+
+Example usage in MDX:
+```mdx
+<CodeExample file="basic/formatting.ts" title="Basic Formatting" />
 ```
 
 ## Development Workflow

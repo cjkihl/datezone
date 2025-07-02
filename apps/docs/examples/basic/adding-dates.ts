@@ -1,7 +1,7 @@
 import { addDays, format } from "datezone";
 
 const date = new Date("2024-06-01T12:00:00Z").getTime();
-const tomorrow = addDays(date, 1);
+const tomorrow = addDays(date, 1, null);
 
 console.log(
 	"Original:",

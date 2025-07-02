@@ -1,8 +1,7 @@
-import { formatToParts, HOUR, type TimeZone } from "./index.pub.js";
+import { HOUR, type TimeZone } from "./index.pub.js";
 import { getUTCtoTimezoneOffsetMinutes } from "./offset.js";
 import { isDST, isUTC } from "./timezone.js";
-
-const HOUR_OPTS = { hour: "2-digit", hour12: false } as const;
+import { timestampToWalltime } from "./walltime.js";
 
 /**
  * Converts a 24-hour format hour to 12-hour format.
@@ -81,8 +80,8 @@ export function hour(ts: number, timeZone: TimeZone | null): number {
 
 		return d.getUTCHours();
 	}
-	// For DST timezones, use formatToParts
-	return formatToParts(ts, timeZone, HOUR_OPTS).hour;
+	// For DST timezones, compute via timestampToWalltime
+	return timestampToWalltime(ts, timeZone).hour;
 }
 
 /**

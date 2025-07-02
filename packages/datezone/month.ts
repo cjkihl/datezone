@@ -1,11 +1,8 @@
 import { getCachedFormatterLocale } from "./cache.js";
-import { FULL_TS, formatToParts } from "./format-parts.js";
 import { getUTCtoTimezoneOffsetMinutes } from "./offset.js";
 import { isDST, isUTC, type TimeZone } from "./timezone.js";
-import { wallTimeToTimestamp } from "./walltime.js";
+import { timestampToWalltime, walltimeToTimestamp } from "./walltime.js";
 import { isLeapYearBase } from "./year.js";
-
-const YEAR_MONTH_OPTS = { month: "2-digit", year: "numeric" } as const;
 
 /**
  * Gets the month of the year for a given timestamp.
@@ -33,7 +30,7 @@ export function month(ts: number, timeZone: TimeZone | null): number {
 		return d.getUTCMonth() + 1;
 	}
 
-	const { month } = formatToParts(ts, timeZone, YEAR_MONTH_OPTS);
+	const { month } = timestampToWalltime(ts, timeZone);
 	return month;
 }
 
@@ -78,7 +75,7 @@ export function startOfMonth(ts: number, timeZone: TimeZone | null): number {
 	}
 
 	// Complex path: DST timezones (requires full timezone parsing)
-	const { year, month } = formatToParts(ts, timeZone, YEAR_MONTH_OPTS);
+	const { year, month } = timestampToWalltime(ts, timeZone);
 	return startOfMonthBase(year, month, timeZone);
 }
 
@@ -94,7 +91,7 @@ export function startOfMonthBase(
 	month: number,
 	timeZone: TimeZone,
 ): number {
-	return wallTimeToTimestamp(year, month, 1, 0, 0, 0, 0, timeZone);
+	return walltimeToTimestamp(year, month, 1, 0, 0, 0, 0, timeZone);
 }
 
 /**
@@ -213,7 +210,7 @@ export function addMonths(
 	}
 
 	// Complex path: DST timezones (requires full timezone parsing)
-	const parts = formatToParts(ts, timeZone, FULL_TS);
+	const parts = timestampToWalltime(ts, timeZone);
 	return addMonthsBase(
 		parts.year,
 		parts.month,
@@ -255,7 +252,7 @@ export function addMonthsBase(
 	const maxDay = daysInMonthBase(newYear, newMonth);
 	const newDay = day > maxDay ? maxDay : day;
 
-	return wallTimeToTimestamp(
+	return walltimeToTimestamp(
 		newYear,
 		newMonth,
 		newDay,
@@ -328,7 +325,7 @@ export function startOfNthMonth(
 	}
 
 	// Complex path: DST timezones (requires full timezone parsing)
-	const { year, month } = formatToParts(ts, timeZone, YEAR_MONTH_OPTS);
+	const { year, month } = timestampToWalltime(ts, timeZone);
 	return startOfNthMonthBase(year, month, n, timeZone);
 }
 
@@ -347,7 +344,7 @@ function startOfNthMonthBase(
 	timeZone: TimeZone,
 ): number {
 	const [nextYear, nextMonth] = calculateYearMonth(year, month, n);
-	return wallTimeToTimestamp(nextYear, nextMonth, 1, 0, 0, 0, 0, timeZone);
+	return walltimeToTimestamp(nextYear, nextMonth, 1, 0, 0, 0, 0, timeZone);
 }
 
 /**
@@ -457,7 +454,7 @@ export function daysInMonth(ts: number, timeZone: TimeZone | null): number {
 		year = wallTimeDate.getUTCFullYear();
 		month = wallTimeDate.getUTCMonth() + 1;
 	} else {
-		({ year, month } = formatToParts(ts, timeZone, YEAR_MONTH_OPTS));
+		({ year, month } = timestampToWalltime(ts, timeZone));
 	}
 
 	return daysInMonthBase(year, month);
@@ -558,7 +555,7 @@ export function getQuarter(ts: number, timeZone: TimeZone | null): number {
 
 		month = wallTimeDate.getUTCMonth() + 1;
 	} else {
-		({ month } = formatToParts(ts, timeZone, YEAR_MONTH_OPTS));
+		({ month } = timestampToWalltime(ts, timeZone));
 	}
 
 	return getQuarterBase(month);

@@ -1,7 +1,7 @@
-import { getLocalTimezone, wallTimeToTS } from "datezone";
+import { getLocalTimezone, walltimeToTimestamp } from "datezone";
 
 // Convert wall time to timestamp
-const timestamp = wallTimeToTS(
+const timestamp = walltimeToTimestamp(
 	2024, // Year
 	1, // Month
 	15, // Day
@@ -21,7 +21,7 @@ console.log("JS Date timestamp:", jsDate.getTime());
 console.log("Difference:", timestamp - jsDate.getTime());
 
 // Useful for creating precise timestamps from time components
-const midnight = wallTimeToTS(2024, 1, 1, 0, 0, 0, 0, "UTC");
-const noon = wallTimeToTS(2024, 1, 1, 12, 0, 0, 0, "UTC");
+const midnight = walltimeToTimestamp(2024, 1, 1, 0, 0, 0, 0, "UTC");
+const noon = walltimeToTimestamp(2024, 1, 1, 12, 0, 0, 0, "UTC");
 console.log("Midnight UTC:", new Date(midnight));
 console.log("Noon UTC:", new Date(noon));
