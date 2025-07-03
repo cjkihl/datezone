@@ -7,7 +7,7 @@ import {
 	subHours,
 	to12Hour,
 	to24Hour,
-} from "./hour";
+} from "./hour.pub.js";
 import { HOUR } from "./index.pub.js";
 
 describe("Hour Functions", () => {
@@ -60,7 +60,7 @@ describe("Hour Functions", () => {
 	describe("hour", () => {
 		it("should return hour from timestamp without timezone", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 0)).getTime();
-			expect(hour(timestamp)).toBe(new Date(timestamp).getHours());
+			expect(hour(timestamp, null)).toBe(new Date(timestamp).getHours());
 		});
 
 		it("should return hour from timestamp with UTC timezone", () => {
@@ -79,7 +79,7 @@ describe("Hour Functions", () => {
 
 		it("should default to local timezone when timezone is undefined", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 15, 12, 30, 45)).getTime();
-			const localHour = hour(timestamp);
+			const localHour = hour(timestamp, null);
 			const jsHour = new Date(timestamp).getHours();
 			expect(localHour).toBe(jsHour);
 		});
@@ -307,7 +307,7 @@ describe("Hour Functions", () => {
 			expect(hour(timestamp, "UTC")).toBe(14);
 
 			// Without timezone should use local time
-			const localHour = hour(timestamp);
+			const localHour = hour(timestamp, null);
 			const jsLocalHour = new Date(timestamp).getHours();
 			expect(localHour).toBe(jsLocalHour);
 		});

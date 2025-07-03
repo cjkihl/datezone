@@ -7,19 +7,19 @@ import {
 	startOfDayBase,
 	subDays,
 	subDaysBase,
-} from "./day";
+} from "./day.pub";
 import { formatGMT, formatTimestamp, formatTimezone } from "./format/utils";
-import { addHours, subHours } from "./hour";
+import { addHours, subHours } from "./hour.pub.js";
 import { getLocalTimezone } from "./index.pub";
-import { addMinutes, subMinutes } from "./minute";
-import { addMonths, daysInMonth } from "./month";
-import { getTimezoneOffsetMinutes } from "./offset";
+import { addMinutes, subMinutes } from "./minute.pub.js";
+import { addMonths, daysInMonth } from "./month.pub.js";
+import { getTimezoneOffsetMinutes } from "./offset.pub.js";
 import {
 	addMilliseconds,
 	addSeconds,
 	subMilliseconds,
 	subSeconds,
-} from "./second";
+} from "./second.pub.js";
 
 describe("Coverage Tests - Missing Lines", () => {
 	describe("Day functions with DayOptions input", () => {

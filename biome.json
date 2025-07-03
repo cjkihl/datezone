@@ -12,15 +12,21 @@
 	},
 	"files": {
 		"includes": [
-			"**",
+			"**/*.ts",
+			"**/*.tsx",
+			"**/*.json",
 			"!**/node_modules/**",
 			"!**/.next/**",
 			"!**/.git/**",
+			"!**/.gemini/**",
+			"!**/.changeset/**",
+			"!**/output/**",
 			"!**/.vscode/**",
 			"!**/dist/**",
+			"!**/.source/**",
 			"!**/.turbo/**",
+			"!**/coverage/**",
 			"!**/package.json",
-			"!**/bun.lock",
 			"!tools/benchmark/output/**"
 		]
 	},

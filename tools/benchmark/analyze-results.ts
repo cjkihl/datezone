@@ -6,7 +6,7 @@ interface BenchmarkResult {
 	group: string;
 	stats: {
 		avg: number;
-		samples: any[];
+		samples: unknown[];
 	};
 }
 

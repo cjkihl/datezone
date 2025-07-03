@@ -10,7 +10,7 @@ import {
 	startOfYear,
 	subYears,
 	year,
-} from "./year";
+} from "./year.pub.js";
 
 const TEST_TIMEZONE = "America/New_York";
 const UTC_TIMEZONE = "UTC";

@@ -13,7 +13,7 @@
 		"release": "bun run resolve && bun run build && changeset publish",
 		"clean": "git clean -fxd -e .env.local",
 		"lint": "biome check . && manypkg check",
-		"lint-fix": "biome check --write --unsafe . && manypkg fix",
+		"lint-fix": "biome check --write --unsafe --verbose . && manypkg fix",
 		"format": "biome format .",
 		"type-check": "turbo type-check",
 		"up": "bunx npm-check-updates -ws --root --format group -u",
@@ -22,25 +22,25 @@
 		"bench-cache": "bun run -F benchmarks cache"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.0.5",
+		"@biomejs/biome": "^2.0.6",
 		"@changesets/cli": "^2.29.5",
 		"@cjkihl/changeset-dep-resolver": "^1.0.3",
 		"@cjkihl/create-exports": "^1.0.2",
-		"@cjkihl/tsconfig": "^1.0.1",
+		"@cjkihl/tsconfig": "^1.0.2",
 		"@date-fns/tz": "^1.2.0",
 		"@manypkg/cli": "^0.24.0",
 		"@types/bun": "latest",
 		"@types/semver": "^7.7.0",
 		"date-fns": "^4.1.0",
 		"date-fns-tz": "^3.2.0",
-		"fumadocs-core": "^15.5.5",
-		"fumadocs-mdx": "^11.6.9",
-		"fumadocs-ui": "^15.5.5",
+		"fumadocs-core": "^15.6.1",
+		"fumadocs-mdx": "^11.6.10",
+		"fumadocs-ui": "^15.6.1",
 		"mitata": "^1.0.34",
 		"semver": "^7.7.2",
 		"turbo": "^2.5.4",
 		"typescript": "^5",
-		"zod": "^3.25.67"
+		"zod": "^3.25.70"
 	},
 	"peerDependencies": {
 		"typescript": "^5"

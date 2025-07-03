@@ -27,9 +27,9 @@ export default async function Page({
 	return (
 		<DocsPage
 			editOnGithub={{
-				owner: "better-auth",
+				owner: "cjkihl",
 				path: `/tools/benchmark/reports/${page.file.path}`,
-				repo: "better-auth",
+				repo: "datezoe",
 				sha: "main",
 			}}
 			footer={{

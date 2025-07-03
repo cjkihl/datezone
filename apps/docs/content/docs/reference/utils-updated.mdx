@@ -13,18 +13,7 @@ This demonstrates how to use external TypeScript files for examples with full in
 
 Converts zoned time (local time in a specific timezone) to UTC timestamp.
 
-```typescript
-function walltimeToTimestamp(
-  year: number,
-  month: number, // 1-based (1 = January)
-  day: number,
-  hour: number,
-  minute: number,
-  second: number,
-  ms: number,
-  timeZone: TimeZone | null
-): number
-```
+<CodeExample tabs={[{ name: "Example 1", file: "reference/utils-updated/example-1.ts" }]} />
 
 <CodeExample tabs={[
   { name: "Local Timezone Example", file: "utils/walltime-local.ts" },

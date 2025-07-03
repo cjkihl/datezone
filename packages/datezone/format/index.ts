@@ -1,8 +1,7 @@
-import { getUTCtoTimezoneOffsetMinutes } from "../offset.js";
-import { isDST, isUTC, type TimeZone } from "../timezone.js";
-import type { WallDateTime } from "../types.js";
-import { timestampToWalltime } from "../walltime.js";
-import { formatters } from "./formatters.js";
+import { getUTCtoTimezoneOffsetMinutes } from "../offset.pub.js";
+import { isDST, isUTC, type TimeZone } from "../timezone.pub.js";
+import { timestampToWalltime } from "../walltime.pub.js";
+import { type DT, formatters } from "./formatters.js";
 
 type FormatOptions = {
 	locale?: string;
@@ -286,7 +285,7 @@ export function format(
 	formatString: string,
 	options: FormatOptions,
 ): string {
-	let dt: WallDateTime;
+	let dt: DT;
 
 	// Extract milliseconds directly from timestamp (no Date object needed)
 	const millisecond = ts % 1000;
@@ -476,7 +475,7 @@ export function format(
  * //=> '2022-01-01T01:00:00.000+01:00' (if local timezone is CET)
  */
 export function toISOString(ts: number, timeZone: TimeZone | null): string {
-	let dt: WallDateTime;
+	let dt: DT;
 	let timezoneOffsetMinutes: number;
 
 	// Extract milliseconds directly from timestamp (no Date object needed)

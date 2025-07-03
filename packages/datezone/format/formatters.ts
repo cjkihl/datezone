@@ -3,14 +3,14 @@ import {
 	dayOfYearBase,
 	getDayPeriod,
 	weekDayName,
-} from "../day.js";
-import { to12Hour } from "../hour.js";
-import { getMonthName } from "../month.js";
-import { formatOrdinal } from "../ordinal.js";
-import type { TimeZone } from "../timezone.js";
-import type { WallDateTime } from "../types.js";
-import { getISOWeekYearBase, weekBase } from "../week.js";
-import { quarter } from "../year.js";
+} from "../day.pub.js";
+import { to12Hour } from "../hour.pub.js";
+import { getMonthName } from "../month.pub.js";
+import { formatOrdinal } from "../ordinal.pub.js";
+import type { TimeZone } from "../timezone.pub.js";
+import type { WallTime } from "../walltime.pub.js";
+import { getISOWeekYearBase, weekBase } from "../week.pub.js";
+import { quarter } from "../year.pub.js";
 import {
 	formatGMT,
 	formatTimestamp,
@@ -18,11 +18,14 @@ import {
 	padZeros,
 } from "./utils.js";
 
+export type DT = WallTime & {
+	timezoneOffsetMinutes: number;
+};
 /**
  * Options passed to each formatter function.
  */
 type Options = {
-	dt: WallDateTime;
+	dt: DT;
 	locale: string;
 	tz: TimeZone | null;
 	len: number;

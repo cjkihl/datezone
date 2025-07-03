@@ -29,10 +29,60 @@
     ".": {
       "default": "./dist/output/index.pub.js",
       "types": "./dist/types/index.pub.d.ts"
+    },
+    "./compare": {
+      "default": "./dist/output/compare.pub.js",
+      "types": "./dist/types/compare.pub.d.ts"
+    },
+    "./constants": {
+      "default": "./dist/output/constants.pub.js",
+      "types": "./dist/types/constants.pub.d.ts"
+    },
+    "./day": {
+      "default": "./dist/output/day.pub.js",
+      "types": "./dist/types/day.pub.d.ts"
+    },
+    "./hour": {
+      "default": "./dist/output/hour.pub.js",
+      "types": "./dist/types/hour.pub.d.ts"
+    },
+    "./minute": {
+      "default": "./dist/output/minute.pub.js",
+      "types": "./dist/types/minute.pub.d.ts"
+    },
+    "./month": {
+      "default": "./dist/output/month.pub.js",
+      "types": "./dist/types/month.pub.d.ts"
+    },
+    "./offset": {
+      "default": "./dist/output/offset.pub.js",
+      "types": "./dist/types/offset.pub.d.ts"
+    },
+    "./ordinal": {
+      "default": "./dist/output/ordinal.pub.js",
+      "types": "./dist/types/ordinal.pub.d.ts"
+    },
+    "./second": {
+      "default": "./dist/output/second.pub.js",
+      "types": "./dist/types/second.pub.d.ts"
+    },
+    "./timezone": {
+      "default": "./dist/output/timezone.pub.js",
+      "types": "./dist/types/timezone.pub.d.ts"
+    },
+    "./walltime": {
+      "default": "./dist/output/walltime.pub.js",
+      "types": "./dist/types/walltime.pub.d.ts"
+    },
+    "./week": {
+      "default": "./dist/output/week.pub.js",
+      "types": "./dist/types/week.pub.d.ts"
+    },
+    "./year": {
+      "default": "./dist/output/year.pub.js",
+      "types": "./dist/types/year.pub.d.ts"
     }
   },
-  "main": "./dist/output/index.pub.js",
-  "types": "./dist/types/index.pub.d.ts",
   "files": [
     "dist/**/*",
     "README.md",
@@ -45,7 +95,7 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@cjkihl/tsconfig": "^1.0.1"
+    "@cjkihl/tsconfig": "^1.0.2"
   },
   "engines": {
     "node": ">=16.0.0"

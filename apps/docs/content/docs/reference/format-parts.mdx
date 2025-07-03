@@ -13,15 +13,7 @@ Format parts utilities provide functions to extract individual date and time com
 
 Extract date and time components from a timestamp.
 
-```typescript
-function formatToParts<T extends Partial<Record<DatePartType, string>> & Intl.DateTimeFormatOptions>(
-  date: number,
-  timeZone: string,
-  opts: T
-): { [K in ExtractDatePartKeys<T>]: number }
-
-type DatePartType = "year" | "month" | "day" | "hour" | "minute" | "second" | "millisecond" | "weekday" | "era" | "timeZoneName"
-```
+<CodeExample tabs={[{ name: "Example 1", file: "reference/format-parts/example-1.ts" }]} />
 
 <CodeExample tabs={[
   { name: "Local timezone examples", file: "reference/format-parts/format-to-parts-local.ts" },
@@ -32,19 +24,7 @@ type DatePartType = "year" | "month" | "day" | "hour" | "minute" | "second" | "m
 
 Pre-defined options for extracting complete timestamp components.
 
-```typescript
-const FULL_TS = {
-  day: "2-digit",
-  era: "short", 
-  hour: "2-digit",
-  hour12: false,
-  minute: "2-digit",
-  month: "2-digit",
-  second: "2-digit",
-  millisecond: "3-digit",
-  year: "numeric",
-} as const
-```
+<CodeExample tabs={[{ name: "Example 2", file: "reference/format-parts/example-2.ts" }]} />
 
 <CodeExample tabs={[
   { name: "Using FULL_TS constant - Local", file: "reference/format-parts/full-ts-local.ts" },
@@ -75,192 +55,19 @@ const FULL_TS = {
 
 ### Custom Date Builder
 
-```typescript
-import { formatToParts, FULL_TS } from 'datezone';
-
-class DateBuilder {
-  static fromTimestamp(timestamp: number, timeZone = 'UTC') {
-    const parts = formatToParts(timestamp, timeZone, FULL_TS);
-    
-    return {
-      year: parts.year,
-      month: parts.month,
-      day: parts.day,
-      hour: parts.hour,
-      minute: parts.minute,
-      second: parts.second,
-      
-      // Helper methods
-      toISODate(): string {
-        return `${parts.year}-${parts.month.toString().padStart(2, '0')}-${parts.day.toString().padStart(2, '0')}`;
-      },
-      
-      toISOTime(): string {
-        return `${parts.hour.toString().padStart(2, '0')}:${parts.minute.toString().padStart(2, '0')}:${parts.second.toString().padStart(2, '0')}`;
-      },
-      
-      toISOString(): string {
-        return `${this.toISODate()}T${this.toISOTime()}`;
-      },
-      
-      toObject() {
-        return {
-          year: parts.year,
-          month: parts.month,
-          day: parts.day,
-          hour: parts.hour,
-          minute: parts.minute,
-          second: parts.second
-        };
-      }
-    };
-  }
-}
-
-const timestamp = new Date(2024, 0, 15, 14, 30, 45).getTime();
-
-const nyDate = DateBuilder.fromTimestamp(timestamp, 'America/New_York');
-const tokyoDate = DateBuilder.fromTimestamp(timestamp, 'Asia/Tokyo');
-
-console.log('NY Date:', nyDate.toISOString());
-console.log('Tokyo Date:', tokyoDate.toISOString());
-console.log('NY Object:', nyDate.toObject());
-```
+<CodeExample tabs={[{ name: "Example 3", file: "reference/format-parts/example-3.ts" }]} />
 
 ### Timezone Comparison Tool
 
-```typescript
-import { formatToParts, FULL_TS } from 'datezone';
-
-function compareTimezones(timestamp: number, timezones: string[]) {
-  return timezones.map(tz => {
-    const parts = formatToParts(timestamp, tz, FULL_TS);
-    
-    return {
-      timezone: tz,
-      components: parts,
-      formatted: {
-        date: `${parts.year}-${parts.month.toString().padStart(2, '0')}-${parts.day.toString().padStart(2, '0')}`,
-        time: `${parts.hour.toString().padStart(2, '0')}:${parts.minute.toString().padStart(2, '0')}:${parts.second.toString().padStart(2, '0')}`,
-        datetime: `${parts.year}-${parts.month.toString().padStart(2, '0')}-${parts.day.toString().padStart(2, '0')} ${parts.hour.toString().padStart(2, '0')}:${parts.minute.toString().padStart(2, '0')}:${parts.second.toString().padStart(2, '0')}`
-      }
-    };
-  });
-}
-
-const timestamp = Date.now();
-const timezones = ['UTC', 'America/New_York', 'Europe/London', 'Asia/Tokyo', 'Australia/Sydney'];
-
-const comparison = compareTimezones(timestamp, timezones);
-console.table(comparison.map(item => ({
-  timezone: item.timezone,
-  date: item.formatted.date,
-  time: item.formatted.time
-})));
-```
+<CodeExample tabs={[{ name: "Example 4", file: "reference/format-parts/example-4.ts" }]} />
 
 ### Date Arithmetic with Components
 
-```typescript
-import { formatToParts, FULL_TS } from 'datezone';
-import { walltimeToTimestamp } from 'datezone';
-
-function addDaysToTimestamp(timestamp: number, days: number, timeZone = 'UTC'): number {
-  // Extract current components
-  const parts = formatToParts(timestamp, timeZone, FULL_TS);
-  
-  // Create new date with added days
-  const newDate = new Date(parts.year, parts.month - 1, parts.day + days);
-  
-  // Convert back to timestamp in the same timezone
-  return walltimeToTimestamp(
-    newDate.getFullYear(),
-    newDate.getMonth() + 1,
-    newDate.getDate(),
-    parts.hour,
-    parts.minute,
-    parts.second,
-    0,
-    timeZone
-  );
-}
-
-function addHoursToTimestamp(timestamp: number, hours: number, timeZone = 'UTC'): number {
-  const parts = formatToParts(timestamp, timeZone, FULL_TS);
-  
-  return walltimeToTimestamp(
-    parts.year,
-    parts.month,
-    parts.day,
-    parts.hour + hours,
-    parts.minute,
-    parts.second,
-    0,
-    timeZone
-  );
-}
-
-const now = Date.now();
-const tomorrow = addDaysToTimestamp(now, 1, 'America/New_York');
-const inThreeHours = addHoursToTimestamp(now, 3, 'America/New_York');
-
-console.log('Now (NY):', formatToParts(now, 'America/New_York', FULL_TS));
-console.log('Tomorrow (NY):', formatToParts(tomorrow, 'America/New_York', FULL_TS));
-console.log('In 3 hours (NY):', formatToParts(inThreeHours, 'America/New_York', FULL_TS));
-```
+<CodeExample tabs={[{ name: "Example 5", file: "reference/format-parts/example-5.ts" }]} />
 
 ### Validation with Components
 
-```typescript
-import { formatToParts } from 'datezone';
-
-function validateBusinessHours(timestamp: number, timeZone: string): boolean {
-  const parts = formatToParts(timestamp, timeZone, {
-    hour: '2-digit',
-    minute: '2-digit',
-    weekday: 'long',
-    hour12: false
-  });
-  
-  // Check if it's a weekday (Monday = 1, Friday = 5)
-  const isWeekday = parts.weekday >= 1 && parts.weekday <= 5;
-  
-  // Check if it's business hours (9 AM to 5 PM)
-  const isBusinessHour = parts.hour >= 9 && parts.hour < 17;
-  
-  return isWeekday && isBusinessHour;
-}
-
-function getNextBusinessDay(timestamp: number, timeZone: string): number {
-  let current = timestamp;
-  
-  while (true) {
-    const parts = formatToParts(current, timeZone, {
-      weekday: 'long',
-      year: 'numeric',
-      month: '2-digit', 
-      day: '2-digit'
-    });
-    
-    // If it's a weekday, return start of business day
-    if (parts.weekday >= 1 && parts.weekday <= 5) {
-      return walltimeToTimestamp(parts.year, parts.month, parts.day, 9, 0, 0, 0, timeZone);
-    }
-    
-    // Move to next day
-    current += 24 * 60 * 60 * 1000;
-  }
-}
-
-const timestamp = Date.now();
-const timeZone = 'America/New_York';
-
-console.log('Is business hours?', validateBusinessHours(timestamp, timeZone));
-
-const nextBusiness = getNextBusinessDay(timestamp, timeZone);
-const nextBusinessParts = formatToParts(nextBusiness, timeZone, FULL_TS);
-console.log('Next business day:', nextBusinessParts);
-```
+<CodeExample tabs={[{ name: "Example 6", file: "reference/format-parts/example-6.ts" }]} />
 
 ## Component Types
 
@@ -283,39 +90,9 @@ The `formatToParts` function supports extracting the following component types:
 ### Options Format
 Each component requires specific Intl.DateTimeFormatOptions:
 
-```typescript
-const options = {
-  year: 'numeric' | '2-digit',
-  month: 'numeric' | '2-digit' | 'long' | 'short' | 'narrow',
-  day: 'numeric' | '2-digit',
-  hour: 'numeric' | '2-digit',
-  minute: 'numeric' | '2-digit',
-  second: 'numeric' | '2-digit',
-  millisecond: '3-digit' | string, // Custom datezone extension
-  weekday: 'long' | 'short' | 'narrow',
-  era: 'long' | 'short' | 'narrow',
-  timeZoneName: 'long' | 'short',
-  hour12: boolean
-};
-```
+<CodeExample tabs={[{ name: "Example 7", file: "reference/format-parts/example-7.ts" }]} />
 
 ### Return Type Mapping
 The function returns only the components you request:
 
-```typescript
-// Request only year and month
-const parts = formatToParts(timestamp, 'UTC', {
-  year: 'numeric',
-  month: '2-digit'
-});
-// Returns: { year: number, month: number }
-
-// Request time components
-const timeParts = formatToParts(timestamp, 'UTC', {
-  hour: '2-digit',
-  minute: '2-digit',
-  second: '2-digit',
-  hour12: false
-});
-// Returns: { hour: number, minute: number, second: number }
-``` 
+<CodeExample tabs={[{ name: "Example 8", file: "reference/format-parts/example-8.ts" }]} /> 

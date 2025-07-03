@@ -13,10 +13,7 @@ Daylight Saving Time (DST) is one of the most common sources of subtle, hard-to-
 
 The fundamental assumption that "a day is always 24 hours" is **wrong** in most timezones that observe DST.
 
-```ts
-// This assumption is dangerous!
-const tomorrow = today + (24 * 60 * 60 * 1000); // ❌ Wrong during DST transitions
-```
+<CodeExample tabs={[{ name: "Example 1", file: "guides/how-dst-works/example-1.ts" }]} />
 
 During DST transitions:
 - **Spring forward**: Days are 23 hours long (lose 1 hour)
@@ -40,83 +37,27 @@ DST bugs are particularly insidious because they only happen during the two DST 
 
 On March 10, 2024, in the `America/New_York` timezone:
 
-```ts
-// At 2:00 AM EST, clocks "spring forward" to 3:00 AM EDT
-// The hour from 2:00 AM to 2:59 AM simply doesn't exist!
-
-const beforeTransition = new Date('2024-03-10T06:59:00Z').getTime(); // 1:59 AM EST
-const afterTransition = new Date('2024-03-10T07:00:00Z').getTime();  // 3:00 AM EDT
-
-const difference = afterTransition - beforeTransition;
-console.log(difference); // 3,600,000 ms (1 hour)
-// But only 1 minute of "wall time" passed!
-```
+<CodeExample tabs={[{ name: "Example 2", file: "guides/how-dst-works/example-2.ts" }]} />
 
 ### Fall Back (Gaining an Hour)
 
 On November 3, 2024, in the `America/New_York` timezone:
 
-```ts
-// At 2:00 AM EDT, clocks "fall back" to 1:00 AM EST
-// The hour from 1:00 AM to 1:59 AM happens twice!
-
-// This time exists twice on the same day:
-const firstOccurrence = new Date('2024-11-03T05:30:00Z').getTime();  // 1:30 AM EDT
-const secondOccurrence = new Date('2024-11-03T06:30:00Z').getTime(); // 1:30 AM EST
-
-// Same "wall time", different actual times
-console.log(secondOccurrence - firstOccurrence); // 3,600,000 ms apart
-```
+<CodeExample tabs={[{ name: "Example 3", file: "guides/how-dst-works/example-3.ts" }]} />
 
 ## Common DST Bugs
 
 ### 1. Naive Date Arithmetic
 
-```ts
-// ❌ This breaks during DST transitions
-function addOneDay(timestamp: number): number {
-  return timestamp + (24 * 60 * 60 * 1000); // Always adds exactly 24 hours
-}
-
-// On March 10, 2024 (spring forward):
-const startTime = new Date('2024-03-10T12:00:00-05:00').getTime(); // Noon EST
-const nextDay = addOneDay(startTime);
-
-// Expected: March 11, 2024 at noon
-// Actual: March 11, 2024 at 1:00 PM (because the day was only 23 hours)
-```
+<CodeExample tabs={[{ name: "Example 4", file: "guides/how-dst-works/example-4.ts" }]} />
 
 ### 2. Recurring Events
 
-```ts
-// ❌ Daily reminder at 9 AM breaks during DST
-function scheduleDaily(startTime: number): number[] {
-  const schedule = [];
-  for (let i = 0; i < 7; i++) {
-    schedule.push(startTime + (i * 24 * 60 * 60 * 1000));
-  }
-  return schedule;
-}
-
-// During DST transition week, some reminders will be at 8 AM or 10 AM!
-```
+<CodeExample tabs={[{ name: "Example 5", file: "guides/how-dst-works/example-5.ts" }]} />
 
 ### 3. Duration Calculations
 
-```ts
-// ❌ Business hours calculation breaks during DST
-function businessHoursToday(date: Date): number {
-  const start = new Date(date);
-  start.setHours(9, 0, 0, 0); // 9 AM
-  
-  const end = new Date(date);
-  end.setHours(17, 0, 0, 0); // 5 PM
-  
-  return end.getTime() - start.getTime(); // Usually 8 hours, but...
-}
-
-// On DST transition days: could be 7 or 9 hours!
-```
+<CodeExample tabs={[{ name: "Example 6", file: "guides/how-dst-works/example-6.ts" }]} />
 
 ## How Datezone Handles DST
 
@@ -128,92 +69,29 @@ Datezone automatically handles DST transitions by using IANA timezone data and i
 
 ### Safe Date Arithmetic
 
-```ts
-import { addDays, addHours } from 'datezone';
-
-// ✅ This correctly handles DST transitions
-const today = Date.now();
-const tomorrow = addDays(today, 1, 'America/New_York');
-
-// On DST transition days:
-// - Spring forward: tomorrow is 23 hours later
-// - Fall back: tomorrow is 25 hours later
-// - But it's always "1 day later" in terms of calendar date
-```
+<CodeExample tabs={[{ name: "Example 7", file: "guides/how-dst-works/example-7.ts" }]} />
 
 ### Timezone-Aware Operations
 
-```ts
-import { startOfDay, endOfDay } from 'datezone';
-
-const timestamp = Date.now();
-
-// Always returns the correct start/end of day, regardless of DST
-const dayStart = startOfDay(timestamp, 'America/New_York');
-const dayEnd = endOfDay(timestamp, 'America/New_York');
-
-// Works correctly even during DST transitions
-```
+<CodeExample tabs={[{ name: "Example 8", file: "guides/how-dst-works/example-8.ts" }]} />
 
 ## DST Best Practices
 
 ### 1. Always Specify Timezones
 
-```ts
-// ❌ Ambiguous - depends on system timezone
-const tomorrow = addDays(today, 1);
-
-// ✅ Explicit - behavior is predictable
-const tomorrow = addDays(today, 1, 'America/New_York');
-```
+<CodeExample tabs={[{ name: "Example 9", file: "guides/how-dst-works/example-9.ts" }]} />
 
 ### 2. Use Calendar Arithmetic, Not Time Arithmetic
 
-```ts
-// ❌ Time-based: adds exactly 24 hours
-const tomorrow = today + (24 * 60 * 60 * 1000);
-
-// ✅ Calendar-based: adds 1 calendar day
-const tomorrow = addDays(today, 1, 'America/New_York');
-```
+<CodeExample tabs={[{ name: "Example 10", file: "guides/how-dst-works/example-10.ts" }]} />
 
 ### 3. Be Careful with Recurring Events
 
-```ts
-import { addDays, setHour } from 'datezone';
-
-// ✅ Correct way to schedule daily events
-function scheduleDailyReminder(startDate: number, timezone: string, hour: number): number[] {
-  const schedule = [];
-  let currentDate = startDate;
-  
-  for (let i = 0; i < 7; i++) {
-    // Add a day first, then set the hour
-    currentDate = addDays(currentDate, i > 0 ? 1 : 0, timezone);
-    const reminder = setHour(currentDate, hour, timezone);
-    schedule.push(reminder);
-  }
-  
-  return schedule;
-}
-```
+<CodeExample tabs={[{ name: "Example 11", file: "guides/how-dst-works/example-11.ts" }]} />
 
 ### 4. Test DST Transitions
 
-```ts
-// Always test your date logic around DST transitions
-const dstTransitions = [
-  '2024-03-10', // Spring forward
-  '2024-11-03', // Fall back
-  '2025-03-09', // Next spring forward
-  '2025-11-02', // Next fall back
-];
-
-dstTransitions.forEach(date => {
-  // Test your date arithmetic around these dates
-  testDateLogic(new Date(date).getTime());
-});
-```
+<CodeExample tabs={[{ name: "Example 12", file: "guides/how-dst-works/example-12.ts" }]} />
 
 ## DST Around the World
 
@@ -224,15 +102,7 @@ DST rules vary significantly by country and region:
 - **No DST**: Many countries/regions don't observe DST at all
 - **Different Rules**: Some countries have unique DST schedules
 
-```ts
-// Different DST transitions for different timezones
-const timezones = [
-  'America/New_York',    // Second Sunday in March/First Sunday in November
-  'Europe/London',       // Last Sunday in March/Last Sunday in October
-  'Australia/Sydney',    // First Sunday in October/First Sunday in April
-  'Asia/Tokyo',          // No DST
-];
-```
+<CodeExample tabs={[{ name: "Example 13", file: "guides/how-dst-works/example-13.ts" }]} />
 
 <Callout type="info">
 **IANA Timezone Database**: Datezone uses the IANA timezone database, which contains the complete history and future predictions of DST rules for all timezones worldwide.
@@ -242,46 +112,15 @@ const timezones = [
 
 ### 1. Log with Timezone Information
 
-```ts
-import { format } from 'datezone';
-
-// ❌ Hard to debug
-console.log('Event time:', timestamp);
-
-// ✅ Clear timezone context
-console.log('Event time:', format(timestamp, 'yyyy-MM-dd HH:mm z', {
-  timeZone: 'America/New_York',
-  locale: 'en-US'
-}));
-```
+<CodeExample tabs={[{ name: "Example 14", file: "guides/how-dst-works/example-14.ts" }]} />
 
 ### 2. Test Edge Cases
 
-```ts
-// Test the hours around DST transitions
-const testHours = [-2, -1, 0, 1, 2, 3, 4]; // Hours relative to transition
-
-testHours.forEach(hourOffset => {
-  const testTime = dstTransitionTime + (hourOffset * 60 * 60 * 1000);
-  // Test your logic with this timestamp
-});
-```
+<CodeExample tabs={[{ name: "Example 15", file: "guides/how-dst-works/example-15.ts" }]} />
 
 ### 3. Use UTC for Calculations, Local for Display
 
-```ts
-// ✅ Store and calculate in UTC/timestamps
-const eventStart = Date.now();
-const eventEnd = eventStart + (2 * 60 * 60 * 1000); // 2 hours later
-
-// ✅ Convert to local time only for display
-const displayStart = format(eventStart, 'HH:mm', { 
-  timeZone: userTimezone 
-});
-const displayEnd = format(eventEnd, 'HH:mm', { 
-  timeZone: userTimezone 
-});
-```
+<CodeExample tabs={[{ name: "Example 16", file: "guides/how-dst-works/example-16.ts" }]} />
 
 ## Summary
 

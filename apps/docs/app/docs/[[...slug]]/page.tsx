@@ -42,9 +42,9 @@ export default async function Page({
 	return (
 		<DocsPage
 			editOnGithub={{
-				owner: "better-auth",
+				owner: "cjkihl",
 				path: `/docs/content/docs/${page.file.path}`,
-				repo: "better-auth",
+				repo: "datezoe",
 				sha: "main",
 			}}
 			footer={{

@@ -15,8 +15,8 @@ import {
 	subDays,
 	subDaysBase,
 	weekDayName,
-} from "./day";
-import type { TimeZone } from "./timezone";
+} from "./day.pub.js";
+import type { TimeZone } from "./timezone.pub.js";
 
 describe("startOfDay", () => {
 	it("returns 00:00:00.000 in UTC if no timezone", () => {

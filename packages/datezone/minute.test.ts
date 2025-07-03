@@ -1,5 +1,10 @@
 import { describe, expect, it } from "bun:test";
-import { addMinutes, endOfMinute, startOfMinute, subMinutes } from "./minute";
+import {
+	addMinutes,
+	endOfMinute,
+	startOfMinute,
+	subMinutes,
+} from "./minute.pub.js";
 
 describe("Minute Functions", () => {
 	describe("startOfMinute", () => {

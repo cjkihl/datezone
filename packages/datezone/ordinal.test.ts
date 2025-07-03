@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { formatOrdinal } from "./ordinal";
+import { formatOrdinal } from "./ordinal.pub.js";
 
 describe("formatOrdinal", () => {
 	describe("English locale", () => {

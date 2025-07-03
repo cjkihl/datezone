@@ -14,9 +14,9 @@ import {
 	isTomorrow,
 	isWeekend,
 	isYesterday,
-} from "./compare";
+} from "./compare.pub";
 import type { TimeZone } from "./index.pub";
-import { walltimeToTimestamp } from "./walltime";
+import { walltimeToTimestamp } from "./walltime.pub";
 
 const NY_TZ: TimeZone = "America/New_York";
 const UTC_TZ: TimeZone = "UTC";

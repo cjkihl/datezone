@@ -13,9 +13,7 @@ Week utilities provide functions for working with weeks in dates and timestamps,
 
 Get the ISO week number of the year (1-53).
 
-```typescript
-function getWeek(ts: OptionsOrTimestamp, timeZone: TimeZone | null): number
-```
+<CodeExample tabs={[{ name: "Example 1", file: "reference/week/example-1.ts" }]} />
 
 <CodeExample tabs={[
   { name: "Local time", file: "reference/week/get-week-local.ts" },
@@ -26,9 +24,7 @@ function getWeek(ts: OptionsOrTimestamp, timeZone: TimeZone | null): number
 
 Get the ISO week-numbering year.
 
-```typescript
-function getISOWeekYear(ts: OptionsOrTimestamp, timeZone: TimeZone | null): number
-```
+<CodeExample tabs={[{ name: "Example 2", file: "reference/week/example-2.ts" }]} />
 
 <CodeExample tabs={[
   { name: "Local time", file: "reference/week/get-iso-week-year-local.ts" },
@@ -39,13 +35,7 @@ function getISOWeekYear(ts: OptionsOrTimestamp, timeZone: TimeZone | null): numb
 
 Get the timestamp for the start of the week.
 
-```typescript
-function startOfWeek(
-  date: OptionsOrTimestamp, 
-  timeZone: TimeZone | null, 
-  weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY
-): number
-```
+<CodeExample tabs={[{ name: "Example 3", file: "reference/week/example-3.ts" }]} />
 
 <CodeExample tabs={[
   { name: "Local time", file: "reference/week/start-of-week-local.ts" },
@@ -56,13 +46,7 @@ function startOfWeek(
 
 Get the timestamp for the end of the week.
 
-```typescript
-function endOfWeek(
-  date: OptionsOrTimestamp, 
-  timeZone: TimeZone | null, 
-  weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY
-): number
-```
+<CodeExample tabs={[{ name: "Example 4", file: "reference/week/example-4.ts" }]} />
 
 <CodeExample tabs={[
   { name: "Local time", file: "reference/week/end-of-week-local.ts" },
@@ -73,9 +57,7 @@ function endOfWeek(
 
 Add weeks to a date.
 
-```typescript
-function addWeeks(date: OptionsOrTimestamp, amount: number, timeZone: TimeZone | null): number
-```
+<CodeExample tabs={[{ name: "Example 5", file: "reference/week/example-5.ts" }]} />
 
 <CodeExample tabs={[
   { name: "Local time", file: "reference/week/add-weeks-local.ts" },
@@ -86,9 +68,7 @@ function addWeeks(date: OptionsOrTimestamp, amount: number, timeZone: TimeZone |
 
 Subtract weeks from a date.
 
-```typescript
-function subWeeks(date: OptionsOrTimestamp, amount: number, timeZone: TimeZone | null): number
-```
+<CodeExample tabs={[{ name: "Example 6", file: "reference/week/example-6.ts" }]} />
 
 <CodeExample tabs={[
   { name: "Local time", file: "reference/week/sub-weeks-local.ts" },
@@ -99,9 +79,7 @@ function subWeeks(date: OptionsOrTimestamp, amount: number, timeZone: TimeZone |
 
 Get the timestamp for the start of the ISO week.
 
-```typescript
-function startOfISOWeek(date: OptionsOrTimestamp, timeZone: TimeZone | null): number
-```
+<CodeExample tabs={[{ name: "Example 7", file: "reference/week/example-7.ts" }]} />
 
 <CodeExample tabs={[
   { name: "Local time", file: "reference/week/start-of-iso-week-local.ts" },
@@ -112,9 +90,7 @@ function startOfISOWeek(date: OptionsOrTimestamp, timeZone: TimeZone | null): nu
 
 Get the timestamp for the end of the ISO week.
 
-```typescript
-function endOfISOWeek(date: OptionsOrTimestamp, timeZone: TimeZone | null): number
-```
+<CodeExample tabs={[{ name: "Example 8", file: "reference/week/example-8.ts" }]} />
 
 <CodeExample tabs={[
   { name: "Local time", file: "reference/week/end-of-iso-week-local.ts" },
@@ -125,13 +101,7 @@ function endOfISOWeek(date: OptionsOrTimestamp, timeZone: TimeZone | null): numb
 
 Get the number of weeks in a month.
 
-```typescript
-function getWeeksInMonth(
-  date: OptionsOrTimestamp, 
-  timeZone: TimeZone | null, 
-  weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY
-): number
-```
+<CodeExample tabs={[{ name: "Example 9", file: "reference/week/example-9.ts" }]} />
 
 <CodeExample tabs={[
   { name: "Local time", file: "reference/week/get-weeks-in-month-local.ts" },
@@ -140,14 +110,4 @@ function getWeeksInMonth(
 
 ## WeekStartsOn Enum
 
-```typescript
-enum WeekStartsOn {
-  SUNDAY = 0,
-  MONDAY = 1,
-  TUESDAY = 2,
-  WEDNESDAY = 3,
-  THURSDAY = 4,
-  FRIDAY = 5,
-  SATURDAY = 6
-}
-``` 
+<CodeExample tabs={[{ name: "Example 10", file: "reference/week/example-10.ts" }]} /> 

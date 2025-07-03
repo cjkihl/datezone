@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { timestampToWalltime, walltimeToTimestamp } from "./walltime";
+import { timestampToWalltime, walltimeToTimestamp } from "./walltime.pub.js";
 
 describe("walltimeToTimestamp", () => {
 	it("converts wall time in UTC to UTC instant", () => {

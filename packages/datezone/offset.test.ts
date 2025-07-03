@@ -6,7 +6,7 @@ import {
 	getLocalTimezoneOffsetMinutes,
 	getTimezoneOffsetMinutes,
 	getUTCtoTimezoneOffsetMinutes,
-} from "./offset";
+} from "./offset.pub.js";
 
 describe("getOffset", () => {
 	it("returns 0 for same zone", () => {

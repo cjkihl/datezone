@@ -18,7 +18,7 @@ import {
 	weekBase,
 	weeksInMonth,
 	weeksInMonthBase,
-} from "./week";
+} from "./week.pub.js";
 
 describe("Week functions", () => {
 	describe("WeekStartsOn enum", () => {

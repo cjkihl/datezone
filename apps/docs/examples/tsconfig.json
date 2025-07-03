@@ -2,10 +2,13 @@
 	"compilerOptions": {
 		"allowUnreachableCode": true,
 		"allowUnusedLabels": true,
+		"isolatedModules": true,
+		"module": "esnext",
+		"moduleResolution": "bundler",
 		"noEmit": true,
 		"skipLibCheck": true
 	},
 	"exclude": ["node_modules"],
-	"extends": "../tsconfig.json",
+	"extends": "@cjkihl/tsconfig/base",
 	"include": ["**/*.ts", "**/*.tsx"]
 }
