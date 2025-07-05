@@ -1,6 +1,8 @@
-import { toISOString, UTCTimeZone } from "datezone";
+import { toISOString } from "datezone";
 
 // UTCTimeZone represents the UTC timezone
+const UTCTimeZone = "UTC" as const;
+
 console.log("UTCTimeZone example:");
 console.log(`UTCTimeZone: ${UTCTimeZone}`);
 

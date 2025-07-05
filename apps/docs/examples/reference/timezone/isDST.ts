@@ -25,9 +25,6 @@ const nonDstTimezones: TimeZone[] = [
 	"Asia/Tokyo",
 	"Asia/Shanghai",
 	"America/Phoenix",
-	"America/Saskatchewan",
-	"+05:30",
-	"-08:00",
 ];
 
 console.log("\nNon-DST timezones:");
@@ -53,15 +50,8 @@ for (const tz of timezones) {
 	}
 }
 
-// Fixed offset timezones (never DST)
-console.log("\nFixed offset timezones (never DST):");
-const fixedOffsets: TimeZone[] = [
-	"+00:00",
-	"+05:30",
-	"-08:00",
-	"+09:00",
-	"-05:00",
-];
-for (const tz of fixedOffsets) {
-	console.log(`${tz}: ${isDST(tz)}`);
-}
+// Note: Fixed offset timezones like "+05:30" are supported but not part of TimeZone type
+console.log(
+	"\nNote: Fixed offset strings like '+05:30' are supported at runtime",
+);
+console.log("but not included in the TypeZone type for type safety.");

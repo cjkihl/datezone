@@ -18,9 +18,6 @@ console.log(`Tokyo: ${toISOString(now, "Asia/Tokyo")}`);
 // Europe/London (GMT/BST)
 console.log(`London: ${toISOString(now, "Europe/London")}`);
 
-// Fixed offset timezone
-console.log(`+05:30: ${toISOString(now, "+05:30")}`);
-
 // Local timezone (system timezone)
 console.log(`Local: ${toISOString(now, null)}`);
 
@@ -31,3 +28,9 @@ console.log(`\nSummer (DST): ${toISOString(summer, "America/New_York")}`);
 // Historical date during standard time
 const winter = new Date("2023-01-15T12:00:00Z").getTime();
 console.log(`Winter (EST): ${toISOString(winter, "America/New_York")}`);
+
+// Note about fixed offset timezones
+console.log(
+	"\nNote: Fixed offset strings like '+05:30' are supported at runtime",
+);
+console.log("but not included in the TypeZone type for strict typing.");

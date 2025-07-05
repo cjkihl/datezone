@@ -4,7 +4,7 @@ import { isUTC, type TimeZone } from "datezone";
 console.log("Checking if timezone is UTC:");
 
 // UTC timezone representations
-const utcTimezones: TimeZone[] = ["UTC", "GMT", "Z"];
+const utcTimezones: TimeZone[] = ["UTC", "GMT"];
 for (const tz of utcTimezones) {
 	console.log(`${tz}: ${isUTC(tz)}`);
 }
@@ -15,8 +15,6 @@ const nonUtcTimezones: TimeZone[] = [
 	"Europe/London",
 	"Asia/Tokyo",
 	"Australia/Sydney",
-	"+05:30",
-	"-08:00",
 ];
 
 console.log("\nNon-UTC timezones:");
@@ -35,9 +33,10 @@ for (const tz of timezones) {
 	}
 }
 
-// Edge cases
-console.log("\nEdge cases:");
-console.log(`"Etc/UTC": ${isUTC("Etc/UTC")}`);
-console.log(`"Etc/GMT": ${isUTC("Etc/GMT")}`);
-console.log(`"Universal": ${isUTC("Universal")}`);
-console.log(`"Zulu": ${isUTC("Zulu")}`);
+// Note: Some timezone strings are supported at runtime but not in TypeZone type
+console.log(
+	"\nNote: Additional timezone formats like 'Z', '+05:30' are supported",
+);
+console.log(
+	"at runtime but not included in the TimeZone type for strict typing.",
+);
