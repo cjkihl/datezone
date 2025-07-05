@@ -1,4 +1,5 @@
 import { describe, expect, it } from "bun:test";
+import { calendarToTimestamp } from "./calendar.pub.js";
 import { formatToParts } from "./format-parts";
 import {
 	addMonths,
@@ -22,7 +23,6 @@ import {
 	startOfPrevMonth,
 	subMonths,
 } from "./month.pub.js";
-import { walltimeToTimestamp } from "./walltime.pub.js";
 
 describe("month", () => {
 	it("returns the correct month for a given timestamp", () => {
@@ -35,19 +35,19 @@ describe("month", () => {
 		expect(month(ts, "UTC")).toBe(7);
 	});
 
-	it("returns the correct month for a given timestamp in a non-DST timezone", () => {
+	it("returns the correct month for a given timestamp in a non-DST timeZone", () => {
 		const ts = new Date("2024-07-10T12:00:00.000Z").getTime();
 		expect(month(ts, "Asia/Tokyo")).toBe(7);
 	});
 
-	it("returns the correct month for a given timestamp in a DST timezone", () => {
+	it("returns the correct month for a given timestamp in a DST timeZone", () => {
 		const ts = new Date("2024-07-10T12:00:00.000Z").getTime();
 		expect(month(ts, "America/New_York")).toBe(7);
 	});
 });
 
 describe("startOfMonth", () => {
-	it("returns 1st 00:00:00.000 in UTC if no timezone", () => {
+	it("returns 1st 00:00:00.000 in UTC if no timeZone", () => {
 		const d = new Date("2024-05-22T15:23:45.123Z");
 		const result = startOfMonth(d.getTime(), "UTC");
 		expect(new Date(result).toISOString()).toBe("2024-05-01T00:00:00.000Z");
@@ -60,7 +60,7 @@ describe("startOfMonth", () => {
 });
 
 describe("endOfMonth", () => {
-	it("returns last day 23:59:59.999 in UTC if no timezone", () => {
+	it("returns last day 23:59:59.999 in UTC if no timeZone", () => {
 		const d = new Date("2024-05-22T15:23:45.123Z");
 		const result = endOfMonth(d.getTime(), "UTC");
 		expect(new Date(result).toISOString()).toBe("2024-05-31T23:59:59.999Z");
@@ -90,7 +90,7 @@ describe("startOfMonth edge cases", () => {
 		const result = startOfMonth(d.getTime(), "UTC");
 		expect(new Date(result).toISOString()).toBe("2024-04-01T00:00:00.000Z");
 	});
-	it("handles negative timezone offset (America/Los_Angeles)", () => {
+	it("handles negative timeZone offset (America/Los_Angeles)", () => {
 		const d = new Date("2024-07-10T10:00:00.000Z");
 		const result = startOfMonth(d.getTime(), "America/Los_Angeles");
 		expect(new Date(result).toISOString()).toBe("2024-07-01T07:00:00.000Z");
@@ -118,7 +118,7 @@ describe("endOfMonth edge cases", () => {
 		const result = endOfMonth(d.getTime(), "UTC");
 		expect(new Date(result).toISOString()).toBe("2024-04-30T23:59:59.999Z");
 	});
-	it("handles negative timezone offset (America/Los_Angeles)", () => {
+	it("handles negative timeZone offset (America/Los_Angeles)", () => {
 		const d = new Date("2024-07-10T10:00:00.000Z");
 		const result = endOfMonth(d.getTime(), "America/Los_Angeles");
 		expect(new Date(result).toISOString()).toBe("2024-08-01T06:59:59.999Z");
@@ -141,7 +141,7 @@ describe("nextMonth", () => {
 		const result = startOfNextMonth(d.getTime(), "UTC");
 		expect(new Date(result).toISOString()).toBe("2024-01-01T00:00:00.000Z");
 	});
-	it("handles timezone offset (Asia/Tokyo)", () => {
+	it("handles timeZone offset (Asia/Tokyo)", () => {
 		const d = new Date("2024-01-15T10:00:00.000Z");
 		const result = startOfNextMonth(d.getTime(), "Asia/Tokyo");
 		expect(new Date(result).toISOString()).toBe("2024-01-31T15:00:00.000Z");
@@ -164,7 +164,7 @@ describe("previousMonth", () => {
 		const result = startOfPrevMonth(d.getTime(), "UTC");
 		expect(new Date(result).toISOString()).toBe("2023-12-01T00:00:00.000Z");
 	});
-	it("handles timezone offset (Asia/Tokyo)", () => {
+	it("handles timeZone offset (Asia/Tokyo)", () => {
 		const d = new Date("2024-03-15T10:00:00.000Z");
 		const result = startOfPrevMonth(d.getTime(), "Asia/Tokyo");
 		expect(new Date(result).toISOString()).toBe("2024-01-31T15:00:00.000Z");
@@ -252,12 +252,12 @@ describe("daysInMonth", () => {
 		expect(daysInMonth(ts, "UTC")).toBe(29);
 	});
 
-	it("returns correct days for a given timestamp in a non-DST timezone", () => {
+	it("returns correct days for a given timestamp in a non-DST timeZone", () => {
 		const ts = new Date("2024-02-10T12:00:00.000Z").getTime();
 		expect(daysInMonth(ts, "Asia/Tokyo")).toBe(29);
 	});
 
-	it("returns correct days for a given timestamp in a DST timezone", () => {
+	it("returns correct days for a given timestamp in a DST timeZone", () => {
 		const ts = new Date("2024-02-10T12:00:00.000Z").getTime();
 		expect(daysInMonth(ts, "America/New_York")).toBe(29);
 	});
@@ -343,12 +343,12 @@ describe("addMonths", () => {
 		const result = addMonths(d.getTime(), -1, "UTC");
 		expect(new Date(result).toISOString()).toBe("2024-02-29T10:00:00.000Z");
 	});
-	it("works with timezones (Asia/Singapore)", () => {
+	it("works with timeZones (Asia/Singapore)", () => {
 		const d = new Date("2024-01-31T16:00:00.000Z");
 		const result = addMonths(d.getTime(), 1, "Asia/Singapore");
 		expect(new Date(result).toISOString()).toBe("2024-02-29T16:00:00.000Z");
 	});
-	it("works with negative months and timezones", () => {
+	it("works with negative months and timeZones", () => {
 		const d = new Date("2024-03-31T16:00:00.000Z");
 		const result = addMonths(d.getTime(), -1, "Asia/Singapore");
 		expect(new Date(result).toISOString()).toBe("2024-02-29T16:00:00.000Z");
@@ -372,13 +372,13 @@ describe("addMonths additional edge cases", () => {
 		expect(new Date(result).getUTCDate()).toBe(28); // 2021-02-28
 	});
 
-	it("should handle non-DST timezones", () => {
+	it("should handle non-DST timeZones", () => {
 		const d = new Date("2024-01-15T10:00:00.000Z");
 		const result = addMonths(d.getTime(), 2, "Asia/Tokyo");
 		expect(new Date(result).toISOString()).toBe("2024-03-15T10:00:00.000Z");
 	});
 
-	it("should handle DST timezones", () => {
+	it("should handle DST timeZones", () => {
 		const d = new Date("2024-01-15T10:00:00.000Z");
 		const result = addMonths(d.getTime(), 2, "America/New_York");
 		expect(new Date(result).toISOString()).toBe("2024-03-15T09:00:00.000Z");
@@ -487,12 +487,12 @@ describe("getQuarter edge cases", () => {
 		expect(getQuarter(ts, null)).toBe(3);
 	});
 
-	it("returns correct quarter for a given timestamp in a non-DST timezone", () => {
+	it("returns correct quarter for a given timestamp in a non-DST timeZone", () => {
 		const ts = new Date("2024-08-10T12:00:00.000Z").getTime();
 		expect(getQuarter(ts, "Asia/Tokyo")).toBe(3);
 	});
 
-	it("returns correct quarter for a given timestamp in a DST timezone", () => {
+	it("returns correct quarter for a given timestamp in a DST timeZone", () => {
 		const ts = new Date("2024-08-10T12:00:00.000Z").getTime();
 		expect(getQuarter(ts, "America/New_York")).toBe(3);
 	});
@@ -533,12 +533,12 @@ describe("subMonths", () => {
 		const result = subMonths(d.getTime(), 2, "UTC");
 		expect(new Date(result).toISOString()).toBe("2024-03-15T10:00:00.000Z");
 	});
-	it("subtracts months from timestamp in non-DST timezone", () => {
+	it("subtracts months from timestamp in non-DST timeZone", () => {
 		const d = new Date("2024-05-15T10:00:00.000Z");
 		const result = subMonths(d.getTime(), 2, "Asia/Tokyo");
 		expect(new Date(result).toISOString()).toBe("2024-03-15T10:00:00.000Z");
 	});
-	it("subtracts months from timestamp in DST timezone", () => {
+	it("subtracts months from timestamp in DST timeZone", () => {
 		const d = new Date("2024-05-15T10:00:00.000Z");
 		const result = subMonths(d.getTime(), 2, "America/New_York");
 		expect(new Date(result).toISOString()).toBe("2024-03-15T10:00:00.000Z");
@@ -564,12 +564,12 @@ describe("startOfNthMonth", () => {
 		expect(resultDate.getDate()).toBe(1);
 		expect(resultDate.getHours()).toBe(0);
 	});
-	it("returns start of previous month (n=-1) in non-DST timezone", () => {
+	it("returns start of previous month (n=-1) in non-DST timeZone", () => {
 		const d = new Date("2024-05-15T10:00:00.000Z");
 		const result = startOfNthMonth(d.getTime(), -1, "Asia/Tokyo");
 		expect(new Date(result).toISOString()).toBe("2024-03-31T15:00:00.000Z");
 	});
-	it("returns start of nth month in DST timezone", () => {
+	it("returns start of nth month in DST timeZone", () => {
 		const d = new Date("2024-03-15T10:00:00.000Z");
 		const result = startOfNthMonth(d.getTime(), 2, "America/New_York"); // May
 		expect(new Date(result).toISOString()).toBe("2024-05-01T04:00:00.000Z");
@@ -589,12 +589,12 @@ describe("endOfNthMonth", () => {
 		expect(resultDate.getMonth()).toBe(5); // June (0-indexed)
 		expect(resultDate.getDate()).toBe(30);
 	});
-	it("returns end of previous month (n=-1) in non-DST timezone", () => {
+	it("returns end of previous month (n=-1) in non-DST timeZone", () => {
 		const d = new Date("2024-05-15T10:00:00.000Z");
 		const result = endOfNthMonth(d.getTime(), -1, "Asia/Tokyo");
 		expect(new Date(result).toISOString()).toBe("2024-04-30T14:59:59.999Z");
 	});
-	it("returns end of nth month in DST timezone", () => {
+	it("returns end of nth month in DST timeZone", () => {
 		const d = new Date("2024-03-15T10:00:00.000Z");
 		const result = endOfNthMonth(d.getTime(), 1, "America/New_York"); // April
 		expect(new Date(result).toISOString()).toBe("2024-05-01T03:59:59.999Z");
@@ -614,12 +614,12 @@ describe("endOfNextMonth", () => {
 		expect(resultDate.getMonth()).toBe(5); // June (0-indexed)
 		expect(resultDate.getDate()).toBe(30);
 	});
-	it("returns end of next month in non-DST timezone", () => {
+	it("returns end of next month in non-DST timeZone", () => {
 		const d = new Date("2024-05-15T10:00:00.000Z");
 		const result = endOfNextMonth(d.getTime(), "Asia/Tokyo");
 		expect(new Date(result).toISOString()).toBe("2024-06-30T14:59:59.999Z");
 	});
-	it("returns end of next month in DST timezone", () => {
+	it("returns end of next month in DST timeZone", () => {
 		const d = new Date("2024-03-15T10:00:00.000Z");
 		const result = endOfNextMonth(d.getTime(), "America/New_York");
 		expect(new Date(result).toISOString()).toBe("2024-05-01T03:59:59.999Z");
@@ -639,12 +639,12 @@ describe("endOfPrevMonth", () => {
 		expect(resultDate.getMonth()).toBe(3); // April (0-indexed)
 		expect(resultDate.getDate()).toBe(30);
 	});
-	it("returns end of previous month in non-DST timezone", () => {
+	it("returns end of previous month in non-DST timeZone", () => {
 		const d = new Date("2024-05-15T10:00:00.000Z");
 		const result = endOfPrevMonth(d.getTime(), "Asia/Tokyo");
 		expect(new Date(result).toISOString()).toBe("2024-04-30T14:59:59.999Z");
 	});
-	it("returns end of previous month in DST timezone", () => {
+	it("returns end of previous month in DST timeZone", () => {
 		const d = new Date("2024-05-15T10:00:00.000Z");
 		const result = endOfPrevMonth(d.getTime(), "America/New_York");
 		expect(new Date(result).toISOString()).toBe("2024-05-01T03:59:59.999Z");
@@ -656,11 +656,11 @@ describe("startOfMonthBase", () => {
 		const result = startOfMonthBase(2024, 5, "UTC");
 		expect(new Date(result).toISOString()).toBe("2024-05-01T00:00:00.000Z");
 	});
-	it("returns start of month for given year/month in non-DST timezone", () => {
+	it("returns start of month for given year/month in non-DST timeZone", () => {
 		const result = startOfMonthBase(2024, 5, "Asia/Tokyo");
 		expect(new Date(result).toISOString()).toBe("2024-04-30T15:00:00.000Z");
 	});
-	it("returns start of month for given year/month in DST timezone", () => {
+	it("returns start of month for given year/month in DST timeZone", () => {
 		const result = startOfMonthBase(2024, 3, "America/New_York");
 		expect(new Date(result).toISOString()).toBe("2024-03-01T05:00:00.000Z");
 	});
@@ -675,11 +675,11 @@ describe("endOfMonthBase", () => {
 		const result = endOfMonthBase(2024, 5, "UTC");
 		expect(new Date(result).toISOString()).toBe("2024-05-31T23:59:59.999Z");
 	});
-	it("returns end of month for given year/month in non-DST timezone", () => {
+	it("returns end of month for given year/month in non-DST timeZone", () => {
 		const result = endOfMonthBase(2024, 5, "Asia/Tokyo");
 		expect(new Date(result).toISOString()).toBe("2024-05-31T14:59:59.999Z");
 	});
-	it("returns end of month for given year/month in DST timezone", () => {
+	it("returns end of month for given year/month in DST timeZone", () => {
 		const result = endOfMonthBase(2024, 3, "America/New_York");
 		expect(new Date(result).toISOString()).toBe("2024-04-01T03:59:59.999Z");
 	});
@@ -690,15 +690,15 @@ describe("endOfMonthBase", () => {
 });
 
 describe("addMonthsBase", () => {
-	it("adds months to walltime components in UTC", () => {
+	it("adds months to calendar components in UTC", () => {
 		const result = addMonthsBase(2024, 3, 15, 10, 30, 45, 123, 2, "UTC");
 		expect(new Date(result).toISOString()).toBe("2024-05-15T10:30:45.123Z");
 	});
-	it("adds months to walltime components in non-DST timezone", () => {
+	it("adds months to calendar components in non-DST timeZone", () => {
 		const result = addMonthsBase(2024, 3, 15, 10, 30, 45, 123, 2, "Asia/Tokyo");
 		expect(new Date(result).toISOString()).toBe("2024-05-15T01:30:45.123Z");
 	});
-	it("adds months to walltime components in DST timezone", () => {
+	it("adds months to calendar components in DST timeZone", () => {
 		const result = addMonthsBase(
 			2024,
 			1,
@@ -724,37 +724,37 @@ describe("addMonthsBase", () => {
 
 // Additional DST coverage tests to hit the uncovered branches
 describe("DST coverage tests", () => {
-	it("month function handles DST timezone", () => {
+	it("month function handles DST timeZone", () => {
 		const ts = new Date("2024-07-10T12:00:00.000Z").getTime();
 		const result = month(ts, "America/New_York");
 		expect(result).toBe(7);
 	});
 
-	it("startOfMonth handles DST timezone complex path", () => {
+	it("startOfMonth handles DST timeZone complex path", () => {
 		const ts = new Date("2024-07-10T12:00:00.000Z").getTime();
 		const result = startOfMonth(ts, "America/New_York");
 		expect(new Date(result).toISOString()).toBe("2024-07-01T04:00:00.000Z");
 	});
 
-	it("endOfMonth handles DST timezone complex path", () => {
+	it("endOfMonth handles DST timeZone complex path", () => {
 		const ts = new Date("2024-07-10T12:00:00.000Z").getTime();
 		const result = endOfMonth(ts, "America/New_York");
 		expect(new Date(result).toISOString()).toBe("2024-08-01T03:59:59.999Z");
 	});
 
-	it("addMonths handles DST timezone complex path", () => {
+	it("addMonths handles DST timeZone complex path", () => {
 		const ts = new Date("2024-01-15T12:00:00.000Z").getTime();
 		const result = addMonths(ts, 6, "America/New_York");
 		expect(new Date(result).toISOString()).toBe("2024-07-15T11:00:00.000Z");
 	});
 
-	it("startOfNthMonth handles DST timezone complex path", () => {
+	it("startOfNthMonth handles DST timeZone complex path", () => {
 		const ts = new Date("2024-03-15T12:00:00.000Z").getTime();
 		const result = startOfNthMonth(ts, 1, "America/New_York");
 		expect(new Date(result).toISOString()).toBe("2024-04-01T04:00:00.000Z");
 	});
 
-	it("getQuarter handles DST timezone complex path", () => {
+	it("getQuarter handles DST timeZone complex path", () => {
 		const ts = new Date("2024-07-10T12:00:00.000Z").getTime();
 		const result = getQuarter(ts, "America/New_York");
 		expect(result).toBe(3);
@@ -763,54 +763,54 @@ describe("DST coverage tests", () => {
 
 // Edge case tests to cover remaining uncovered lines
 describe("Edge cases for 100% coverage", () => {
-	it("covers month function DST branch with specific DST timezone", () => {
-		// Test with a known DST timezone to ensure we hit the formatToParts branch
+	it("covers month function DST branch with specific DST timeZone", () => {
+		// Test with a known DST timeZone to ensure we hit the formatToParts branch
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
 		const result = month(ts, "America/New_York");
 		expect(result).toBe(7);
 	});
 
-	it("covers startOfMonth DST branch with specific DST timezone", () => {
-		// Test with a known DST timezone to ensure we hit the formatToParts branch
+	it("covers startOfMonth DST branch with specific DST timeZone", () => {
+		// Test with a known DST timeZone to ensure we hit the formatToParts branch
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
 		const result = startOfMonth(ts, "America/New_York");
 		expect(typeof result).toBe("number");
 		expect(result).toBeGreaterThan(0);
 	});
 
-	it("covers endOfMonth DST branch with specific DST timezone", () => {
-		// Test with a known DST timezone to ensure we hit the formatToParts branch
+	it("covers endOfMonth DST branch with specific DST timeZone", () => {
+		// Test with a known DST timeZone to ensure we hit the formatToParts branch
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
 		const result = endOfMonth(ts, "America/New_York");
 		expect(typeof result).toBe("number");
 		expect(result).toBeGreaterThan(ts);
 	});
 
-	it("covers addMonths DST branch with specific DST timezone", () => {
-		// Test with a known DST timezone to ensure we hit the formatToParts branch
+	it("covers addMonths DST branch with specific DST timeZone", () => {
+		// Test with a known DST timeZone to ensure we hit the formatToParts branch
 		const ts = new Date("2024-01-15T12:00:00.000Z").getTime();
 		const result = addMonths(ts, 6, "America/New_York");
 		expect(typeof result).toBe("number");
 		expect(result).toBeGreaterThan(ts);
 	});
 
-	it("covers startOfNthMonth DST branch with specific DST timezone", () => {
-		// Test with a known DST timezone to ensure we hit the formatToParts branch
+	it("covers startOfNthMonth DST branch with specific DST timeZone", () => {
+		// Test with a known DST timeZone to ensure we hit the formatToParts branch
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
 		const result = startOfNthMonth(ts, 0, "America/New_York");
 		expect(typeof result).toBe("number");
 		expect(result).toBeGreaterThan(0);
 	});
 
-	it("covers getQuarter DST branch with specific DST timezone", () => {
-		// Test with a known DST timezone to ensure we hit the formatToParts branch
+	it("covers getQuarter DST branch with specific DST timeZone", () => {
+		// Test with a known DST timeZone to ensure we hit the formatToParts branch
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
 		const result = getQuarter(ts, "America/New_York");
 		expect(result).toBe(3);
 	});
 
-	it("covers daysInMonth DST branch with specific DST timezone", () => {
-		// Test with a known DST timezone to ensure we hit the formatToParts branch
+	it("covers daysInMonth DST branch with specific DST timeZone", () => {
+		// Test with a known DST timeZone to ensure we hit the formatToParts branch
 		const ts = new Date("2024-02-15T12:00:00.000Z").getTime();
 		const result = daysInMonth(ts, "America/New_York");
 		expect(result).toBe(29); // 2024 is leap year
@@ -850,18 +850,18 @@ describe("Edge cases for 100% coverage", () => {
 		expect(daysResult).toBe(31); // January has 31 days
 	});
 
-	it("forces DST branches with complex timezone and precise date", () => {
+	it("forces DST branches with complex timeZone and precise date", () => {
 		// Use a date/time that should definitely trigger DST logic
 		const ts = new Date("2024-03-15T15:30:45.123Z").getTime();
 
-		// Test multiple DST timezones to be thorough
-		const timezones = [
+		// Test multiple DST timeZones to be thorough
+		const timeZones = [
 			"America/New_York",
 			"Europe/London",
 			"Australia/Sydney",
 		] as const;
 
-		for (const tz of timezones) {
+		for (const tz of timeZones) {
 			const monthResult = month(ts, tz);
 			const startResult = startOfMonth(ts, tz);
 			const endResult = endOfMonth(ts, tz);
@@ -882,25 +882,25 @@ describe("Edge cases for 100% coverage", () => {
 });
 
 describe("100% line coverage tests", () => {
-	it("covers startOfMonth null timezone fast path (lines 49-52)", () => {
-		// Test the local time fast path with null timezone
+	it("covers startOfMonth null timeZone fast path (lines 49-52)", () => {
+		// Test the local time fast path with null timeZone
 		const ts = new Date(2024, 5, 15, 12, 0, 0, 0).getTime(); // June 15, 2024
 		const result = startOfMonth(ts, null);
 		const expected = new Date(2024, 5, 1, 0, 0, 0, 0).getTime(); // June 1, 2024
 		expect(result).toBe(expected);
 	});
 
-	it("covers endOfMonth null timezone fast path (lines 109-112)", () => {
-		// Test the local time fast path with null timezone
+	it("covers endOfMonth null timeZone fast path (lines 109-112)", () => {
+		// Test the local time fast path with null timeZone
 		const ts = new Date(2024, 5, 15, 12, 0, 0, 0).getTime(); // June 15, 2024
 		const result = endOfMonth(ts, null);
 		const expected = new Date(2024, 6, 1, 0, 0, 0, 0).getTime() - 1; // June 30, 2024 23:59:59.999
 		expect(result).toBe(expected);
 	});
 
-	it("covers addMonths day overflow in non-DST timezone (line 208)", () => {
-		// Test day overflow scenario in non-DST timezone - Jan 31 + 1 month should = Feb 29 (leap year)
-		const ts = walltimeToTimestamp(2024, 1, 31, 12, 0, 0, 0, "Asia/Singapore"); // Jan 31
+	it("covers addMonths day overflow in non-DST timeZone (line 208)", () => {
+		// Test day overflow scenario in non-DST timeZone - Jan 31 + 1 month should = Feb 29 (leap year)
+		const ts = calendarToTimestamp(2024, 1, 31, 12, 0, 0, 0, "Asia/Singapore"); // Jan 31
 		const result = addMonths(ts, 1, "Asia/Singapore"); // Should become Feb 29
 		const parts = formatToParts(result, "Asia/Singapore", {
 			day: "2-digit",
@@ -923,10 +923,10 @@ describe("100% line coverage tests", () => {
 	});
 
 	it("covers all remaining uncovered paths", () => {
-		// Test more scenarios with null timezone to ensure all paths are covered
+		// Test more scenarios with null timeZone to ensure all paths are covered
 		const ts = Date.now();
 
-		// More null timezone tests
+		// More null timeZone tests
 		expect(typeof startOfMonth(ts, null)).toBe("number");
 		expect(typeof endOfMonth(ts, null)).toBe("number");
 		expect(typeof month(ts, null)).toBe("number");
@@ -936,7 +936,7 @@ describe("100% line coverage tests", () => {
 		expect(typeof addMonths(ts, 0, null)).toBe("number");
 
 		// Test edge cases for day overflow in different scenarios
-		const jan31 = walltimeToTimestamp(2024, 1, 31, 0, 0, 0, 0, "UTC");
+		const jan31 = calendarToTimestamp(2024, 1, 31, 0, 0, 0, 0, "UTC");
 		const feb = addMonths(jan31, 1, "UTC");
 		const febParts = formatToParts(feb, "UTC", {
 			day: "2-digit",

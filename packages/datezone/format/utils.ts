@@ -1,10 +1,10 @@
 import type { DT } from "./formatters.js";
 
 /**
- * Formats a timezone offset according to the given pattern.
- * @param offset - The timezone offset in minutes.
+ * Formats a timeZone offset according to the given pattern.
+ * @param offset - The timeZone offset in minutes.
  * @param pattern - The pattern string (e.g., "X", "XX", "XXX", etc.).
- * @returns The formatted timezone string.
+ * @returns The formatted timeZone string.
  */
 export function formatTimezone(offset: number, pattern: string): string {
 	if (offset === 0 && pattern[0]!.toUpperCase() === "X") return "Z";
@@ -29,8 +29,8 @@ export function formatTimezone(offset: number, pattern: string): string {
 }
 
 /**
- * Formats a timezone offset as a GMT string.
- * @param offset - The timezone offset in minutes.
+ * Formats a timeZone offset as a GMT string.
+ * @param offset - The timeZone offset in minutes.
  * @param long - Whether to use the long format (with zero-padded hours and minutes).
  * @returns The formatted GMT string.
  */

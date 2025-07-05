@@ -1,7 +1,7 @@
+import { timestampToCalendar } from "./calendar.pub.js";
 import { startOfDayBase } from "./day.pub.js";
 import type { TimeZone } from "./index.pub.js";
 import { dayOfWeek, startOfDay } from "./index.pub.js";
-import { timestampToWalltime } from "./walltime.pub.js";
 
 // Type and helper function for other modules that still use OptionsOrTimestamp
 export type OptionsOrTimestamp =
@@ -9,16 +9,20 @@ export type OptionsOrTimestamp =
 	| number;
 
 /**
- * Returns the start of today (00:00:00.000) in the given timezone.
+ * Checks if today.
+ *
  * @param timeZone - The time zone.
  * @returns The timestamp for the start of today.
+ * @see https://datezone.dev/docs/reference/compare#isToday
  */
 function startOfToday(timeZone: TimeZone): number {
 	return startOfDay(Date.now(), timeZone);
 }
 
 /**
- * Performance: Timezone required for converting timestamp to current day
+ * Checks if today.
+ *
+ * @see https://datezone.dev/docs/reference/compare#isToday
  */
 export function isToday(ts: number, timeZone: TimeZone): boolean {
 	const todayStart = startOfToday(timeZone);
@@ -36,7 +40,9 @@ export function isTodayBase(
 }
 
 /**
- * Performance: Timezone required for converting timestamp to current day
+ * Checks if tomorrow.
+ *
+ * @see https://datezone.dev/docs/reference/compare#isTomorrow
  */
 export function isTomorrow(ts: number, timeZone: TimeZone): boolean {
 	const todayStart = startOfToday(timeZone);
@@ -46,7 +52,9 @@ export function isTomorrow(ts: number, timeZone: TimeZone): boolean {
 }
 
 /**
- * Performance: Timezone required for converting timestamp to current day
+ * Checks if yesterday.
+ *
+ * @see https://datezone.dev/docs/reference/compare#isYesterday
  */
 export function isYesterday(ts: number, timeZone: TimeZone): boolean {
 	const todayStart = startOfToday(timeZone);
@@ -56,7 +64,9 @@ export function isYesterday(ts: number, timeZone: TimeZone): boolean {
 }
 
 /**
- * Performance: Timezone required for DST-aware comparison with current time
+ * Checks if past.
+ *
+ * @see https://datezone.dev/docs/reference/compare#isPast
  */
 export function isPast(ts: number): boolean {
 	const now = Date.now();
@@ -64,7 +74,9 @@ export function isPast(ts: number): boolean {
 }
 
 /**
- * Performance: Timezone required for DST-aware comparison with current time
+ * Checks if future.
+ *
+ * @see https://datezone.dev/docs/reference/compare#isFuture
  */
 export function isFuture(ts: number): boolean {
 	const now = Date.now();
@@ -72,7 +84,9 @@ export function isFuture(ts: number): boolean {
 }
 
 /**
- * Performance: Timezone only needed for timestamp-to-date conversion, not DST
+ * Checks if weekend.
+ *
+ * @see https://datezone.dev/docs/reference/compare#isWeekend
  */
 export function isWeekend(ts: number, timeZone: TimeZone): boolean {
 	const dow = dayOfWeek(ts, timeZone);
@@ -80,28 +94,36 @@ export function isWeekend(ts: number, timeZone: TimeZone): boolean {
 }
 
 /**
- * Performance: Simple timestamp comparison, no timezone conversion needed
+ * Checks if before.
+ *
+ * @see https://datezone.dev/docs/reference/compare#isBefore
  */
 export function isBefore(ts1: number, ts2: number): boolean {
 	return ts1 < ts2;
 }
 
 /**
- * Performance: Simple timestamp comparison, no timezone conversion needed
+ * Checks if after.
+ *
+ * @see https://datezone.dev/docs/reference/compare#isAfter
  */
 export function isAfter(ts1: number, ts2: number): boolean {
 	return ts1 > ts2;
 }
 
 /**
- * Performance: Simple timestamp comparison, no timezone conversion needed
+ * Checks if equal.
+ *
+ * @see https://datezone.dev/docs/reference/compare#isEqual
  */
 export function isEqual(ts1: number, ts2: number): boolean {
 	return ts1 === ts2;
 }
 
 /**
- * Performance: Timezone only needed for timestamp-to-date conversion, not DST
+ * Checks if same day.
+ *
+ * @see https://datezone.dev/docs/reference/compare#isSameDay
  */
 export function isSameDay(
 	ts1: number,
@@ -114,7 +136,9 @@ export function isSameDay(
 }
 
 /**
- * Performance: Timezone only needed for timestamp-to-date conversion, not DST
+ * Checks if same week.
+ *
+ * @see https://datezone.dev/docs/reference/compare#isSameWeek
  */
 export function isSameWeek(
 	ts1: number,
@@ -131,27 +155,31 @@ export function isSameWeek(
 }
 
 /**
- * Performance: Timezone only needed for timestamp-to-date conversion
+ * Checks if same month.
+ *
+ * @see https://datezone.dev/docs/reference/compare#isSameMonth
  */
 export function isSameMonth(
 	ts1: number,
 	ts2: number,
 	timeZone: TimeZone,
 ): boolean {
-	const d1 = timestampToWalltime(ts1, timeZone);
-	const d2 = timestampToWalltime(ts2, timeZone);
+	const d1 = timestampToCalendar(ts1, timeZone);
+	const d2 = timestampToCalendar(ts2, timeZone);
 	return d1.year === d2.year && d1.month === d2.month;
 }
 
 /**
- * Performance: Timezone only needed for timestamp-to-date conversion
+ * Checks if same year.
+ *
+ * @see https://datezone.dev/docs/reference/compare#isSameYear
  */
 export function isSameYear(
 	ts1: number,
 	ts2: number,
 	timeZone: TimeZone,
 ): boolean {
-	const d1 = timestampToWalltime(ts1, timeZone);
-	const d2 = timestampToWalltime(ts2, timeZone);
+	const d1 = timestampToCalendar(ts1, timeZone);
+	const d2 = timestampToCalendar(ts2, timeZone);
 	return d1.year === d2.year;
 }

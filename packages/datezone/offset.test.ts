@@ -88,15 +88,15 @@ describe("getLocalTimezoneOffsetMinutes", () => {
 	});
 });
 
-describe("getTimezoneOffsetMinutes with optional timezones", () => {
-	it("defaults to local timezone when no timezone specified", () => {
+describe("getTimezoneOffsetMinutes with optional timeZones", () => {
+	it("defaults to local timeZone when no timeZone specified", () => {
 		const now = Date.now();
 		const localToUtc = getTimezoneOffsetMinutes(now, undefined, "UTC");
 		const nativeOffset = new Date(now).getTimezoneOffset();
 		expect(localToUtc).toBe(nativeOffset);
 	});
 
-	it("defaults to local timezone when both timezones are undefined", () => {
+	it("defaults to local timeZone when both timeZones are undefined", () => {
 		const now = Date.now();
 		const localToLocal = getTimezoneOffsetMinutes(now, undefined, undefined);
 		expect(localToLocal).toBe(0);
@@ -109,7 +109,7 @@ describe("getTimezoneOffsetMinutes with optional timezones", () => {
 		expect(utcToLocal).toBe(-nativeOffset);
 	});
 
-	it("handles local to other timezone conversion", () => {
+	it("handles local to other timeZone conversion", () => {
 		const now = Date.now();
 		const localToTokyo = getTimezoneOffsetMinutes(now, undefined, "Asia/Tokyo");
 		const utcToTokyo = getTimezoneOffsetMinutes(now, "UTC", "Asia/Tokyo");
@@ -119,7 +119,7 @@ describe("getTimezoneOffsetMinutes with optional timezones", () => {
 		expect(localToTokyo).toBe(utcToTokyo - localToUtc);
 	});
 
-	it("handles other timezone to local conversion", () => {
+	it("handles other timeZone to local conversion", () => {
 		const now = Date.now();
 		const tokyoToLocal = getTimezoneOffsetMinutes(now, "Asia/Tokyo", undefined);
 		const tokyoToUtc = getTimezoneOffsetMinutes(now, "Asia/Tokyo", "UTC");
@@ -129,7 +129,7 @@ describe("getTimezoneOffsetMinutes with optional timezones", () => {
 		expect(tokyoToLocal).toBe(tokyoToUtc + utcToLocal);
 	});
 
-	it("works with getUTCtoTimezoneOffsetMinutes without timezone parameter", () => {
+	it("works with getUTCtoTimezoneOffsetMinutes without timeZone parameter", () => {
 		const now = Date.now();
 		const localOffset = getUTCtoTimezoneOffsetMinutes(now);
 		const nativeOffset = new Date(now).getTimezoneOffset();
@@ -138,20 +138,20 @@ describe("getTimezoneOffsetMinutes with optional timezones", () => {
 });
 
 describe("getUTCtoTimezoneOffsetMinutes", () => {
-	it("returns 0 for UTC timezone", () => {
+	it("returns 0 for UTC timeZone", () => {
 		const now = Date.now();
 		expect(getUTCtoTimezoneOffsetMinutes(now, "UTC")).toBe(0);
 		expect(getUTCtoTimezoneOffsetMinutes(now, "Etc/UTC")).toBe(0);
 	});
 
-	it("defaults to local timezone when no timezone provided", () => {
+	it("defaults to local timeZone when no timeZone provided", () => {
 		const now = Date.now();
 		const localOffset = getUTCtoTimezoneOffsetMinutes(now);
 		const expectedOffset = getLocalTimezoneOffsetMinutes(now);
 		expect(localOffset).toBe(expectedOffset);
 	});
 
-	it("handles non-DST timezones (fixed offset zones) with caching", () => {
+	it("handles non-DST timeZones (fixed offset zones) with caching", () => {
 		// Clear cache first to ensure we test both cache miss and hit
 		clearFixedOffsetCache();
 
@@ -172,7 +172,7 @@ describe("getUTCtoTimezoneOffsetMinutes", () => {
 		expect(offset1).toBe(offset2);
 	});
 
-	it("handles DST timezones with per-hour caching", () => {
+	it("handles DST timeZones with per-hour caching", () => {
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime(); // Summer time
 
 		// First call should calculate and cache
@@ -194,10 +194,10 @@ describe("getUTCtoTimezoneOffsetMinutes", () => {
 		expect(typeof offset3).toBe("number");
 	});
 
-	it("handles different DST timezones in sequence to test cache object reuse", () => {
+	it("handles different DST timeZones in sequence to test cache object reuse", () => {
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
 
-		// Test multiple DST timezones to ensure cache object is reused properly
+		// Test multiple DST timeZones to ensure cache object is reused properly
 		const nyOffset = getUTCtoTimezoneOffsetMinutes(ts, "America/New_York");
 		const laOffset = getUTCtoTimezoneOffsetMinutes(ts, "America/Los_Angeles");
 		const londonOffset = getUTCtoTimezoneOffsetMinutes(ts, "Europe/London");
@@ -211,7 +211,7 @@ describe("getUTCtoTimezoneOffsetMinutes", () => {
 		// This will test the !lastOffsetCache branch by using a fresh DST calculation
 		const ts = new Date("2024-01-15T12:00:00.000Z").getTime(); // Winter time
 
-		// Use a DST timezone that we haven't tested yet
+		// Use a DST timeZone that we haven't tested yet
 		const offset = getUTCtoTimezoneOffsetMinutes(ts, "Australia/Sydney");
 		expect(typeof offset).toBe("number");
 		expect(offset).toBeGreaterThan(0); // Sydney is ahead of UTC
@@ -227,7 +227,7 @@ describe("Fixed offset cache management", () => {
 		expect(initialInfo.size).toBe(0);
 		expect(initialInfo.cachedTimezones).toEqual([]);
 
-		// Add some non-DST timezones to cache
+		// Add some non-DST timeZones to cache
 		const ts = Date.now();
 		getUTCtoTimezoneOffsetMinutes(ts, "Asia/Kolkata"); // Non-DST
 		getUTCtoTimezoneOffsetMinutes(ts, "Asia/Dubai"); // Non-DST
@@ -245,9 +245,9 @@ describe("Fixed offset cache management", () => {
 		// Make sure each property is individually accessed
 		const info = getFixedOffsetCacheInfo();
 		const sizeValue = info.size;
-		const timezonesList = info.cachedTimezones;
+		const timeZonesList = info.cachedTimezones;
 		expect(sizeValue).toBeGreaterThan(0);
-		expect(timezonesList).toEqual(
+		expect(timeZonesList).toEqual(
 			expect.arrayContaining(["Asia/Kolkata", "Asia/Dubai"]),
 		);
 	});
@@ -277,10 +277,10 @@ describe("Fixed offset cache management", () => {
 });
 
 describe("Edge cases and performance", () => {
-	it("handles timezone offset edge cases", () => {
+	it("handles timeZone offset edge cases", () => {
 		const ts = new Date("2024-01-01T00:00:00.000Z").getTime();
 
-		// Test various timezone offsets
+		// Test various timeZone offsets
 		const utcOffset = getUTCtoTimezoneOffsetMinutes(ts, "UTC");
 		const tokyoOffset = getUTCtoTimezoneOffsetMinutes(ts, "Asia/Tokyo");
 		const nyOffset = getUTCtoTimezoneOffsetMinutes(ts, "America/New_York");
@@ -327,13 +327,13 @@ describe("Edge cases and performance", () => {
 
 	it("handles rapid successive calls with performance optimizations", () => {
 		const baseTime = Date.now();
-		const timezone = "Europe/London";
+		const timeZone = "Europe/London";
 
 		// Multiple calls in the same hour should use cache
 		const results: number[] = [];
 		for (let i = 0; i < 10; i++) {
 			const ts = baseTime + i * 5 * 60 * 1000; // 5-minute intervals
-			results.push(getUTCtoTimezoneOffsetMinutes(ts, timezone));
+			results.push(getUTCtoTimezoneOffsetMinutes(ts, timeZone));
 		}
 
 		// All results in the same hour should be identical (cache hit)
@@ -344,11 +344,11 @@ describe("Edge cases and performance", () => {
 	});
 });
 
-describe("Complex timezone scenarios", () => {
-	it("handles unusual timezone offsets", () => {
+describe("Complex timeZone scenarios", () => {
+	it("handles unusual timeZone offsets", () => {
 		const ts = new Date("2024-06-15T12:00:00.000Z").getTime();
 
-		// Test some unusual timezone offsets
+		// Test some unusual timeZone offsets
 		const kathmandu = getUTCtoTimezoneOffsetMinutes(ts, "Asia/Kathmandu"); // UTC+5:45
 		const marquesas = getUTCtoTimezoneOffsetMinutes(ts, "Pacific/Marquesas"); // UTC-9:30
 		const chatham = getUTCtoTimezoneOffsetMinutes(ts, "Pacific/Chatham"); // UTC+12:45 -> UTC+13:45 during DST
@@ -370,5 +370,39 @@ describe("Complex timezone scenarios", () => {
 		expect(etcUtcToTokyo).toBe(utcToTokyo);
 		expect(tokyoToEtcUtc).toBe(tokyoToUtc);
 		expect(etcUtcToTokyo).toBe(-tokyoToEtcUtc);
+	});
+});
+
+describe("General case with two non-UTC timeZones", () => {
+	it("computes correct difference between Asia/Tokyo and Europe/London", () => {
+		const ts = new Date("2024-06-15T12:00:00.000Z").getTime();
+
+		// Calculate using the general API
+		const diff = getTimezoneOffsetMinutes(ts, "Asia/Tokyo", "Europe/London");
+
+		// Expected difference is (UTC→London) - (UTC→Tokyo)
+		const toOffset = getUTCtoTimezoneOffsetMinutes(ts, "Europe/London");
+		const fromOffset = getUTCtoTimezoneOffsetMinutes(ts, "Asia/Tokyo");
+		const expected = toOffset - fromOffset;
+
+		expect(diff).toBe(expected);
+	});
+
+	it("returns the inverse when arguments are swapped", () => {
+		const ts = new Date("2024-10-15T12:00:00.000Z").getTime();
+
+		const tokyoToLondon = getTimezoneOffsetMinutes(
+			ts,
+			"Asia/Tokyo",
+			"Europe/London",
+		);
+		const londonToTokyo = getTimezoneOffsetMinutes(
+			ts,
+			"Europe/London",
+			"Asia/Tokyo",
+		);
+
+		// The offsets should be equal in magnitude but opposite in sign
+		expect(tokyoToLondon).toBe(-londonToTokyo);
 	});
 });

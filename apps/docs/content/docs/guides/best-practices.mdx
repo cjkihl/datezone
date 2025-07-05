@@ -11,25 +11,27 @@ Building reliable applications that handle dates and times correctly requires fo
 
 ### 1. Always Specify Timezones Explicitly
 
-Never rely on the system timezone for date operations. This creates unpredictable behavior that varies between environments.
+Never rely on the system timeZone for date operations. This creates unpredictable behavior that varies between environments.
 
-<CodeExample tabs={[{ name: "Example 1", file: "guides/best-practices/example-1.ts" }]} />
+<CodeExample tabs={[{ name: "Example 1", file: "guides/how-dst-works/this-assumption-is-dangerous.ts" }]} />
 
 <Callout type="info">
-**User experience tip**: Default to the user's detected timezone, but always allow them to override it. This is how professional applications like Outlook handle timezone selection.
+**User experience tip**: Default to the user's detected timeZone, but always allow them to override it. This is how most calendar applications like Outlook handle timeZone selection.
 </Callout>
 
-### 2. Store Timestamps, Display with Timezones
+### 2. Store Timestamps, Display with Calendar Dates
 
-Use timestamps for storage and calculations, but convert to localized formats only for display.
+Use timestamps for storage and use to Timezone sensitive Calendar only for display and calculations.
 
-<CodeExample tabs={[{ name: "Example 2", file: "guides/best-practices/example-2.ts" }]} />
+<CodeExample tabs={[{ name: "Example 2", file: "guides/best-practices/user-settings-probably-set-in-a-database-or-local-storage.ts" }]} />
 
-### 3. Never Use Date Arithmetic for Calendar Operations
+### 3. Never Use simple Arithmetic for Calendar Operations
 
 Don't add milliseconds directly to timestamps for date operations. DST transitions make this unreliable.
 
-<CodeExample tabs={[{ name: "Example 3", file: "guides/best-practices/example-3.ts" }]} />
+Read more about this in [how DST Works](/docs/guides/how-dst-works)
+
+<CodeExample tabs={[{ name: "Example 3", file: "guides/how-dst-works/this-breaks-during-dst-transitions.ts" }]} />
 
 <Callout type="warning">
 **DST gotcha**: During DST transitions, some days are 23 or 25 hours long. Simple arithmetic will give you the wrong calendar date.
@@ -46,39 +48,39 @@ Use timestamp columns in your database schema, not datetime strings.
 CREATE TABLE events (
   id UUID PRIMARY KEY,
   name TEXT NOT NULL,
-  created_at BIGINT NOT NULL,  -- Timestamp
-  start_time BIGINT NOT NULL,  -- Timestamp
-  end_time BIGINT NOT NULL     -- Timestamp
+  created_at BIGINT NOT NULL,  
+  start_time BIGINT NOT NULL,  
+  end_time BIGINT NOT NULL
 );
 ```
 
-<CodeExample tabs={[{ name: "Example 4", file: "guides/best-practices/example-4.ts" }]} />
+<CodeExample tabs={[{ name: "Example 4", file: "guides/best-practices/typescript-interface.type" }]} />
 
 ### 2. Include Timezone Information in APIs
 
-When an API needs timezone context, include it explicitly in your requests and responses.
+When an API needs timeZone context, include it explicitly in your requests and responses.
 
-<CodeExample tabs={[{ name: "Example 5", file: "guides/best-practices/example-5.ts" }]} />
+<CodeExample tabs={[{ name: "Example 5", file: "guides/best-practices/api-request-with-timeZone-context.type" }]} />
 
 ### 3. Validate Timezone Parameters
 
-Always validate timezone strings to prevent runtime errors.
+Always validate timeZone strings to prevent runtime errors.
 
-<CodeExample tabs={[{ name: "Example 6", file: "guides/best-practices/example-6.ts" }]} />
+<CodeExample tabs={[{ name: "Example 6", file: "guides/best-practices/timeZone-validation-helper.type" }]} />
 
 ## Performance Optimization
 
 ### 1. Minimize DST Calculations
 
-Datezone offers base functions that work with wall time to avoid repeated DST calculations.
+Datezone offers base functions that work with calendar to avoid repeated DST calculations.
 
-<CodeExample tabs={[{ name: "Example 7", file: "guides/best-practices/example-7.ts" }]} />
+<CodeExample tabs={[{ name: "Example 7", file: "guides/best-practices/repeated-dst-calculations.type" }]} />
 
 ### 2. Cache Timezone Operations
 
-For applications with many timezone operations, consider caching formatted results.
+For applications with many timeZone operations, consider caching formatted results.
 
-<CodeExample tabs={[{ name: "Example 8", file: "guides/best-practices/example-8.ts" }]} />
+<CodeExample tabs={[{ name: "Example 8", file: "guides/best-practices/simple-timeZone-formatter-cache.type" }]} />
 
 ## Testing Best Practices
 
@@ -86,17 +88,17 @@ For applications with many timezone operations, consider caching formatted resul
 
 Always include DST transition dates in your test suite.
 
-<CodeExample tabs={[{ name: "Example 9", file: "guides/best-practices/example-9.ts" }]} />
+<CodeExample tabs={[{ name: "Example 9", file: "guides/best-practices/test-critical-dst-dates.type" }]} />
 
 ### 2. Use Fixed Timestamps in Tests
 
 Avoid `Date.now()` in tests. Use fixed timestamps for predictable testing.
 
-<CodeExample tabs={[{ name: "Example 10", file: "guides/best-practices/example-10.ts" }]} />
+<CodeExample tabs={[{ name: "Example 10", file: "guides/best-practices/fixed-timestamp-for-consistent-tests.type" }]} />
 
 ### 3. Test Multiple Timezones
 
-Test your logic across different timezone types.
+Test your logic across different timeZone types.
 
 <CodeExample tabs={[{ name: "Example 11", file: "guides/best-practices/example-11.prisma" }]} />
 
@@ -104,29 +106,29 @@ Test your logic across different timezone types.
 
 ### 1. Show Timezone Context
 
-Always display timezone information in your UI when showing times.
+Always display timeZone information in your UI when showing times.
 
-<CodeExample tabs={[{ name: "Example 12", file: "guides/best-practices/example-12.tsx" }]} />
+<CodeExample tabs={[{ name: "Example 12", file: "guides/best-practices/example-12.type" }]} />
 
 ### 2. Handle Timezone Selection
 
-Provide timezone selection with smart defaults.
+Provide timeZone selection with smart defaults.
 
-<CodeExample tabs={[{ name: "Example 13", file: "guides/best-practices/example-13.tsx" }]} />
+<CodeExample tabs={[{ name: "Example 13", file: "guides/best-practices/example-13.type" }]} />
 
 ## Error Handling
 
 ### 1. Graceful Timezone Fallbacks
 
-Handle invalid timezones gracefully.
+Handle invalid timeZones gracefully.
 
-<CodeExample tabs={[{ name: "Example 14", file: "guides/best-practices/example-14.ts" }]} />
+<CodeExample tabs={[{ name: "Example 14", file: "guides/best-practices/safe-timeZone-operations-with-fallbacks.type" }]} />
 
 ### 2. Validate Date Inputs
 
 Always validate date inputs from users.
 
-<CodeExample tabs={[{ name: "Example 15", file: "guides/best-practices/example-15.ts" }]} />
+<CodeExample tabs={[{ name: "Example 15", file: "guides/best-practices/input-validation.type" }]} />
 
 ## Migration Strategies
 
@@ -134,7 +136,7 @@ Always validate date inputs from users.
 
 Migrate your codebase gradually by introducing wrapper functions.
 
-<CodeExample tabs={[{ name: "Example 16", file: "guides/best-practices/example-16.ts" }]} />
+<CodeExample tabs={[{ name: "Example 16", file: "guides/best-practices/migration-wrapper.type" }]} />
 
 ### 2. Database Migration
 
@@ -157,16 +159,16 @@ SET start_time_ts = EXTRACT(EPOCH FROM start_time) * 1000;
 
 Following these best practices will help you build robust, maintainable applications with reliable date and time handling:
 
-1. **Always specify timezones explicitly**
-2. **Store timestamps, display with timezone context**
+1. **Always specify timeZones explicitly**
+2. **Store timestamps, display with timeZone context**
 3. **Never use arithmetic for calendar operations**
 4. **Test around DST transitions**
-5. **Validate all timezone inputs**
-6. **Provide clear timezone context in UIs**
+5. **Validate all timeZone inputs**
+6. **Provide clear timeZone context in UIs**
 
 <Callout type="success">
-**Golden rule**: When in doubt, be explicit about timezones. The extra verbosity will save you from hard-to-debug issues in production.
+**Golden rule**: When in doubt, be explicit about timeZones. The extra verbosity will save you from hard-to-debug issues in production.
 </Callout>
 
-These practices, combined with datezone's timezone-aware functions, will eliminate the vast majority of date-related bugs in your applications.
+These practices, combined with datezone's timeZone-aware functions, will eliminate the vast majority of date-related bugs in your applications.
 

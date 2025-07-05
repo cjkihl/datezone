@@ -44,7 +44,7 @@ interface ComparisonRow {
 	operation?: string;
 	datezone?: BenchmarkResult;
 	datefns?: BenchmarkResult;
-	variant?: string; // Add timezone variant tracking
+	variant?: string; // Add timeZone variant tracking
 }
 
 function _formatTime(avg: number): string {
@@ -149,7 +149,7 @@ function boldBest(
 	return [val1, val2];
 }
 
-// New categorization function that handles timezone variants properly
+// New categorization function that handles timeZone variants properly
 function categorizeWithVariant(operation: string, variant: string): string {
 	const op = operation.toLowerCase();
 
@@ -197,7 +197,7 @@ function categorizeWithVariant(operation: string, variant: string): string {
 		opType = "Formatting";
 	}
 
-	// Determine timezone category
+	// Determine timeZone category
 	const v = variant.toLowerCase();
 	if (v === "local") {
 		return `Non-Timezone: ${opType} Operations`;
@@ -211,7 +211,7 @@ function categorizeWithVariant(operation: string, variant: string): string {
 	if (v === "dst") {
 		return `DST Timezone: ${opType} Operations`;
 	}
-	// Fallback for timezone-aware operations
+	// Fallback for timeZone-aware operations
 	return `Timezone-Aware: ${opType} Operations`;
 }
 
@@ -264,7 +264,7 @@ function generateCreativeMarkdown(rows: ComparisonRow[]): string {
 	md += `**Platform:** \`${platform}\`\n\n`;
 	md += "## 📊 Performance Overview\n\n";
 	md +=
-		"This report compares **Datezone** against **Date-fns v4** with timezone support (@date-fns/tz).\n\n";
+		"This report compares **Datezone** against **Date-fns v4** with timeZone support (@date-fns/tz).\n\n";
 	md += "### 🏆 Performance Legend\n\n";
 	md += "| Icon | Meaning | Improvement |\n";
 	md += "|------|---------|-------------|\n";
@@ -363,13 +363,13 @@ function generateCreativeMarkdown(rows: ComparisonRow[]): string {
 	md += "## 🔬 Methodology\n\n";
 	md += `### Benchmark Setup\n- **Tool:** [Mitata](https://github.com/evanwashere/mitata) - High-precision JavaScript benchmarking\n- **Iterations:** Multiple samples with statistical significance testing\n- **Environment:** Node.js \`${node}\` on \`${platform}\`\n\n`;
 	md +=
-		"### Comparison Approach\n- **Datezone:** Built-in timezone support with UTC timestamps\n- **Date-fns:** v4.x with @date-fns/tz package for timezone operations\n- **Test Data:** Realistic timestamps across different times and timezones\n- **Fairness:** Both libraries tested with equivalent timezone-aware operations\n\n";
+		"### Comparison Approach\n- **Datezone:** Built-in timeZone support with UTC timestamps\n- **Date-fns:** v4.x with @date-fns/tz package for timeZone operations\n- **Test Data:** Realistic timestamps across different times and timeZones\n- **Fairness:** Both libraries tested with equivalent timeZone-aware operations\n\n";
 	md +=
 		"### Performance Metrics\n- **Time (avg):** Average execution time per operation\n- **Operations/sec:** Throughput (higher = better)\n- **Comparison:** Based on operations per second difference\n\n";
 	md +=
-		"### Timezone Test Categories\n- **Non-Timezone (Local):** Standard local time operations\n- **UTC Fast Path:** Optimized UTC timezone operations\n- **Non-DST Timezone:** Fixed offset timezones (fastest timezone path)\n- **DST Timezone:** Complex DST-aware timezone operations\n\n";
+		"### Timezone Test Categories\n- **Non-Timezone (Local):** Standard local time operations\n- **UTC Fast Path:** Optimized UTC timeZone operations\n- **Non-DST Timezone:** Fixed offset timeZones (fastest timeZone path)\n- **DST Timezone:** Complex DST-aware timeZone operations\n\n";
 	md +=
-		"### Notes\n- Results may vary based on system specifications and load\n- Benchmarks focus on equivalent functionality where available\n- Some operations are unique to Datezone (timezone utilities)\n- All operations tested with timezone awareness for fair comparison\n- Non-DST timezones should show the best performance for timezone-aware operations\n\n---\n\n*To regenerate:*\n```bash\nbun run tools/benchmark/format-results.ts\n```\n\n";
+		"### Notes\n- Results may vary based on system specifications and load\n- Benchmarks focus on equivalent functionality where available\n- Some operations are unique to Datezone (timeZone utilities)\n- All operations tested with timeZone awareness for fair comparison\n- Non-DST timeZones should show the best performance for timeZone-aware operations\n\n---\n\n*To regenerate:*\n```bash\nbun run tools/benchmark/format-results.ts\n```\n\n";
 
 	// Add internal datezone comparisons
 	md += "## 🔬 Internal Datezone Performance Analysis\n\n";

@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/latest/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
 	"assist": {
 		"actions": {
 			"source": {
@@ -33,8 +33,7 @@
 			"correctness": {
 				"noUnusedImports": "off",
 				"noUnusedVariables": "off",
-				"useExhaustiveDependencies": "error",
-
+				"useExhaustiveDependencies": "error"
 			},
 			"nursery": {
 				"noNestedComponentDefinitions": "off",
@@ -59,5 +58,6 @@
 				"noArrayIndexKey": "off"
 			}
 		}
-	}
+	},
+	"root": false
 }

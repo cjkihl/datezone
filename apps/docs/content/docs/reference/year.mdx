@@ -1,84 +1,104 @@
 ---
-title: Year Utilities
-description: Functions for working with years in dates and timestamps
+title: Year
 ---
 
+## `year`
 
+Extracts the year from a timestamp.
 
-# Year Utilities
+```ts
+import { year } from "@datezone/year";
+```
 
-Year utilities provide functions for working with years in dates and timestamps, including leap year calculations, year boundaries, and year arithmetic.
+<CodeExample file="reference/year/year.ts" title="year" />
 
-## getYear
+## `isLeapYear`
 
-Get the year from a timestamp or year options.
+Checks if the year containing the given timestamp is a leap year.
 
-<CodeExample tabs={[{ name: "Example 1", file: "reference/year/example-1.ts" }]} />
+```ts
+import { isLeapYear } from "@datezone/year";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/year/get-year-local.ts" },
-  { name: "With timezone", file: "reference/year/get-year-timezone.ts" }
-]} />
+<CodeExample file="reference/year/isLeapYear.ts" title="isLeapYear" />
 
-## isLeapYear
+## `isLeapYearBase`
 
-Check if a year is a leap year.
+Checks if a given year is a leap year.
 
-<CodeExample tabs={[{ name: "Example 2", file: "reference/year/example-2.ts" }]} />
+```ts
+import { isLeapYearBase } from "@datezone/year";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/year/is-leap-year-local.ts" },
-  { name: "With timezone", file: "reference/year/is-leap-year-timezone.ts" }
-]} />
+<CodeExample file="reference/year/isLeapYearBase.ts" title="isLeapYearBase" />
 
-## startOfYear
+## `startOfYear`
 
-Get the timestamp for the start of the year.
+Gets the timestamp for the start of the year containing the given timestamp.
 
-<CodeExample tabs={[{ name: "Example 3", file: "reference/year/example-3.ts" }]} />
+```ts
+import { startOfYear } from "@datezone/year";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/year/start-of-year-local.ts" },
-  { name: "With timezone", file: "reference/year/start-of-year-timezone.ts" }
-]} />
+<CodeExample file="reference/year/startOfYear.ts" title="startOfYear" />
 
-## endOfYear
+## `endOfYear`
 
-Get the timestamp for the end of the year.
+Gets the timestamp for the end of the year containing the given timestamp.
 
-<CodeExample tabs={[{ name: "Example 4", file: "reference/year/example-4.ts" }]} />
+```ts
+import { endOfYear } from "@datezone/year";
+```
 
-<CodeExample tabs={[{ name: "Local time", file: "reference/year/local-time.ts" }]} />
+<CodeExample file="reference/year/endOfYear.ts" title="endOfYear" />
 
-<CodeExample tabs={[{ name: "With timezone", file: "reference/year/with-timezone.ts" }]} />
+## `addYears`
 
-## addYears
+Adds the specified number of years to a timestamp.
+Handles leap year dates appropriately (e.g., Feb 29 -> Feb 28 in non-leap years).
 
-Add years to a date.
+```ts
+import { addYears } from "@datezone/year";
+```
 
-<CodeExample tabs={[{ name: "Example 7", file: "reference/year/example-7.ts" }]} />
+<CodeExample file="reference/year/addYears.ts" title="addYears" />
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/year/add-years-local.ts" },
-  { name: "With timezone", file: "reference/year/add-years-timezone.ts" }
-]} />
+## `subYears`
 
-## subYears
+Subtracts the specified number of years from a timestamp.
 
-Subtract years from a date.
+```ts
+import { subYears } from "@datezone/year";
+```
 
-<CodeExample tabs={[{ name: "Example 8", file: "reference/year/example-8.ts" }]} />
+<CodeExample file="reference/year/subYears.ts" title="subYears" />
 
-<CodeExample tabs={[{ name: "Local time", file: "reference/year/local-time.ts" }]} />
+## `daysInYear`
 
-<CodeExample tabs={[{ name: "With timezone", file: "reference/year/with-timezone.ts" }]} />
+Gets the number of days in the year containing the given timestamp.
 
-## getDaysInYear
+```ts
+import { daysInYear } from "@datezone/year";
+```
 
-Get the number of days in a year (365 or 366 for leap years).
+<CodeExample file="reference/year/daysInYear.ts" title="daysInYear" />
 
-<CodeExample tabs={[{ name: "Example 11", file: "reference/year/example-11.ts" }]} />
+## `daysInYearBase`
 
-<CodeExample tabs={[{ name: "Local time", file: "reference/year/local-time.ts" }]} />
+Gets the number of days in the given year.
 
-<CodeExample tabs={[{ name: "With timezone", file: "reference/year/with-timezone.ts" }]} /> 
+```ts
+import { daysInYearBase } from "@datezone/year";
+```
+
+<CodeExample file="reference/year/daysInYearBase.ts" title="daysInYearBase" />
+
+## `quarter`
+
+Returns the quarter of the year (1-4) for the given month.
+
+```ts
+import { quarter } from "@datezone/year";
+```
+
+<CodeExample file="reference/year/quarter.ts" title="quarter" />

@@ -8,6 +8,7 @@
 		"dev": "bun run -F docs dev",
 		"build": "turbo build --filter=./packages/*",
 		"changeset": "changeset",
+		"fix-examples": "bun tools/fix-examples.ts",
 		"resolve": "bun run resolve-deps resolve",
 		"restore": "bun run resolve-deps restore",
 		"release": "bun run resolve && bun run build && changeset publish",

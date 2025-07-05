@@ -12,10 +12,10 @@ const debugMode = args.includes("--debug") || args.includes("-d");
 const testTimestamp = new Date("2024-06-15T15:45:30.123Z").getTime();
 const testDate = new Date(testTimestamp);
 
-// Test different timezone categories
+// Test different timeZone categories
 const utcTimezone: dz.TimeZone = "UTC";
-const nonDstTimezone: dz.TimeZone = "Asia/Tokyo"; // Non-DST timezone
-const dstTimezone: dz.TimeZone = "America/New_York"; // DST timezone
+const nonDstTimezone: dz.TimeZone = "Asia/Tokyo"; // Non-DST timeZone
+const dstTimezone: dz.TimeZone = "America/New_York"; // DST timeZone
 
 // Pre-create TZDate objects to avoid object creation overhead in benchmarks
 const testDateUTC = new TZDate(testTimestamp, utcTimezone);
@@ -23,7 +23,7 @@ const testDateNonDST = new TZDate(testTimestamp, nonDstTimezone);
 const testDateDST = new TZDate(testTimestamp, dstTimezone);
 
 console.log("🚀 Comprehensive Datezone vs Date-fns Performance Comparison");
-console.log("Testing all timezone fast paths and optimizations");
+console.log("Testing all timeZone fast paths and optimizations");
 console.log(
 	`Test timestamp: ${testTimestamp} (${new Date(testTimestamp).toISOString()})`,
 );
@@ -36,7 +36,7 @@ console.log(
 );
 
 // ============================================================================
-// DAY FUNCTIONS - Testing all timezone scenarios
+// DAY FUNCTIONS - Testing all timeZone scenarios
 // ============================================================================
 
 group("📅 Day Functions - Local Time", () => {
@@ -224,7 +224,7 @@ group("📅 Day Functions - DST (Complex Path)", () => {
 });
 
 // ============================================================================
-// MONTH FUNCTIONS - Testing all timezone scenarios
+// MONTH FUNCTIONS - Testing all timeZone scenarios
 // ============================================================================
 
 group("🗓️ Month Functions - Local Time", () => {
@@ -348,7 +348,7 @@ group("🗓️ Month Functions - DST (Complex Path)", () => {
 });
 
 // ============================================================================
-// YEAR FUNCTIONS - Testing all timezone scenarios
+// YEAR FUNCTIONS - Testing all timeZone scenarios
 // ============================================================================
 
 group("📆 Year Functions - Local Time", () => {
@@ -409,7 +409,7 @@ group("📆 Year Functions - UTC (Fast Path)", () => {
 	);
 	bench(
 		"date-fns: year (UTC)",
-		() => do_not_optimize(testDateUTC.getFullYear()), // Fair: timezone-aware year extraction
+		() => do_not_optimize(testDateUTC.getFullYear()), // Fair: timeZone-aware year extraction
 	);
 });
 
@@ -440,7 +440,7 @@ group("📆 Year Functions - Non-DST (FASTEST - Fixed Offset)", () => {
 	);
 	bench(
 		"date-fns: year (Non-DST)",
-		() => do_not_optimize(testDateNonDST.getFullYear()), // Fair: timezone-aware year extraction
+		() => do_not_optimize(testDateNonDST.getFullYear()), // Fair: timeZone-aware year extraction
 	);
 });
 
@@ -471,12 +471,12 @@ group("📆 Year Functions - DST (Complex Path)", () => {
 	);
 	bench(
 		"date-fns: year (DST)",
-		() => do_not_optimize(testDateDST.getFullYear()), // Fair: timezone-aware year extraction
+		() => do_not_optimize(testDateDST.getFullYear()), // Fair: timeZone-aware year extraction
 	);
 });
 
 // ============================================================================
-// WEEK FUNCTIONS - Testing all timezone scenarios
+// WEEK FUNCTIONS - Testing all timeZone scenarios
 // ============================================================================
 
 group("📅 Week Functions - Local Time", () => {
@@ -580,7 +580,7 @@ group("📅 Week Functions - DST (Complex Path)", () => {
 });
 
 // ============================================================================
-// HOUR FUNCTIONS - Testing all timezone scenarios
+// HOUR FUNCTIONS - Testing all timeZone scenarios
 // ============================================================================
 
 group("🕐 Hour Functions - Local Time", () => {
@@ -645,7 +645,7 @@ group("🕐 Hour Functions - DST (Complex Path)", () => {
 });
 
 // ============================================================================
-// FORMATTING FUNCTIONS - Testing all timezone scenarios
+// FORMATTING FUNCTIONS - Testing all timeZone scenarios
 // ============================================================================
 
 group("📝 Format Functions - Local Time", () => {
@@ -841,7 +841,7 @@ if (!existsSync(outputDir)) {
 }
 
 console.log("\n🏃‍♂️ Running comprehensive benchmarks...");
-console.log("💡 Look for big performance wins in Non-DST timezone tests!");
+console.log("💡 Look for big performance wins in Non-DST timeZone tests!");
 console.log("🔧 Fixed unfair TZDate object creation overhead!");
 console.log("🚀 Added internal fast path vs slow path comparisons!");
 

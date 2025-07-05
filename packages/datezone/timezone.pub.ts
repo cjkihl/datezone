@@ -199,7 +199,7 @@ const DST_TIMEZONE_NAMES = [
 export type UTCTimeZone = (typeof UTC_TIMEZONE_NAMES)[number];
 export type DSTTimeZone = (typeof DST_TIMEZONE_NAMES)[number];
 
-// Other timezones (neither UTC nor DST) - defined as TypeScript union type only
+// Other timeZones (neither UTC nor DST) - defined as TypeScript union type only
 export type OtherTimeZone =
 	| "Africa/Addis_Ababa"
 	| "Africa/Algiers"
@@ -597,7 +597,7 @@ export type OtherTimeZone =
 	| "W-SU"
 	| "WET";
 
-// Complete TimeZone type - each timezone appears only once
+// Complete TimeZone type - each timeZone appears only once
 export type TimeZone = UTCTimeZone | DSTTimeZone | OtherTimeZone;
 
 // Create Sets for O(1) lookup performance
@@ -605,30 +605,22 @@ const UTC_TIMEZONES = new Set(UTC_TIMEZONE_NAMES);
 const DST_TIMEZONES = new Set(DST_TIMEZONE_NAMES);
 
 /**
- * Checks if a timezone is UTC.
+ * Checks if utc.
  *
- * @param timeZone - The IANA timezone identifier to check
- * @returns `true` if the timezone is UTC, `false` otherwise
+ * @param timeZone - The IANA timeZone identifier to check
+ * @returns `true` if the timeZone is UTC, `false` otherwise
+ * @see https://datezone.dev/docs/reference/timezone#isUTC
  */
 export function isUTC(timeZone: TimeZone): boolean {
 	return UTC_TIMEZONES.has(timeZone as UTCTimeZone);
 }
 
 /**
- * Checks if a timezone is a DST timezone. (DST = Daylight Saving Time)
- * If the timezone do not have DST we can do simple arithmetic to get the correct time.
+ * Checks if dst.
  *
- * @param timeZone - The IANA timezone identifier to check
- * @returns `true` if the timezone is a DST timezone, `false` otherwise
- *
- * @example
- * ```typescript
- * isDST('America/New_York'); // true
- * isDST('Europe/London'); // true
- * isDST('UTC'); // false
- * isDST('GMT'); // false
- * isDST('Asia/Tokyo'); // false
- * ```
+ * @param timeZone - The IANA timeZone identifier to check
+ * @returns `true` if the timeZone is a DST timeZone, `false` otherwise
+ * @see https://datezone.dev/docs/reference/timezone#isDST
  */
 export function isDST(timeZone: TimeZone): boolean {
 	return DST_TIMEZONES.has(timeZone as DSTTimeZone);

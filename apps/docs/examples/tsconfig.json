@@ -4,6 +4,7 @@
 		"allowUnusedLabels": true,
 		"isolatedModules": true,
 		"module": "esnext",
+		"moduleDetection": "force",
 		"moduleResolution": "bundler",
 		"noEmit": true,
 		"skipLibCheck": true

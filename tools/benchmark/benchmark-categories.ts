@@ -33,23 +33,23 @@ export const GROUP_LABELS: Record<BenchmarkGroupKey, string> = {
 // Shared categorize function: returns the group key (not display name)
 export function categorize(operation: string): BenchmarkGroupKey | "Other" {
 	const op = operation.toLowerCase();
-	if (op.includes("timezone") && op.includes("month"))
+	if (op.includes("timeZone") && op.includes("month"))
 		return "TIMEZONE_AWARE_MONTH";
-	if (op.includes("timezone") && op.includes("day"))
+	if (op.includes("timeZone") && op.includes("day"))
 		return "TIMEZONE_AWARE_DAY";
-	if (op.includes("timezone") && op.includes("year"))
+	if (op.includes("timeZone") && op.includes("year"))
 		return "TIMEZONE_AWARE_YEAR";
-	if (op.includes("timezone") && op.includes("format"))
+	if (op.includes("timeZone") && op.includes("format"))
 		return "TIMEZONE_AWARE_FORMATTING";
-	if (op.includes("format") && !op.includes("timezone"))
+	if (op.includes("format") && !op.includes("timeZone"))
 		return "NON_TIMEZONE_FORMATTING";
-	if (!op.includes("timezone") && op.includes("month"))
+	if (!op.includes("timeZone") && op.includes("month"))
 		return "NON_TIMEZONE_MONTH";
-	if (!op.includes("timezone") && op.includes("day")) return "NON_TIMEZONE_DAY";
-	if (!op.includes("timezone") && op.includes("year"))
+	if (!op.includes("timeZone") && op.includes("day")) return "NON_TIMEZONE_DAY";
+	if (!op.includes("timeZone") && op.includes("year"))
 		return "NON_TIMEZONE_YEAR";
 	if (op.includes("complex")) return "COMPLEX_TIMEZONE";
-	if (op.includes("multi") && op.includes("timezone")) return "MULTI_TIMEZONE";
+	if (op.includes("multi") && op.includes("timeZone")) return "MULTI_TIMEZONE";
 	if (
 		op.includes("real-world") ||
 		op.includes("calendar") ||
@@ -59,7 +59,7 @@ export function categorize(operation: string): BenchmarkGroupKey | "Other" {
 	if (
 		op.includes("datezone") ||
 		op.includes("offset") ||
-		op.includes("walltime")
+		op.includes("calendar")
 	)
 		return "DATEZONE_SPECIFIC";
 	return "Other";

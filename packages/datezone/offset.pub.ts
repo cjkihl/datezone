@@ -12,20 +12,19 @@ type OffsetCache = {
 let lastOffsetCache: OffsetCache | null = null;
 let localOffsetCache: { hourStart: number; offset: number } | null = null;
 
-// Global cache for non-DST timezones (fixed offset zones)
+// Global cache for non-DST timeZones (fixed offset zones)
 const fixedOffsetCache = new Map<TimeZone, number>();
 
 /**
- * Returns the offset in minutes between UTC and the given time zone at the given date.
- * Positive if the zone is ahead of UTC, negative if behind.
- * Uses a per-hour cache for performance.
- * If no timezone is specified, defaults to local system timezone.
+ * Get utcto timezone offset minutes.
+ *
+ * @see https://datezone.dev/docs/reference/offset#getUTCtoTimezoneOffsetMinutes
  */
 export function getUTCtoTimezoneOffsetMinutes(
 	ts: number,
 	tz?: TimeZone,
 ): number {
-	// Default to local timezone if not specified
+	// Default to local timeZone if not specified
 	if (!tz) {
 		return getLocalTimezoneOffsetMinutes(ts);
 	}
@@ -33,7 +32,7 @@ export function getUTCtoTimezoneOffsetMinutes(
 	// Fast path: Check UTC first with optimized lookup
 	if (isUTC(tz)) return 0;
 
-	// Fast path for non-DST timezones (fixed offset zones)
+	// Fast path for non-DST timeZones (fixed offset zones)
 	// Use optimized DST check - if it's not DST and not UTC, it's fixed offset
 	if (!isDST(tz)) {
 		let cachedOffset = fixedOffsetCache.get(tz);
@@ -58,7 +57,7 @@ export function getUTCtoTimezoneOffsetMinutes(
 		return cachedOffset;
 	}
 
-	// For DST timezones, use per-hour cache as offsets can change
+	// For DST timeZones, use per-hour cache as offsets can change
 	// Inline hour calculation to avoid repeated computation
 	const hourStart = Math.floor(ts / HOUR) * HOUR;
 	if (
@@ -69,7 +68,7 @@ export function getUTCtoTimezoneOffsetMinutes(
 		return lastOffsetCache.offset;
 	}
 
-	// Calculate offset for DST timezone
+	// Calculate offset for DST timeZone
 	const parts = formatToParts(ts, tz, FULL_TS);
 	const wall = Date.UTC(
 		parts.year ?? 0,
@@ -95,10 +94,11 @@ export function getUTCtoTimezoneOffsetMinutes(
 }
 
 /**
- * Fast path for local timezone offset calculation.
- * Uses native Date.getTimezoneOffset() for better performance when working with the system timezone.
+ * Get local timezone offset minutes.
+ *
  * @param ts - Timestamp in milliseconds
  * @returns Offset in minutes (positive if ahead of UTC, negative if behind)
+ * @see https://datezone.dev/docs/reference/offset#getLocalTimezoneOffsetMinutes
  */
 export function getLocalTimezoneOffsetMinutes(ts: number): number {
 	const hourStart = Math.floor(ts / HOUR) * HOUR;
@@ -124,16 +124,16 @@ export function getLocalTimezoneOffsetMinutes(ts: number): number {
 }
 
 /**
- * Returns the offset in minutes from fromZone to toZone at the given date.
- * Fast path for UTC zones to avoid extra formatToParts calls.
- * If timezone parameters are not specified, defaults to local system timezone.
+ * Get timezone offset minutes.
+ *
+ * @see https://datezone.dev/docs/reference/offset#getTimezoneOffsetMinutes
  */
 export function getTimezoneOffsetMinutes(
 	ts: number,
 	fromZone?: TimeZone,
 	toZone?: TimeZone,
 ): number {
-	// Default both timezones to local if not specified
+	// Default both timeZones to local if not specified
 	const from = fromZone || undefined;
 	const to = toZone || undefined;
 
@@ -152,13 +152,13 @@ export function getTimezoneOffsetMinutes(
 
 	// If one is local and one is specified
 	if (!from && to) {
-		// Local to specified timezone
+		// Local to specified timeZone
 		const localOffset = getLocalTimezoneOffsetMinutes(ts);
 		const toOffset = getUTCtoTimezoneOffsetMinutes(ts, to);
 		return toOffset - localOffset;
 	}
 	if (from && !to) {
-		// Specified timezone to local
+		// Specified timeZone to local
 		const fromOffset = getUTCtoTimezoneOffsetMinutes(ts, from);
 		const localOffset = getLocalTimezoneOffsetMinutes(ts);
 		return localOffset - fromOffset;
@@ -171,8 +171,10 @@ export function getTimezoneOffsetMinutes(
 }
 
 /**
- * Returns information about the fixed offset cache for debugging purposes.
- * @returns Object containing cache size and cached timezones
+ * Get fixed offset cache info.
+ *
+ * @returns Object containing cache size and cached timeZones
+ * @see https://datezone.dev/docs/reference/offset#getFixedOffsetCacheInfo
  */
 export function getFixedOffsetCacheInfo(): {
 	size: number;
@@ -185,7 +187,9 @@ export function getFixedOffsetCacheInfo(): {
 }
 
 /**
- * Clears the fixed offset cache. Useful for testing or memory management.
+ * Clear fixed offset cache.
+ *
+ * @see https://datezone.dev/docs/reference/offset#clearFixedOffsetCache
  */
 export function clearFixedOffsetCache(): void {
 	fixedOffsetCache.clear();

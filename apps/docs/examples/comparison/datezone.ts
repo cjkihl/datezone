@@ -5,10 +5,10 @@ const date = Date.UTC(2024, 5, 1, 8, 0, 0, 0); // 2024-06-01 08:00:00 UTC
 
 const timeZone: TimeZone = "Europe/Stockholm"; // Timezone
 
-// Adds 5 days in the Europe/Stockholm timezone
+// Adds 5 days in the Europe/Stockholm timeZone
 const future = addDays(date, 5, timeZone);
 
-// Formats the future date in the Europe/Stockholm timezone
+// Formats the future date in the Europe/Stockholm timeZone
 const result = format(future, "yyyy-MM-dd HH:mm:ss", {
 	timeZone: "Europe/Stockholm",
 });

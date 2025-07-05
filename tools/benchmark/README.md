@@ -58,7 +58,7 @@ bun run bench:report
 - **Month/day/time manipulations**
 - **Formatting and parsing**
 - **Unique Datezone utilities**
-- **Datezone**: Built-in timezone support
+- **Datezone**: Built-in timeZone support
 - **Date-fns v4**: With `@date-fns/tz` package
 - [Mitata](https://github.com/evanwashere/mitata) - High-precision JavaScript benchmarking
 

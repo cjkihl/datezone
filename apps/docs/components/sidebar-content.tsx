@@ -51,6 +51,11 @@ export const contents: Content[] = [
 				title: "Introduction",
 			},
 			{
+				href: "/docs/api-reference",
+				icon: () => <FileText className="w-4 h-4 text-muted-foreground" />,
+				title: "API Reference",
+			},
+			{
 				href: "/docs/comparison",
 				icon: () => <GitCompare className="w-4 h-4 text-muted-foreground" />,
 				title: "Comparison",
@@ -118,6 +123,21 @@ export const contents: Content[] = [
 				title: "Hour",
 			},
 			{
+				href: "/docs/reference/minute",
+				icon: () => <Timer className="w-4 h-4 text-muted-foreground" />,
+				title: "Minute",
+			},
+			{
+				href: "/docs/reference/second",
+				icon: () => <Timer className="w-4 h-4 text-muted-foreground" />,
+				title: "Second",
+			},
+			{
+				href: "/docs/reference/duration",
+				icon: () => <Clock className="w-4 h-4 text-muted-foreground" />,
+				title: "Duration",
+			},
+			{
 				href: "/docs/reference/compare",
 				icon: () => <GitCompare className="w-4 h-4 text-muted-foreground" />,
 				title: "Compare",
@@ -133,29 +153,29 @@ export const contents: Content[] = [
 				title: "Ordinal",
 			},
 			{
-				href: "/docs/reference/utils",
+				href: "/docs/reference/constants",
 				icon: () => <Settings className="w-4 h-4 text-muted-foreground" />,
-				title: "General Utils",
+				title: "Constants",
 			},
 			{
-				href: "/docs/reference/iana",
+				href: "/docs/reference/calendar",
+				icon: () => <Calendar className="w-4 h-4 text-muted-foreground" />,
+				title: "Calendar",
+			},
+			{
+				href: "/docs/reference/iso",
+				icon: () => <Type className="w-4 h-4 text-muted-foreground" />,
+				title: "ISO",
+			},
+			{
+				href: "/docs/reference/timezone",
 				icon: () => <MapPin className="w-4 h-4 text-muted-foreground" />,
-				title: "IANA Timezones",
+				title: "Timezone",
 			},
 			{
 				href: "/docs/reference/format",
 				icon: () => <Type className="w-4 h-4 text-muted-foreground" />,
 				title: "Format",
-			},
-			{
-				href: "/docs/reference/format-parts",
-				icon: () => <Layers className="w-4 h-4 text-muted-foreground" />,
-				title: "Format Parts",
-			},
-			{
-				href: "/docs/reference/faq",
-				icon: () => <CircleHelp className="w-4 h-4 text-muted-foreground" />,
-				title: "FAQ",
 			},
 		],
 		title: "Reference",

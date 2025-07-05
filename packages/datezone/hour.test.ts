@@ -58,26 +58,26 @@ describe("Hour Functions", () => {
 	});
 
 	describe("hour", () => {
-		it("should return hour from timestamp without timezone", () => {
+		it("should return hour from timestamp without timeZone", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 0)).getTime();
 			expect(hour(timestamp, null)).toBe(new Date(timestamp).getHours());
 		});
 
-		it("should return hour from timestamp with UTC timezone", () => {
+		it("should return hour from timestamp with UTC timeZone", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 0)).getTime();
 			expect(hour(timestamp, "UTC")).toBe(14);
 		});
 
-		it("should handle different timezones", () => {
+		it("should handle different timeZones", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 0, 0, 0)).getTime(); // UTC midnight
-			// These will vary based on timezone rules, just ensure they return valid hours
+			// These will vary based on timeZone rules, just ensure they return valid hours
 			expect(hour(timestamp, "Asia/Tokyo")).toBeGreaterThanOrEqual(0);
 			expect(hour(timestamp, "Asia/Tokyo")).toBeLessThan(24);
 			expect(hour(timestamp, "America/New_York")).toBeGreaterThanOrEqual(0);
 			expect(hour(timestamp, "America/New_York")).toBeLessThan(24);
 		});
 
-		it("should default to local timezone when timezone is undefined", () => {
+		it("should default to local timeZone when timeZone is undefined", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 15, 12, 30, 45)).getTime();
 			const localHour = hour(timestamp, null);
 			const jsHour = new Date(timestamp).getHours();
@@ -300,13 +300,13 @@ describe("Hour Functions", () => {
 			expect(end - start).toBe(HOUR - 1);
 		});
 
-		it("should have hour function work correctly with timezone parameter", () => {
+		it("should have hour function work correctly with timeZone parameter", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 30, 0)).getTime();
 
 			// UTC should give us 14
 			expect(hour(timestamp, "UTC")).toBe(14);
 
-			// Without timezone should use local time
+			// Without timeZone should use local time
 			const localHour = hour(timestamp, null);
 			const jsLocalHour = new Date(timestamp).getHours();
 			expect(localHour).toBe(jsLocalHour);

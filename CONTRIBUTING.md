@@ -111,7 +111,7 @@ We maintain high code quality standards:
 - **TypeScript**: All code must be fully typed
 - **Tests**: Maintain 90%+ code coverage
 - **Performance**: New functions should be benchmarked
-- **Pure functions**: No side effects, explicit timezone handling
+- **Pure functions**: No side effects, explicit timeZone handling
 
 ### 4. Testing
 
@@ -231,18 +231,18 @@ bun run release
 Datezone is designed for high-frequency usage (60fps+). When contributing:
 
 - Avoid creating unnecessary `Date` objects
-- Use the Intl API for timezone operations
+- Use the Intl API for timeZone operations
 - Benchmark performance-critical code
 - Consider memory allocation patterns
 
 ### Timezone Awareness
 
-All date operations should be timezone-aware:
+All date operations should be timeZone-aware:
 
 - Accept optional `timeZone?: string` parameter
-- Use explicit timezone handling (no assumptions about local timezone)
-- Test across multiple timezones
-- Document timezone behavior clearly
+- Use explicit timeZone handling (no assumptions about local timeZone)
+- Test across multiple timeZones
+- Document timeZone behavior clearly
 
 ### API Design
 
@@ -256,7 +256,7 @@ Follow these principles:
 ### Writing Tests
 
 - Test edge cases (DST transitions, leap years, etc.)
-- Test multiple timezones
+- Test multiple timeZones
 - Include performance assertions for critical paths
 - Use descriptive test names
 
@@ -271,7 +271,7 @@ describe("yourFunction", () => {
     expect(result).toEqual(expected);
   });
 
-  test("should handle timezone transitions", () => {
+  test("should handle timeZone transitions", () => {
     // Test DST transitions, etc.
   });
 });
@@ -327,7 +327,7 @@ When reporting issues:
 1. Use the issue templates
 2. Include minimal reproduction case
 3. Specify environment (Node.js version, platform)
-4. Include relevant timezone information
+4. Include relevant timeZone information
 
 ## Adding New Features
 

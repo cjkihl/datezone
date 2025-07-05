@@ -16,10 +16,10 @@ This directory contains TypeScript example files that are used in the MDX docume
 ```
 examples/
 ├── utils/                    # Examples for utilities documentation
-│   ├── walltime-local.ts     # Local timezone examples
-│   ├── walltime-timezone.ts  # Specific timezone examples
-│   ├── timezone-events.ts    # Event management examples
-│   ├── timezone-converter.ts # Timezone conversion examples
+│   ├── calendar-local.ts     # Local timeZone examples
+│   ├── calendar-timeZone.ts  # Specific timeZone examples
+│   ├── timeZone-events.ts    # Event management examples
+│   ├── timeZone-converter.ts # Timezone conversion examples
 │   └── dst-scheduling.ts     # DST-aware scheduling examples
 ├── tsconfig.json             # TypeScript configuration for examples
 └── README.md                 # This file
@@ -33,10 +33,10 @@ Create `.ts` files in the appropriate subdirectory (e.g., `utils/`, `format/`, e
 
 ```typescript
 // examples/utils/my-example.ts
-import { walltimeToTimestamp, type TimeZone } from "datezone";
+import { calendarToTimestamp, type TimeZone } from "datezone";
 
 // Your example code here with full TypeScript support
-const timestamp = walltimeToTimestamp(2024, 1, 1, 12, 0, 0, 0, "UTC" as TimeZone);
+const timestamp = calendarToTimestamp(2024, 1, 1, 12, 0, 0, 0, "UTC" as TimeZone);
 console.log(new Date(timestamp));
 ```
 
@@ -85,20 +85,20 @@ The `examples/tsconfig.json` extends the main app's TypeScript configuration wit
 Always import types and functions from the actual package:
 
 ```typescript
-import { walltimeToTimestamp, type TimeZone } from "datezone";
+import { calendarToTimestamp, type TimeZone } from "datezone";
 ```
 
 ### Type Safety
 
-Use proper types for timezone parameters:
+Use proper types for timeZone parameters:
 
 ```typescript
 // Good - using the proper TimeZone type
-const timestamp = walltimeToTimestamp(2024, 1, 1, 12, 0, 0, 0, "America/New_York" as TimeZone);
+const timestamp = calendarToTimestamp(2024, 1, 1, 12, 0, 0, 0, "America/New_York" as TimeZone);
 
 // Better - if you're creating a helper function
 function createTimestamp(tz: TimeZone) {
-  return walltimeToTimestamp(2024, 1, 1, 12, 0, 0, 0, tz);
+  return calendarToTimestamp(2024, 1, 1, 12, 0, 0, 0, tz);
 }
 ```
 
@@ -107,11 +107,11 @@ function createTimestamp(tz: TimeZone) {
 Include helpful comments for documentation readers:
 
 ```typescript
-// Convert local wall time to UTC
-const utcTimestamp = walltimeToTimestamp(
+// Convert local calendar to UTC
+const utcTimestamp = calendarToTimestamp(
   2024, 1, 15, // January 15, 2024 (month is 1-based)
   14, 30, 0, 0, // 2:30:00.000 PM
-  "UTC" // Use UTC timezone
+  "UTC" // Use UTC timeZone
 );
 ```
 

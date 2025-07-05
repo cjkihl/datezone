@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { formatters } from "../format/formatters";
-import type { TimeZone } from "../timezone";
+import type { TimeZone } from "../timezone.pub.js";
 
 const baseDT = {
 	day: 1,
@@ -9,7 +9,7 @@ const baseDT = {
 	minute: 0,
 	month: 4,
 	second: 0,
-	timezoneOffsetMinutes: 0,
+	timeZoneOffsetMinutes: 0,
 	year: 2024,
 };
 
@@ -91,7 +91,7 @@ describe("formatters direct unit tests", () => {
 	});
 });
 
-describe("formatters - month, week, day, time, and timezone", () => {
+describe("formatters - month, week, day, time, and timeZone", () => {
 	const dt = { ...baseDT };
 	const opts = { dt, len: 2, locale: "en" };
 
@@ -243,7 +243,7 @@ describe("formatters - complex and edge cases", () => {
 	it("Timezone formatters (X, XX, XXX, x, xx, xxx, O, OO, OOO, OOOO, z, zz, zzz, zzzz)", () => {
 		const optsTZ = {
 			...optsMidnight,
-			dt: { ...optsMidnight.dt, timezoneOffsetMinutes: -480 },
+			dt: { ...optsMidnight.dt, timeZoneOffsetMinutes: -480 },
 		};
 		expect(typeof formatters.X(optsTZ)).toBe("string");
 		expect(typeof formatters.XX(optsTZ)).toBe("string");

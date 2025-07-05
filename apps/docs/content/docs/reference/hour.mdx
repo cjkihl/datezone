@@ -1,197 +1,75 @@
 ---
-title: Hour Utilities
-description: Functions for working with hours, minutes, seconds, and milliseconds
+title: Hour
 ---
 
+## `to12Hour`
 
+Converts a 24-hour format hour to 12-hour format.
 
-# Hour Utilities
+```ts
+import { to12Hour } from "@datezone/hour";
+```
 
-Hour utilities provide functions for working with hours, minutes, seconds, and milliseconds in dates and timestamps, including time arithmetic and time boundaries.
+<CodeExample file="reference/hour/to12Hour.ts" title="to12Hour" />
 
-## get12Hour
+## `to24Hour`
 
-Get the hour in 12-hour format (1-12).
+Normalizes an hour value to 24-hour format (0-23).
 
-<CodeExample tabs={[{ name: "Example 1", file: "reference/hour/example-1.ts" }]} />
+```ts
+import { to24Hour } from "@datezone/hour";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/get-12-hour-local.ts" },
-  { name: "With timezone", file: "reference/hour/get-12-hour-timezone.ts" }
-]} />
+<CodeExample file="reference/hour/to24Hour.ts" title="to24Hour" />
 
-## get24Hour
+## `hour`
 
-Get the hour in 24-hour format (0-23).
+Returns the hour of the day in the given timeZone.
+Uses Intl.DateTimeFormat to get the hour in the given timeZone.
+Returns the hour in ISO 8601 24-hour format (0-23)
 
-<CodeExample tabs={[{ name: "Example 2", file: "reference/hour/example-2.ts" }]} />
+```ts
+import { hour } from "@datezone/hour";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/get-24-hour-local.ts" },
-  { name: "With timezone", file: "reference/hour/get-24-hour-timezone.ts" }
-]} />
+<CodeExample file="reference/hour/hour.ts" title="hour" />
 
-## getHour
+## `addHours`
 
-Get the hour (same as get24Hour).
+Adds a specified number of hours to a timestamp.
 
-<CodeExample tabs={[{ name: "Example 3", file: "reference/hour/example-3.ts" }]} />
+```ts
+import { addHours } from "@datezone/hour";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/hour-local.ts" },
-  { name: "With timezone", file: "reference/hour/hour-timezone.ts" }
-]} />
+<CodeExample file="reference/hour/addHours.ts" title="addHours" />
 
-## addHours
+## `subHours`
 
-Add hours to a timestamp.
+Subtracts a specified number of hours from a timestamp.
 
-<CodeExample tabs={[{ name: "Example 4", file: "reference/hour/example-4.ts" }]} />
+```ts
+import { subHours } from "@datezone/hour";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/add-hours-local.ts" },
-  { name: "With timezone", file: "reference/hour/add-hours-timezone.ts" }
-]} />
+<CodeExample file="reference/hour/subHours.ts" title="subHours" />
 
-## subHours
+## `startOfHour`
 
-Subtract hours from a timestamp.
+Returns the timestamp at the start of the hour (minutes, seconds, and milliseconds set to 0).
 
-<CodeExample tabs={[{ name: "Example 5", file: "reference/hour/example-5.ts" }]} />
+```ts
+import { startOfHour } from "@datezone/hour";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/sub-hours-local.ts" },
-  { name: "With timezone", file: "reference/hour/sub-hours-timezone.ts" }
-]} />
+<CodeExample file="reference/hour/startOfHour.ts" title="startOfHour" />
 
-## startOfHour
+## `endOfHour`
 
-Get the timestamp for the start of the hour.
+Returns the timestamp at the end of the hour (59 minutes, 59 seconds, 999 milliseconds).
 
-<CodeExample tabs={[{ name: "Example 6", file: "reference/hour/example-6.ts" }]} />
+```ts
+import { endOfHour } from "@datezone/hour";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/start-of-hour-local.ts" },
-  { name: "With timezone", file: "reference/hour/start-of-hour-timezone.ts" }
-]} />
-
-## endOfHour
-
-Get the timestamp for the end of the hour.
-
-<CodeExample tabs={[{ name: "Example 7", file: "reference/hour/example-7.ts" }]} />
-
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/end-of-hour-local.ts" },
-  { name: "With timezone", file: "reference/hour/end-of-hour-timezone.ts" }
-]} />
-
-## startOfMinute
-
-Get the timestamp for the start of the minute.
-
-<CodeExample tabs={[{ name: "Example 8", file: "reference/hour/example-8.ts" }]} />
-
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/start-of-minute-local.ts" },
-  { name: "With timezone", file: "reference/hour/start-of-minute-timezone.ts" }
-]} />
-
-## endOfMinute
-
-Get the timestamp for the end of the minute.
-
-<CodeExample tabs={[{ name: "Example 9", file: "reference/hour/example-9.ts" }]} />
-
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/end-of-minute-local.ts" },
-  { name: "With timezone", file: "reference/hour/end-of-minute-timezone.ts" }
-]} />
-
-## startOfSecond
-
-Get the timestamp for the start of the second.
-
-<CodeExample tabs={[{ name: "Example 10", file: "reference/hour/example-10.ts" }]} />
-
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/start-of-second-local.ts" },
-  { name: "With timezone", file: "reference/hour/start-of-second-timezone.ts" }
-]} />
-
-## endOfSecond
-
-Get the timestamp for the end of the second.
-
-<CodeExample tabs={[{ name: "Example 11", file: "reference/hour/example-11.ts" }]} />
-
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/end-of-second-local.ts" },
-  { name: "With timezone", file: "reference/hour/end-of-second-timezone.ts" }
-]} />
-
-## addMinutes
-
-Add minutes to a timestamp.
-
-<CodeExample tabs={[{ name: "Example 12", file: "reference/hour/example-12.ts" }]} />
-
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/add-minutes-local.ts" },
-  { name: "With timezone", file: "reference/hour/add-minutes-timezone.ts" }
-]} />
-
-## subMinutes
-
-Subtract minutes from a timestamp.
-
-<CodeExample tabs={[{ name: "Example 13", file: "reference/hour/example-13.ts" }]} />
-
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/sub-minutes-local.ts" },
-  { name: "With timezone", file: "reference/hour/sub-minutes-timezone.ts" }
-]} />
-
-## addSeconds
-
-Add seconds to a timestamp.
-
-<CodeExample tabs={[{ name: "Example 14", file: "reference/hour/example-14.ts" }]} />
-
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/add-seconds-local.ts" },
-  { name: "With timezone", file: "reference/hour/add-seconds-timezone.ts" }
-]} />
-
-## subSeconds
-
-Subtract seconds from a timestamp.
-
-<CodeExample tabs={[{ name: "Example 15", file: "reference/hour/example-15.ts" }]} />
-
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/sub-seconds-local.ts" },
-  { name: "With timezone", file: "reference/hour/sub-seconds-timezone.ts" }
-]} />
-
-## addMilliseconds
-
-Add milliseconds to a timestamp.
-
-<CodeExample tabs={[{ name: "Example 16", file: "reference/hour/example-16.ts" }]} />
-
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/add-milliseconds-local.ts" },
-  { name: "With timezone", file: "reference/hour/add-milliseconds-timezone.ts" }
-]} />
-
-## subMilliseconds
-
-Subtract milliseconds from a timestamp.
-
-<CodeExample tabs={[{ name: "Example 17", file: "reference/hour/example-17.ts" }]} />
-
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/hour/sub-milliseconds-local.ts" },
-  { name: "With timezone", file: "reference/hour/sub-milliseconds-timezone.ts" }
-]} /> 
+<CodeExample file="reference/hour/endOfHour.ts" title="endOfHour" />

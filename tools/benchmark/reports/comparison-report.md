@@ -6,7 +6,7 @@
 
 ## 📊 Performance Overview
 
-This report compares **Datezone** against **Date-fns v4** with timezone support (@date-fns/tz).
+This report compares **Datezone** against **Date-fns v4** with timeZone support (@date-fns/tz).
 
 ### 🏆 Performance Legend
 
@@ -287,10 +287,10 @@ This report compares **Datezone** against **Date-fns v4** with timezone support 
 - **Environment:** Node.js `v22.6.0` on `darwin arm64`
 
 ### Comparison Approach
-- **Datezone:** Built-in timezone support with UTC timestamps
-- **Date-fns:** v4.x with @date-fns/tz package for timezone operations
-- **Test Data:** Realistic timestamps across different times and timezones
-- **Fairness:** Both libraries tested with equivalent timezone-aware operations
+- **Datezone:** Built-in timeZone support with UTC timestamps
+- **Date-fns:** v4.x with @date-fns/tz package for timeZone operations
+- **Test Data:** Realistic timestamps across different times and timeZones
+- **Fairness:** Both libraries tested with equivalent timeZone-aware operations
 
 ### Performance Metrics
 - **Time (avg):** Average execution time per operation
@@ -299,16 +299,16 @@ This report compares **Datezone** against **Date-fns v4** with timezone support 
 
 ### Timezone Test Categories
 - **Non-Timezone (Local):** Standard local time operations
-- **UTC Fast Path:** Optimized UTC timezone operations
-- **Non-DST Timezone:** Fixed offset timezones (fastest timezone path)
-- **DST Timezone:** Complex DST-aware timezone operations
+- **UTC Fast Path:** Optimized UTC timeZone operations
+- **Non-DST Timezone:** Fixed offset timeZones (fastest timeZone path)
+- **DST Timezone:** Complex DST-aware timeZone operations
 
 ### Notes
 - Results may vary based on system specifications and load
 - Benchmarks focus on equivalent functionality where available
-- Some operations are unique to Datezone (timezone utilities)
-- All operations tested with timezone awareness for fair comparison
-- Non-DST timezones should show the best performance for timezone-aware operations
+- Some operations are unique to Datezone (timeZone utilities)
+- All operations tested with timeZone awareness for fair comparison
+- Non-DST timeZones should show the best performance for timeZone-aware operations
 
 ---
 

@@ -1,3 +1,4 @@
+import type { Calendar } from "../calendar.pub.js";
 import {
 	dayOfWeekBase,
 	dayOfYearBase,
@@ -8,7 +9,6 @@ import { to12Hour } from "../hour.pub.js";
 import { getMonthName } from "../month.pub.js";
 import { formatOrdinal } from "../ordinal.pub.js";
 import type { TimeZone } from "../timezone.pub.js";
-import type { WallTime } from "../walltime.pub.js";
 import { getISOWeekYearBase, weekBase } from "../week.pub.js";
 import { quarter } from "../year.pub.js";
 import {
@@ -18,8 +18,8 @@ import {
 	padZeros,
 } from "./utils.js";
 
-export type DT = WallTime & {
-	timezoneOffsetMinutes: number;
+export type DT = Calendar & {
+	timeZoneOffsetMinutes: number;
 };
 /**
  * Options passed to each formatter function.
@@ -27,8 +27,12 @@ export type DT = WallTime & {
 type Options = {
 	dt: DT;
 	locale: string;
-	tz: TimeZone | null;
+	// Length modifier for certain tokens
 	len: number;
+	// Target timeZone (optional). Use `tz` moving forward; `timeZone` is kept for backward compatibility.
+	tz?: TimeZone | null;
+	/** @deprecated Use `tz` instead. Kept for backward compatibility */
+	timeZone?: TimeZone | null;
 };
 
 /**
@@ -681,70 +685,70 @@ function SSSS(o: Options): string {
  * Timezone (ISO-8601 w/ Z)
  */
 function X(o: Options): string {
-	return formatTimezone(o.dt.timezoneOffsetMinutes, "X".repeat(o.len));
+	return formatTimezone(o.dt.timeZoneOffsetMinutes, "X".repeat(o.len));
 }
 function XX(o: Options): string {
-	return formatTimezone(o.dt.timezoneOffsetMinutes, "X".repeat(o.len));
+	return formatTimezone(o.dt.timeZoneOffsetMinutes, "X".repeat(o.len));
 }
 function XXX(o: Options): string {
-	return formatTimezone(o.dt.timezoneOffsetMinutes, "X".repeat(o.len));
+	return formatTimezone(o.dt.timeZoneOffsetMinutes, "X".repeat(o.len));
 }
 function XXXX(o: Options): string {
-	return formatTimezone(o.dt.timezoneOffsetMinutes, "X".repeat(o.len));
+	return formatTimezone(o.dt.timeZoneOffsetMinutes, "X".repeat(o.len));
 }
 function XXXXX(o: Options): string {
-	return formatTimezone(o.dt.timezoneOffsetMinutes, "X".repeat(o.len));
+	return formatTimezone(o.dt.timeZoneOffsetMinutes, "X".repeat(o.len));
 }
 
 /**
  * Timezone (ISO-8601 w/o Z)
  */
 function x(o: Options): string {
-	return formatTimezone(o.dt.timezoneOffsetMinutes, "x".repeat(o.len));
+	return formatTimezone(o.dt.timeZoneOffsetMinutes, "x".repeat(o.len));
 }
 function xx(o: Options): string {
-	return formatTimezone(o.dt.timezoneOffsetMinutes, "x".repeat(o.len));
+	return formatTimezone(o.dt.timeZoneOffsetMinutes, "x".repeat(o.len));
 }
 function xxx(o: Options): string {
-	return formatTimezone(o.dt.timezoneOffsetMinutes, "x".repeat(o.len));
+	return formatTimezone(o.dt.timeZoneOffsetMinutes, "x".repeat(o.len));
 }
 function xxxx(o: Options): string {
-	return formatTimezone(o.dt.timezoneOffsetMinutes, "x".repeat(o.len));
+	return formatTimezone(o.dt.timeZoneOffsetMinutes, "x".repeat(o.len));
 }
 function xxxxx(o: Options): string {
-	return formatTimezone(o.dt.timezoneOffsetMinutes, "x".repeat(o.len));
+	return formatTimezone(o.dt.timeZoneOffsetMinutes, "x".repeat(o.len));
 }
 
 /**
  * Timezone (GMT)
  */
 function O(o: Options): string {
-	return formatGMT(o.dt.timezoneOffsetMinutes, o.len >= 4);
+	return formatGMT(o.dt.timeZoneOffsetMinutes, o.len >= 4);
 }
 function OO(o: Options): string {
-	return formatGMT(o.dt.timezoneOffsetMinutes, o.len >= 4);
+	return formatGMT(o.dt.timeZoneOffsetMinutes, o.len >= 4);
 }
 function OOO(o: Options): string {
-	return formatGMT(o.dt.timezoneOffsetMinutes, o.len >= 4);
+	return formatGMT(o.dt.timeZoneOffsetMinutes, o.len >= 4);
 }
 function OOOO(o: Options): string {
-	return formatGMT(o.dt.timezoneOffsetMinutes, true);
+	return formatGMT(o.dt.timeZoneOffsetMinutes, true);
 }
 
 /**
  * Timezone (specific non-location)
  */
 function z(o: Options): string {
-	return formatGMT(o.dt.timezoneOffsetMinutes, o.len >= 4);
+	return formatGMT(o.dt.timeZoneOffsetMinutes, o.len >= 4);
 }
 function zz(o: Options): string {
-	return formatGMT(o.dt.timezoneOffsetMinutes, o.len >= 4);
+	return formatGMT(o.dt.timeZoneOffsetMinutes, o.len >= 4);
 }
 function zzz(o: Options): string {
-	return formatGMT(o.dt.timezoneOffsetMinutes, o.len >= 4);
+	return formatGMT(o.dt.timeZoneOffsetMinutes, o.len >= 4);
 }
 function zzzz(o: Options): string {
-	return formatGMT(o.dt.timezoneOffsetMinutes, true);
+	return formatGMT(o.dt.timeZoneOffsetMinutes, true);
 }
 
 /**
@@ -797,10 +801,10 @@ function pp(o: Options): string {
 	return `${to12Hour(o.dt.hour)}:${padZeros(o.dt.minute, 2)}:${padZeros(o.dt.second, 2)} ${getDayPeriod(o.locale, o.dt.hour)}`;
 }
 function ppp(o: Options): string {
-	return `${to12Hour(o.dt.hour)}:${padZeros(o.dt.minute, 2)}:${padZeros(o.dt.second, 2)} ${getDayPeriod(o.locale, o.dt.hour)} GMT${o.dt.timezoneOffsetMinutes <= 0 ? "+" : "-"}${padZeros(Math.abs(Math.floor(o.dt.timezoneOffsetMinutes / 60)), 2)}`;
+	return `${to12Hour(o.dt.hour)}:${padZeros(o.dt.minute, 2)}:${padZeros(o.dt.second, 2)} ${getDayPeriod(o.locale, o.dt.hour)} GMT${o.dt.timeZoneOffsetMinutes <= 0 ? "+" : "-"}${padZeros(Math.abs(Math.floor(o.dt.timeZoneOffsetMinutes / 60)), 2)}`;
 }
 function pppp(o: Options): string {
-	return `${to12Hour(o.dt.hour)}:${padZeros(o.dt.minute, 2)}:${padZeros(o.dt.second, 2)} ${getDayPeriod(o.locale, o.dt.hour)} GMT${o.dt.timezoneOffsetMinutes <= 0 ? "+" : "-"}${padZeros(Math.abs(Math.floor(o.dt.timezoneOffsetMinutes / 60)), 2)}:${padZeros(Math.abs(o.dt.timezoneOffsetMinutes % 60), 2)}`;
+	return `${to12Hour(o.dt.hour)}:${padZeros(o.dt.minute, 2)}:${padZeros(o.dt.second, 2)} ${getDayPeriod(o.locale, o.dt.hour)} GMT${o.dt.timeZoneOffsetMinutes <= 0 ? "+" : "-"}${padZeros(Math.abs(Math.floor(o.dt.timeZoneOffsetMinutes / 60)), 2)}:${padZeros(Math.abs(o.dt.timeZoneOffsetMinutes % 60), 2)}`;
 }
 
 /**

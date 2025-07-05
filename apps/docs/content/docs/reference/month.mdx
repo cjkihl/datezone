@@ -1,152 +1,204 @@
 ---
-title: Month Utilities
+title: Month
 ---
 
+## `month`
 
+Gets the month of the year for a given timestamp.
 
-# Month Utilities (`datezone/month`)
+```ts
+import { month } from "@datezone/month";
+```
 
-This page documents all exported functions from the `month` module in `datezone`.
+<CodeExample file="reference/month/month.ts" title="month" />
 
-## Functions
+## `startOfMonth`
 
-### startOfMonth
+Gets the timestamp for the start of the month containing the given timestamp.
 
-Returns the start of the month (first day, 00:00:00.000) in the given timezone.
+```ts
+import { startOfMonth } from "@datezone/month";
+```
 
-<CodeExample tabs={[{ name: "Example 1", file: "reference/month/example-1.ts" }]} />
+<CodeExample file="reference/month/startOfMonth.ts" title="startOfMonth" />
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/month/start-of-month-local.ts" },
-  { name: "With timezone", file: "reference/month/start-of-month-timezone.ts" }
-]} />
+## `startOfMonthBase`
 
----
+Gets the timestamp for the start of the month for given year and month.
 
-### endOfMonth
+```ts
+import { startOfMonthBase } from "@datezone/month";
+```
 
-Returns the end of the month (last day, 23:59:59.999) in the given timezone.
+<CodeExample file="reference/month/startOfMonthBase.ts" title="startOfMonthBase" />
 
-<CodeExample tabs={[{ name: "Example 2", file: "reference/month/example-2.ts" }]} />
+## `endOfMonth`
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/month/end-of-month-local.ts" },
-  { name: "With timezone", file: "reference/month/end-of-month-timezone.ts" }
-]} />
+Gets the timestamp for the end of the month containing the given timestamp.
 
----
+```ts
+import { endOfMonth } from "@datezone/month";
+```
 
-### addMonths
+<CodeExample file="reference/month/endOfMonth.ts" title="endOfMonth" />
 
-Adds a number of months to a timestamp.
+## `endOfMonthBase`
 
-<CodeExample tabs={[{ name: "Example 3", file: "reference/month/example-3.ts" }]} />
+Gets the timestamp for the end of the month for given year and month.
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/month/add-months-local.ts" },
-  { name: "With timezone", file: "reference/month/add-months-timezone.ts" }
-]} />
+```ts
+import { endOfMonthBase } from "@datezone/month";
+```
 
----
+<CodeExample file="reference/month/endOfMonthBase.ts" title="endOfMonthBase" />
 
-### subMonths
+## `addMonths`
 
-Subtracts a number of months from a timestamp.
+Adds the specified number of months to a timestamp.
+Handles month-end dates appropriately (e.g., Jan 31 + 1 month = Feb 28/29).
 
-<CodeExample tabs={[{ name: "Example 4", file: "reference/month/example-4.ts" }]} />
+```ts
+import { addMonths } from "@datezone/month";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/month/sub-months-local.ts" },
-  { name: "With timezone", file: "reference/month/sub-months-timezone.ts" }
-]} />
+<CodeExample file="reference/month/addMonths.ts" title="addMonths" />
 
----
+## `addMonthsBase`
 
-### startOfNextMonth
+Adds the specified number of months to a timestamp with calendar components.
 
-Returns the start of the next month (first day, 00:00:00.000) in the given timezone.
+```ts
+import { addMonthsBase } from "@datezone/month";
+```
 
-<CodeExample tabs={[{ name: "Example 5", file: "reference/month/example-5.ts" }]} />
+<CodeExample file="reference/month/addMonthsBase.ts" title="addMonthsBase" />
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/month/start-of-next-month-local.ts" },
-  { name: "With timezone", file: "reference/month/start-of-next-month-timezone.ts" }
-]} />
+## `subMonths`
 
----
+Subtracts the specified number of months from a timestamp.
 
-### endOfNextMonth
+```ts
+import { subMonths } from "@datezone/month";
+```
 
-Returns the end of the next month (last day, 23:59:59.999) in the given timezone.
+<CodeExample file="reference/month/subMonths.ts" title="subMonths" />
 
-<CodeExample tabs={[{ name: "Example 6", file: "reference/month/example-6.ts" }]} />
+## `startOfNthMonth`
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/month/end-of-next-month-local.ts" },
-  { name: "With timezone", file: "reference/month/end-of-next-month-timezone.ts" }
-]} />
+Gets the start of the nth month relative to the given timestamp.
 
----
+```ts
+import { startOfNthMonth } from "@datezone/month";
+```
 
-### startOfPrevMonth
+<CodeExample file="reference/month/startOfNthMonth.ts" title="startOfNthMonth" />
 
-Returns the start of the previous month (first day, 00:00:00.000) in the given timezone.
+## `endOfNthMonth`
 
-<CodeExample tabs={[{ name: "Example 7", file: "reference/month/example-7.ts" }]} />
+Gets the end of the nth month relative to the given timestamp.
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/month/start-of-prev-month-local.ts" },
-  { name: "With timezone", file: "reference/month/start-of-prev-month-timezone.ts" }
-]} />
+```ts
+import { endOfNthMonth } from "@datezone/month";
+```
 
----
+<CodeExample file="reference/month/endOfNthMonth.ts" title="endOfNthMonth" />
 
-### endOfPrevMonth
+## `startOfNextMonth`
 
-Returns the end of the previous month (last day, 23:59:59.999) in the given timezone.
+Gets the start of the next month relative to the given timestamp.
 
-<CodeExample tabs={[{ name: "Example 8", file: "reference/month/example-8.ts" }]} />
+```ts
+import { startOfNextMonth } from "@datezone/month";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/month/end-of-prev-month-local.ts" },
-  { name: "With timezone", file: "reference/month/end-of-prev-month-timezone.ts" }
-]} />
+<CodeExample file="reference/month/startOfNextMonth.ts" title="startOfNextMonth" />
 
----
+## `endOfNextMonth`
 
-### daysInMonth
+Gets the end of the next month relative to the given timestamp.
 
-Returns the number of days in the month for the given date and timezone.
+```ts
+import { endOfNextMonth } from "@datezone/month";
+```
 
-<CodeExample tabs={[{ name: "Example 9", file: "reference/month/example-9.ts" }]} />
+<CodeExample file="reference/month/endOfNextMonth.ts" title="endOfNextMonth" />
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/month/days-in-month-local.ts" },
-  { name: "With timezone", file: "reference/month/days-in-month-timezone.ts" }
-]} />
+## `startOfPrevMonth`
 
----
+Gets the start of the previous month relative to the given timestamp.
 
-### getMonthName
+```ts
+import { startOfPrevMonth } from "@datezone/month";
+```
 
-Returns the localized month name.
+<CodeExample file="reference/month/startOfPrevMonth.ts" title="startOfPrevMonth" />
 
-<CodeExample tabs={[{ name: "Example 10", file: "reference/month/example-10.ts" }]} />
+## `endOfPrevMonth`
 
-<CodeExample tabs={[
-  { name: "en-US", file: "reference/month/get-month-name-en.ts" },
-  { name: "fr-FR", file: "reference/month/get-month-name-fr.ts" }
-]} />
+Gets the end of the previous month relative to the given timestamp.
 
----
+```ts
+import { endOfPrevMonth } from "@datezone/month";
+```
 
-### getQuarter
+<CodeExample file="reference/month/endOfPrevMonth.ts" title="endOfPrevMonth" />
 
-Returns the quarter of the year (1-4) for the given date and timezone.
+## `daysInMonth`
 
-<CodeExample tabs={[{ name: "Example 11", file: "reference/month/example-11.ts" }]} />
+Gets the number of days in a month for a given timestamp.
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/month/get-quarter-local.ts" },
-  { name: "With timezone", file: "reference/month/get-quarter-timezone.ts" }
-]} /> 
+```ts
+import { daysInMonth } from "@datezone/month";
+```
+
+<CodeExample file="reference/month/daysInMonth.ts" title="daysInMonth" />
+
+## `daysInMonthBase`
+
+Gets the number of days in a month for given year and month.
+
+```ts
+import { daysInMonthBase } from "@datezone/month";
+```
+
+<CodeExample file="reference/month/daysInMonthBase.ts" title="daysInMonthBase" />
+
+## `calculateYearMonth`
+
+Calculates the year and month after adding a specified number of months.
+
+```ts
+import { calculateYearMonth } from "@datezone/month";
+```
+
+<CodeExample file="reference/month/calculateYearMonth.ts" title="calculateYearMonth" />
+
+## `getMonthName`
+
+Gets the localized name of a month.
+
+```ts
+import { getMonthName } from "@datezone/month";
+```
+
+<CodeExample file="reference/month/getMonthName.ts" title="getMonthName" />
+
+## `getQuarter`
+
+Gets the quarter (1-4) for a given timestamp.
+
+```ts
+import { getQuarter } from "@datezone/month";
+```
+
+<CodeExample file="reference/month/getQuarter.ts" title="getQuarter" />
+
+## `getQuarterBase`
+
+Gets the quarter (1-4) for a given month.
+
+```ts
+import { getQuarterBase } from "@datezone/month";
+```
+
+<CodeExample file="reference/month/getQuarterBase.ts" title="getQuarterBase" />

@@ -1,10 +1,10 @@
 {
   "name": "datezone",
   "version": "1.0.1",
-  "description": "A lightweight and comprehensive date and timezone utility library for JavaScript.",
+  "description": "A lightweight and comprehensive date and timeZone utility library for JavaScript.",
   "keywords": [
     "date",
-    "timezone",
+    "timeZone",
     "utilities",
     "javascript",
     "typescript",
@@ -30,6 +30,10 @@
       "default": "./dist/output/index.pub.js",
       "types": "./dist/types/index.pub.d.ts"
     },
+    "./calendar": {
+      "default": "./dist/output/calendar.pub.js",
+      "types": "./dist/types/calendar.pub.d.ts"
+    },
     "./compare": {
       "default": "./dist/output/compare.pub.js",
       "types": "./dist/types/compare.pub.d.ts"
@@ -42,9 +46,21 @@
       "default": "./dist/output/day.pub.js",
       "types": "./dist/types/day.pub.d.ts"
     },
+    "./duration": {
+      "default": "./dist/output/duration.pub.js",
+      "types": "./dist/types/duration.pub.d.ts"
+    },
+    "./format": {
+      "default": "./dist/output/format/index.pub.js",
+      "types": "./dist/types/format/index.pub.d.ts"
+    },
     "./hour": {
       "default": "./dist/output/hour.pub.js",
       "types": "./dist/types/hour.pub.d.ts"
+    },
+    "./iso": {
+      "default": "./dist/output/iso.pub.js",
+      "types": "./dist/types/iso.pub.d.ts"
     },
     "./minute": {
       "default": "./dist/output/minute.pub.js",
@@ -69,10 +85,6 @@
     "./timezone": {
       "default": "./dist/output/timezone.pub.js",
       "types": "./dist/types/timezone.pub.d.ts"
-    },
-    "./walltime": {
-      "default": "./dist/output/walltime.pub.js",
-      "types": "./dist/types/walltime.pub.d.ts"
     },
     "./week": {
       "default": "./dist/output/week.pub.js",

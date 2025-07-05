@@ -1,74 +1,13 @@
 ---
-title: Ordinal Utilities
-description: Functions for formatting ordinal numbers with locale support
+title: Ordinal
 ---
 
+## `formatOrdinal`
 
+Returns the ordinal suffix for the given number in the given locale. (e.g. 1st, 2nd, 3rd, 4th)
 
-# Ordinal Utilities
+```ts
+import { formatOrdinal } from "@datezone/ordinal";
+```
 
-Ordinal utilities provide functions for formatting numbers with ordinal suffixes (1st, 2nd, 3rd, etc.) with internationalization support for multiple locales.
-
-## formatOrdinal
-
-Format a number with its ordinal suffix for a given locale.
-
-<CodeExample tabs={[
-  { name: "Function Signature", file: "reference/ordinal/format-ordinal-signature.ts" },
-  { name: "English Ordinals", file: "reference/ordinal/format-ordinal-signature.ts" },
-  { name: "Locale Examples", file: "reference/ordinal/locale-examples.ts" }
-]} />
-
-## Supported Locales
-
-The `formatOrdinal` function supports the following locales with their specific ordinal formatting rules:
-
-### English (en)
-- **1st, 21st, 31st, etc.**: Numbers ending in 1 (except 11) use "st"
-- **2nd, 22nd, 32nd, etc.**: Numbers ending in 2 (except 12) use "nd"  
-- **3rd, 23rd, 33rd, etc.**: Numbers ending in 3 (except 13) use "rd"
-- **4th, 5th, 6th, etc.**: All other numbers use "th"
-- **11th, 12th, 13th**: Special cases that use "th"
-
-### Spanish (es)
-- **All numbers**: Use "º" suffix (masculine ordinal indicator)
-
-### French (fr)
-- **1st**: Uses "er" (premier)
-- **All others**: Use "e" (deuxième, troisième, etc.)
-
-### German (de)
-- **All numbers**: Use "." (period) suffix
-
-### Italian (it)
-- **All numbers**: Use "º" suffix
-
-### Portuguese (pt)
-- **All numbers**: Use "º" suffix (masculine form)
-
-### Dutch (nl)
-- **All numbers**: Use "e" suffix
-
-## Usage Examples
-
-### Date Formatting with Ordinals
-
-<CodeExample tabs={[{ name: "Date Formatting", file: "reference/ordinal/date-formatting.ts" }]} />
-
-### Ranking Lists
-
-<CodeExample tabs={[{ name: "Ranking Lists", file: "reference/ordinal/ranking-lists.ts" }]} />
-
-### Century and Millennium Formatting
-
-<CodeExample tabs={[{ name: "Century Formatting", file: "reference/ordinal/century-formatting.ts" }]} />
-
-### Fallback Behavior
-
-<CodeExample tabs={[{ name: "Fallback Behavior", file: "reference/ordinal/fallback-behavior.ts" }]} />
-
-## Number Formatting
-
-The function also respects locale-specific number formatting:
-
-<CodeExample tabs={[{ name: "Number Formatting", file: "reference/ordinal/number-formatting.ts" }]} /> 
+<CodeExample file="reference/ordinal/formatOrdinal.ts" title="formatOrdinal" />

@@ -78,7 +78,7 @@ describe("Coverage Tests - Missing Lines", () => {
 				minute: 30,
 				month: 3,
 				second: 45,
-				timezoneOffsetMinutes: 0,
+				timeZoneOffsetMinutes: 0,
 				year: 2024,
 			};
 
@@ -94,10 +94,10 @@ describe("Coverage Tests - Missing Lines", () => {
 	});
 
 	describe("Index.pub getLocalTimezone", () => {
-		test("getLocalTimezone should return a timezone string", () => {
-			const timezone = getLocalTimezone();
-			expect(typeof timezone).toBe("string");
-			expect(timezone.length).toBeGreaterThan(0);
+		test("getLocalTimezone should return a timeZone string", () => {
+			const timeZone = getLocalTimezone();
+			expect(typeof timeZone).toBe("string");
+			expect(timeZone.length).toBeGreaterThan(0);
 		});
 	});
 

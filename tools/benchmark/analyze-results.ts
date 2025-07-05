@@ -138,16 +138,16 @@ for (const [tzType, stats] of Object.entries(performanceByTz)) {
 
 console.log("\n💡 KEY INSIGHTS:");
 console.log(
-	"• Non-DST timezones should show the biggest performance improvements",
+	"• Non-DST timeZones should show the biggest performance improvements",
 );
 console.log("• UTC should be consistently fast across all operations");
 console.log("• Local time should be competitive for most operations");
 console.log(
-	"• DST timezones use the complex path but should still be efficient",
+	"• DST timeZones use the complex path but should still be efficient",
 );
 
 console.log("\n🔍 OPTIMIZATION VALIDATION:");
-console.log("The fast paths added for non-DST timezones using isDST() checks");
+console.log("The fast paths added for non-DST timeZones using isDST() checks");
 console.log(
 	"should dramatically improve performance by avoiding formatToParts calls.",
 );

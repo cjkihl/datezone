@@ -22,7 +22,7 @@ describe("Second Functions", () => {
 			expect(resultDate.getUTCMilliseconds()).toBe(0);
 		});
 
-		it("should handle different timezones", () => {
+		it("should handle different timeZones", () => {
 			const timestamp = new Date(
 				Date.UTC(2024, 0, 1, 14, 35, 42, 123),
 			).getTime();
@@ -45,7 +45,7 @@ describe("Second Functions", () => {
 			expect(resultDate.getUTCMilliseconds()).toBe(999);
 		});
 
-		it("should handle different timezones", () => {
+		it("should handle different timeZones", () => {
 			const timestamp = new Date(
 				Date.UTC(2024, 0, 1, 14, 35, 42, 123),
 			).getTime();
@@ -169,7 +169,7 @@ describe("Second Functions", () => {
 			expect(result).toBe(timestamp + 1000);
 		});
 
-		it("should be performant (no timezone calculation)", () => {
+		it("should be performant (no timeZone calculation)", () => {
 			const timestamp = Date.now();
 			const start = performance.now();
 
@@ -179,7 +179,7 @@ describe("Second Functions", () => {
 			}
 
 			const end = performance.now();
-			expect(end - start).toBeLessThan(10); // Should be very fast since no timezone calc
+			expect(end - start).toBeLessThan(10); // Should be very fast since no timeZone calc
 		});
 	});
 
@@ -212,7 +212,7 @@ describe("Second Functions", () => {
 			expect(resultDate.getUTCMilliseconds()).toBe(700);
 		});
 
-		it("should be performant (no timezone calculation)", () => {
+		it("should be performant (no timeZone calculation)", () => {
 			const timestamp = Date.now();
 			const start = performance.now();
 
@@ -222,18 +222,18 @@ describe("Second Functions", () => {
 			}
 
 			const end = performance.now();
-			expect(end - start).toBeLessThan(10); // Should be very fast since no timezone calc
+			expect(end - start).toBeLessThan(10); // Should be very fast since no timeZone calc
 		});
 	});
 
 	describe("Edge Cases", () => {
-		it("should add seconds with timestamp and no timezone", () => {
+		it("should add seconds with timestamp and no timeZone", () => {
 			const ts = new Date(Date.UTC(2024, 0, 1, 10, 0, 0)).getTime();
 			const result = addSeconds(ts, 30);
 			expect(new Date(result).getUTCSeconds()).toBe(30);
 		});
 
-		it("should subtract seconds with timestamp and no timezone", () => {
+		it("should subtract seconds with timestamp and no timeZone", () => {
 			const ts = new Date(Date.UTC(2024, 0, 1, 10, 0, 30)).getTime();
 			const result = subSeconds(ts, 30);
 			expect(new Date(result).getUTCSeconds()).toBe(0);
@@ -257,7 +257,7 @@ describe("Second Functions", () => {
 	});
 
 	describe("DST Edge Cases with Unusual Timezones", () => {
-		// Test arithmetic consistency across unusual timezone offsets and DST rules
+		// Test arithmetic consistency across unusual timeZone offsets and DST rules
 		const testTimestamp = new Date(
 			Date.UTC(2024, 2, 10, 12, 30, 45, 123),
 		).getTime();
@@ -297,7 +297,7 @@ describe("Second Functions", () => {
 			expect(largeResult).toBe(largeExpected);
 		});
 
-		it("should maintain consistency across DST transitions for unusual timezones", () => {
+		it("should maintain consistency across DST transitions for unusual timeZones", () => {
 			// Test that arithmetic remains consistent regardless of DST rules
 			const baseTime = new Date(Date.UTC(2024, 2, 31, 6, 0, 0)).getTime(); // March 31 - common DST transition date
 
@@ -314,8 +314,8 @@ describe("Second Functions", () => {
 			expect(nfldResult).toBe(baseTime + 3599000);
 		});
 
-		it("should handle millisecond precision with unusual timezone offsets", () => {
-			// Test that millisecond operations are unaffected by timezone complexity
+		it("should handle millisecond precision with unusual timeZone offsets", () => {
+			// Test that millisecond operations are unaffected by timeZone complexity
 			const tests = [
 				{ ms: 750, offset: "+3:30", seconds: 30 }, // Iran-like
 				{ ms: 250, offset: "+12:45", seconds: 15 }, // Chatham-like
@@ -336,12 +336,12 @@ describe("Second Functions", () => {
 			});
 		});
 
-		it("should be performant regardless of timezone complexity", () => {
-			// Verify that arithmetic approach maintains performance even with complex timezones
+		it("should be performant regardless of timeZone complexity", () => {
+			// Verify that arithmetic approach maintains performance even with complex timeZones
 			const start = performance.now();
 
 			for (let i = 0; i < 1000; i++) {
-				// Simulate operations that would be complex with timezone-aware logic
+				// Simulate operations that would be complex with timeZone-aware logic
 				let current = testTimestamp;
 				current = addSeconds(current, i % 60);
 				current = addMilliseconds(current, i % 1000);

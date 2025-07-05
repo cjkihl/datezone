@@ -132,18 +132,18 @@ group("High-Frequency Operations (Cache Benefits)", () => {
 });
 
 group("Multi-Timezone Cache Test", () => {
-	const timezones = ["UTC", "America/New_York", "Europe/London", "Asia/Tokyo"];
+	const timeZones = ["UTC", "America/New_York", "Europe/London", "Asia/Tokyo"];
 
-	bench("datezone: 4 timezones × 25 calls each (cached)", function* () {
-		// Pre-warm cache for all timezones
-		for (const tz of timezones) {
+	bench("datezone: 4 timeZones × 25 calls each (cached)", function* () {
+		// Pre-warm cache for all timeZones
+		for (const tz of timeZones) {
 			formatToParts(testTimestamp, tz, formatOptions);
 		}
 
 		yield () => {
 			const results = [];
 			for (let i = 0; i < 25; i++) {
-				for (const tz of timezones) {
+				for (const tz of timeZones) {
 					results.push(
 						formatToParts(testTimestamp + i * 1000, tz, formatOptions),
 					);
@@ -153,11 +153,11 @@ group("Multi-Timezone Cache Test", () => {
 		};
 	});
 
-	bench("native: 4 timezones × 25 calls each (no cache)", function* () {
+	bench("native: 4 timeZones × 25 calls each (no cache)", function* () {
 		yield () => {
 			const results = [];
 			for (let i = 0; i < 25; i++) {
-				for (const tz of timezones) {
+				for (const tz of timeZones) {
 					const formatter = new Intl.DateTimeFormat("en-US", {
 						timeZone: tz,
 						...formatOptions,
@@ -182,6 +182,6 @@ console.log(
 	"  • 'datezone cached' significantly faster than 'native no cache'",
 );
 console.log(
-	"  • Bigger performance gap in high-frequency and multi-timezone tests",
+	"  • Bigger performance gap in high-frequency and multi-timeZone tests",
 );
 console.log("  • datezone competitive with or faster than date-fns");

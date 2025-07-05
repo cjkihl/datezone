@@ -1,24 +1,34 @@
 /**
- * Number of milliseconds in one second.
+ * Extracts the second from a timestamp.
+ *
+ * @see https://datezone.dev/docs/reference/constants#SECOND
  */
 export const SECOND = 1000 as const;
 
 /**
- * Number of milliseconds in one minute.
+ * Extracts the minute from a timestamp.
+ *
+ * @see https://datezone.dev/docs/reference/constants#MINUTE
  */
 export const MINUTE = 60_000 as const;
 
 /**
- * Number of milliseconds in one hour.
+ * Extracts the hour from a timestamp.
+ *
+ * @see https://datezone.dev/docs/reference/constants#HOUR
  */
 export const HOUR = 3_600_000 as const;
 
 /**
- * Number of milliseconds in one day.
+ * Extracts the day from a timestamp.
+ *
+ * @see https://datezone.dev/docs/reference/constants#DAY
  */
 export const DAY = 86_400_000 as const;
 
 /**
- * Number of milliseconds in one week.
+ * Extracts the week from a timestamp.
+ *
+ * @see https://datezone.dev/docs/reference/constants#WEEK
  */
 export const WEEK = 604_800_000 as const;

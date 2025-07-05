@@ -41,7 +41,7 @@ describe("Week functions", () => {
 			expect(week(timestamp, "UTC")).toBe(24);
 		});
 
-		it("should handle timezone-specific dates correctly", () => {
+		it("should handle timeZone-specific dates correctly", () => {
 			// Test DST transition dates using base function
 			expect(weekBase(2023, 3, 12, "America/New_York")).toBe(10); // DST starts in US
 			expect(weekBase(2023, 3, 12, "UTC")).toBe(10);
@@ -54,18 +54,18 @@ describe("Week functions", () => {
 			expect(weekBase(2021, 1, 1, "UTC")).toBe(53); // 2021-01-01 is week 53 of 2020
 		});
 
-		it("defaults to local timezone when timezone is undefined", () => {
+		it("defaults to local timeZone when timeZone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 			const calculatedWeek = week(d.getTime(), null);
 
-			// Get the local timezone
+			// Get the local timeZone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 			const localWeek = week(d.getTime(), localTz as TimeZone);
 
-			// Should match local timezone behavior
+			// Should match local timeZone behavior
 			expect(calculatedWeek).toBe(localWeek);
 
-			// If local timezone is not UTC, results should be different
+			// If local timeZone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 				const utcWeek = week(d.getTime(), "UTC");
 				expect(calculatedWeek).not.toBe(utcWeek);
@@ -75,7 +75,7 @@ describe("Week functions", () => {
 
 	describe("getISOWeekYear", () => {
 		it("should return correct ISO week year", () => {
-			// Use base function for walltime parameters
+			// Use base function for calendar parameters
 			expect(getISOWeekYearBase(2023, 1, 1, "UTC")).toBe(2022); // Belongs to 2022 ISO year
 			expect(getISOWeekYearBase(2023, 1, 2, "UTC")).toBe(2023); // Belongs to 2023 ISO year
 			expect(getISOWeekYearBase(2023, 12, 31, "UTC")).toBe(2023);
@@ -86,25 +86,25 @@ describe("Week functions", () => {
 			expect(getISOWeekYear(timestamp, "UTC")).toBe(2020); // Belongs to 2020 ISO year
 		});
 
-		it("should work with different timezones", () => {
-			// Use base function for walltime parameters
+		it("should work with different timeZones", () => {
+			// Use base function for calendar parameters
 			expect(getISOWeekYearBase(2023, 1, 1, "UTC")).toBe(2022);
 			expect(getISOWeekYearBase(2023, 1, 1, "America/New_York")).toBe(2022);
 			expect(getISOWeekYearBase(2023, 1, 1, "Asia/Tokyo")).toBe(2022);
 		});
 
-		it("defaults to local timezone when timezone is undefined", () => {
+		it("defaults to local timeZone when timeZone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 			const year = getISOWeekYear(d.getTime(), null);
 
-			// Get the local timezone
+			// Get the local timeZone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 			const localYear = getISOWeekYear(d.getTime(), localTz as TimeZone);
 
-			// Should match local timezone behavior
+			// Should match local timeZone behavior
 			expect(year).toBe(localYear);
 
-			// If local timezone is not UTC, results should be different
+			// If local timeZone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 				const utcYear = getISOWeekYear(d.getTime(), "UTC");
 				expect(year).not.toBe(utcYear);
@@ -240,18 +240,18 @@ describe("Week functions", () => {
 			expect(parts.day).toBe(12); // Should be June 12 (Monday)
 		});
 
-		it("defaults to local timezone when timezone is undefined", () => {
+		it("defaults to local timeZone when timeZone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 			const start = startOfWeek(d.getTime(), null);
 
-			// Get the local timezone
+			// Get the local timeZone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 			const localStart = startOfWeek(d.getTime(), localTz as TimeZone);
 
-			// Should match local timezone behavior
+			// Should match local timeZone behavior
 			expect(start).toBe(localStart);
 
-			// If local timezone is not UTC, results should be different
+			// If local timeZone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 				const utcStart = startOfWeek(d.getTime(), "UTC");
 				expect(start).not.toBe(utcStart);
@@ -352,18 +352,18 @@ describe("Week functions", () => {
 			expect(parts.day).toBe(12); // Should be March 12 (Sunday of that week)
 		});
 
-		it("defaults to local timezone when timezone is undefined", () => {
+		it("defaults to local timeZone when timeZone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 			const end = endOfWeek(d.getTime(), null);
 
-			// Get the local timezone
+			// Get the local timeZone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 			const localEnd = endOfWeek(d.getTime(), localTz as TimeZone);
 
-			// Should match local timezone behavior
+			// Should match local timeZone behavior
 			expect(end).toBe(localEnd);
 
-			// If local timezone is not UTC, results should be different
+			// If local timeZone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 				const utcEnd = endOfWeek(d.getTime(), "UTC");
 				expect(end).not.toBe(utcEnd);
@@ -373,7 +373,7 @@ describe("Week functions", () => {
 
 	describe("addWeeks", () => {
 		it("should add weeks correctly", () => {
-			// Use base function for walltime parameters
+			// Use base function for calendar parameters
 			const result = addWeeksBase(2023, 6, 15, 2, "UTC");
 			const parts = formatToParts(result, "UTC", {
 				day: "2-digit",
@@ -384,7 +384,7 @@ describe("Week functions", () => {
 		});
 
 		it("should handle negative weeks", () => {
-			// Use base function for walltime parameters
+			// Use base function for calendar parameters
 			const result = addWeeksBase(2023, 6, 15, -1, "UTC");
 			const parts = formatToParts(result, "UTC", {
 				day: "2-digit",
@@ -395,7 +395,7 @@ describe("Week functions", () => {
 		});
 
 		it("should handle month boundaries", () => {
-			// Use base function for walltime parameters
+			// Use base function for calendar parameters
 			const result = addWeeksBase(2023, 5, 31, 1, "UTC");
 			const parts = formatToParts(result, "UTC", {
 				day: "2-digit",
@@ -406,14 +406,14 @@ describe("Week functions", () => {
 			expect(parts.day).toBe(7); // Should be June 7
 		});
 
-		it("should optimize for UTC timezone with timestamp input", () => {
+		it("should optimize for UTC timeZone with timestamp input", () => {
 			const timestamp = Date.UTC(2023, 5, 15);
 			const result = addWeeks(timestamp, 2, "UTC");
 			const expected = timestamp + 2 * 7 * 24 * 60 * 60 * 1000; // 2 weeks in milliseconds
 			expect(result).toBe(expected);
 		});
 
-		it("should optimize for Etc/UTC timezone with timestamp input", () => {
+		it("should optimize for Etc/UTC timeZone with timestamp input", () => {
 			const timestamp = Date.UTC(2023, 5, 15);
 			const result = addWeeks(timestamp, 1, "Etc/UTC");
 			const expected = timestamp + 1 * 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
@@ -432,7 +432,7 @@ describe("Week functions", () => {
 		});
 
 		it("should handle zero weeks", () => {
-			// Use base function for walltime parameters
+			// Use base function for calendar parameters
 			const result = addWeeksBase(2023, 6, 15, 0, "UTC");
 			const parts = formatToParts(result, "UTC", {
 				day: "2-digit",
@@ -442,23 +442,23 @@ describe("Week functions", () => {
 			expect(parts.day).toBe(15); // Should be same day
 		});
 
-		it("defaults to local timezone when timezone is undefined", () => {
+		it("defaults to local timeZone when timeZone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 			const added = addWeeks(d.getTime(), 1, null);
 
-			// Get the local timezone
+			// Get the local timeZone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 			const localAdded = addWeeks(d.getTime(), 1, localTz as TimeZone);
 
-			// Should match local timezone behavior
+			// Should match local timeZone behavior
 			expect(added).toBe(localAdded);
 
-			// If local timezone is not UTC, results should be different from UTC optimization
+			// If local timeZone is not UTC, results should be different from UTC optimization
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 				const utcAdded = addWeeks(d.getTime(), 1, "UTC");
 				expect(added).not.toBe(utcAdded);
 			} else {
-				// If local timezone is UTC, should use optimization and get same result
+				// If local timeZone is UTC, should use optimization and get same result
 				const utcAdded = addWeeks(d.getTime(), 1, "UTC");
 				expect(added).toBe(utcAdded);
 			}
@@ -512,23 +512,23 @@ describe("Week functions", () => {
 			expect(parts.day).toBe(24); // Should be December 24, 2022
 		});
 
-		it("defaults to local timezone when timezone is undefined", () => {
+		it("defaults to local timeZone when timeZone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 			const subbed = subWeeks(d.getTime(), 1, null);
 
-			// Get the local timezone
+			// Get the local timeZone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 			const localSubbed = subWeeks(d.getTime(), 1, localTz as TimeZone);
 
-			// Should match local timezone behavior
+			// Should match local timeZone behavior
 			expect(subbed).toBe(localSubbed);
 
-			// If local timezone is not UTC, results should be different from UTC optimization
+			// If local timeZone is not UTC, results should be different from UTC optimization
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 				const utcSubbed = subWeeks(d.getTime(), 1, "UTC");
 				expect(subbed).not.toBe(utcSubbed);
 			} else {
-				// If local timezone is UTC, should use optimization and get same result
+				// If local timeZone is UTC, should use optimization and get same result
 				const utcSubbed = subWeeks(d.getTime(), 1, "UTC");
 				expect(subbed).toBe(utcSubbed);
 			}
@@ -552,7 +552,7 @@ describe("Week functions", () => {
 			expect(isoStart).not.toBe(sundayStart);
 		});
 
-		it("should work with different timezones", () => {
+		it("should work with different timeZones", () => {
 			// Use timestamp for main functions
 			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023
 			const utcStart = startOfISOWeek(timestamp, "UTC");
@@ -574,18 +574,18 @@ describe("Week functions", () => {
 			expect(utcParts.day).toBe(nyParts.day); // Same day
 		});
 
-		it("defaults to local timezone when timezone is undefined", () => {
+		it("defaults to local timeZone when timeZone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 			const start = startOfISOWeek(d.getTime(), null);
 
-			// Get the local timezone
+			// Get the local timeZone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 			const localStart = startOfISOWeek(d.getTime(), localTz as TimeZone);
 
-			// Should match local timezone behavior
+			// Should match local timeZone behavior
 			expect(start).toBe(localStart);
 
-			// If local timezone is not UTC, results should be different
+			// If local timeZone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 				const utcStart = startOfISOWeek(d.getTime(), "UTC");
 				expect(start).not.toBe(utcStart);
@@ -628,18 +628,18 @@ describe("Week functions", () => {
 			expect(parts.second).toBe(59);
 		});
 
-		it("defaults to local timezone when timezone is undefined", () => {
+		it("defaults to local timeZone when timeZone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 			const end = endOfISOWeek(d.getTime(), null);
 
-			// Get the local timezone
+			// Get the local timeZone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 			const localEnd = endOfISOWeek(d.getTime(), localTz as TimeZone);
 
-			// Should match local timezone behavior
+			// Should match local timeZone behavior
 			expect(end).toBe(localEnd);
 
-			// If local timezone is not UTC, results should be different
+			// If local timeZone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 				const utcEnd = endOfISOWeek(d.getTime(), "UTC");
 				expect(end).not.toBe(utcEnd);
@@ -704,7 +704,7 @@ describe("Week functions", () => {
 			expect(weeksInMonthBase(2023, 10, WeekStartsOn.MONDAY, "UTC")).toBe(6); // October 2023
 		});
 
-		it("should work with different timezones", () => {
+		it("should work with different timeZones", () => {
 			// Use timestamps for main functions
 			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023
 			const utcWeeks = weeksInMonth(timestamp, "UTC");
@@ -746,18 +746,18 @@ describe("Week functions", () => {
 			}
 		});
 
-		it("defaults to local timezone when timezone is undefined", () => {
+		it("defaults to local timeZone when timeZone is undefined", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 			const weeks = weeksInMonth(d.getTime(), null);
 
-			// Get the local timezone
+			// Get the local timeZone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 			const localWeeks = weeksInMonth(d.getTime(), localTz as TimeZone);
 
-			// Should match local timezone behavior
+			// Should match local timeZone behavior
 			expect(weeks).toBe(localWeeks);
 
-			// If local timezone is not UTC, results should be different
+			// If local timeZone is not UTC, results should be different
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 				const utcWeeks = weeksInMonth(d.getTime(), "UTC");
 				expect(weeks).not.toBe(utcWeeks);
@@ -786,7 +786,7 @@ describe("Week functions", () => {
 			expect(duration).toBeLessThan(1000);
 		});
 
-		it("should handle UTC timezone operations efficiently", () => {
+		it("should handle UTC timeZone operations efficiently", () => {
 			const timestamp = Date.UTC(2023, 5, 15);
 
 			// Test that UTC operations work correctly (functional test, not performance)
@@ -807,12 +807,12 @@ describe("Week functions", () => {
 		});
 	});
 
-	describe("Fixed offset timezones (non-DST)", () => {
-		// Test fixed offset timezones to cover the !isDST() fast path
-		it("should handle fixed offset timezones in startOfWeek", () => {
+	describe("Fixed offset timeZones (non-DST)", () => {
+		// Test fixed offset timeZones to cover the !isDST() fast path
+		it("should handle fixed offset timeZones in startOfWeek", () => {
 			const timestamp = Date.UTC(2023, 5, 15, 12, 0, 0); // June 15, 2023 12:00 UTC
 
-			// Test Asia/Karachi timezone (UTC+5, fixed offset, no DST)
+			// Test Asia/Karachi timeZone (UTC+5, fixed offset, no DST)
 			const result = startOfWeek(timestamp, "Asia/Karachi");
 			const parts = formatToParts(result, "Asia/Karachi", {
 				day: "2-digit",
@@ -825,10 +825,10 @@ describe("Week functions", () => {
 			expect(parts.hour).toBe(0); // Should be 00:00 in Asia/Karachi
 		});
 
-		it("should handle fixed offset timezones in endOfWeek", () => {
+		it("should handle fixed offset timeZones in endOfWeek", () => {
 			const timestamp = Date.UTC(2023, 5, 15, 12, 0, 0); // June 15, 2023 12:00 UTC
 
-			// Test Pacific/Pitcairn timezone (UTC-8, fixed offset, no DST)
+			// Test Pacific/Pitcairn timeZone (UTC-8, fixed offset, no DST)
 			const result = endOfWeek(timestamp, "Pacific/Pitcairn");
 			const parts = formatToParts(result, "Pacific/Pitcairn", {
 				day: "2-digit",
@@ -845,10 +845,10 @@ describe("Week functions", () => {
 			expect(parts.second).toBe(59);
 		});
 
-		it("should handle fixed offset timezones in addWeeks", () => {
+		it("should handle fixed offset timeZones in addWeeks", () => {
 			const timestamp = Date.UTC(2023, 5, 15, 12, 0, 0); // June 15, 2023 12:00 UTC
 
-			// Test Asia/Dhaka timezone (UTC+6, fixed offset, no DST)
+			// Test Asia/Dhaka timeZone (UTC+6, fixed offset, no DST)
 			const result = addWeeks(timestamp, 2, "Asia/Dhaka");
 			const expected = timestamp + 2 * 7 * 24 * 60 * 60 * 1000; // Should use fast path
 			expect(result).toBe(expected);
@@ -960,7 +960,7 @@ describe("Week functions", () => {
 			expect(weeksInMonthBase(2023, 1, WeekStartsOn.MONDAY, null)).toBe(6); // Requires 6 weeks
 			expect(weeksInMonthBase(2023, 1, WeekStartsOn.SATURDAY, null)).toBe(5); // Requires 5 weeks
 
-			// Test with timezone parameter
+			// Test with timeZone parameter
 			expect(weeksInMonthBase(2023, 2, WeekStartsOn.MONDAY, "UTC")).toBe(5);
 			expect(
 				weeksInMonthBase(2023, 2, WeekStartsOn.MONDAY, "America/New_York"),
@@ -1038,8 +1038,8 @@ describe("Week functions", () => {
 		});
 	});
 
-	describe("Special timezone scenarios", () => {
-		it("should handle Etc/UTC timezone", () => {
+	describe("Special timeZone scenarios", () => {
+		it("should handle Etc/UTC timeZone", () => {
 			const timestamp = Date.UTC(2023, 5, 15);
 
 			// Etc/UTC should use the same fast path as UTC
@@ -1052,8 +1052,8 @@ describe("Week functions", () => {
 			expect(start1).toBe(start2);
 		});
 
-		it("should handle timezone with daylight saving transitions", () => {
-			// Test Australia timezone that has DST
+		it("should handle timeZone with daylight saving transitions", () => {
+			// Test Australia timeZone that has DST
 			const timestamp = Date.UTC(2023, 9, 1); // October 1, 2023
 
 			expect(() => week(timestamp, "Australia/Sydney")).not.toThrow();

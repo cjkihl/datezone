@@ -1,56 +1,59 @@
 ---
-title: Offset Utilities
-description: Functions for working with timezone offsets
+title: Offset
 ---
 
+## `getUTCtoTimezoneOffsetMinutes`
 
+Returns the offset in minutes between UTC and the given time zone at the given date.
+Positive if the zone is ahead of UTC, negative if behind.
+Uses a per-hour cache for performance.
+If no timeZone is specified, defaults to local system timeZone.
 
-# Offset Utilities
+```ts
+import { getUTCtoTimezoneOffsetMinutes } from "@datezone/offset";
+```
 
-Offset utilities provide functions for working with timezone offsets, calculating time differences between timezones, and converting between UTC and local times.
+<CodeExample file="reference/offset/getUTCtoTimezoneOffsetMinutes.ts" title="getUTCtoTimezoneOffsetMinutes" />
 
-## getUTCtoTimezoneOffsetMinutes
+## `getLocalTimezoneOffsetMinutes`
 
-Get the offset in minutes from UTC to a specific timezone.
+Fast path for local timeZone offset calculation.
+Uses native Date.getTimezoneOffset() for better performance when working with the system timeZone.
 
-<CodeExample tabs={[
-  { name: "Function Signature", file: "reference/offset/utc-to-timezone-signatures.ts" },
-  { name: "Local Timezone Examples", file: "reference/offset/utc-to-timezone-local.ts" },
-  { name: "Timezone Examples", file: "reference/offset/utc-to-timezone-signatures.ts" }
-]} />
+```ts
+import { getLocalTimezoneOffsetMinutes } from "@datezone/offset";
+```
 
-## getLocalTimezoneOffsetMinutes
+<CodeExample file="reference/offset/getLocalTimezoneOffsetMinutes.ts" title="getLocalTimezoneOffsetMinutes" />
 
-Get the offset in minutes from UTC to the local system timezone.
+## `getTimezoneOffsetMinutes`
 
-<CodeExample tabs={[
-  { name: "Local Timezone Offset", file: "reference/offset/local-timezone-offset.ts" },
-  { name: "Local Examples", file: "reference/offset/local-timezone-offset.ts" },
-  { name: "Timezone Comparison", file: "reference/offset/local-timezone-offset.ts" }
-]} />
+Returns the offset in minutes from fromZone to toZone at the given date.
+Fast path for UTC zones to avoid extra formatToParts calls.
+If timeZone parameters are not specified, defaults to local system timeZone.
 
-## getTimezoneOffsetMinutes
+```ts
+import { getTimezoneOffsetMinutes } from "@datezone/offset";
+```
 
-Get the offset in minutes between two timezones.
+<CodeExample file="reference/offset/getTimezoneOffsetMinutes.ts" title="getTimezoneOffsetMinutes" />
 
-<CodeExample tabs={[
-  { name: "Timezone Offset Comparison", file: "reference/offset/timezone-offset-comparison.ts" },
-  { name: "Local to Timezone", file: "reference/offset/timezone-offset-comparison.ts" },
-  { name: "Between Timezones", file: "reference/offset/timezone-offset-comparison.ts" }
-]} />
+## `getFixedOffsetCacheInfo`
 
-## Usage Examples
+Returns information about the fixed offset cache for debugging purposes.
 
-Here are some practical examples of using offset utilities:
+```ts
+import { getFixedOffsetCacheInfo } from "@datezone/offset";
+```
 
-### Converting Times Between Timezones
+<CodeExample file="reference/offset/getFixedOffsetCacheInfo.ts" title="getFixedOffsetCacheInfo" />
 
-<CodeExample tabs={[{ name: "Timezone Conversion", file: "reference/offset/converting-between-timezones.ts" }]} />
+## `clearFixedOffsetCache`
 
-### Checking DST Transitions
+Clears the fixed offset cache. Useful for testing or memory management.
 
-<CodeExample tabs={[{ name: "DST Analysis", file: "reference/offset/dst-transitions.ts" }]} />
+```ts
+import { clearFixedOffsetCache } from "@datezone/offset";
+```
 
-### Time Zone Comparison Table
-
-<CodeExample tabs={[{ name: "Timezone Table", file: "reference/offset/timezone-comparison-table.ts" }]} /> 
+<CodeExample file="reference/offset/clearFixedOffsetCache.ts" title="clearFixedOffsetCache" />

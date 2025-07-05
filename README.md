@@ -1,6 +1,6 @@
 # DateZone Monorepo
 
-A lightweight and comprehensive date and timezone utility library for JavaScript and TypeScript.
+A lightweight and comprehensive date and timeZone utility library for JavaScript and TypeScript.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -84,7 +84,7 @@ datezone/
 │   ├── ordinal.ts       # Ordinal dates
 │   ├── compare.ts       # Date comparisons
 │   ├── offset.ts        # Timezone offsets
-│   └── iana.ts          # IANA timezone database
+│   └── iana.ts          # IANA timeZone database
 ├── tools/               # Development utilities
 │   ├── benchmark/       # Performance tools
 │   ├── coverage/        # Test coverage

@@ -9,6 +9,7 @@
 		"jsx": "preserve",
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"module": "esnext",
+		"moduleDetection": "force",
 		"moduleResolution": "bundler",
 		"noEmit": true,
 		"paths": {

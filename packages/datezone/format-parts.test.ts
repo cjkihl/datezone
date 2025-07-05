@@ -65,10 +65,10 @@ describe("formatToParts", () => {
 		expect(parts.millisecond).toBe(456);
 	});
 
-	it("milliseconds work correctly across timezones", () => {
+	it("milliseconds work correctly across timeZones", () => {
 		const d = new Date(Date.UTC(2023, 5, 1, 0, 0, 0, 789));
 
-		// Milliseconds should be the same regardless of timezone
+		// Milliseconds should be the same regardless of timeZone
 		const utcParts = formatToParts(d.getTime(), "Etc/UTC", {
 			millisecond: "3-digit",
 		});

@@ -1,97 +1,23 @@
 ---
-title: Format Utilities
-description: Date and time formatting functions with timezone support
+title: Format
 ---
 
+## `format`
 
+> TODO: Add description.
 
-# Format Utilities
+```ts
+import { format } from "@datezone/format";
+```
 
-Format utilities provide comprehensive date and time formatting functions with full timezone support, allowing you to create human-readable date strings in any timezone with customizable formatting options.
+<CodeExample file="reference/format/format.ts" title="format" />
 
-## format
+## `toISOString`
 
-Format a timestamp into a string using a format pattern.
+> TODO: Add description.
 
-<CodeExample tabs={[{ name: "Example 1", file: "reference/format/example-1.ts" }]} />
+```ts
+import { toISOString } from "@datezone/format";
+```
 
-<CodeExample tabs={[
-  { name: "Local Format Examples", file: "format/basic-local.ts" },
-  { name: "Timezone Format Examples", file: "format/basic-timezone.ts" }
-]} />
-
-## formatRelative
-
-Format a timestamp relative to another timestamp (e.g., "2 hours ago", "in 3 days").
-
-<CodeExample tabs={[{ name: "Example 2", file: "reference/format/example-2.ts" }]} />
-
-_Note: formatRelative function may not be implemented in the current version_
-
-## formatDistance
-
-Format the distance between two timestamps (e.g., "2 hours", "3 days").
-
-<CodeExample tabs={[{ name: "Example 3", file: "reference/format/example-3.ts" }]} />
-
-_Note: formatDistance function may not be implemented in the current version_
-
-## Format Patterns
-
-The format function supports various pattern tokens:
-
-### Year Patterns
-- `YYYY` - 4-digit year (2024)
-- `YY` - 2-digit year (24)
-
-### Month Patterns
-- `MM` - 2-digit month (01-12)
-- `M` - 1-digit month (1-12)
-- `MMM` - Short month name (Jan, Feb, Mar)
-- `MMMM` - Full month name (January, February, March)
-
-### Day Patterns
-- `DD` - 2-digit day (01-31)
-- `D` - 1-digit day (1-31)
-- `DDD` - Day of year (001-366)
-
-### Hour Patterns
-- `HH` - 24-hour format, 2-digit (00-23)
-- `H` - 24-hour format, 1-digit (0-23)
-- `hh` - 12-hour format, 2-digit (01-12)
-- `h` - 12-hour format, 1-digit (1-12)
-
-### Minute and Second Patterns
-- `mm` - 2-digit minutes (00-59)
-- `m` - 1-digit minutes (0-59)
-- `ss` - 2-digit seconds (00-59)
-- `s` - 1-digit seconds (0-59)
-
-### Period Patterns
-- `A` - Uppercase AM/PM
-- `a` - Lowercase am/pm
-
-### Timezone Patterns
-- `z` - Timezone abbreviation (EST, PST, JST)
-- `Z` - Timezone offset (+0500, -0800)
-
-### Escape Sequences
-- `[text]` - Literal text that won't be formatted
-
-## Usage Examples
-
-### Event Scheduling
-
-<CodeExample tabs={[{ name: "Event Scheduling", file: "format/event-scheduling.ts" }]} />
-
-### Multi-timezone Dashboard
-
-<CodeExample tabs={[{ name: "World Clock", file: "format/world-clock.ts" }]} />
-
-### Log Formatting
-
-<CodeExample tabs={[{ name: "Logger with Timestamps", file: "format/logger.ts" }]} />
-
-### Date Range Formatting
-
-<CodeExample tabs={[{ name: "Date Range Formatting", file: "format/date-range.ts" }]} /> 
+<CodeExample file="reference/format/toISOString.ts" title="toISOString" />

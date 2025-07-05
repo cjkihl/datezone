@@ -68,10 +68,12 @@ function getOrdinalSuffix(locale: string, rule: string): string {
 }
 
 /**
- * Returns the ordinal suffix for the given number in the given locale. (e.g. 1st, 2nd, 3rd, 4th)
+ * Format ordinal.
+ *
  * @param number - The number to format.
  * @param locale - The locale to use.
  * @returns The ordinal suffix.
+ * @see https://datezone.dev/docs/reference/ordinal#formatOrdinal
  */
 export function formatOrdinal(number: number, locale = "en"): string {
 	const pr = getPluralRules(locale);

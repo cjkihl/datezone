@@ -1,160 +1,193 @@
 ---
-title: Day Utilities
+title: Day
 ---
 
+## `addDays`
 
+Adds a number of days to a timestamp.
 
-## addDays
+```ts
+import { addDays } from "@datezone/day";
+```
 
-Adds a number of days to a timestamp or options object.
+<CodeExample file="reference/day/addDays.ts" title="addDays" />
 
-<CodeExample tabs={[{ name: "Example 1", file: "reference/day/example-1.ts" }]} />
+## `addDaysBase`
 
-<CodeExample tabs={[
-  { name: "With timezone", file: "reference/day/add-days-timezone.ts" },
-  { name: "Local time", file: "reference/day/add-days-local.ts" }
-]} />
+Adds a number of days to a specific date in calendar.
 
-<Callout type="info">
-**Why do we need to specify a timezone when adding days?**
+```ts
+import { addDaysBase } from "@datezone/day";
+```
 
-Isn't 1 day always 24 hours (86,400 seconds)?
+<CodeExample file="reference/day/addDaysBase.ts" title="addDaysBase" />
 
-**Not always!** Due to Daylight Saving Time (DST) transitions, some days are 23 or 25 hours long.
+## `subDays`
 
-**Example:** In the `America/New_York` timezone on March 11, 2023 at 1:00 PM EST:
-- Simply adding 24 hours would result in March 12, 2023 at 2:00 PM EDT
-- But the correct "1 day later" should be March 12, 2023 at 1:00 PM EDT
-- This is because March 12, 2023 was only 23 hours long due to the spring DST transition
+Subtracts a number of days from a timestamp.
 
-**Summary:** The length of a day varies depending on the timezone and DST transitions, which is why timezone-aware day arithmetic is essential for accurate date calculations.
-</Callout>
+```ts
+import { subDays } from "@datezone/day";
+```
 
----
+<CodeExample file="reference/day/subDays.ts" title="subDays" />
 
-## subDays
+## `subDaysBase`
 
-Subtracts a number of days from a timestamp or options object.
+Subtracts a number of days from a specific date in calendar.
 
-<CodeExample tabs={[{ name: "Example 2", file: "reference/day/example-2.ts" }]} />
+```ts
+import { subDaysBase } from "@datezone/day";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/day/sub-days-local.ts" },
-  { name: "With timezone", file: "reference/day/sub-days-timezone.ts" }
-]} />
+<CodeExample file="reference/day/subDaysBase.ts" title="subDaysBase" />
 
----
+## `startOfDay`
 
-## startOfDay
+Returns the start of the day (00:00:00.000) in the given timeZone.
 
-Returns the start of the day (00:00:00.000) in the given timezone.
+```ts
+import { startOfDay } from "@datezone/day";
+```
 
-<CodeExample tabs={[{ name: "Example 3", file: "reference/day/example-3.ts" }]} />
+<CodeExample file="reference/day/startOfDay.ts" title="startOfDay" />
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/day/start-of-day-local.ts" },
-  { name: "With timezone", file: "reference/day/start-of-day-timezone.ts" }
-]} />
+## `startOfDayBase`
 
----
+Returns the start of the day (00:00:00.000) in the given timeZone.
 
-## endOfDay
+```ts
+import { startOfDayBase } from "@datezone/day";
+```
 
-Returns the end of the day (23:59:59.999) in the given timezone.
+<CodeExample file="reference/day/startOfDayBase.ts" title="startOfDayBase" />
 
-<CodeExample tabs={[{ name: "Example 4", file: "reference/day/example-4.ts" }]} />
+## `endOfDay`
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/day/end-of-day-local.ts" },
-  { name: "With timezone", file: "reference/day/end-of-day-timezone.ts" }
-]} />
+Returns the end of the day (23:59:59.999) in the given timeZone.
 
----
+```ts
+import { endOfDay } from "@datezone/day";
+```
 
-## nextDay
+<CodeExample file="reference/day/endOfDay.ts" title="endOfDay" />
 
-Returns the start of the next day (00:00:00.000) in the given timezone.
+## `endOfDayBase`
 
-<CodeExample tabs={[{ name: "Example 5", file: "reference/day/example-5.ts" }]} />
+Returns the end of the day (23:59:59.999) in the given timeZone.
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/day/next-day-local.ts" },
-  { name: "With timezone", file: "reference/day/next-day-timezone.ts" }
-]} />
+```ts
+import { endOfDayBase } from "@datezone/day";
+```
 
----
+<CodeExample file="reference/day/endOfDayBase.ts" title="endOfDayBase" />
 
-## previousDay
+## `nextDay`
 
-Returns the start of the previous day (00:00:00.000) in the given timezone.
+Returns the start of the next day (00:00:00.000) in the given timeZone.
 
-<CodeExample tabs={[{ name: "Example 6", file: "reference/day/example-6.ts" }]} />
+```ts
+import { nextDay } from "@datezone/day";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/day/previous-day-local.ts" },
-  { name: "With timezone", file: "reference/day/previous-day-timezone.ts" }
-]} />
+<CodeExample file="reference/day/nextDay.ts" title="nextDay" />
 
----
+## `nextDayBase`
 
-## dayOfWeek
+Returns the start of the next day (00:00:00.000) in the given timeZone.
 
-Returns the ISO day of week (1=Monday, 7=Sunday) in the given timezone.
+```ts
+import { nextDayBase } from "@datezone/day";
+```
 
-<CodeExample tabs={[{ name: "Example 7", file: "reference/day/example-7.ts" }]} />
+<CodeExample file="reference/day/nextDayBase.ts" title="nextDayBase" />
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/day/day-of-week-local.ts" },
-  { name: "With timezone", file: "reference/day/day-of-week-timezone.ts" }
-]} />
+## `previousDay`
 
----
+Returns the start of the previous day (00:00:00.000) in the given timeZone.
 
-## dayOfYear
+```ts
+import { previousDay } from "@datezone/day";
+```
 
-Returns the day of year (1-366) in the given timezone.
+<CodeExample file="reference/day/previousDay.ts" title="previousDay" />
 
-<CodeExample tabs={[{ name: "Example 8", file: "reference/day/example-8.ts" }]} />
+## `previousDayBase`
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/day/day-of-year-local.ts" },
-  { name: "With timezone", file: "reference/day/day-of-year-timezone.ts" }
-]} />
+Returns the start of the previous day (00:00:00.000) in the given timeZone.
 
----
+```ts
+import { previousDayBase } from "@datezone/day";
+```
 
-## weekDayName
+<CodeExample file="reference/day/previousDayBase.ts" title="previousDayBase" />
+
+## `dayOfMonth`
+
+Returns the day of the month (1-31) in the given timeZone.
+
+```ts
+import { dayOfMonth } from "@datezone/day";
+```
+
+<CodeExample file="reference/day/dayOfMonth.ts" title="dayOfMonth" />
+
+## `dayOfWeek`
+
+Returns the ISO day of week (1=Monday, 7=Sunday) in the given timeZone.
+
+```ts
+import { dayOfWeek } from "@datezone/day";
+```
+
+<CodeExample file="reference/day/dayOfWeek.ts" title="dayOfWeek" />
+
+## `dayOfWeekBase`
+
+Returns the ISO day of week (1=Monday, 7=Sunday) in the given timeZone.
+
+```ts
+import { dayOfWeekBase } from "@datezone/day";
+```
+
+<CodeExample file="reference/day/dayOfWeekBase.ts" title="dayOfWeekBase" />
+
+## `dayOfYear`
+
+Returns the day of year (1-366) in the given timeZone.
+
+```ts
+import { dayOfYear } from "@datezone/day";
+```
+
+<CodeExample file="reference/day/dayOfYear.ts" title="dayOfYear" />
+
+## `dayOfYearBase`
+
+> TODO: Add description.
+
+```ts
+import { dayOfYearBase } from "@datezone/day";
+```
+
+<CodeExample file="reference/day/dayOfYearBase.ts" title="dayOfYearBase" />
+
+## `weekDayName`
 
 Returns the localized weekday name.
 
-<CodeExample tabs={[{ name: "Example 9", file: "reference/day/example-9.ts" }]} />
+```ts
+import { weekDayName } from "@datezone/day";
+```
 
-<Tabs items={["en-US", "fr-FR"]}>
-  <Tab value="en-US">
+<CodeExample file="reference/day/weekDayName.ts" title="weekDayName" />
 
-<CodeExample tabs={[{ name: "en-US", file: "reference/day/en-us.ts" }]} />
-  </Tab>
-  <Tab value="fr-FR">
-
-<CodeExample tabs={[{ name: "fr-FR", file: "reference/day/fr-fr.ts" }]} />
-  </Tab>
-</Tabs>
-
----
-
-## getDayPeriod
+## `getDayPeriod`
 
 Returns the localized day period (AM/PM) string for the given hour.
 
-<CodeExample tabs={[{ name: "Example 12", file: "reference/day/example-12.ts" }]} />
+```ts
+import { getDayPeriod } from "@datezone/day";
+```
 
-<Tabs items={["AM", "PM"]}>
-  <Tab value="AM">
-
-<CodeExample tabs={[{ name: "AM", file: "reference/day/am.ts" }]} />
-  </Tab>
-  <Tab value="PM">
-
-<CodeExample tabs={[{ name: "PM", file: "reference/day/pm.ts" }]} />
-  </Tab>
-</Tabs> 
+<CodeExample file="reference/day/getDayPeriod.ts" title="getDayPeriod" />

@@ -2,10 +2,10 @@ import { hour, startOfDay, type TimeZone } from "datezone";
 
 const testTimestamp = new Date("2024-06-15T15:45:30.123Z").getTime();
 
-// Test different timezone categories to show fast path improvements
+// Test different timeZone categories to show fast path improvements
 const _utcTimezone: TimeZone = "UTC";
-const nonDstTimezone: TimeZone = "Asia/Tokyo"; // Non-DST timezone (fixed offset)
-const dstTimezone: TimeZone = "America/New_York"; // DST timezone
+const nonDstTimezone: TimeZone = "Asia/Tokyo"; // Non-DST timeZone (fixed offset)
+const dstTimezone: TimeZone = "America/New_York"; // DST timeZone
 
 const iterations = 50000;
 
@@ -75,7 +75,7 @@ showSpeedup(
 console.log();
 console.log("💡 OPTIMIZATION SUCCESS:");
 console.log(
-	"• Non-DST timezones now use fast paths with direct offset calculations",
+	"• Non-DST timeZones now use fast paths with direct offset calculations",
 );
 console.log("• isDST() enables automatic selection of optimal code paths");
 console.log(

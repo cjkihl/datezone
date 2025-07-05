@@ -20,7 +20,7 @@ describe("Minute Functions", () => {
 			expect(resultDate.getUTCMilliseconds()).toBe(0);
 		});
 
-		it("should handle different timezones", () => {
+		it("should handle different timeZones", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42)).getTime();
 			const result = startOfMinute(timestamp);
 			const resultDate = new Date(result);
@@ -42,7 +42,7 @@ describe("Minute Functions", () => {
 			expect(resultDate.getUTCMilliseconds()).toBe(999);
 		});
 
-		it("should handle different timezones", () => {
+		it("should handle different timeZones", () => {
 			const timestamp = new Date(Date.UTC(2024, 0, 1, 14, 35, 42)).getTime();
 			const result = endOfMinute(timestamp);
 			const resultDate = new Date(result);
@@ -104,7 +104,7 @@ describe("Minute Functions", () => {
 			const expectedUTC = beforeDST + 90 * 60 * 1000;
 			expect(result).toBe(expectedUTC);
 
-			// Verify the result in America/New_York timezone
+			// Verify the result in America/New_York timeZone
 			const parts = new Intl.DateTimeFormat("en-US", {
 				hour: "2-digit",
 				hour12: false,
@@ -175,7 +175,7 @@ describe("Minute Functions", () => {
 	});
 
 	describe("DST Edge Cases with Unusual Timezones", () => {
-		// Test arithmetic consistency across unusual timezone offsets and DST rules
+		// Test arithmetic consistency across unusual timeZone offsets and DST rules
 		const testTimestamp = new Date(
 			Date.UTC(2024, 2, 10, 12, 30, 45, 123),
 		).getTime();
@@ -220,7 +220,7 @@ describe("Minute Functions", () => {
 			expect(boundaryResult).toBe(boundaryExpected);
 		});
 
-		it("should maintain precision across unusual timezone DST transitions", () => {
+		it("should maintain precision across unusual timeZone DST transitions", () => {
 			// Test that arithmetic maintains precision during complex DST scenarios
 			const iranDstStart = new Date(Date.UTC(2024, 2, 20, 23, 30, 0)).getTime(); // Iran DST transition time
 			const chathamDstEnd = new Date(Date.UTC(2024, 3, 7, 14, 45, 0)).getTime(); // Chatham DST transition time
@@ -237,8 +237,8 @@ describe("Minute Functions", () => {
 			expect(nfldTest).toBe(nfldDstStart + 150 * 60 * 1000);
 		});
 
-		it("should handle fractional timezone offsets consistently", () => {
-			// Test that minute arithmetic works with any timestamp, regardless of destination timezone complexity
+		it("should handle fractional timeZone offsets consistently", () => {
+			// Test that minute arithmetic works with any timestamp, regardless of destination timeZone complexity
 			const baseTests = [
 				{ minutes: 30, name: "Iran-style (+3:30)" },
 				{ minutes: 45, name: "Chatham-style (+12:45)" },
@@ -257,7 +257,7 @@ describe("Minute Functions", () => {
 		});
 
 		it("should handle hour boundary crossings with unusual offsets", () => {
-			// Test minute operations that cross hour boundaries in timezones with fractional offsets
+			// Test minute operations that cross hour boundaries in timeZones with fractional offsets
 			const nearHourBoundary = new Date(
 				Date.UTC(2024, 2, 15, 14, 58, 30),
 			).getTime();
@@ -279,12 +279,12 @@ describe("Minute Functions", () => {
 			expect(crossDay).toBe(expectedDay);
 		});
 
-		it("should maintain performance with complex timezone scenarios", () => {
-			// Verify arithmetic approach is fast regardless of timezone complexity
+		it("should maintain performance with complex timeZone scenarios", () => {
+			// Verify arithmetic approach is fast regardless of timeZone complexity
 			const start = performance.now();
 
 			for (let i = 0; i < 500; i++) {
-				// Simulate operations across various unusual timezones
+				// Simulate operations across various unusual timeZones
 				let current = testTimestamp;
 				current = addMinutes(current, i % 60);
 				current = subMinutes(current, i % 30);

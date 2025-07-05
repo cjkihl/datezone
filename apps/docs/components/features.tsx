@@ -16,7 +16,7 @@ import { GithubStat } from "./github-stat";
 
 const features = [
 	{
-		description: "Up to 1,000x faster than date-fns for timezone operations.",
+		description: "Up to 1,000x faster than date-fns for timeZone operations.",
 		icon: ZapIcon,
 		id: 1,
 		label: "Extreme Performance",
@@ -33,7 +33,7 @@ const features = [
 	},
 	{
 		description:
-			"All functions accept an optional timeZone parameter for explicit timezone handling.",
+			"All functions accept an optional timeZone parameter for explicit timeZone handling.",
 		icon: GlobeIcon,
 		id: 3,
 		label: "Timezone-First",
@@ -121,7 +121,7 @@ export default function Features({ stars }: { stars: string | null }) {
 							<div className="flex items-center gap-2">
 								<Globe2Icon className="w-4 h-4" />
 								<p className="text-gray-600 dark:text-gray-400">
-									Control your timezones
+									Control your timeZones
 								</p>
 							</div>
 							<p className="max-w-md mx-auto mt-4 text-4xl font-normal tracking-tighter text-center md:text-4xl">

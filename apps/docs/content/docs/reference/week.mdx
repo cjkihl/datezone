@@ -1,113 +1,153 @@
 ---
-title: Week Utilities
-description: Functions for working with weeks in dates and timestamps
+title: Week
 ---
 
+## `week`
 
+> TODO: Add description.
 
-# Week Utilities
+```ts
+import { week } from "@datezone/week";
+```
 
-Week utilities provide functions for working with weeks in dates and timestamps, including week calculations, ISO week handling, and week boundaries.
+<CodeExample file="reference/week/week.ts" title="week" />
 
-## getWeek
+## `weekBase`
 
-Get the ISO week number of the year (1-53).
+> TODO: Add description.
 
-<CodeExample tabs={[{ name: "Example 1", file: "reference/week/example-1.ts" }]} />
+```ts
+import { weekBase } from "@datezone/week";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/week/get-week-local.ts" },
-  { name: "With timezone", file: "reference/week/get-week-timezone.ts" }
-]} />
+<CodeExample file="reference/week/weekBase.ts" title="weekBase" />
 
-## getISOWeekYear
+## `getISOWeekYear`
 
-Get the ISO week-numbering year.
+> TODO: Add description.
 
-<CodeExample tabs={[{ name: "Example 2", file: "reference/week/example-2.ts" }]} />
+```ts
+import { getISOWeekYear } from "@datezone/week";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/week/get-iso-week-year-local.ts" },
-  { name: "With timezone", file: "reference/week/get-iso-week-year-timezone.ts" }
-]} />
+<CodeExample file="reference/week/getISOWeekYear.ts" title="getISOWeekYear" />
 
-## startOfWeek
+## `getISOWeekYearBase`
 
-Get the timestamp for the start of the week.
+> TODO: Add description.
 
-<CodeExample tabs={[{ name: "Example 3", file: "reference/week/example-3.ts" }]} />
+```ts
+import { getISOWeekYearBase } from "@datezone/week";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/week/start-of-week-local.ts" },
-  { name: "With timezone", file: "reference/week/start-of-week-timezone.ts" }
-]} />
+<CodeExample file="reference/week/getISOWeekYearBase.ts" title="getISOWeekYearBase" />
 
-## endOfWeek
+## `startOfWeek`
 
-Get the timestamp for the end of the week.
+> TODO: Add description.
 
-<CodeExample tabs={[{ name: "Example 4", file: "reference/week/example-4.ts" }]} />
+```ts
+import { startOfWeek } from "@datezone/week";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/week/end-of-week-local.ts" },
-  { name: "With timezone", file: "reference/week/end-of-week-timezone.ts" }
-]} />
+<CodeExample file="reference/week/startOfWeek.ts" title="startOfWeek" />
 
-## addWeeks
+## `startOfWeekBase`
 
-Add weeks to a date.
+Returns the start of the week (00:00:00.000) in the given timeZone.
 
-<CodeExample tabs={[{ name: "Example 5", file: "reference/week/example-5.ts" }]} />
+```ts
+import { startOfWeekBase } from "@datezone/week";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/week/add-weeks-local.ts" },
-  { name: "With timezone", file: "reference/week/add-weeks-timezone.ts" }
-]} />
+<CodeExample file="reference/week/startOfWeekBase.ts" title="startOfWeekBase" />
 
-## subWeeks
+## `endOfWeek`
 
-Subtract weeks from a date.
+> TODO: Add description.
 
-<CodeExample tabs={[{ name: "Example 6", file: "reference/week/example-6.ts" }]} />
+```ts
+import { endOfWeek } from "@datezone/week";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/week/sub-weeks-local.ts" },
-  { name: "With timezone", file: "reference/week/sub-weeks-timezone.ts" }
-]} />
+<CodeExample file="reference/week/endOfWeek.ts" title="endOfWeek" />
 
-## startOfISOWeek
+## `endOfWeekBase`
 
-Get the timestamp for the start of the ISO week.
+Returns the end of the week (23:59:59.999) in the given timeZone.
 
-<CodeExample tabs={[{ name: "Example 7", file: "reference/week/example-7.ts" }]} />
+```ts
+import { endOfWeekBase } from "@datezone/week";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/week/start-of-iso-week-local.ts" },
-  { name: "With timezone", file: "reference/week/start-of-iso-week-timezone.ts" }
-]} />
+<CodeExample file="reference/week/endOfWeekBase.ts" title="endOfWeekBase" />
 
-## endOfISOWeek
+## `addWeeks`
 
-Get the timestamp for the end of the ISO week.
+> TODO: Add description.
 
-<CodeExample tabs={[{ name: "Example 8", file: "reference/week/example-8.ts" }]} />
+```ts
+import { addWeeks } from "@datezone/week";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/week/end-of-iso-week-local.ts" },
-  { name: "With timezone", file: "reference/week/end-of-iso-week-timezone.ts" }
-]} />
+<CodeExample file="reference/week/addWeeks.ts" title="addWeeks" />
 
-## getWeeksInMonth
+## `addWeeksBase`
 
-Get the number of weeks in a month.
+Returns the timestamp for the given date plus the given number of weeks.
 
-<CodeExample tabs={[{ name: "Example 9", file: "reference/week/example-9.ts" }]} />
+```ts
+import { addWeeksBase } from "@datezone/week";
+```
 
-<CodeExample tabs={[
-  { name: "Local time", file: "reference/week/get-weeks-in-month-local.ts" },
-  { name: "With timezone", file: "reference/week/get-weeks-in-month-timezone.ts" }
-]} />
+<CodeExample file="reference/week/addWeeksBase.ts" title="addWeeksBase" />
 
-## WeekStartsOn Enum
+## `subWeeks`
 
-<CodeExample tabs={[{ name: "Example 10", file: "reference/week/example-10.ts" }]} /> 
+> TODO: Add description.
+
+```ts
+import { subWeeks } from "@datezone/week";
+```
+
+<CodeExample file="reference/week/subWeeks.ts" title="subWeeks" />
+
+## `startOfISOWeek`
+
+> TODO: Add description.
+
+```ts
+import { startOfISOWeek } from "@datezone/week";
+```
+
+<CodeExample file="reference/week/startOfISOWeek.ts" title="startOfISOWeek" />
+
+## `endOfISOWeek`
+
+> TODO: Add description.
+
+```ts
+import { endOfISOWeek } from "@datezone/week";
+```
+
+<CodeExample file="reference/week/endOfISOWeek.ts" title="endOfISOWeek" />
+
+## `weeksInMonth`
+
+> TODO: Add description.
+
+```ts
+import { weeksInMonth } from "@datezone/week";
+```
+
+<CodeExample file="reference/week/weeksInMonth.ts" title="weeksInMonth" />
+
+## `weeksInMonthBase`
+
+Returns the number of weeks in the given month.
+
+```ts
+import { weeksInMonthBase } from "@datezone/week";
+```
+
+<CodeExample file="reference/week/weeksInMonthBase.ts" title="weeksInMonthBase" />

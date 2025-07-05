@@ -11,11 +11,11 @@
 [![Star on GitHub](https://img.shields.io/github/stars/cjkihl/datezone?style=flat-square&logo=github)](https://github.com/cjkihl/datezone/stargazers)
 [![Sponsor](https://img.shields.io/badge/Sponsor-❤-ff69b4?style=flat-square&logo=github-sponsors)](https://github.com/sponsors/cjkihl)
 
-A **blazingly fast**, fully-typed TypeScript library for working with dates and times, with explicit timezone support and no unnecessary `Date` object creation. Designed for high-frequency usage, tree-shakeable builds, and maximum performance.
+A **blazingly fast**, fully-typed TypeScript library for working with dates and times, with explicit timeZone support and no unnecessary `Date` object creation. Designed for high-frequency usage, tree-shakeable builds, and maximum performance.
 
 ## 🚀 Why Datezone?
 
-- **Extreme Performance**: Up to **1,000x faster** than date-fns for timezone operations ([see benchmarks](https://github.com/cjkihl/datezone/blob/main/tools/benchmark/reports/comparison-report.md))
+- **Extreme Performance**: Up to **1,000x faster** than date-fns for timeZone operations ([see benchmarks](https://github.com/cjkihl/datezone/blob/main/tools/benchmark/reports/comparison-report.md))
 - **Faster by Design**: Uses timestamp math instead of creating `Date` objects, minimizing allocations and saving work for the garbage collector
 - **Timezone-First**: All functions accept an optional `timeZone` parameter
 - **Zero Unnecessary Objects**: Avoids creating `Date` objects unless needed
@@ -69,8 +69,8 @@ Latest benchmarks vs. date-fns:
 
 | vs. date-fns | vs. Luxon/Day.js | vs. Temporal |
 |--------------|------------------|-------------|
-| ✅ Much faster timezone ops | ✅ No object wrappers | ✅ Available today |
-| ✅ Explicit timezone handling | ✅ Tree-shakeable | ✅ Proven performance |
+| ✅ Much faster timeZone ops | ✅ No object wrappers | ✅ Available today |
+| ✅ Explicit timeZone handling | ✅ Tree-shakeable | ✅ Proven performance |
 | ✅ Modern Intl API | ✅ Smaller bundle size | |
 
 ## Contributing

@@ -1,35 +1,153 @@
 ---
-title: Compare Utilities
-description: Functions for comparing dates and timestamps
+title: Compare
 ---
 
-import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+## `OptionsOrTimestamp`
 
+> TODO: Add description.
 
-# Compare Utilities
+```ts
+import { OptionsOrTimestamp } from "@datezone/compare";
+```
 
-Compare utilities provide functions for comparing dates and timestamps, including relative time comparisons and date equality checks.
+<CodeExample file="reference/compare/OptionsOrTimestamp.ts" title="OptionsOrTimestamp" />
 
-## Daily Comparisons
+## `isToday`
 
-Check if dates are today, tomorrow, or yesterday.
+Performance: Timezone required for converting timestamp to current day
 
-<CodeExample tabs={[{ name: "Function Signatures", file: "reference/compare/function-signatures.ts" }]} />
+```ts
+import { isToday } from "@datezone/compare";
+```
 
-<CodeExample tabs={[{ name: "Daily Comparisons", file: "reference/compare/basic-comparisons.ts" }]} />
+<CodeExample file="reference/compare/isToday.ts" title="isToday" />
 
-## Time-based Comparisons
+## `isTodayBase`
 
-Check if dates are in the past or future.
+> TODO: Add description.
 
-<CodeExample tabs={[{ name: "Time-based Signatures", file: "reference/compare/time-based-signatures.ts" }]} />
+```ts
+import { isTodayBase } from "@datezone/compare";
+```
 
-<CodeExample tabs={[{ name: "Past/Future Comparisons", file: "reference/compare/time-comparisons.ts" }]} />
+<CodeExample file="reference/compare/isTodayBase.ts" title="isTodayBase" />
 
-## isWeekend
+## `isTomorrow`
 
-Check if a date is a weekend.
+Performance: Timezone required for converting timestamp to current day
 
-<CodeExample tabs={[{ name: "Weekend Examples", file: "reference/compare/weekend-examples.ts" }]} />
+```ts
+import { isTomorrow } from "@datezone/compare";
+```
 
-_Note: The remaining comparison functions (isBefore, isAfter, isEqual, isSameDay, isSameWeek, isSameMonth, isSameYear) would follow the same pattern with their own CodeExample components._ 
+<CodeExample file="reference/compare/isTomorrow.ts" title="isTomorrow" />
+
+## `isYesterday`
+
+Performance: Timezone required for converting timestamp to current day
+
+```ts
+import { isYesterday } from "@datezone/compare";
+```
+
+<CodeExample file="reference/compare/isYesterday.ts" title="isYesterday" />
+
+## `isPast`
+
+Performance: Timezone required for DST-aware comparison with current time
+
+```ts
+import { isPast } from "@datezone/compare";
+```
+
+<CodeExample file="reference/compare/isPast.ts" title="isPast" />
+
+## `isFuture`
+
+Performance: Timezone required for DST-aware comparison with current time
+
+```ts
+import { isFuture } from "@datezone/compare";
+```
+
+<CodeExample file="reference/compare/isFuture.ts" title="isFuture" />
+
+## `isWeekend`
+
+Performance: Timezone only needed for timestamp-to-date conversion, not DST
+
+```ts
+import { isWeekend } from "@datezone/compare";
+```
+
+<CodeExample file="reference/compare/isWeekend.ts" title="isWeekend" />
+
+## `isBefore`
+
+Performance: Simple timestamp comparison, no timeZone conversion needed
+
+```ts
+import { isBefore } from "@datezone/compare";
+```
+
+<CodeExample file="reference/compare/isBefore.ts" title="isBefore" />
+
+## `isAfter`
+
+Performance: Simple timestamp comparison, no timeZone conversion needed
+
+```ts
+import { isAfter } from "@datezone/compare";
+```
+
+<CodeExample file="reference/compare/isAfter.ts" title="isAfter" />
+
+## `isEqual`
+
+Performance: Simple timestamp comparison, no timeZone conversion needed
+
+```ts
+import { isEqual } from "@datezone/compare";
+```
+
+<CodeExample file="reference/compare/isEqual.ts" title="isEqual" />
+
+## `isSameDay`
+
+Performance: Timezone only needed for timestamp-to-date conversion, not DST
+
+```ts
+import { isSameDay } from "@datezone/compare";
+```
+
+<CodeExample file="reference/compare/isSameDay.ts" title="isSameDay" />
+
+## `isSameWeek`
+
+Performance: Timezone only needed for timestamp-to-date conversion, not DST
+
+```ts
+import { isSameWeek } from "@datezone/compare";
+```
+
+<CodeExample file="reference/compare/isSameWeek.ts" title="isSameWeek" />
+
+## `isSameMonth`
+
+Performance: Timezone only needed for timestamp-to-date conversion
+
+```ts
+import { isSameMonth } from "@datezone/compare";
+```
+
+<CodeExample file="reference/compare/isSameMonth.ts" title="isSameMonth" />
+
+## `isSameYear`
+
+Performance: Timezone only needed for timestamp-to-date conversion
+
+```ts
+import { isSameYear } from "@datezone/compare";
+```
+
+<CodeExample file="reference/compare/isSameYear.ts" title="isSameYear" />

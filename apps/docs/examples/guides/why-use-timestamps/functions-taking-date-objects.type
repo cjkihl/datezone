@@ -1,0 +1,9 @@
+// ❌ Functions taking Date objects
+function scheduleEvent(_date: Date) {
+	// ...
+}
+
+// ✅ Functions taking timestamps
+function scheduleEvent(_timestamp: number) {
+	// ...
+}

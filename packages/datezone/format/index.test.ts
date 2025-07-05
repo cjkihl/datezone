@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
-import type { TimeZone } from "../timezone";
-import { format, toISOString } from "./index";
+import type { TimeZone } from "../timezone.pub.js";
+import { format, toISOString } from "./index.pub.js";
 
 describe("format", () => {
 	const UTC: TimeZone = "UTC" as TimeZone;
@@ -20,13 +20,13 @@ describe("format", () => {
 		expect(format(ts, "h 'o''clock'", optionsUTC)).toBe("3 o'clock");
 	});
 
-	it("formats with timezone (PST)", () => {
+	it("formats with timeZone (PST)", () => {
 		const ts = Date.UTC(2020, 0, 1, 8, 0, 0); // 1 Jan 2020, 08:00 UTC
 		// 08:00 UTC = 00:00 PST
 		expect(format(ts, "yyyy-MM-dd HH:mm", optionsPST)).toBe("2020-01-01 00:00");
 	});
 
-	it("formats with timezone (JST)", () => {
+	it("formats with timeZone (JST)", () => {
 		const ts = Date.UTC(2020, 0, 1, 0, 0, 0); // 1 Jan 2020, 00:00 UTC
 		// 00:00 UTC = 09:00 JST
 		expect(format(ts, "yyyy-MM-dd HH:mm", optionsJST)).toBe("2020-01-01 09:00");
@@ -80,7 +80,7 @@ describe("format", () => {
 		expect(format(ts, "ss.SSS", optionsUTC)).toMatch(/00\.000|00\.123/);
 	});
 
-	it("formats with timezone offset (XXX)", () => {
+	it("formats with timeZone offset (XXX)", () => {
 		const ts = Date.UTC(2020, 3, 1, 0, 0, 0);
 		const result = format(ts, "XXX", optionsPST);
 		expect(result).toMatch(/-07:00|-08:00/);
@@ -135,6 +135,29 @@ describe("format", () => {
 		const result = format(ts, "DDD", optionsUTC);
 		expect(Number(result)).toBe(365);
 	});
+
+	it("formats with local timeZone (null timeZone)", () => {
+		const ts = Date.UTC(2020, 0, 1, 12, 34, 56, 789);
+		// Build expected string using the host environment's local timeZone so the test is timeZone-agnostic
+		const local = new Date(ts);
+		const expected = `${local.getFullYear().toString().padStart(4, "0")}-${String(local.getMonth() + 1).padStart(2, "0")}-${String(local.getDate()).padStart(2, "0")} ${String(local.getHours()).padStart(2, "0")}:${String(local.getMinutes()).padStart(2, "0")}`;
+		const result = format(ts, "yyyy-MM-dd HH:mm", {
+			locale: "en-US",
+			timeZone: null,
+		});
+		expect(result).toBe(expected);
+	});
+
+	it("formats BC years correctly in DST timeZone path (America/New_York)", () => {
+		// 44 BC → year -43 in JavaScript Date constructor context
+		const tsBC = Date.UTC(-43, 0, 1, 0, 0, 0, 0);
+		const result = format(tsBC, "y", {
+			locale: "en-US",
+			timeZone: "America/New_York" as TimeZone,
+		});
+		// Accept 44 or 43 depending on how the underlying calendar math resolves negative years
+		expect(result).toMatch(/44|43/);
+	});
 });
 
 describe("toISOString", () => {
@@ -166,9 +189,9 @@ describe("toISOString", () => {
 		expect(result).toBe("2022-01-01T11:00:00.000+11:00");
 	});
 
-	it("should format timestamp as ISO string with local timezone when no timezone provided", () => {
-		// This test will depend on the local timezone of the test runner
-		const result = toISOString(timestamp);
+	it("should format timestamp as ISO string with local timeZone when no timeZone provided", () => {
+		// This test will depend on the local timeZone of the test runner
+		const result = toISOString(timestamp, null);
 		// Accept both Z (for UTC) and offset format
 		expect(result).toMatch(
 			/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}(Z|[+-]\d{2}:\d{2})$/,
@@ -195,8 +218,15 @@ describe("toISOString", () => {
 		expect(result).toBe("2021-03-14T04:00:00.000-04:00");
 	});
 
-	it("should format fixed offset timezones correctly", () => {
+	it("should format fixed offset timeZones correctly", () => {
 		const result = toISOString(timestamp, "America/Argentina/Buenos_Aires");
 		expect(result).toBe("2021-12-31T21:00:00.000-03:00");
+	});
+
+	it("toISOString handles negative timestamp in DST timeZone (America/New_York)", () => {
+		const negativeTimestamp = -86400000; // 1969-12-31T00:00:00.000Z
+		const result = toISOString(negativeTimestamp, "America/New_York");
+		// Should end with a valid Eastern offset (-05:00 or -04:00)
+		expect(/-0[45]:00$/.test(result)).toBe(true);
 	});
 });

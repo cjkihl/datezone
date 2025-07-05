@@ -19,7 +19,7 @@ import {
 import type { TimeZone } from "./timezone.pub.js";
 
 describe("startOfDay", () => {
-	it("returns 00:00:00.000 in UTC if no timezone", () => {
+	it("returns 00:00:00.000 in UTC if no timeZone", () => {
 		const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 		const start = startOfDay(d.getTime(), null);
 		const result = new Date(start);
@@ -36,18 +36,18 @@ describe("startOfDay", () => {
 		expect(result.getUTCHours()).toBe(16);
 		expect(result.getUTCDate()).toBe(14); // Previous day in UTC
 	});
-	it("defaults to local timezone when timezone is undefined", () => {
+	it("defaults to local timeZone when timeZone is undefined", () => {
 		const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 		const start = startOfDay(d.getTime(), null);
 
-		// Get the local timezone
+		// Get the local timeZone
 		const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		const localStart = startOfDay(d.getTime(), localTz as TimeZone);
 
-		// Should match local timezone behavior
+		// Should match local timeZone behavior
 		expect(start).toBe(localStart);
 
-		// If local timezone is not UTC, results should be different
+		// If local timeZone is not UTC, results should be different
 		if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 			const utcStart = startOfDay(d.getTime(), "UTC");
 			expect(start).not.toBe(utcStart);
@@ -56,7 +56,7 @@ describe("startOfDay", () => {
 });
 
 describe("endOfDay", () => {
-	it("returns 23:59:59.999 in UTC if no timezone", () => {
+	it("returns 23:59:59.999 in UTC if no timeZone", () => {
 		const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 		const end = endOfDay(d.getTime(), null);
 		const result = new Date(end);
@@ -73,18 +73,18 @@ describe("endOfDay", () => {
 		expect(result.getUTCHours()).toBe(15);
 		expect(result.getUTCDate()).toBe(15); // Same day in UTC
 	});
-	it("defaults to local timezone when timezone is undefined", () => {
+	it("defaults to local timeZone when timeZone is undefined", () => {
 		const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 		const end = endOfDay(d.getTime(), null);
 
-		// Get the local timezone
+		// Get the local timeZone
 		const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		const localEnd = endOfDay(d.getTime(), localTz as TimeZone);
 
-		// Should match local timezone behavior
+		// Should match local timeZone behavior
 		expect(end).toBe(localEnd);
 
-		// If local timezone is not UTC, results should be different
+		// If local timeZone is not UTC, results should be different
 		if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 			const utcEnd = endOfDay(d.getTime(), "UTC");
 			expect(end).not.toBe(utcEnd);
@@ -173,7 +173,7 @@ describe("nextDay", () => {
 		const result = nextDay(d.getTime(), "UTC");
 		expect(new Date(result).toISOString()).toBe("2024-01-01T00:00:00.000Z");
 	});
-	it("handles timezone offset (Asia/Singapore)", () => {
+	it("handles timeZone offset (Asia/Singapore)", () => {
 		const d = new Date("2024-05-22T15:23:45.123Z");
 		const result = nextDay(d.getTime(), "Asia/Singapore");
 		expect(new Date(result).toISOString()).toBe("2024-05-22T16:00:00.000Z");
@@ -188,18 +188,18 @@ describe("nextDay", () => {
 		const result = nextDay(d.getTime(), "America/New_York");
 		expect(new Date(result).toISOString()).toBe("2024-11-03T04:00:00.000Z");
 	});
-	it("defaults to local timezone when timezone is undefined", () => {
+	it("defaults to local timeZone when timeZone is undefined", () => {
 		const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 		const next = nextDay(d.getTime(), null);
 
-		// Get the local timezone
+		// Get the local timeZone
 		const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		const localNext = nextDay(d.getTime(), localTz as TimeZone);
 
-		// Should match local timezone behavior
+		// Should match local timeZone behavior
 		expect(next).toBe(localNext);
 
-		// If local timezone is not UTC, results should be different
+		// If local timeZone is not UTC, results should be different
 		if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 			const utcNext = nextDay(d.getTime(), "UTC");
 			expect(next).not.toBe(utcNext);
@@ -228,7 +228,7 @@ describe("previousDay", () => {
 		const result = previousDay(d.getTime(), "UTC");
 		expect(new Date(result).toISOString()).toBe("2023-12-31T00:00:00.000Z");
 	});
-	it("handles timezone offset (Asia/Singapore)", () => {
+	it("handles timeZone offset (Asia/Singapore)", () => {
 		const d = new Date("2024-05-22T15:23:45.123Z");
 		const result = previousDay(d.getTime(), "Asia/Singapore");
 		expect(new Date(result).toISOString()).toBe("2024-05-20T16:00:00.000Z");
@@ -243,18 +243,18 @@ describe("previousDay", () => {
 		const result = previousDay(d.getTime(), "America/New_York");
 		expect(new Date(result).toISOString()).toBe("2024-11-02T04:00:00.000Z");
 	});
-	it("defaults to local timezone when timezone is undefined", () => {
+	it("defaults to local timeZone when timeZone is undefined", () => {
 		const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 		const prev = previousDay(d.getTime(), null);
 
-		// Get the local timezone
+		// Get the local timeZone
 		const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		const localPrev = previousDay(d.getTime(), localTz as TimeZone);
 
-		// Should match local timezone behavior
+		// Should match local timeZone behavior
 		expect(prev).toBe(localPrev);
 
-		// If local timezone is not UTC, results should be different
+		// If local timeZone is not UTC, results should be different
 		if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 			const utcPrev = previousDay(d.getTime(), "UTC");
 			expect(prev).not.toBe(utcPrev);
@@ -263,7 +263,7 @@ describe("previousDay", () => {
 });
 
 describe("addDays", () => {
-	it("adds days to a timestamp (no timezone)", () => {
+	it("adds days to a timestamp (no timeZone)", () => {
 		const d = new Date(Date.UTC(2024, 0, 15));
 		expect(new Date(addDays(d.getTime(), 5, null)).getUTCDate()).toBe(20);
 		expect(new Date(addDays(d.getTime(), -10, null)).getUTCDate()).toBe(5);
@@ -273,7 +273,7 @@ describe("addDays", () => {
 		const ts = addDaysBase(opts.year, opts.month, opts.day, 1, "UTC");
 		expect(new Date(ts).toISOString()).toBe("2024-01-16T00:00:00.000Z");
 	});
-	it("adds days with timezone (Asia/Singapore)", () => {
+	it("adds days with timeZone (Asia/Singapore)", () => {
 		const ts = new Date("2024-05-22T15:23:45.123Z").getTime();
 		const result = addDays(ts, 2, "Asia/Singapore");
 		expect(new Date(result).toISOString()).toBe("2024-05-24T15:23:45.123Z");
@@ -281,7 +281,7 @@ describe("addDays", () => {
 });
 
 describe("subDays", () => {
-	it("subtracts days from a timestamp (no timezone)", () => {
+	it("subtracts days from a timestamp (no timeZone)", () => {
 		const d = new Date(Date.UTC(2024, 0, 15));
 		expect(new Date(subDays(d.getTime(), 5, null)).getUTCDate()).toBe(10);
 	});
@@ -290,7 +290,7 @@ describe("subDays", () => {
 		const ts = subDaysBase(opts.year, opts.month, opts.day, 1, "UTC");
 		expect(new Date(ts).toISOString()).toBe("2024-01-14T00:00:00.000Z");
 	});
-	it("subtracts days with timezone (Asia/Singapore)", () => {
+	it("subtracts days with timeZone (Asia/Singapore)", () => {
 		const opts = { day: 22, month: 5, year: 2024 };
 		const ts = subDaysBase(
 			opts.year,
@@ -305,7 +305,7 @@ describe("subDays", () => {
 });
 
 describe("dayOfMonth", () => {
-	it("returns the correct day of the month for a given timestamp (local timezone)", () => {
+	it("returns the correct day of the month for a given timestamp (local timeZone)", () => {
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
 		expect(dayOfMonth(ts)).toBe(15);
 	});
@@ -315,19 +315,19 @@ describe("dayOfMonth", () => {
 		expect(dayOfMonth(ts, "UTC")).toBe(15);
 	});
 
-	it("returns the correct day of the month for a given timestamp in a non-DST timezone", () => {
+	it("returns the correct day of the month for a given timestamp in a non-DST timeZone", () => {
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
 		expect(dayOfMonth(ts, "Asia/Tokyo")).toBe(15);
 	});
 
-	it("returns the correct day of the month for a given timestamp in a DST timezone", () => {
+	it("returns the correct day of the month for a given timestamp in a DST timeZone", () => {
 		const ts = new Date("2024-03-10T12:00:00.000Z").getTime(); // DST start day in America/New_York
 		expect(dayOfMonth(ts, "America/New_York")).toBe(10);
 	});
 });
 
 describe("dayOfWeek", () => {
-	it("returns ISO day of week for timestamp (no timezone)", () => {
+	it("returns ISO day of week for timestamp (no timeZone)", () => {
 		const d = new Date(Date.UTC(2024, 0, 15)); // Monday
 		expect(dayOfWeek(d.getTime())).toBe(1);
 	});
@@ -335,24 +335,24 @@ describe("dayOfWeek", () => {
 		const opts = { day: 14, month: 1, year: 2024 }; // Sunday
 		expect(dayOfWeekBase(opts.year, opts.month, opts.day)).toBe(7);
 	});
-	it("returns ISO day of week with timezone (Asia/Singapore)", () => {
+	it("returns ISO day of week with timeZone (Asia/Singapore)", () => {
 		const opts = { day: 22, month: 5, year: 2024 }; // Wednesday
 		expect(dayOfWeekBase(opts.year, opts.month, opts.day)).toBe(3);
 	});
 
-	it("returns ISO day of week for a given timestamp in a non-DST timezone", () => {
+	it("returns ISO day of week for a given timestamp in a non-DST timeZone", () => {
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime(); // Monday
 		expect(dayOfWeek(ts, "Asia/Tokyo")).toBe(1);
 	});
 
-	it("returns ISO day of week for a given timestamp in a DST timezone", () => {
+	it("returns ISO day of week for a given timestamp in a DST timeZone", () => {
 		const ts = new Date("2024-03-10T12:00:00.000Z").getTime(); // Sunday in America/New_York
 		expect(dayOfWeek(ts, "America/New_York")).toBe(7);
 	});
 });
 
 describe("dayOfYear", () => {
-	it("returns day of year for timestamp (no timezone)", () => {
+	it("returns day of year for timestamp (no timeZone)", () => {
 		const d = new Date(Date.UTC(2024, 2, 1)); // March 1, 2024 (leap year)
 		expect(dayOfYear(d.getTime())).toBe(61);
 	});
@@ -360,17 +360,17 @@ describe("dayOfYear", () => {
 		const opts = { day: 31, month: 12, year: 2023 };
 		expect(dayOfYearBase(opts.year, opts.month, opts.day)).toBe(365);
 	});
-	it("returns day of year with timezone (Asia/Singapore)", () => {
+	it("returns day of year with timeZone (Asia/Singapore)", () => {
 		const opts = { day: 22, month: 5, year: 2024 };
 		expect(dayOfYearBase(opts.year, opts.month, opts.day)).toBe(143);
 	});
 
-	it("returns the correct day of the year for a given timestamp in a non-DST timezone", () => {
+	it("returns the correct day of the year for a given timestamp in a non-DST timeZone", () => {
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
 		expect(dayOfYear(ts, "Asia/Tokyo")).toBe(197);
 	});
 
-	it("returns the correct day of the year for a given timestamp in a DST timezone", () => {
+	it("returns the correct day of the year for a given timestamp in a DST timeZone", () => {
 		const ts = new Date("2024-03-10T12:00:00.000Z").getTime(); // DST start day in America/New_York
 		expect(dayOfYear(ts, "America/New_York")).toBe(70);
 	});
@@ -380,7 +380,7 @@ describe("dayOfYear", () => {
 		expect(dayOfYear(ts, "UTC")).toBe(197);
 	});
 
-	it("returns the correct day of the year for a given timestamp (local timezone)", () => {
+	it("returns the correct day of the year for a given timestamp (local timeZone)", () => {
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
 		expect(dayOfYear(ts)).toBe(197);
 	});
@@ -464,14 +464,14 @@ describe("DST edge cases", () => {
 });
 
 describe("addDays time preservation in DST zones", () => {
-	it("preserves time-of-day when adding days in a DST timezone", () => {
+	it("preserves time-of-day when adding days in a DST timeZone", () => {
 		const tz: TimeZone = "Europe/Stockholm"; // Observes DST (UTC+1/+2)
 
 		// Two timestamps exactly 1 hour apart
 		const base1 = Date.UTC(2024, 5, 1, 8, 0, 0, 0); // 2024-06-01 08:00:00Z
 		const base2 = Date.UTC(2024, 5, 1, 9, 0, 0, 0); // 2024-06-01 09:00:00Z
 
-		// Add 5 days in the DST timezone
+		// Add 5 days in the DST timeZone
 		const future1 = addDays(base1, 5, tz);
 		const future2 = addDays(base2, 5, tz);
 
