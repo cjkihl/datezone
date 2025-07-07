@@ -1,5 +1,13 @@
 # @datezone/benchmarks
 
+## 0.0.2
+
+### Patch Changes
+
+- 8ad2ca7: Refactor
+- Updated dependencies [8ad2ca7]
+  - datezone@1.0.2
+
 ## 0.0.1
 
 ### Patch Changes
