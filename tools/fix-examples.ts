@@ -17,6 +17,14 @@ import path from "node:path";
 
 const EXAMPLES_ROOT = path.resolve("apps/docs/examples");
 const DOCS_ROOT = path.resolve("apps/docs/content/docs");
+// Additional root to search for <CodeExample /> usage inside the Next.js app router
+const APP_ROOT = path.resolve("apps/docs/app");
+
+// File extensions we want to scan for CodeExample references
+const SCAN_EXTS = new Set([".mdx", ".tsx"]);
+
+// Directories to scan
+const SEARCH_DIRS = [DOCS_ROOT, APP_ROOT];
 
 // Recursively walk a directory and invoke the callback for each file found.
 function walkDir(dir: string, cb: (filePath: string) => void): void {
@@ -35,14 +43,16 @@ function walkDir(dir: string, cb: (filePath: string) => void): void {
 
 const referencedPaths = new Set<string>();
 
-walkDir(DOCS_ROOT, (filePath) => {
-	if (!filePath.endsWith(".mdx")) return;
-	const content = fs.readFileSync(filePath, "utf8");
-	const regex = /file\s*[:=]\s*["']([^"']+)["']/g;
-	for (const match of content.matchAll(regex)) {
-		referencedPaths.add(match[1]);
-	}
-});
+for (const root of SEARCH_DIRS) {
+	walkDir(root, (filePath) => {
+		if (!SCAN_EXTS.has(path.extname(filePath))) return;
+		const content = fs.readFileSync(filePath, "utf8");
+		const regex = /file\s*[:=]\s*["']([^"']+)["']/g;
+		for (const match of content.matchAll(regex)) {
+			referencedPaths.add(match[1]);
+		}
+	});
+}
 
 // --- Ensure each referenced example file exists ------------------------------
 

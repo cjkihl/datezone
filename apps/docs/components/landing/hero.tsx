@@ -1,40 +1,16 @@
-"use client";
-
 import Link from "next/link";
-import { useId } from "react";
 import { Button } from "@/components/ui/button";
-import { CodePreview, type CodePreviewTab } from "../code/code-preview";
+import { CodeExample } from "../code/code-example";
 import { GradientBG } from "./gradient-bg";
-import { Spotlight } from "./spotlight";
-
-const tabs: CodePreviewTab[] = [
-	{
-		code: `import { startOfDay, addDays } from "datezone";
-
-const now = Date.now();
-const start = startOfDay(now, "America/New_York");
-const tomorrow = addDays(now, 1, "Europe/London");`,
-		name: "index.ts",
-	},
-	{
-		code: `import { format } from "datezone";
-
-const now = Date.now();
-const formatted = format(now, "yyyy-MM-dd HH:mm:ss zzzz", {
-    locale: "en",
-    timeZone: "America/New_York"
-});`,
-		name: "format.ts",
-	},
-];
+import { AnimatedWaveBg } from "./wave-bg";
 
 export default function Hero() {
 	return (
 		<section className="max-h-[40rem] relative w-full flex md:items-center md:justify-center antialiased overflow-hidden px-8 md:min-h-[40rem]">
-			<Spotlight />
+			<AnimatedWaveBg />
 			<div className="overflow-hidden bg-transparent md:px-10 dark:-mb-32 dark:mt-[-4.75rem] dark:pb-32 dark:pt-[4.75rem]">
 				<div className="lg:max-w-8xl mx-auto grid max-w-full grid-cols-1 items-center gap-x-8 gap-y-16 px-4 py-2 lg:grid-cols-2 lg:px-8 lg:py-4 xl:gap-x-16 xl:px-12">
-					<div className="relative z-10 md:text-center lg:text-left">
+					<div className="relative z-10">
 						<div className="relative">
 							<div className="flex flex-col items-start gap-2">
 								<div className="flex items-end gap-1 mt-2 ">
@@ -57,7 +33,7 @@ export default function Hero() {
 								</div>
 							</div>
 
-							<p className="text-zinc-800 dark:text-zinc-300 mt-3 tracking-tight text-3xl md:text-4xl">
+							<p className="text-zinc-800 dark:text-zinc-300 mt-3 tracking-tight text-3xl md:text-4xl ">
 								The fastest TypeScript library for working with dates, times and
 								timeZones.
 							</p>
@@ -66,13 +42,12 @@ export default function Hero() {
 									<div className="w-full flex items-center gap-2">
 										<p className="md:text-sm text-xs font-mono select-none">
 											<span>
-												<span className="text-[#4498c8]">git:</span>
-												<span className="text-[#F07178]">(main) </span>
+												<span className="text-[#44c872]">git:</span>
+												<span className="text-[#71aef0]">(main) </span>
 											</span>
-											<span className="italic text-amber-600"> x</span>
 										</p>
 										<p className=" relative inline tracking-tight opacity-90 md:text-sm text-xs dark:text-white font-mono text-black">
-											npm add{" "}
+											bun add{" "}
 											<span className="relative dark:text-fuchsia-100 text-fuchsia-950">
 												datezone
 												<span className="absolute h-2 bg-gradient-to-tr from-white via-stone-200 to-stone-300 blur-3xl w-full top-0 left-2" />
@@ -138,12 +113,19 @@ export default function Hero() {
 						</div>
 					</div>
 
-					<div className="relative hidden md:block lg:static xl:pl-10">
-						<div className="relative">
-							<div className="from-sky-300 via-sky-300/70 to-blue-300 absolute inset-0 rounded-none bg-gradient-to-tr opacity-5 blur-lg" />
-							<div className="from-stone-300 via-stone-300/70 to-blue-300 absolute inset-0 rounded-none bg-gradient-to-tr opacity-5" />
-							<CodePreview tabs={tabs} />
-						</div>
+					<div className="relative xl:pl-10">
+						<CodeExample
+							tabs={[
+								{
+									file: "home/example.ts",
+									name: "example",
+								},
+								{
+									file: "home/formatting.ts",
+									name: "formatting",
+								},
+							]}
+						/>
 					</div>
 				</div>
 			</div>
@@ -152,7 +134,6 @@ export default function Hero() {
 }
 
 export function HeroBackground(props: React.ComponentPropsWithoutRef<"svg">) {
-	const id = useId();
 	return (
 		<svg
 			aria-hidden="true"
@@ -163,7 +144,7 @@ export function HeroBackground(props: React.ComponentPropsWithoutRef<"svg">) {
 			{...props}
 		>
 			<defs>
-				<clipPath id={`${id}-clip-path`}>
+				<clipPath id={"hero-clip-path"}>
 					<path
 						d="M0 0h668v1068.8H0z"
 						fill="#fff"
@@ -171,7 +152,7 @@ export function HeroBackground(props: React.ComponentPropsWithoutRef<"svg">) {
 					/>
 				</clipPath>
 			</defs>
-			<g clipPath={`url(#${id}-clip-path)`} opacity=".4" strokeWidth={4}>
+			<g clipPath={"url(#hero-clip-path)"} opacity=".4" strokeWidth={4}>
 				<path
 					d="M584.5 770.4v-474M484.5 770.4v-474M384.5 770.4v-474M283.5 769.4v-474M183.5 768.4v-474M83.5 767.4v-474"
 					opacity=".3"

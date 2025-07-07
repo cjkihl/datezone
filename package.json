@@ -7,6 +7,7 @@
 		"test": "bun test",
 		"dev": "bun run -F docs dev",
 		"build": "turbo build --filter=./packages/*",
+		"build-docs": "turbo build --filter=./apps/docs",
 		"changeset": "changeset",
 		"fix-examples": "bun tools/fix-examples.ts",
 		"resolve": "bun run resolve-deps resolve",
