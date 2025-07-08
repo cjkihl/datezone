@@ -9,7 +9,8 @@
 		"debug": "bun run comprehensive-compare.ts --debug",
 		"report": "bun run format-results.ts",
 		"cache": "bun run cache-test.ts",
-		"clean": "rm -rf output/*.json reports/*.md"
+		"clean": "rm -rf output/*.json reports/*.md",
+		"type-check": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@date-fns/tz": "^1.2.0",

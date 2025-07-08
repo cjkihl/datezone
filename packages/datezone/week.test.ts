@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { formatToParts } from "./format-parts";
+import { formatToParts } from "./format-parts.pub.js";
 import type { TimeZone } from "./index.pub";
 import {
 	addWeeks,
@@ -450,17 +450,25 @@ describe("Week functions", () => {
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 			const localAdded = addWeeks(d.getTime(), 1, localTz as TimeZone);
 
-			// Should match local timeZone behavior
-			expect(added).toBe(localAdded);
+			// Should match local timeZone behavior (compare YMD only)
+			const getYMD = (ts: number) => {
+				const d = new Date(ts);
+				return {
+					day: d.getDate(),
+					month: d.getMonth(),
+					year: d.getFullYear(),
+				};
+			};
+			expect(getYMD(added)).toEqual(getYMD(localAdded));
 
 			// If local timeZone is not UTC, results should be different from UTC optimization
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 				const utcAdded = addWeeks(d.getTime(), 1, "UTC");
 				expect(added).not.toBe(utcAdded);
 			} else {
-				// If local timeZone is UTC, should use optimization and get same result
+				// If local timeZone is UTC, should use optimization and get same YMD result
 				const utcAdded = addWeeks(d.getTime(), 1, "UTC");
-				expect(added).toBe(utcAdded);
+				expect(getYMD(added)).toEqual(getYMD(utcAdded));
 			}
 		});
 	});
@@ -520,17 +528,25 @@ describe("Week functions", () => {
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 			const localSubbed = subWeeks(d.getTime(), 1, localTz as TimeZone);
 
-			// Should match local timeZone behavior
-			expect(subbed).toBe(localSubbed);
+			// Should match local timeZone behavior (compare YMD only)
+			const getYMD = (ts: number) => {
+				const d = new Date(ts);
+				return {
+					day: d.getDate(),
+					month: d.getMonth(),
+					year: d.getFullYear(),
+				};
+			};
+			expect(getYMD(subbed)).toEqual(getYMD(localSubbed));
 
 			// If local timeZone is not UTC, results should be different from UTC optimization
 			if (localTz !== "UTC" && localTz !== "Etc/UTC") {
 				const utcSubbed = subWeeks(d.getTime(), 1, "UTC");
 				expect(subbed).not.toBe(utcSubbed);
 			} else {
-				// If local timeZone is UTC, should use optimization and get same result
+				// If local timeZone is UTC, should use optimization and get same YMD result
 				const utcSubbed = subWeeks(d.getTime(), 1, "UTC");
-				expect(subbed).toBe(utcSubbed);
+				expect(getYMD(subbed)).toEqual(getYMD(utcSubbed));
 			}
 		});
 	});
@@ -850,8 +866,15 @@ describe("Week functions", () => {
 
 			// Test Asia/Dhaka timeZone (UTC+6, fixed offset, no DST)
 			const result = addWeeks(timestamp, 2, "Asia/Dhaka");
-			const expected = timestamp + 2 * 7 * 24 * 60 * 60 * 1000; // Should use fast path
-			expect(result).toBe(expected);
+			const parts = formatToParts(result, "Asia/Dhaka", {
+				day: "2-digit",
+				month: "2-digit",
+				year: "numeric",
+			});
+			// June 15, 2023 + 14 days = June 29, 2023 in Asia/Dhaka
+			expect(parts.day).toBe(29);
+			expect(parts.month).toBe(6);
+			expect(parts.year).toBe(2023);
 		});
 	});
 

@@ -41,42 +41,39 @@ console.log(
 
 group("📅 Day Functions - Local Time", () => {
 	bench("datezone: addDays (local)", () =>
-		do_not_optimize(dz.addDays(testTimestamp, 7)),
+		do_not_optimize(dz.addDays(testTimestamp, 7, null)),
 	);
 	bench("date-fns: addDays (local)", () =>
 		do_not_optimize(fns.addDays(testDate, 7).getTime()),
 	);
 
 	bench("datezone: startOfDay (local)", () =>
-		do_not_optimize(dz.startOfDay(testTimestamp)),
+		do_not_optimize(dz.startOfDay(testTimestamp, null)),
 	);
 	bench("date-fns: startOfDay (local)", () =>
 		do_not_optimize(fns.startOfDay(testDate).getTime()),
 	);
 
 	bench("datezone: endOfDay (local)", () =>
-		do_not_optimize(dz.endOfDay(testTimestamp)),
+		do_not_optimize(dz.endOfDay(testTimestamp, null)),
 	);
 	bench("date-fns: endOfDay (local)", () =>
 		do_not_optimize(fns.endOfDay(testDate).getTime()),
 	);
 
-	bench("datezone: nextDay (local)", () =>
-		do_not_optimize(dz.nextDay(testTimestamp)),
-	);
 	bench("date-fns: nextDay (local)", () =>
 		do_not_optimize(fns.addDays(testDate, 1).getTime()),
 	);
 
 	bench("datezone: dayOfWeek (local)", () =>
-		do_not_optimize(dz.dayOfWeek(testTimestamp)),
+		do_not_optimize(dz.dayOfWeek(testTimestamp, null)),
 	);
 	bench("date-fns: dayOfWeek (local)", () =>
 		do_not_optimize(fns.getDay(testDate)),
 	);
 
 	bench("datezone: dayOfYear (local)", () =>
-		do_not_optimize(dz.dayOfYear(testTimestamp)),
+		do_not_optimize(dz.dayOfYear(testTimestamp, null)),
 	);
 	bench("date-fns: dayOfYear (local)", () => {
 		const start = fns.startOfYear(testDate);
@@ -108,7 +105,7 @@ group("📅 Day Functions - UTC (Fast Path)", () => {
 	);
 
 	bench("datezone: nextDay (UTC)", () =>
-		do_not_optimize(dz.nextDay(testTimestamp, utcTimezone)),
+		do_not_optimize(dz.addDays(testTimestamp, 1, utcTimezone)),
 	);
 	bench("date-fns: nextDay (UTC)", () =>
 		do_not_optimize(fns.addDays(testDateUTC, 1).getTime()),
@@ -154,7 +151,7 @@ group("📅 Day Functions - Non-DST (FASTEST - Fixed Offset)", () => {
 	);
 
 	bench("datezone: nextDay (Non-DST)", () =>
-		do_not_optimize(dz.nextDay(testTimestamp, nonDstTimezone)),
+		do_not_optimize(dz.addDays(testTimestamp, 1, nonDstTimezone)),
 	);
 	bench("date-fns: nextDay (Non-DST)", () =>
 		do_not_optimize(fns.addDays(testDateNonDST, 1).getTime()),
@@ -200,7 +197,7 @@ group("📅 Day Functions - DST (Complex Path)", () => {
 	);
 
 	bench("datezone: nextDay (DST)", () =>
-		do_not_optimize(dz.nextDay(testTimestamp, dstTimezone)),
+		do_not_optimize(dz.addDays(testTimestamp, 1, dstTimezone)),
 	);
 	bench("date-fns: nextDay (DST)", () =>
 		do_not_optimize(fns.addDays(testDateDST, 1).getTime()),
@@ -229,28 +226,28 @@ group("📅 Day Functions - DST (Complex Path)", () => {
 
 group("🗓️ Month Functions - Local Time", () => {
 	bench("datezone: addMonths (local)", () =>
-		do_not_optimize(dz.addMonths(testTimestamp, 3)),
+		do_not_optimize(dz.addMonths(testTimestamp, 3, null)),
 	);
 	bench("date-fns: addMonths (local)", () =>
 		do_not_optimize(fns.addMonths(testDate, 3).getTime()),
 	);
 
 	bench("datezone: startOfMonth (local)", () =>
-		do_not_optimize(dz.startOfMonth(testTimestamp)),
+		do_not_optimize(dz.startOfMonth(testTimestamp, null)),
 	);
 	bench("date-fns: startOfMonth (local)", () =>
 		do_not_optimize(fns.startOfMonth(testDate).getTime()),
 	);
 
 	bench("datezone: endOfMonth (local)", () =>
-		do_not_optimize(dz.endOfMonth(testTimestamp)),
+		do_not_optimize(dz.endOfMonth(testTimestamp, null)),
 	);
 	bench("date-fns: endOfMonth (local)", () =>
 		do_not_optimize(fns.endOfMonth(testDate).getTime()),
 	);
 
 	bench("datezone: daysInMonth (local)", () =>
-		do_not_optimize(dz.daysInMonth(testTimestamp)),
+		do_not_optimize(dz.daysInMonth(testTimestamp, null)),
 	);
 	bench("date-fns: daysInMonth (local)", () =>
 		do_not_optimize(fns.getDaysInMonth(testDate)),
@@ -481,21 +478,21 @@ group("📆 Year Functions - DST (Complex Path)", () => {
 
 group("📅 Week Functions - Local Time", () => {
 	bench("datezone: addWeeks (local)", () =>
-		do_not_optimize(dz.addWeeks(testTimestamp, 2)),
+		do_not_optimize(dz.addWeeks(testTimestamp, 2, null)),
 	);
 	bench("date-fns: addWeeks (local)", () =>
 		do_not_optimize(fns.addWeeks(testDate, 2).getTime()),
 	);
 
 	bench("datezone: startOfWeek (local)", () =>
-		do_not_optimize(dz.startOfWeek(testTimestamp)),
+		do_not_optimize(dz.startOfWeek(testTimestamp, null)),
 	);
 	bench("date-fns: startOfWeek (local)", () =>
 		do_not_optimize(fns.startOfWeek(testDate, { weekStartsOn: 1 }).getTime()),
 	);
 
 	bench("datezone: endOfWeek (local)", () =>
-		do_not_optimize(dz.endOfWeek(testTimestamp)),
+		do_not_optimize(dz.endOfWeek(testTimestamp, null)),
 	);
 	bench("date-fns: endOfWeek (local)", () =>
 		do_not_optimize(fns.endOfWeek(testDate, { weekStartsOn: 1 }).getTime()),
@@ -585,7 +582,7 @@ group("📅 Week Functions - DST (Complex Path)", () => {
 
 group("🕐 Hour Functions - Local Time", () => {
 	bench("datezone: hour (local)", () =>
-		do_not_optimize(dz.hour(testTimestamp)),
+		do_not_optimize(dz.hour(testTimestamp, null)),
 	);
 	bench("date-fns: hour (local)", () => {
 		const d = new Date(testTimestamp);
@@ -651,7 +648,10 @@ group("🕐 Hour Functions - DST (Complex Path)", () => {
 group("📝 Format Functions - Local Time", () => {
 	bench("datezone: format (local)", () =>
 		do_not_optimize(
-			dz.format(testTimestamp, "yyyy-MM-dd HH:mm:ss", { locale: "en-US" }),
+			dz.format(testTimestamp, "yyyy-MM-dd HH:mm:ss", {
+				locale: "en-US",
+				timeZone: null,
+			}),
 		),
 	);
 	bench("date-fns: format (local)", () =>
@@ -707,14 +707,14 @@ group("📝 Format Functions - DST (Complex Path)", () => {
 
 group("🚀 Datezone Internal: Fast Path vs No Fast Path Benefits", () => {
 	bench("datezone: addDays (Local - No Timezone)", () =>
-		do_not_optimize(dz.addDays(testTimestamp, 7)),
+		do_not_optimize(dz.addDays(testTimestamp, 7, null)),
 	);
 	bench("datezone: addDays (UTC Fast Path)", () =>
 		do_not_optimize(dz.addDays(testTimestamp, 7, utcTimezone)),
 	);
 
 	bench("datezone: startOfDay (Local - No Timezone)", () =>
-		do_not_optimize(dz.startOfDay(testTimestamp)),
+		do_not_optimize(dz.startOfDay(testTimestamp, null)),
 	);
 	bench("datezone: startOfDay (UTC Fast Path)", () =>
 		do_not_optimize(dz.startOfDay(testTimestamp, utcTimezone)),
@@ -776,7 +776,7 @@ group("🔥 Datezone Internal: Ultimate Fast Path Performance", () => {
 		do_not_optimize(dz.addDays(testTimestamp, 7, utcTimezone)),
 	);
 	bench("datezone: addWeeks (Raw Arithmetic - Fastest)", () =>
-		do_not_optimize(dz.addWeeks(testTimestamp, 2)),
+		do_not_optimize(dz.addWeeks(testTimestamp, 2, null)),
 	);
 	bench("datezone: startOfHour (Raw Arithmetic - Fastest)", () =>
 		do_not_optimize(dz.startOfHour(testTimestamp)),

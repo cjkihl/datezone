@@ -619,7 +619,7 @@ export function isUTC(timeZone: TimeZone): boolean {
  * Checks if dst.
  *
  * @param timeZone - The IANA timeZone identifier to check
- * @returns `true` if the timeZone is a DST timeZone, `false` otherwise
+ * @returns `true` if the timeZone is a DST timeZone, `false` otherwise.
  * @see https://datezone.dev/docs/reference/timezone#isDST
  */
 export function isDST(timeZone: TimeZone): boolean {

@@ -3,7 +3,6 @@ import { hour, startOfDay, type TimeZone } from "datezone";
 const testTimestamp = new Date("2024-06-15T15:45:30.123Z").getTime();
 
 // Test different timeZone categories to show fast path improvements
-const _utcTimezone: TimeZone = "UTC";
 const nonDstTimezone: TimeZone = "Asia/Tokyo"; // Non-DST timeZone (fixed offset)
 const dstTimezone: TimeZone = "America/New_York"; // DST timeZone
 

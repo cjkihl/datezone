@@ -11,7 +11,6 @@ import {
 	isSameWeek,
 	isSameYear,
 	isToday,
-	isTodayBase,
 	isTomorrow,
 	isWeekend,
 	isYesterday,
@@ -532,62 +531,6 @@ describe("Edge cases", () => {
 
 		expect(isSameYear(springForwardTs, fallBackTs, NY_TZ)).toBe(true);
 		expect(isBefore(springForwardTs, fallBackTs)).toBe(true);
-	});
-});
-
-// Missing function tests
-describe("isTodayBase", () => {
-	test("should return true for today's date components", () => {
-		const now = new Date();
-		const todayYear = now.getUTCFullYear();
-		const todayMonth = now.getUTCMonth() + 1;
-		const todayDay = now.getUTCDate();
-
-		expect(isTodayBase(todayYear, todayMonth, todayDay, UTC_TZ)).toBe(true);
-	});
-
-	test("should return false for different date components", () => {
-		expect(isTodayBase(2024, 1, 15, UTC_TZ)).toBe(false);
-		expect(isTodayBase(2020, 12, 25, UTC_TZ)).toBe(false);
-	});
-
-	test("should work with different timeZones", () => {
-		const now = new Date();
-		const nyDate = new Intl.DateTimeFormat("en-CA", {
-			day: "2-digit",
-			month: "2-digit",
-			timeZone: NY_TZ,
-			year: "numeric",
-		})
-			.format(now)
-			.split("-")
-			.map(Number);
-
-		expect(isTodayBase(nyDate[0], nyDate[1], nyDate[2], NY_TZ)).toBe(true);
-	});
-
-	test("should handle timeZone date boundaries", () => {
-		// Test when it might be a different day in different timeZones
-		const now = new Date();
-		const utcDate = [
-			now.getUTCFullYear(),
-			now.getUTCMonth() + 1,
-			now.getUTCDate(),
-		];
-		const tokyoDate = new Intl.DateTimeFormat("en-CA", {
-			day: "2-digit",
-			month: "2-digit",
-			timeZone: TOKYO_TZ,
-			year: "numeric",
-		})
-			.format(now)
-			.split("-")
-			.map(Number);
-
-		expect(isTodayBase(utcDate[0], utcDate[1], utcDate[2], UTC_TZ)).toBe(true);
-		expect(
-			isTodayBase(tokyoDate[0], tokyoDate[1], tokyoDate[2], TOKYO_TZ),
-		).toBe(true);
 	});
 });
 

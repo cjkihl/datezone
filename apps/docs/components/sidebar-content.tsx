@@ -49,11 +49,6 @@ export const contents: Content[] = [
 				title: "Introduction",
 			},
 			{
-				href: "/docs/api-reference",
-				icon: () => <FileText className="w-4 h-4 text-muted-foreground" />,
-				title: "API Reference",
-			},
-			{
 				href: "/docs/comparison",
 				icon: () => <GitCompare className="w-4 h-4 text-muted-foreground" />,
 				title: "Comparison",
@@ -70,9 +65,9 @@ export const contents: Content[] = [
 		Icon: () => <FileText className="w-5 h-5" />,
 		list: [
 			{
-				href: "/docs/guides/why-date-is-evil",
+				href: "/docs/guides/why-not-to-use-date",
 				icon: () => <AlertTriangle className="w-4 h-4 text-muted-foreground" />,
-				title: "Why Date is Evil",
+				title: "Why NOT to use Date",
 			},
 			{
 				href: "/docs/guides/why-use-timestamps",

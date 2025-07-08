@@ -1,7 +1,6 @@
 import { getCachedFormatterLocale } from "./cache.js";
 import { calendarToTimestamp, timestampToCalendar } from "./calendar.pub.js";
-import { getUTCtoTimezoneOffsetMinutes } from "./offset.pub.js";
-import { isDST, isUTC, type TimeZone } from "./timezone.pub.js";
+import type { TimeZone } from "./timezone.pub.js";
 import { isLeapYearBase } from "./year.pub.js";
 
 /**
@@ -17,23 +16,7 @@ export function month(ts: number, timeZone: TimeZone | null): number {
 		const d = new Date(ts);
 		return d.getMonth() + 1;
 	}
-
-	if (isUTC(timeZone)) {
-		const d = new Date(ts);
-		return d.getUTCMonth() + 1;
-	}
-
-	if (!isDST(timeZone)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
-		const offsetMs = offsetMinutes * 60000;
-
-		const calendarTs = ts + offsetMs;
-		const d = new Date(calendarTs);
-		return d.getUTCMonth() + 1;
-	}
-
-	const { month } = timestampToCalendar(ts, timeZone);
-	return month;
+	return timestampToCalendar(ts, timeZone).month;
 }
 
 /**
@@ -45,40 +28,12 @@ export function month(ts: number, timeZone: TimeZone | null): number {
  * @see https://datezone.dev/docs/reference/month#startOfMonth
  */
 export function startOfMonth(ts: number, timeZone: TimeZone | null): number {
-	// Fast path: local time
 	if (!timeZone) {
 		const d = new Date(ts);
 		d.setDate(1);
 		d.setHours(0, 0, 0, 0);
 		return d.getTime();
 	}
-
-	// Fast path: UTC time
-	if (isUTC(timeZone)) {
-		const d = new Date(ts);
-		d.setUTCDate(1);
-		d.setUTCHours(0, 0, 0, 0);
-		return d.getTime();
-	}
-
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(timeZone)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
-		const offsetMs = offsetMinutes * 60 * 1000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = ts + offsetMs;
-		const d = new Date(calendarTs);
-
-		// Set to start of month in calendar
-		d.setUTCDate(1);
-		d.setUTCHours(0, 0, 0, 0);
-
-		// Convert back to UTC
-		return d.getTime() - offsetMs;
-	}
-
-	// Complex path: DST timeZones (requires full timeZone parsing)
 	const { year, month } = timestampToCalendar(ts, timeZone);
 	return startOfMonthBase(year, month, timeZone);
 }
@@ -109,40 +64,12 @@ export function startOfMonthBase(
  * @see https://datezone.dev/docs/reference/month#endOfMonth
  */
 export function endOfMonth(ts: number, timeZone: TimeZone | null): number {
-	// Fast path: local time
 	if (!timeZone) {
 		const d = new Date(ts);
 		d.setMonth(d.getMonth() + 1, 1);
 		d.setHours(0, 0, 0, 0);
 		return d.getTime() - 1;
 	}
-
-	// Fast path: UTC time
-	if (isUTC(timeZone)) {
-		const d = new Date(ts);
-		d.setUTCMonth(d.getUTCMonth() + 1, 1);
-		d.setUTCHours(0, 0, 0, 0);
-		return d.getTime() - 1;
-	}
-
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(timeZone)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
-		const offsetMs = offsetMinutes * 60000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = ts + offsetMs;
-		const d = new Date(calendarTs);
-
-		// Set to start of next month in calendar, then subtract 1ms
-		d.setUTCMonth(d.getUTCMonth() + 1, 1);
-		d.setUTCHours(0, 0, 0, 0);
-
-		// Convert back to UTC and subtract 1ms
-		return d.getTime() - offsetMs - 1;
-	}
-
-	// Complex path: DST timeZones (requires full timeZone parsing)
 	return startOfNextMonth(ts, timeZone) - 1;
 }
 
@@ -177,7 +104,6 @@ export function addMonths(
 	months: number,
 	timeZone: TimeZone | null,
 ): number {
-	// Fast path: local time
 	if (!timeZone) {
 		const d = new Date(ts);
 		const originalDay = d.getDate();
@@ -187,40 +113,6 @@ export function addMonths(
 		}
 		return d.getTime();
 	}
-
-	// Fast path: UTC time
-	if (isUTC(timeZone)) {
-		const d = new Date(ts);
-		const originalDay = d.getUTCDate();
-		d.setUTCMonth(d.getUTCMonth() + months);
-		if (d.getUTCDate() !== originalDay) {
-			d.setUTCDate(0); // Go to last day of previous month
-		}
-		return d.getTime();
-	}
-
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(timeZone)) {
-		// Get the fixed timeZone offset
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
-		const offsetMs = offsetMinutes * 60 * 1000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = ts + offsetMs;
-		const d = new Date(calendarTs);
-
-		// Do month arithmetic in calendar
-		const originalDay = d.getUTCDate();
-		d.setUTCMonth(d.getUTCMonth() + months);
-		if (d.getUTCDate() !== originalDay) {
-			d.setUTCDate(0); // Go to last day of previous month
-		}
-
-		// Convert back to UTC
-		return d.getTime() - offsetMs;
-	}
-
-	// Complex path: DST timeZones (requires full timeZone parsing)
 	const parts = timestampToCalendar(ts, timeZone);
 	return addMonthsBase(
 		parts.year,
@@ -308,40 +200,12 @@ export function startOfNthMonth(
 	n: number,
 	timeZone: TimeZone | null,
 ): number {
-	// Fast path: local time
 	if (!timeZone) {
 		const d = new Date(ts);
 		d.setMonth(d.getMonth() + n, 1);
 		d.setHours(0, 0, 0, 0);
 		return d.getTime();
 	}
-
-	// Fast path: UTC time
-	if (isUTC(timeZone)) {
-		const d = new Date(ts);
-		d.setUTCMonth(d.getUTCMonth() + n, 1);
-		d.setUTCHours(0, 0, 0, 0);
-		return d.getTime();
-	}
-
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(timeZone)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
-		const offsetMs = offsetMinutes * 60 * 1000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = ts + offsetMs;
-		const d = new Date(calendarTs);
-
-		// Do month arithmetic in calendar
-		d.setUTCMonth(d.getUTCMonth() + n, 1);
-		d.setUTCHours(0, 0, 0, 0);
-
-		// Convert back to UTC
-		return d.getTime() - offsetMs;
-	}
-
-	// Complex path: DST timeZones (requires full timeZone parsing)
 	const { year, month } = timestampToCalendar(ts, timeZone);
 	return startOfNthMonthBase(year, month, n, timeZone);
 }
@@ -464,24 +328,10 @@ export function daysInMonth(ts: number, timeZone: TimeZone | null): number {
 	let year: number;
 	let month: number;
 
-	const d = new Date(ts);
 	if (!timeZone) {
+		const d = new Date(ts);
 		year = d.getFullYear();
 		month = d.getMonth() + 1;
-	} else if (isUTC(timeZone)) {
-		year = d.getUTCFullYear();
-		month = d.getUTCMonth() + 1;
-	} else if (!isDST(timeZone)) {
-		// Fast path: Non-DST timeZones (fixed offset zones)
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
-		const offsetMs = offsetMinutes * 60 * 1000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = ts + offsetMs;
-		const calendarDate = new Date(calendarTs);
-
-		year = calendarDate.getUTCFullYear();
-		month = calendarDate.getUTCMonth() + 1;
 	} else {
 		({ year, month } = timestampToCalendar(ts, timeZone));
 	}
@@ -574,23 +424,11 @@ export function getMonthName(
 export function getQuarter(ts: number, timeZone: TimeZone | null): number {
 	let month: number;
 
-	const d = new Date(ts);
 	if (!timeZone) {
+		const d = new Date(ts);
 		month = d.getMonth() + 1;
-	} else if (isUTC(timeZone)) {
-		month = d.getUTCMonth() + 1;
-	} else if (!isDST(timeZone)) {
-		// Fast path: Non-DST timeZones (fixed offset zones)
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
-		const offsetMs = offsetMinutes * 60 * 1000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = ts + offsetMs;
-		const calendarDate = new Date(calendarTs);
-
-		month = calendarDate.getUTCMonth() + 1;
 	} else {
-		({ month } = timestampToCalendar(ts, timeZone));
+		month = timestampToCalendar(ts, timeZone).month;
 	}
 
 	return getQuarterBase(month);

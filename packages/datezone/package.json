@@ -54,6 +54,10 @@
       "default": "./dist/output/format/index.pub.js",
       "types": "./dist/types/format/index.pub.d.ts"
     },
+    "./format-parts": {
+      "default": "./dist/output/format-parts.pub.js",
+      "types": "./dist/types/format-parts.pub.d.ts"
+    },
     "./hour": {
       "default": "./dist/output/hour.pub.js",
       "types": "./dist/types/hour.pub.d.ts"

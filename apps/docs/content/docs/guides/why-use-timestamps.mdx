@@ -5,13 +5,15 @@ description: Learn why timestamps are the superior choice for handling dates and
 
 
 
-After understanding [why JavaScript Date is problematic](/docs/guides/why-date-is-evil), you might wonder what the alternative is. The answer is simple: **timestamps**. JavaScript's `number` type is actually the perfect data type for representing dates and times.
+After understanding [why JavaScript Date is problematic](/docs/guides/why-not-to-use-date), you might wonder: are there any alternative? 
+
+The answer is: **timestamps**. JavaScript's `number` type is the perfect data type for representing a moment in time.
 
 ## What Are Timestamps?
 
 A timestamp is a number representing milliseconds since the Unix epoch (January 1, 1970, 00:00:00 UTC). It's a single number that unambiguously represents a specific moment in time, anywhere in the world.
 
-<CodeExample tabs={[{ name: "Example 1", file: "guides/why-use-timestamps/const-timestamp-datenow-eg-1704067200000.type" }]} />
+<CodeExample tabs={[{ name: "Example 1", file: "guides/why-use-timestamps/timestamp-example.ts" }]} />
 
 ## Why Timestamps Are Superior
 
@@ -19,103 +21,71 @@ A timestamp is a number representing milliseconds since the Unix epoch (January 
 
 Unlike `Date` objects, timestamps represent the exact same moment in time regardless of where your code runs.
 
-<CodeExample tabs={[{ name: "Example 2", file: "guides/why-use-timestamps/this-timestamp-represents-the-same-moment-everywhere.type" }]} />
+<CodeExample tabs={[{ name: "Example 2", file: "guides/why-use-timestamps/this-timestamp-represents-the-same-moment-everywhere.ts" }]} />
 
 ### 2. Immutable by Nature
 
 Numbers cannot be mutated in JavaScript, eliminating an entire class of bugs.
 
-<CodeExample tabs={[{ name: "Example 3", file: "guides/why-use-timestamps/original-is-unchanged.type" }]} />
+<CodeExample tabs={[{ name: "Example 3", file: "guides/why-use-timestamps/original-is-unchanged.ts" }]} />
 
 ### 3. Perfect Serialization
 
 Timestamps serialize and deserialize perfectly with JSON, databases, and APIs.
 
-<CodeExample tabs={[{ name: "Example 4", file: "guides/why-use-timestamps/all-values-are-still-numbers-ready-to-use.type" }]} />
+<CodeExample tabs={[{ name: "Example 4", file: "guides/why-use-timestamps/all-values-are-still-numbers-ready-to-use.ts" }]} />
 
 ### 4. Zero Memory Overhead
 
-Timestamps are primitive values with no object overhead on the JavaScript heap.
+Timestamps are fast and lightweight primitive values with no object overhead on the JavaScript heap.
 
-<CodeExample tabs={[{ name: "Example 5", file: "guides/why-use-timestamps/efficient-memory-usage.type" }]} />
+<CodeExample tabs={[{ name: "Example 5", file: "guides/why-use-timestamps/efficient-memory-usage.ts" }]} />
 
 ### 5. Mathematical Operations
 
 You can perform arithmetic directly on timestamps without special functions.
 
-<CodeExample tabs={[{ name: "Example 6", file: "guides/why-use-timestamps/const-start-datenow.type" }]} />
+<CodeExample tabs={[{ name: "Example 6", file: "guides/why-use-timestamps/timestamp-math.ts" }]} />
 
-## Working with Timestamps in Datezone
+## What Timestamps Are Lacking
 
-Datezone is designed from the ground up to work with timestamps, providing all the functionality you need while maintaining the benefits of timestamps.
+Even though timestamps are the best *storage* format, they are not the best *presentation* or *manipulation* format for humans.
 
-### Basic Operations
+### 1. Human-Readable Calendar Values
 
-<CodeExample tabs={[{ name: "Example 7", file: "guides/why-use-timestamps/import-adddays-subdays-from-datezone.type" }]} />
+Humans think in calendar units: "March&nbsp;14 at 3 PM", not `1710436800000`. Whenever you need to **display** a date or accept input from a human, convert the raw timestamp with datezone's formatting helpers.
 
-### Timezone-Aware Operations
+```ts
+import { format } from "datezone/format";
 
-<CodeExample tabs={[{ name: "Example 8", file: "guides/why-use-timestamps/add-a-day-in-new-york-timeZone-handles-dst-automatically.type" }]} />
+const launch = 1710436800000; // timestamp
+console.log(format(launch, "yyyy-MM-dd HH:mm zzzz"));
+// → "2024-03-14 15:00 America/New_York"
+```
 
-### Comparison and Validation
+### 2. No Built-in DST Awareness
 
-<CodeExample tabs={[{ name: "Example 9", file: "guides/why-use-timestamps/clear-readable-comparisons.type" }]} />
+Simple timestamp math works for seconds, minutes and hours, but beyond that you will run into issues with Daylight Saving Time (DST). Adding *24 × 60 × 60 × 1000* milliseconds will **usually** move you one day forward, but not across a DST transitions.
 
-## Converting from Date Objects
+<CodeExample title="Breaks during DST" file="guides/how-dst-works/at-200-am-est-clocks-spring-forward-to-300-am-edt.ts" />
 
-When you need to work with existing Date objects, convert them to timestamps immediately:
+Learn more about why DST makes date math tricky in: [How DST Works](/docs/guides/how-dst-works).
 
-<CodeExample tabs={[{ name: "Example 10", file: "guides/why-use-timestamps/convert-existing-date-to-timestamp.type" }]} />
+### 3. Higher-Level Calendar Operations
 
-## Best Practices with Timestamps
+Operations such as "add one month", "start of week", or "is the date a weekend" are **calendar concepts** and subjective to where the user is located. `datezone` offers a *time zone-aware* API on top of timestamps to cover all of these cases without sacrificing the benefits you gained from using numbers.
 
-### 1. Store Timestamps in Your Database
-
-<CodeExample tabs={[{ name: "Example 11", file: "guides/why-use-timestamps/placeholder-example-for-storing-timestamps-in-a-database.type" }]} />
-
-### 2. Use Timestamps in APIs
-
-<CodeExample tabs={[{ name: "Example 12", file: "guides/why-use-timestamps/api-responses.type" }]} />
-
-### 3. Convert to Display Format Only When Needed
-
-<CodeExample tabs={[{ name: "Example 13", file: "guides/why-use-timestamps/store-as-timestamp.type" }]} />
-
-## Common Timestamp Patterns
-
-### Creating Timestamps
-
-<CodeExample tabs={[{ name: "Example 14", file: "guides/why-use-timestamps/current-time.type" }]} />
-
-### Time Calculations
-
-<CodeExample tabs={[{ name: "Example 15", file: "guides/why-use-timestamps/const-minute-60-1000.type" }]} />
-
-### Range Checking
-
-<CodeExample tabs={[{ name: "Example 16", file: "guides/why-use-timestamps/const-isinrange-timestamp-number-start-number-end-number.type" }]} />
-
-## Migration Strategy
-
-### Step 1: Replace Date.now() Calls
-
-<CodeExample tabs={[{ name: "Example 17", file: "guides/why-use-timestamps/creating-date-objects.type" }]} />
-
-### Step 2: Convert Function Parameters
-
-<CodeExample tabs={[{ name: "Example 18", file: "guides/why-use-timestamps/functions-taking-date-objects.type" }]} />
-
-### Step 3: Update Data Storage
-
-<CodeExample tabs={[{ name: "Example 19", file: "guides/why-use-timestamps/storing-date-objects-often-serialized-as-strings.type" }]} />
+<Callout type="info">
+Datezone is designed as a *thin layer* above timestamps: use raw numbers for and performance, then use datezone whenever you have to think 'Calendar' like a human.
+</Callout>
 
 ## Summary
 
-Timestamps are the ideal way to handle dates and times in JavaScript applications. They're simple, efficient, predictable, and work seamlessly with the web platform. Combined with datezone's timeZone-aware functions, you get all the power you need without any of the pitfalls of Date objects.
+Timestamps are the ideal way to handle dates and times in JavaScript applications. They're simple, efficient, predictable, and work seamlessly across environments.
 
-<Callout type="success">
+<Callout type="info">
 **Key benefits**: Timestamps eliminate timeZone ambiguity, serialization issues, mutation bugs, and testing problems while providing better performance and simpler code.
 </Callout>
 
-Next, learn about [how DST affects your applications](/docs/guides/how-dst-works) and why timeZone-aware date arithmetic is essential.
+Next, learn about [how DST affects your applications](/docs/guides/how-dst-works) and why time zone-aware date arithmetic is needed.
 

@@ -42,7 +42,7 @@
 		"semver": "^7.7.2",
 		"turbo": "^2.5.4",
 		"typescript": "^5",
-		"zod": "^3.25.70"
+		"zod": "^3.25.74"
 	},
 	"peerDependencies": {
 		"typescript": "^5"

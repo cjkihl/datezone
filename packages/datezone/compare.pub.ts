@@ -1,5 +1,4 @@
 import { timestampToCalendar } from "./calendar.pub.js";
-import { startOfDayBase } from "./day.pub.js";
 import type { TimeZone } from "./index.pub.js";
 import { dayOfWeek, startOfDay } from "./index.pub.js";
 
@@ -27,16 +26,6 @@ function startOfToday(timeZone: TimeZone): number {
 export function isToday(ts: number, timeZone: TimeZone): boolean {
 	const todayStart = startOfToday(timeZone);
 	return todayStart === startOfDay(ts, timeZone);
-}
-
-export function isTodayBase(
-	year: number,
-	month: number,
-	day: number,
-	timeZone: TimeZone,
-): boolean {
-	const todayStart = startOfToday(timeZone);
-	return todayStart === startOfDayBase(year, month, day, timeZone);
 }
 
 /**

@@ -1,0 +1,86 @@
+---
+title: Why NOT to use Date
+description: Understanding the fundamental problems with JavaScript's Date object and why you should avoid it
+---
+
+
+
+JavaScript's `Date` object is one of the most problematic APIs in the language. While it seems convenient at first, it's the source of countless bugs and unpredictable behavior in applications. Here's why you should avoid it and what to use instead.
+
+## The Core Problems
+
+### 1. No Timezone Support
+
+The `Date` object doesn't properly support timeZones. It only knows about the local system timeZone and UTC, making it difficult to work with dates in specific timeZones reliably.
+
+<CodeExample tabs={[{ name: "Example 1", file: "guides/why-not-to-use-date/example-1.ts" }]} />
+
+<Callout type="info">
+**Machine-dependent behavior**: The same code produces different results depending on where it's executed. This makes your application unpredictable and hard to test.
+
+- The JavaScript `Date` object reflects the host system's **local time zone**.
+
+- There is no API in JavaScript to override the time zone globally.
+</Callout>
+
+### 2. Confusing constructor
+
+The `Date` object's constructor string parser have strange implicit behavours and is prone to a lot a hard to track errors.
+
+<CodeExample tabs={[{ name: "Example 2", file: "guides/why-not-to-use-date/example-2.ts" }]} />
+
+### 3. Mutable State = Bugs
+
+`Date` objects are mutable, which leads to unexpected side effects and hard-to-track bugs.
+
+<CodeExample tabs={[{ name: "Example 3", file: "guides/why-not-to-use-date/example-3.ts" }]} />
+
+<Callout type="danger">
+**Mutation bugs**: Methods like `setHours()`, `setDate()`, etc. modify the original object instead of returning a new one. 
+- Violates the principle of immutability and can cause subtle bugs.
+- **Confusing return values**: `setDate()` returns a timestamp, making it appear like an immutable function when it also mutates the original object.
+</Callout>
+
+### 4. Unpredictable Results
+
+The same code returns different results depending on the system timeZone, making unit testing unreliable.
+
+<CodeExample tabs={[{ name: "Example 4", file: "guides/why-not-to-use-date/example-4.ts" }]} />
+
+### 5. Not Serializable
+
+`Date` objects don't serialize well. When you send them over HTTP or store them in JSON, you lose the Date() object.
+
+<CodeExample tabs={[{ name: "Example 5", file: "guides/why-not-to-use-date/example-5.ts" }]} />
+
+<Callout type="info">
+**Serialization problems**: Libraries like `superjson` exist to work around this, but they add complexity and overhead to your application.
+</Callout>
+
+### 6. Only Supports Gregorian Calendar
+
+The `Date` object only works with the Gregorian calendar. While this calendar is widely used, many cultures use different calendar systems (like Islamic, Hebrew, Thai Buddhist, or Chinese calendars).
+
+<Callout type="error">
+**Limited calendar support**: JavaScript Date() only supports the Gregorian calendar.
+</Callout>
+
+## The Alternative: Timestamps
+
+JavaScript has a much better built-in native type for handling dates: `number` (timestamps)!
+
+### Why Timestamps Are Better
+
+- **Immutable**: Numbers can't be mutated
+- **Serializable**: Numbers work perfectly with JSON
+- **Predictable**: Always represent the same moment in time no matter environment and calendar system 
+- **Efficient**: No memory overhead on the JavaScript heap
+- **Testable**: Same input always produces the same output
+
+<CodeExample tabs={[{ name: "Example 6", file: "guides/why-not-to-use-date/example-6.ts" }]} />
+
+## Summary
+
+The JavaScript `Date` object is fundamentally flawed and are a big cause of Date & Time related bugs in global applications. 
+
+Next, learn about [why timestamps are the better choice](/docs/guides/why-use-timestamps) for your applications.

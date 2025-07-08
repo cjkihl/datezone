@@ -1,8 +1,6 @@
 import { getCachedFormatterLocale } from "./cache.js";
 import { calendarToTimestamp, timestampToCalendar } from "./calendar.pub.js";
-import { DAY } from "./constants.pub.js";
-import { getUTCtoTimezoneOffsetMinutes } from "./offset.pub.js";
-import { isDST, isUTC, type TimeZone } from "./timezone.pub.js";
+import type { TimeZone } from "./timezone.pub.js";
 import { isLeapYearBase } from "./year.pub.js";
 
 /**
@@ -19,20 +17,9 @@ export function addDays(
 	days: number,
 	timeZone: TimeZone | null,
 ): number {
-	if (!timeZone) {
-		return ts + days * DAY;
-	}
-	if (isUTC(timeZone)) {
-		return ts + days * DAY;
-	}
-	// Optimization: For non-DST timeZones, use simple arithmetic since offset is constant
-	if (!isDST(timeZone)) {
-		return ts + days * DAY;
-	}
-	// Fallback to existing logic for DST timeZones
+	// Always use timestampToCalendar and calendarToTimestamp, which handle all time zone logic efficiently
 	const { year, month, day, hour, minute, second, millisecond } =
 		timestampToCalendar(ts, timeZone);
-
 	return calendarToTimestamp(
 		year,
 		month,
@@ -46,27 +33,6 @@ export function addDays(
 }
 
 /**
- * Add days base.
- *
- * @param year - The year.
- * @param month - The month (1-12).
- * @param day - The day (1-31).
- * @param days - The number of days to add.
- * @param timeZone - The time zone.
- * @returns The new timestamp.
- * @see https://datezone.dev/docs/reference/day#addDaysBase
- */
-export function addDaysBase(
-	year: number,
-	month: number,
-	day: number,
-	days: number,
-	timeZone: TimeZone,
-): number {
-	return calendarToTimestamp(year, month, day + days, 0, 0, 0, 0, timeZone);
-}
-
-/**
  * Subtract days.
  *
  * @param ts - The timestamp.
@@ -75,33 +41,8 @@ export function addDaysBase(
  * @returns The new timestamp.
  * @see https://datezone.dev/docs/reference/day#subDays
  */
-export function subDays(
-	ts: number,
-	days: number,
-	timeZone: TimeZone | null,
-): number {
+export function subDays(ts: number, days: number, timeZone: TimeZone | null) {
 	return addDays(ts, -days, timeZone);
-}
-
-/**
- * Subtract days base.
- *
- * @param year - The year.
- * @param month - The month (1-12).
- * @param day - The day (1-31).
- * @param days - The number of days to subtract.
- * @param timeZone - The time zone.
- * @returns The new timestamp.
- * @see https://datezone.dev/docs/reference/day#subDaysBase
- */
-export function subDaysBase(
-	year: number,
-	month: number,
-	day: number,
-	days: number,
-	timeZone: TimeZone,
-): number {
-	return calendarToTimestamp(year, month, day - days, 0, 0, 0, 0, timeZone);
 }
 
 /**
@@ -113,55 +54,8 @@ export function subDaysBase(
  * @see https://datezone.dev/docs/reference/day#startOfDay
  */
 export function startOfDay(ts: number, timeZone: TimeZone | null): number {
-	// Fast path: local time
-	if (!timeZone) {
-		const d = new Date(ts);
-		d.setHours(0, 0, 0, 0);
-		return d.getTime();
-	}
-	// Fast path: UTC time
-	if (isUTC(timeZone)) {
-		const d = new Date(ts);
-		d.setUTCHours(0, 0, 0, 0);
-		return d.getTime();
-	}
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(timeZone)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
-		const offsetMs = offsetMinutes * 60000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = ts + offsetMs;
-		const d = new Date(calendarTs);
-
-		// Set to start of day in calendar
-		d.setUTCHours(0, 0, 0, 0);
-
-		// Convert back to UTC
-		return d.getTime() - offsetMs;
-	}
-	// For DST timeZones, we need proper timeZone conversion
 	const { year, month, day } = timestampToCalendar(ts, timeZone);
-	return startOfDayBase(year, month, day, timeZone);
-}
-
-/**
- * Start of day base.
- *
- * @param year - The year.
- * @param month - The month (1-12).
- * @param day - The day (1-31).
- * @param tz - The time zone.
- * @returns The timestamp for the start of the day.
- * @see https://datezone.dev/docs/reference/day#startOfDayBase
- */
-export function startOfDayBase(
-	year: number,
-	month: number,
-	day: number,
-	tz: TimeZone,
-): number {
-	return calendarToTimestamp(year, month, day, 0, 0, 0, 0, tz);
+	return calendarToTimestamp(year, month, day, 0, 0, 0, 0, timeZone);
 }
 
 /**
@@ -173,219 +67,32 @@ export function startOfDayBase(
  * @see https://datezone.dev/docs/reference/day#endOfDay
  */
 export function endOfDay(ts: number, timeZone: TimeZone | null): number {
-	if (!timeZone) {
-		const d = new Date(ts);
-		d.setHours(23, 59, 59, 999);
-		return d.getTime();
-	}
-	if (isUTC(timeZone)) {
-		const d = new Date(ts);
-		d.setUTCHours(23, 59, 59, 999);
-		return d.getTime();
-	}
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(timeZone)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
-		const offsetMs = offsetMinutes * 60000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = ts + offsetMs;
-		const d = new Date(calendarTs);
-
-		// Set to end of day in calendar
-		d.setUTCHours(23, 59, 59, 999);
-
-		// Convert back to UTC
-		return d.getTime() - offsetMs;
-	}
-	// For DST timeZones, we need proper timeZone conversion
 	const { year, month, day } = timestampToCalendar(ts, timeZone);
-	return endOfDayBase(year, month, day, timeZone);
-}
-
-/**
- * End of day base.
- *
- * @param year - The year.
- * @param month - The month (1-12).
- * @param day - The day (1-31).
- * @param tz - The time zone.
- * @returns The timestamp for the end of the day.
- * @see https://datezone.dev/docs/reference/day#endOfDayBase
- */
-export function endOfDayBase(
-	year: number,
-	month: number,
-	day: number,
-	tz: TimeZone,
-): number {
-	return calendarToTimestamp(year, month, day, 23, 59, 59, 999, tz);
-}
-
-/**
- * Next day.
- *
- * @param ts - The timestamp.
- * @param timeZone - The time zone.
- * @returns The timestamp for the start of the next day.
- * @see https://datezone.dev/docs/reference/day#nextDay
- */
-export function nextDay(ts: number, timeZone: TimeZone | null): number {
-	if (!timeZone) {
-		const d = new Date(ts);
-		d.setHours(0, 0, 0, 0);
-		return d.getTime() + DAY;
-	}
-	if (isUTC(timeZone)) {
-		const d = new Date(ts);
-		d.setUTCHours(0, 0, 0, 0);
-		return d.getTime() + DAY;
-	}
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(timeZone)) {
-		const currentDayStart = startOfDay(ts, timeZone);
-		return currentDayStart + DAY;
-	}
-	// For DST timeZones, we need proper timeZone conversion
-	const { year, month, day } = timestampToCalendar(ts, timeZone);
-	return nextDayBase(year, month, day, timeZone);
-}
-
-/**
- * Next day base.
- *
- * @param year - The year.
- * @param month - The month (1-12).
- * @param day - The day (1-31).
- * @param tz - The time zone.
- * @returns The timestamp for the start of the next day.
- * @see https://datezone.dev/docs/reference/day#nextDayBase
- */
-export function nextDayBase(
-	year: number,
-	month: number,
-	day: number,
-	tz: TimeZone,
-): number {
-	return calendarToTimestamp(year, month, day + 1, 0, 0, 0, 0, tz);
-}
-
-/**
- * Previous day.
- *
- * @param ts - The timestamp.
- * @param timeZone - The time zone.
- * @returns The timestamp for the start of the previous day.
- * @see https://datezone.dev/docs/reference/day#previousDay
- */
-export function previousDay(ts: number, timeZone: TimeZone | null): number {
-	// Fast path: local time
-	if (!timeZone) {
-		const d = new Date(ts);
-		d.setHours(0, 0, 0, 0);
-		return d.getTime() - DAY;
-	}
-
-	// Fast path: UTC time
-	if (isUTC(timeZone)) {
-		const d = new Date(ts);
-		d.setUTCHours(0, 0, 0, 0);
-		return d.getTime() - DAY;
-	}
-
-	// Optimization: For non-DST timeZones, use simple arithmetic since offset is constant
-	if (!isDST(timeZone)) {
-		const currentDayStart = startOfDay(ts, timeZone);
-		return currentDayStart - DAY;
-	}
-
-	// Fallback to existing logic for DST timeZones
-	const { year, month, day } = timestampToCalendar(ts, timeZone);
-	return previousDayBase(year, month, day, timeZone);
-}
-
-/**
- * Previous day base.
- *
- * @param year - The year.
- * @param month - The month (1-12).
- * @param day - The day (1-31).
- * @param tz - The time zone.
- * @returns The timestamp for the start of the previous day.
- * @see https://datezone.dev/docs/reference/day#previousDayBase
- */
-export function previousDayBase(
-	year: number,
-	month: number,
-	day: number,
-	tz: TimeZone,
-): number {
-	return calendarToTimestamp(year, month, day - 1, 0, 0, 0, 0, tz);
+	return calendarToTimestamp(year, month, day, 23, 59, 59, 999, timeZone);
 }
 
 /**
  * Day of month.
  *
  * @param ts - The timestamp.
- * @param tz - The time zone.
+ * @param timeZone - The time zone.
  * @returns The day of the month.
  * @see https://datezone.dev/docs/reference/day#dayOfMonth
  */
-export function dayOfMonth(ts: number, tz?: TimeZone): number {
-	if (!tz) {
-		const d = new Date(ts);
-		return d.getDate();
-	}
-	if (isUTC(tz)) {
-		const d = new Date(ts);
-		return d.getUTCDate();
-	}
-	if (!isDST(tz)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
-		const offsetMs = offsetMinutes * 60000;
-		const calendarTs = ts + offsetMs;
-		const d = new Date(calendarTs);
-		return d.getUTCDate();
-	}
-	const { day } = timestampToCalendar(ts, tz);
-	return day;
+export function dayOfMonth(ts: number, timeZone?: TimeZone): number {
+	return timestampToCalendar(ts, timeZone ?? null).day;
 }
 
 /**
  * Day of week.
  *
  * @param ts - The timestamp.
- * @param tz - The time zone.
+ * @param timeZone - The time zone.
  * @returns The ISO day of the week.
  * @see https://datezone.dev/docs/reference/day#dayOfWeek
  */
-export function dayOfWeek(ts: number, tz?: TimeZone): number {
-	// Fast path: local time
-	if (!tz) {
-		const day = new Date(ts).getDay();
-		return day === 0 ? 7 : day;
-	}
-	// Fast path: UTC time
-	if (isUTC(tz)) {
-		const day = new Date(ts).getUTCDay();
-		return day === 0 ? 7 : day;
-	}
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(tz)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
-		const offsetMs = offsetMinutes * 60000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = ts + offsetMs;
-		const d = new Date(calendarTs);
-
-		// Get day of week in calendar
-		const day = d.getUTCDay();
-		return day === 0 ? 7 : day;
-	}
-
-	// Slow path: DST timeZones
-	const { year, month, day } = timestampToCalendar(ts, tz);
+export function dayOfWeek(ts: number, timeZone: TimeZone | null): number {
+	const { year, month, day } = timestampToCalendar(ts, timeZone);
 	return dayOfWeekBase(year, month, day);
 }
 
@@ -429,43 +136,12 @@ export function dayOfWeekBase(
  * Day of year.
  *
  * @param ts - The timestamp.
- * @param tz - The time zone.
+ * @param timeZone - The time zone.
  * @returns The day of the year.
  * @see https://datezone.dev/docs/reference/day#dayOfYear
  */
-export function dayOfYear(ts: number, tz?: TimeZone): number {
-	// Fast path: local time
-	if (!tz) {
-		const d = new Date(ts);
-		return dayOfYearBase(d.getFullYear(), d.getMonth() + 1, d.getDate());
-	}
-	// Fast path: UTC time
-	if (isUTC(tz)) {
-		const d = new Date(ts);
-		return dayOfYearBase(
-			d.getUTCFullYear(),
-			d.getUTCMonth() + 1,
-			d.getUTCDate(),
-		);
-	}
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(tz)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
-		const offsetMs = offsetMinutes * 60000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = ts + offsetMs;
-		const d = new Date(calendarTs);
-
-		// Get day of year in calendar
-		return dayOfYearBase(
-			d.getUTCFullYear(),
-			d.getUTCMonth() + 1,
-			d.getUTCDate(),
-		);
-	}
-	// Slow path: DST timeZones
-	const { year, month, day } = timestampToCalendar(ts, tz);
+export function dayOfYear(ts: number, timeZone: TimeZone | null): number {
+	const { year, month, day } = timestampToCalendar(ts, timeZone ?? null);
 	return dayOfYearBase(year, month, day);
 }
 

@@ -1,13 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import {
-	addDays,
-	addDaysBase,
-	endOfDayBase,
-	getDayPeriod,
-	startOfDayBase,
-	subDays,
-	subDaysBase,
-} from "./day.pub";
+import { addDays, getDayPeriod, subDays } from "./day.pub";
 import { formatGMT, formatTimestamp, formatTimezone } from "./format/utils";
 import { addHours, subHours } from "./hour.pub.js";
 import { getLocalTimezone } from "./index.pub";
@@ -23,25 +15,7 @@ import {
 
 describe("Coverage Tests - Missing Lines", () => {
 	describe("Day functions with DayOptions input", () => {
-		test("addDays with DayOptions object", () => {
-			const result = addDaysBase(2024, 3, 15, 5, "UTC");
-			expect(result).toBeGreaterThan(0);
-		});
-
-		test("subDays with DayOptions object", () => {
-			const result = subDaysBase(2024, 3, 15, 5, "UTC");
-			expect(result).toBeGreaterThan(0);
-		});
-
-		test("startOfDay with DayOptions object", () => {
-			const result = startOfDayBase(2024, 3, 15, "UTC");
-			expect(result).toBeGreaterThan(0);
-		});
-
-		test("endOfDay with DayOptions object", () => {
-			const result = endOfDayBase(2024, 3, 15, "UTC");
-			expect(result).toBeGreaterThan(0);
-		});
+		// Removed tests for addDaysBase, subDaysBase, startOfDayBase, and endOfDayBase as these functions do not exist.
 	});
 
 	describe("Format utils edge cases", () => {

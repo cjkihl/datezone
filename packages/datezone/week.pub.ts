@@ -1,8 +1,6 @@
 import { calendarToTimestamp, timestampToCalendar } from "./calendar.pub.js";
 import { dayOfWeekBase } from "./day.pub.js";
-import { isUTC, type TimeZone } from "./index.pub.js";
-import { getUTCtoTimezoneOffsetMinutes } from "./offset.pub.js";
-import { isDST } from "./timezone.pub.js";
+import type { TimeZone } from "./index.pub.js";
 
 export enum WeekStartsOn {
 	SUNDAY = 0,
@@ -53,7 +51,6 @@ export function startOfWeek(
 	timeZone: TimeZone | null,
 	weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY,
 ): number {
-	// Fast path: local time
 	if (!timeZone) {
 		const d = new Date(timestamp);
 		const day = d.getDay();
@@ -62,35 +59,6 @@ export function startOfWeek(
 		d.setHours(0, 0, 0, 0);
 		return d.getTime();
 	}
-	// Fast path: UTC time
-	if (isUTC(timeZone)) {
-		const d = new Date(timestamp);
-		const day = d.getUTCDay();
-		const diff = (day - weekStartsOn + 7) % 7;
-		d.setUTCDate(d.getUTCDate() - diff);
-		d.setUTCHours(0, 0, 0, 0);
-		return d.getTime();
-	}
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(timeZone)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(timestamp, timeZone);
-		const offsetMs = offsetMinutes * 60000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = timestamp + offsetMs;
-		const d = new Date(calendarTs);
-
-		// Calculate start of week in calendar
-		const day = d.getUTCDay();
-		const diff = (day - weekStartsOn + 7) % 7;
-		d.setUTCDate(d.getUTCDate() - diff);
-		d.setUTCHours(0, 0, 0, 0);
-
-		// Convert back to UTC
-		return d.getTime() - offsetMs;
-	}
-
-	// Complex path: DST timeZones (requires full timeZone parsing)
 	const dt = timestampToCalendar(timestamp, timeZone);
 	return startOfWeekBase(dt.year, dt.month, dt.day, weekStartsOn, timeZone);
 }
@@ -102,7 +70,7 @@ export function startOfWeek(
  * @param month - The month (1-12).
  * @param day - The day (1-31).
  * @param weekStartsOn - The day of the week to start the week on.
- * @param tz - The time zone.
+ * @param timeZone - The time zone.
  * @returns The timestamp for the start of the week.
  * @see https://datezone.dev/docs/reference/week#startOfWeekBase
  */
@@ -111,7 +79,7 @@ export function startOfWeekBase(
 	month: number,
 	day: number,
 	weekStartsOn: WeekStartsOn,
-	tz: TimeZone,
+	timeZone: TimeZone,
 ): number {
 	const dayNum = dayOfWeekBase(year, month, day);
 	const jsDay = dayNum === 7 ? 0 : dayNum;
@@ -124,7 +92,7 @@ export function startOfWeekBase(
 		0,
 		0,
 		0,
-		tz,
+		timeZone,
 	);
 }
 
@@ -133,7 +101,6 @@ export function endOfWeek(
 	timeZone: TimeZone | null,
 	weekStartsOn: WeekStartsOn = WeekStartsOn.MONDAY,
 ): number {
-	// Fast path: local time
 	if (!timeZone) {
 		const d = new Date(timestamp);
 		const day = d.getDay();
@@ -142,35 +109,6 @@ export function endOfWeek(
 		d.setHours(23, 59, 59, 999);
 		return d.getTime();
 	}
-	// Fast path: UTC time
-	if (isUTC(timeZone)) {
-		const d = new Date(timestamp);
-		const day = d.getUTCDay();
-		const diff = (day - weekStartsOn + 7) % 7;
-		d.setUTCDate(d.getUTCDate() - diff + 6);
-		d.setUTCHours(23, 59, 59, 999);
-		return d.getTime();
-	}
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(timeZone)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(timestamp, timeZone);
-		const offsetMs = offsetMinutes * 60000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = timestamp + offsetMs;
-		const d = new Date(calendarTs);
-
-		// Calculate end of week in calendar
-		const day = d.getUTCDay();
-		const diff = (day - weekStartsOn + 7) % 7;
-		d.setUTCDate(d.getUTCDate() - diff + 6);
-		d.setUTCHours(23, 59, 59, 999);
-
-		// Convert back to UTC
-		return d.getTime() - offsetMs;
-	}
-
-	// Complex path: DST timeZones (requires full timeZone parsing)
 	const dt = timestampToCalendar(timestamp, timeZone);
 	return endOfWeekBase(dt.year, dt.month, dt.day, weekStartsOn, timeZone);
 }
@@ -182,7 +120,7 @@ export function endOfWeek(
  * @param month - The month (1-12).
  * @param day - The day (1-31).
  * @param weekStartsOn - The day of the week to start the week on.
- * @param tz - The time zone.
+ * @param timeZone - The time zone.
  * @returns The timestamp for the end of the week.
  * @see https://datezone.dev/docs/reference/week#endOfWeekBase
  */
@@ -191,7 +129,7 @@ export function endOfWeekBase(
 	month: number,
 	day: number,
 	weekStartsOn: WeekStartsOn,
-	tz: TimeZone,
+	timeZone: TimeZone,
 ): number {
 	const dayNum = dayOfWeekBase(year, month, day);
 	const jsDay = dayNum === 7 ? 0 : dayNum;
@@ -205,7 +143,7 @@ export function endOfWeekBase(
 		59,
 		59,
 		999,
-		tz,
+		timeZone,
 	);
 }
 
@@ -217,19 +155,8 @@ export function addWeeks(
 	const weeksInMs = amount * 604800000; // 7 * 24 * 60 * 60 * 1000
 
 	if (!timeZone) {
-		// Fast path: local time
 		return timestamp + weeksInMs;
 	}
-	if (isUTC(timeZone)) {
-		// Fast path: UTC time
-		return timestamp + weeksInMs;
-	}
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(timeZone)) {
-		return timestamp + weeksInMs;
-	}
-
-	// Complex path: DST timeZones (requires full timeZone parsing)
 	const dt = timestampToCalendar(timestamp, timeZone);
 	return addWeeksBase(dt.year, dt.month, dt.day, amount, timeZone);
 }
@@ -241,7 +168,7 @@ export function addWeeks(
  * @param month - The month (1-12).
  * @param day - The day (1-31).
  * @param amount - The number of weeks to add.
- * @param tz - The time zone.
+ * @param timeZone: - The time zone.
  * @returns The timestamp for the given date plus the given number of weeks.
  * @see https://datezone.dev/docs/reference/week#addWeeksBase
  */
@@ -250,9 +177,18 @@ export function addWeeksBase(
 	month: number,
 	day: number,
 	amount: number,
-	tz: TimeZone,
+	timeZone: TimeZone,
 ): number {
-	return calendarToTimestamp(year, month, day + amount * 7, 0, 0, 0, 0, tz);
+	return calendarToTimestamp(
+		year,
+		month,
+		day + amount * 7,
+		0,
+		0,
+		0,
+		0,
+		timeZone,
+	);
 }
 
 export function subWeeks(
@@ -302,16 +238,13 @@ export function weeksInMonthBase(
 	weekStartsOn: WeekStartsOn,
 	timeZone: TimeZone | null,
 ): number {
-	// Fast path: local time or UTC
-	if (!timeZone || isUTC(timeZone)) {
+	if (!timeZone) {
 		const firstDayOfWeek = new Date(year, month - 1, 1).getDay();
 		const daysInMonth = new Date(year, month, 0).getDate();
 		const daysFromWeekStart = (firstDayOfWeek - weekStartsOn + 7) % 7;
 		const totalDays = daysFromWeekStart + daysInMonth;
 		return Math.ceil(totalDays / 7);
 	}
-
-	// For other timeZones, use proper timeZone conversion
 	const firstDayOfWeek = dayOfWeekBase(year, month, 1);
 	const jsDay = firstDayOfWeek === 7 ? 0 : firstDayOfWeek;
 	const daysInMonth = new Date(year, month, 0).getDate();

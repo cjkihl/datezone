@@ -1,7 +1,5 @@
 import { timestampToCalendar } from "./calendar.pub.js";
 import { HOUR, type TimeZone } from "./index.pub.js";
-import { getUTCtoTimezoneOffsetMinutes } from "./offset.pub.js";
-import { isDST, isUTC } from "./timezone.pub.js";
 
 /**
  * To12 hour.
@@ -37,22 +35,6 @@ export function hour(ts: number, timeZone: TimeZone | null): number {
 	if (!timeZone) {
 		return new Date(ts).getHours();
 	}
-	// Fast path: UTC time
-	if (isUTC(timeZone)) {
-		return new Date(ts).getUTCHours();
-	}
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(timeZone)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
-		const offsetMs = offsetMinutes * 60000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = ts + offsetMs;
-		const d = new Date(calendarTs);
-
-		return d.getUTCHours();
-	}
-	// For DST timeZones, compute via timestampToCalendar
 	return timestampToCalendar(ts, timeZone).hour;
 }
 

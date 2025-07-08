@@ -9,5 +9,3 @@ const second = new Date("2024-11-03T01:30:00-05:00");
 // How many minutes does JavaScript think separate these two moments?
 const diffMinutes = (second.getTime() - first.getTime()) / 60_000;
 console.log("diffMinutes", diffMinutes); // 👉 60 minutes (!)
-
-export {};

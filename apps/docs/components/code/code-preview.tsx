@@ -1,7 +1,8 @@
 "use client";
+
 import clsx from "clsx";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
-import { Check, Copy, Play } from "lucide-react";
+import { Check, Copy, Loader2, Play, Terminal } from "lucide-react";
 
 import { Fragment, type JSX, useState } from "react";
 import useMeasure from "react-use-measure";
@@ -99,9 +100,15 @@ export function CodePreview({
 		};
 
 		try {
-			// Transform imports and wrap in async function so that we can use await.
-			const transformed = transformImports(code);
-			// Dynamically create an async function to execute the code.
+			const sucrase = await import("sucrase");
+			const { code: jsWithoutTypes } = sucrase.transform(code, {
+				transforms: ["typescript"],
+			});
+
+			// 2) Rewrite bare import specifiers so that they can run in the browser.
+			const transformed = transformImports(jsWithoutTypes);
+
+			// 3) Dynamically compile & execute the code.
 			const AsyncFunction = Object.getPrototypeOf(async () => {}).constructor;
 			const fn = new AsyncFunction(
 				"console",
@@ -142,7 +149,10 @@ export function CodePreview({
 													: "text-slate-500",
 											)}
 											key={tab.name}
-											onClick={() => setCurrentTab(tab.name)}
+											onClick={() => {
+												setCurrentTab(tab.name);
+												setOutput("");
+											}}
 										>
 											{tab.name}
 											{tab.name === currentTab && (
@@ -219,13 +229,24 @@ export function CodePreview({
 										{actions}
 									</motion.div>
 								)}
-								{output && (
+								{isRunning && !output && (
 									<motion.pre
 										animate={{ opacity: 1 }}
-										className="mt-4 w-full rounded-sm bg-stone-950 p-4 font-mono text-xs text-stone-300"
+										className="mt-4 w-full rounded-sm bg-stone-950 p-1 pb-4 font-mono text-xs text-stone-300 flex items-start gap-2"
 										initial={{ opacity: 0 }}
 										layout
 									>
+										<Loader2 className="animate-spin" /> Loading libraries...
+									</motion.pre>
+								)}
+								{output && (
+									<motion.pre
+										animate={{ opacity: 1 }}
+										className="mt-4 w-full rounded-sm bg-stone-950 p-1 pb-4 font-mono text-xs text-stone-300 flex items-start gap-2"
+										initial={{ opacity: 0 }}
+										layout
+									>
+										<Terminal className="" />
 										{output}
 									</motion.pre>
 								)}

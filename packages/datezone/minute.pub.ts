@@ -1,3 +1,6 @@
+import { getUTCtoTimezoneOffsetMinutes } from "./offset.pub.js";
+import type { TimeZone } from "./timezone.pub.js";
+
 /**
  * Start of minute.
  *
@@ -42,4 +45,20 @@ export function addMinutes(ts: number, amount: number): number {
  */
 export function subMinutes(ts: number, amount: number): number {
 	return ts - amount * 60 * 1000;
+}
+
+/**
+ * Get the minute of the day.
+ *
+ * @param ts - The timestamp in milliseconds
+ * @param timeZone - The time zone to use (null for local)
+ * @returns The minute of the day
+ * @see https://datezone.dev/docs/reference/minute#minute
+ */
+export function minute(ts: number, timeZone: TimeZone | null): number {
+	const m =
+		Math.floor(
+			(ts + getUTCtoTimezoneOffsetMinutes(ts, timeZone) * 60000) / 60000,
+		) % 60;
+	return (m + 60) % 60;
 }

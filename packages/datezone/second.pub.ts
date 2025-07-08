@@ -67,3 +67,11 @@ export function addMilliseconds(ts: number, amount: number): number {
 export function subMilliseconds(ts: number, amount: number): number {
 	return ts - amount;
 }
+
+/**
+ * Get the second of a timestamp
+ * @see https://datezone.dev/docs/reference/second#second
+ */
+export function second(ts: number): number {
+	return Math.floor(ts / 1000) % 60;
+}

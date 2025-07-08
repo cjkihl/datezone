@@ -1,5 +1,5 @@
 import { getUTCtoTimezoneOffsetMinutes } from "./offset.pub.js";
-import { isDST, isUTC, type TimeZone } from "./timezone.pub.js";
+import { isUTC, type TimeZone } from "./timezone.pub.js";
 
 /**
  * Represents a wall clock time with individual date and time components.
@@ -168,43 +168,9 @@ export function timestampToCalendar(ts: number, tz: TimeZone | null): Calendar {
 		};
 	}
 
-	if (isUTC(tz)) {
-		const d = new Date(ts);
-		return {
-			day: d.getUTCDate(),
-			hour: d.getUTCHours(),
-			millisecond: d.getUTCMilliseconds(),
-			minute: d.getUTCMinutes(),
-			month: d.getUTCMonth() + 1,
-			second: d.getUTCSeconds(),
-			year: d.getUTCFullYear(),
-		};
-	}
-
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(tz)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
-		const offsetMs = offsetMinutes * 60000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = ts + offsetMs;
-		const d = new Date(calendarTs);
-		return {
-			day: d.getUTCDate(),
-			hour: d.getUTCHours(),
-			millisecond: d.getUTCMilliseconds(),
-			minute: d.getUTCMinutes(),
-			month: d.getUTCMonth() + 1,
-			second: d.getUTCSeconds(),
-			year: d.getUTCFullYear(),
-		};
-	}
-
-	// Complex path: DST timeZones (requires full timeZone parsing)
+	// All other timeZones (fixed offset or DST): use offset logic
 	const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
 	const offsetMs = offsetMinutes * 60000;
-
-	// Convert to calendar in the timeZone
 	const calendarTs = ts + offsetMs;
 	const d = new Date(calendarTs);
 	return {

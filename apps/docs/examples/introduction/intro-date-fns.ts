@@ -1,8 +1,8 @@
 import { TZDate } from "@date-fns/tz";
 import { startOfDay } from "date-fns";
 
-// Need to create a TZDate object to use the timeZone (1.2 kB) Footprint
-const tzDate = TZDate.tz("Asia/Singapore");
+const tzDate = new TZDate(Date.now(), "Asia/Singapore");
 
-// Start of day, not explicit since timeZone is a hidden parameter of the TZDate object
-startOfDay(tzDate).getTime();
+const nowDate = startOfDay(tzDate);
+
+console.log(nowDate.withTimeZone("America/New_York").toISOString());

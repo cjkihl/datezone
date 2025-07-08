@@ -2,9 +2,11 @@ import { describe, expect, it } from "bun:test";
 import {
 	addMinutes,
 	endOfMinute,
+	minute,
 	startOfMinute,
 	subMinutes,
 } from "./minute.pub.js";
+import type { TimeZone } from "./timezone.pub.js";
 
 describe("Minute Functions", () => {
 	describe("startOfMinute", () => {
@@ -238,7 +240,7 @@ describe("Minute Functions", () => {
 		});
 
 		it("should handle fractional timeZone offsets consistently", () => {
-			// Test that minute arithmetic works with any timestamp, regardless of destination timeZone complexity
+			// Test that minute arithmetic works with TimeZone timestamp, regardless of destination timeZone complexity
 			const baseTests = [
 				{ minutes: 30, name: "Iran-style (+3:30)" },
 				{ minutes: 45, name: "Chatham-style (+12:45)" },
@@ -294,5 +296,94 @@ describe("Minute Functions", () => {
 			const end = performance.now();
 			expect(end - start).toBeLessThan(25); // Should be very fast with pure arithmetic
 		});
+	});
+});
+
+describe("minute (edge cases & DST)", () => {
+	it("returns correct minute for UTC", () => {
+		const ts = Date.UTC(2024, 5, 1, 12, 34, 56, 789);
+		expect(minute(ts, null)).toBe(34);
+	});
+
+	it("returns correct minute for positive offset (Asia/Tokyo, UTC+9)", () => {
+		const ts = Date.UTC(2024, 5, 1, 12, 45, 0, 0);
+		const tz: TimeZone = "Asia/Tokyo";
+		expect(minute(ts, tz)).toBe(45);
+	});
+
+	it("returns correct minute for negative offset (America/New_York, UTC-5/UTC-4 DST)", () => {
+		const ts = Date.UTC(2024, 0, 1, 12, 15, 0, 0);
+		const tz: TimeZone = "America/New_York";
+		expect(minute(ts, tz)).toBe(15);
+	});
+
+	it("returns correct minute for fractional offset (Asia/Kolkata, UTC+5:30)", () => {
+		const ts = Date.UTC(2024, 0, 1, 0, 59, 0, 0);
+		const tz: TimeZone = "Asia/Kolkata";
+		expect(minute(ts, tz)).toBe(29);
+	});
+
+	it("returns correct minute for Chatham Islands (Pacific/Chatham, UTC+12:45)", () => {
+		const ts = Date.UTC(2024, 0, 1, 0, 0, 0, 0);
+		const tz: TimeZone = "Pacific/Chatham";
+		expect(minute(ts, tz)).toBe(45);
+	});
+
+	it("handles DST spring forward (America/New_York, 2024-03-10 02:00 -> 03:00)", () => {
+		const tz: TimeZone = "America/New_York";
+		const before = Date.UTC(2024, 2, 10, 6, 59, 0, 0);
+		expect(minute(before, tz)).toBe(59);
+		const after = Date.UTC(2024, 2, 10, 7, 0, 0, 0);
+		expect(minute(after, tz)).toBe(0);
+	});
+
+	it("handles DST fall back (America/New_York, 2024-11-03 02:00 -> 01:00)", () => {
+		const tz: TimeZone = "America/New_York";
+		const before = Date.UTC(2024, 10, 3, 5, 59, 0, 0);
+		expect(minute(before, tz)).toBe(59);
+		const after = Date.UTC(2024, 10, 3, 6, 0, 0, 0);
+		expect(minute(after, tz)).toBe(0);
+	});
+
+	it("handles ambiguous time (fall back hour, America/New_York)", () => {
+		const tz: TimeZone = "America/New_York";
+		const before = Date.UTC(2024, 10, 3, 5, 30, 0, 0);
+		expect(minute(before, tz)).toBe(30);
+		const after = Date.UTC(2024, 10, 3, 6, 30, 0, 0);
+		expect(minute(after, tz)).toBe(30);
+	});
+
+	it("handles skipped time (spring forward hour, America/New_York)", () => {
+		const tz: TimeZone = "America/New_York";
+		const before = Date.UTC(2024, 2, 10, 6, 30, 0, 0);
+		expect(minute(before, tz)).toBe(30);
+		const after = Date.UTC(2024, 2, 10, 7, 30, 0, 0);
+		expect(minute(after, tz)).toBe(30);
+	});
+
+	it("handles historical time zone (Europe/Dublin, 1971-10-31 DST end)", () => {
+		const tz: TimeZone = "Europe/Dublin";
+		const before = Date.UTC(1971, 9, 31, 1, 59, 0, 0);
+		expect(minute(before, tz)).toBe(59);
+		const after = Date.UTC(1971, 9, 31, 2, 0, 0, 0);
+		expect(minute(after, tz)).toBe(0);
+	});
+
+	it("handles negative fractional offset (America/St_Johns, UTC-3:30)", () => {
+		const tz: TimeZone = "America/St_Johns";
+		const ts = Date.UTC(2024, 0, 1, 12, 45, 0, 0);
+		expect(minute(ts, tz)).toBe(15);
+	});
+
+	it("handles extreme positive offset (Pacific/Kiritimati, UTC+14)", () => {
+		const tz: TimeZone = "Pacific/Kiritimati";
+		const ts = Date.UTC(2024, 0, 1, 0, 0, 0, 0);
+		expect(minute(ts, tz)).toBe(0);
+	});
+
+	it("handles extreme negative offset (Pacific/Pago_Pago, UTC-11)", () => {
+		const tz: TimeZone = "Pacific/Pago_Pago";
+		const ts = Date.UTC(2024, 0, 1, 12, 59, 0, 0);
+		expect(minute(ts, tz)).toBe(59);
 	});
 });

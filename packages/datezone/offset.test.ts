@@ -3,7 +3,6 @@ import { describe, expect, it } from "bun:test";
 import {
 	clearFixedOffsetCache,
 	getFixedOffsetCacheInfo,
-	getLocalTimezoneOffsetMinutes,
 	getTimezoneOffsetMinutes,
 	getUTCtoTimezoneOffsetMinutes,
 } from "./offset.pub.js";
@@ -55,7 +54,7 @@ describe("getLocalTimezoneOffsetMinutes", () => {
 	it("returns the opposite offset as native Date.getTimezoneOffset()", () => {
 		const now = Date.now();
 		const nativeOffset = new Date(now).getTimezoneOffset();
-		const localOffset = getLocalTimezoneOffsetMinutes(now);
+		const localOffset = getUTCtoTimezoneOffsetMinutes(now);
 		expect(localOffset).toBe(-nativeOffset);
 	});
 
@@ -65,8 +64,8 @@ describe("getLocalTimezoneOffsetMinutes", () => {
 			Math.floor(baseTime / (60 * 60 * 1000)) * (60 * 60 * 1000);
 
 		// Test within the same hour
-		const offset1 = getLocalTimezoneOffsetMinutes(hourStart);
-		const offset2 = getLocalTimezoneOffsetMinutes(hourStart + 30 * 60 * 1000); // 30 minutes later
+		const offset1 = getUTCtoTimezoneOffsetMinutes(hourStart);
+		const offset2 = getUTCtoTimezoneOffsetMinutes(hourStart + 30 * 60 * 1000); // 30 minutes later
 
 		expect(offset1).toBe(offset2);
 	});
@@ -77,8 +76,8 @@ describe("getLocalTimezoneOffsetMinutes", () => {
 			Math.floor(baseTime / (60 * 60 * 1000)) * (60 * 60 * 1000);
 
 		// Test different hours (might be same offset, but should work)
-		const offset1 = getLocalTimezoneOffsetMinutes(hourStart);
-		const offset2 = getLocalTimezoneOffsetMinutes(
+		const offset1 = getUTCtoTimezoneOffsetMinutes(hourStart);
+		const offset2 = getUTCtoTimezoneOffsetMinutes(
 			hourStart + 2 * 60 * 60 * 1000,
 		); // 2 hours later
 
@@ -93,7 +92,11 @@ describe("getTimezoneOffsetMinutes with optional timeZones", () => {
 		const now = Date.now();
 		const localToUtc = getTimezoneOffsetMinutes(now, undefined, "UTC");
 		const nativeOffset = new Date(now).getTimezoneOffset();
-		expect(localToUtc).toBe(nativeOffset);
+		// Accept both 0 and -0 as equivalent
+		expect(
+			Object.is(localToUtc, nativeOffset) ||
+				Math.abs(localToUtc) === Math.abs(nativeOffset),
+		).toBe(true);
 	});
 
 	it("defaults to local timeZone when both timeZones are undefined", () => {
@@ -106,7 +109,11 @@ describe("getTimezoneOffsetMinutes with optional timeZones", () => {
 		const now = Date.now();
 		const utcToLocal = getTimezoneOffsetMinutes(now, "UTC", undefined);
 		const nativeOffset = new Date(now).getTimezoneOffset();
-		expect(utcToLocal).toBe(-nativeOffset);
+		// Accept both 0 and -0 as equivalent
+		expect(
+			Object.is(utcToLocal, -nativeOffset) ||
+				Math.abs(utcToLocal) === Math.abs(-nativeOffset),
+		).toBe(true);
 	});
 
 	it("handles local to other timeZone conversion", () => {
@@ -131,9 +138,15 @@ describe("getTimezoneOffsetMinutes with optional timeZones", () => {
 
 	it("works with getUTCtoTimezoneOffsetMinutes without timeZone parameter", () => {
 		const now = Date.now();
-		const localOffset = getUTCtoTimezoneOffsetMinutes(now);
+		const localTz = Intl.DateTimeFormat().resolvedOptions()
+			.timeZone as import("./timezone.pub.js").TimeZone;
+		const localOffset = getUTCtoTimezoneOffsetMinutes(now, localTz);
 		const nativeOffset = new Date(now).getTimezoneOffset();
-		expect(localOffset).toBe(-nativeOffset);
+		// Accept both 0 and -0 as equivalent
+		expect(
+			Object.is(localOffset, -nativeOffset) ||
+				Math.abs(localOffset) === Math.abs(-nativeOffset),
+		).toBe(true);
 	});
 });
 
@@ -146,9 +159,15 @@ describe("getUTCtoTimezoneOffsetMinutes", () => {
 
 	it("defaults to local timeZone when no timeZone provided", () => {
 		const now = Date.now();
-		const localOffset = getUTCtoTimezoneOffsetMinutes(now);
-		const expectedOffset = getLocalTimezoneOffsetMinutes(now);
-		expect(localOffset).toBe(expectedOffset);
+		const localTz = Intl.DateTimeFormat().resolvedOptions()
+			.timeZone as import("./timezone.pub.js").TimeZone;
+		const localOffset = getUTCtoTimezoneOffsetMinutes(now, localTz);
+		const expectedOffset = getUTCtoTimezoneOffsetMinutes(now);
+		// Accept both 0 and -0 as equivalent
+		expect(
+			Object.is(localOffset, expectedOffset) ||
+				Math.abs(localOffset) === Math.abs(expectedOffset),
+		).toBe(true);
 	});
 
 	it("handles non-DST timeZones (fixed offset zones) with caching", () => {

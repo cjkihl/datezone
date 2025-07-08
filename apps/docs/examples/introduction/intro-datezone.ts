@@ -1,3 +1,5 @@
-import { startOfDay } from "datezone";
+import { startOfDay, toISOString } from "datezone";
 
-startOfDay(Date.now(), "Asia/Singapore");
+const now = startOfDay(Date.now(), "Asia/Singapore");
+
+console.log(toISOString(now, "America/New_York"));

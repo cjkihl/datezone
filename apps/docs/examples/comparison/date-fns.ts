@@ -2,17 +2,18 @@
 import { TZDate } from "@date-fns/tz";
 import { addDays, format } from "date-fns";
 
-const date = new Date("2024-06-01T08:00:00Z").getTime(); // UTC timestamp
+const date = Date.UTC(2024, 5, 1, 8, 0, 0, 0); // 2024-06-01 08:00:00 UTC
 
-const timeZone = "Europe/Stockholm";
+// Creates a Date Fns TZDate instance for the Tokio time zone
+const tzDate = new TZDate(date, "Asia/Tokyo");
 
-// Creates a Date Fns TZDate instance
-const tzDate = new TZDate(date, timeZone);
-
-// Adds 5 days in the Europe/Stockholm timeZone
+// Adds 5 days in the Tokio time zone
 const addedDays = addDays(tzDate, 5);
 
 // Formats the future date in the Europe/Stockholm timeZone
-const result = format(addedDays, "yyyy-MM-dd HH:mm:ss");
+const result = format(
+	addedDays.withTimeZone("Europe/Stockholm"),
+	"yyyy-MM-dd HH:mm:ss",
+);
 
-console.log(result); // 2024-06-06 08:00:00
+console.log(result); // 2024-06-06 10:00:00

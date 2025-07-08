@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { FULL_TS, formatToParts } from "./format-parts";
+import { FULL_TS, formatToParts } from "./format-parts.pub";
 
 describe("formatToParts", () => {
 	it("extracts correct parts for UTC", () => {

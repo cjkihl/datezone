@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CodeExample } from "../code/code-example";
+import TerminalPrefix from "../code/terminal-prefix";
 import { GradientBG } from "./gradient-bg";
 import { AnimatedWaveBg } from "./wave-bg";
 
@@ -40,12 +41,7 @@ export default function Hero() {
 							<div className="relative mt-2 md:flex items-center gap-2 w-10/12 hidden">
 								<GradientBG className="w-full flex items-center justify-between">
 									<div className="w-full flex items-center gap-2">
-										<p className="md:text-sm text-xs font-mono select-none">
-											<span>
-												<span className="text-[#44c872]">git:</span>
-												<span className="text-[#71aef0]">(main) </span>
-											</span>
-										</p>
+										<TerminalPrefix />
 										<p className=" relative inline tracking-tight opacity-90 md:text-sm text-xs dark:text-white font-mono text-black">
 											bun add{" "}
 											<span className="relative dark:text-fuchsia-100 text-fuchsia-950">

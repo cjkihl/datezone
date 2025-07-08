@@ -7,5 +7,5 @@ const data = {
 const json = JSON.stringify(data);
 const parsed = JSON.parse(json);
 
-// All values are still numbers, ready to use
+// All values are intact
 console.log(typeof parsed.createdAt); // "number"

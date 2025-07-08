@@ -47,12 +47,6 @@ interface ComparisonRow {
 	variant?: string; // Add timeZone variant tracking
 }
 
-function _formatTime(avg: number): string {
-	if (avg < 1) return `${(avg * 1000).toFixed(2)} ns`;
-	if (avg < 1000) return `${avg.toFixed(2)} µs`;
-	return `${(avg / 1000).toFixed(2)} ms`;
-}
-
 function formatOps(_ticks: number, avg: number): string {
 	if (avg === 0) return "-";
 	const ops = 1_000_000 / avg;

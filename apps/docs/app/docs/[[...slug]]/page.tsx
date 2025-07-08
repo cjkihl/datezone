@@ -1,4 +1,3 @@
-import { createTypeTable } from "fumadocs-typescript/ui";
 import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
 import { Card, Cards } from "fumadocs-ui/components/card";
 import { File, Files, Folder } from "fumadocs-ui/components/files";
@@ -20,8 +19,6 @@ import { contents } from "@/components/sidebar-content";
 import { AnimatePresence } from "@/components/ui/fade-in";
 import { source } from "@/lib/source";
 import { absoluteUrl, cn } from "@/lib/utils";
-
-const { AutoTypeTable } = createTypeTable();
 
 export default async function Page({
 	params,
@@ -66,7 +63,6 @@ export default async function Page({
 						Accordion,
 						Accordions,
 						AnimatePresence,
-						AutoTypeTable,
 						Callout: ({ children, ...props }) => (
 							<defaultMdxComponents.Callout
 								{...props}

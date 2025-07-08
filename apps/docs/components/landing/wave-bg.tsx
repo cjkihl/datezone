@@ -10,6 +10,40 @@ type Props = {
 	baseOpacity?: number;
 };
 
+// ---------------------------------------------------------------------------
+// Utility: Procedurally generate a seamless wave path
+// ---------------------------------------------------------------------------
+
+function generateWavePath({
+	width = 1440,
+	height = 320,
+	segments = 8,
+	amplitude = 80,
+	variability = 0.35, // 0–1 – amplitude modulation factor
+	phase = 0, // phase shift in radians for variability waveform
+} = {}): string {
+	const midY = height / 2;
+	const step = width / segments;
+
+	let d = `M0 ${midY} `;
+	for (let i = 0; i < segments; i++) {
+		const x1 = (i + 0.5) * step;
+		const x2 = x1; // symmetrical control points
+		const xEnd = (i + 1) * step;
+
+		// Alternate peaks up/down; add randomness to amplitude
+		const direction = i % 2 === 0 ? 1 : -1;
+		const ampVariation = amplitude * (1 + variability * Math.sin(phase + i));
+		const yControl = midY + direction * ampVariation;
+
+		d += `C ${x1} ${yControl} ${x2} ${yControl} ${xEnd} ${midY} `;
+	}
+
+	// Close the shape: down to bottom, back to start, close path
+	d += `V ${height} H 0 Z`;
+	return d;
+}
+
 // ---- Wave configuration ----------------------------------------------------
 
 export type WaveConfig = {
@@ -25,33 +59,53 @@ export type WaveConfig = {
 	/** Starting and ending translateX values (percentage) */
 	xFrom: string;
 	xTo: string;
+	/** Individual SVG path string */
+	path: string;
 };
 
-// Fine-tune individual layers here
+// Fine-tune individual layers here; each gets its own procedural path.
 const WAVE_CONFIG: WaveConfig[] = [
 	{
 		color: "#ffffff",
-		opacityFactor: 1,
+		opacityFactor: 0.5,
+		path: generateWavePath({
+			amplitude: 90,
+			phase: 0,
+			segments: 10,
+			variability: 0.25,
+		}),
 		scale: 1,
-		speed: 40,
+		speed: 400,
 		xFrom: "0%",
 		xTo: "-50%",
 		yOffset: 0,
 	},
 	{
 		color: "#ffffff",
-		opacityFactor: 0.6,
-		scale: 1.05,
-		speed: 70,
+		opacityFactor: 0.4,
+		path: generateWavePath({
+			amplitude: 30,
+			phase: Math.PI / 3,
+			segments: 8,
+			variability: 0.5,
+		}),
+		scale: 0.95,
+		speed: 300,
 		xFrom: "-25%",
 		xTo: "-75%",
 		yOffset: 20,
 	},
 	{
 		color: "#ffffff",
-		opacityFactor: 0.4,
+		opacityFactor: 0.3,
+		path: generateWavePath({
+			amplitude: 130,
+			phase: Math.PI / 1.3,
+			segments: 6,
+			variability: 0.45,
+		}),
 		scale: 1.1,
-		speed: 100,
+		speed: 200,
 		xFrom: "-50%",
 		xTo: "-150%",
 		yOffset: 40,
@@ -63,8 +117,7 @@ const WAVE_CONFIG: WaveConfig[] = [
 const Wave: React.FC<{
 	config: WaveConfig;
 	baseOpacity: number;
-	path: string;
-}> = ({ config, baseOpacity, path }) => {
+}> = ({ config, baseOpacity }) => {
 	return (
 		<svg
 			className="absolute inset-0 h-full w-[200%]"
@@ -84,13 +137,13 @@ const Wave: React.FC<{
 			>
 				{/* two copies for seamless repeat */}
 				<path
-					d={path}
+					d={config.path}
 					fill={config.color}
 					fillOpacity={baseOpacity * config.opacityFactor}
 					transform={`translate(0 ${config.yOffset}) scale(1 ${config.scale})`}
 				/>
 				<path
-					d={path}
+					d={config.path}
 					fill={config.color}
 					fillOpacity={baseOpacity * config.opacityFactor}
 					transform={`translate(1440 ${config.yOffset}) scale(1 ${config.scale})`}
@@ -109,16 +162,10 @@ const Wave: React.FC<{
  * interference.
  */
 export const AnimatedWaveBg = ({ className, baseOpacity = 0.12 }: Props) => {
-	// A single wave path spanning 1440 px. Amplitude is increased (y 80 ↔ 240)
-	// for a more pronounced wave, yet overall opacity is lower so the effect
-	// remains subtle. We duplicate it so a -50 % translation loops seamlessly.
-	const wavePath =
-		"M0 160 C 60 80 120 80 180 160 C 240 240 300 240 360 160 C 420 80 480 80 540 160 C 600 240 660 240 720 160 C 780 80 840 80 900 160 C 960 240 1020 240 1080 160 C 1140 80 1200 80 1260 160 C 1320 240 1380 240 1440 160 V 320 H 0 Z";
-
 	return (
 		<div
 			className={cn(
-				"pointer-events-none absolute inset-0 z-[1] overflow-hidden select-none",
+				"pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 z-[1] select-none min-w-[1000px] w-full h-full overflow-hidden",
 				className,
 			)}
 			style={{
@@ -129,12 +176,7 @@ export const AnimatedWaveBg = ({ className, baseOpacity = 0.12 }: Props) => {
 		>
 			{/* Render all configured layers */}
 			{WAVE_CONFIG.map((wave, idx) => (
-				<Wave
-					baseOpacity={baseOpacity}
-					config={wave}
-					key={`wave-${idx}`}
-					path={wavePath}
-				/>
+				<Wave baseOpacity={baseOpacity} config={wave} key={`wave-${idx}`} />
 			))}
 		</div>
 	);

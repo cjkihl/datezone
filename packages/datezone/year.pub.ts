@@ -1,7 +1,5 @@
 import { calendarToTimestamp, timestampToCalendar } from "./calendar.pub.js";
-import { isUTC, type TimeZone } from "./index.pub.js";
-import { getUTCtoTimezoneOffsetMinutes } from "./offset.pub.js";
-import { isDST } from "./timezone.pub.js";
+import type { TimeZone } from "./index.pub.js";
 
 /**
  * Extracts the year from a timestamp.
@@ -14,20 +12,6 @@ import { isDST } from "./timezone.pub.js";
 export function year(ts: number, tz?: TimeZone): number {
 	if (!tz) {
 		return new Date(ts).getFullYear();
-	}
-	if (isUTC(tz)) {
-		return new Date(ts).getUTCFullYear();
-	}
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(tz)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
-		const offsetMs = offsetMinutes * 60000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = ts + offsetMs;
-		const d = new Date(calendarTs);
-
-		return d.getUTCFullYear();
 	}
 	return timestampToCalendar(ts, tz).year;
 }
@@ -69,26 +53,6 @@ export function startOfYear(ts: number, tz?: TimeZone): number {
 		const y = new Date(ts).getFullYear();
 		return new Date(y, 0, 1).getTime();
 	}
-	if (isUTC(tz)) {
-		const y = new Date(ts).getUTCFullYear();
-		return Date.UTC(y, 0, 1);
-	}
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(tz)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
-		const offsetMs = offsetMinutes * 60000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = ts + offsetMs;
-		const d = new Date(calendarTs);
-
-		// Get start of year in calendar
-		const y = d.getUTCFullYear();
-		const startOfYearWall = Date.UTC(y, 0, 1);
-
-		// Convert back to UTC
-		return startOfYearWall - offsetMs;
-	}
 	const y = year(ts, tz);
 	return calendarToTimestamp(y, 1, 1, 0, 0, 0, 0, tz);
 }
@@ -105,26 +69,6 @@ export function endOfYear(ts: number, tz?: TimeZone): number {
 	if (!tz) {
 		const y = new Date(ts).getFullYear();
 		return new Date(y, 11, 31, 23, 59, 59, 999).getTime();
-	}
-	if (isUTC(tz)) {
-		const y = new Date(ts).getUTCFullYear();
-		return Date.UTC(y, 11, 31, 23, 59, 59, 999);
-	}
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(tz)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
-		const offsetMs = offsetMinutes * 60000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = ts + offsetMs;
-		const d = new Date(calendarTs);
-
-		// Get end of year in calendar
-		const y = d.getUTCFullYear();
-		const endOfYearWall = Date.UTC(y, 11, 31, 23, 59, 59, 999);
-
-		// Convert back to UTC
-		return endOfYearWall - offsetMs;
 	}
 	const y = year(ts, tz);
 	return calendarToTimestamp(y, 12, 31, 23, 59, 59, 999, tz);
@@ -148,34 +92,6 @@ export function addYears(ts: number, amount: number, tz?: TimeZone): number {
 			d.setDate(0);
 		}
 		return d.getTime();
-	}
-	if (isUTC(tz)) {
-		const d = new Date(ts);
-		const originalUTCMonth = d.getUTCMonth();
-		d.setUTCFullYear(d.getUTCFullYear() + amount);
-		if (d.getUTCMonth() !== originalUTCMonth) {
-			d.setUTCDate(0);
-		}
-		return d.getTime();
-	}
-	// Fast path: Non-DST timeZones (fixed offset zones)
-	if (!isDST(tz)) {
-		const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
-		const offsetMs = offsetMinutes * 60000;
-
-		// Convert to calendar in the timeZone
-		const calendarTs = ts + offsetMs;
-		const d = new Date(calendarTs);
-
-		// Do year arithmetic in calendar
-		const originalUTCMonth = d.getUTCMonth();
-		d.setUTCFullYear(d.getUTCFullYear() + amount);
-		if (d.getUTCMonth() !== originalUTCMonth) {
-			d.setUTCDate(0);
-		}
-
-		// Convert back to UTC
-		return d.getTime() - offsetMs;
 	}
 
 	const { year, month, day, hour, minute, second, millisecond } =
