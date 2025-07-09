@@ -120,7 +120,7 @@ export function createGetModifiers(
 			dayFlags[name as DayFlag] = days.some((d) => d === day);
 		}
 		for (const name in customModifiersMap) {
-			customModifiers[name] = customModifiersMap[name].some((d) => d === day);
+			customModifiers[name] = customModifiersMap[name]!.some((d) => d === day);
 		}
 
 		return {

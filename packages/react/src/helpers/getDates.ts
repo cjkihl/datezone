@@ -19,8 +19,8 @@ export function getDates(
 	props: Pick<DayPickerProps, "ISOWeek" | "fixedWeeks" | "broadcastCalendar">,
 	dateLib: DateLib,
 ): Date[] {
-	const firstMonth = displayMonths[0];
-	const lastMonth = displayMonths[displayMonths.length - 1];
+	const firstMonth = displayMonths[0]!;
+	const lastMonth = displayMonths[displayMonths.length - 1]!;
 
 	const { ISOWeek, fixedWeeks, broadcastCalendar } = props ?? {};
 	const {
@@ -67,7 +67,7 @@ export function getDates(
 	if (fixedWeeks && dates.length < extraDates) {
 		const daysToAdd = extraDates - dates.length;
 		for (let i = 0; i < daysToAdd; i++) {
-			const date = addDays(dates[dates.length - 1], 1);
+			const date = addDays(dates[dates.length - 1]!, 1);
 			dates.push(date);
 		}
 	}

@@ -23,7 +23,7 @@ export function getClassNamesForModifiers(
 		.reduce(
 			(previousValue, [key]) => {
 				if (modifiersClassNames[key]) {
-					previousValue.push(modifiersClassNames[key as string]);
+					previousValue.push(modifiersClassNames[key as string]!);
 				} else if (classNames[DayFlag[key as DayFlag]]) {
 					previousValue.push(classNames[DayFlag[key as DayFlag]]);
 				} else if (classNames[SelectionState[key as SelectionState]]) {

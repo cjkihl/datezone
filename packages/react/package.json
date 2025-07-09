@@ -25,9 +25,7 @@
   "author": "CJ Kihl",
   "sideEffects": false,
   "type": "module",
-  "exports": {
-    
-  },
+  "exports": {},
   "files": [
     "dist/**/*",
     "README.md",
@@ -39,8 +37,12 @@
     "build": "tsc && create-exports",
     "type-check": "tsc --noEmit"
   },
+  "dependencies": {
+    "date-fns-jalali": "^4.1.0-0"
+  },
   "devDependencies": {
-    "@cjkihl/tsconfig": "^1.0.2"
+    "@cjkihl/tsconfig": "^1.0.2",
+    "@testing-library/react-hooks": "^8.0.1"
   },
   "engines": {
     "node": ">=16.0.0"

@@ -1,3 +1,4 @@
+import { expect, it } from "bun:test";
 import { CalendarDay, CalendarMonth, CalendarWeek } from "../classes";
 
 import { getWeeks } from "./getWeeks";

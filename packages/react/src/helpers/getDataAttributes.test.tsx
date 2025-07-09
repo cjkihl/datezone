@@ -1,3 +1,4 @@
+import { expect, test } from "bun:test";
 import { getDataAttributes } from "./getDataAttributes";
 
 // Mocking the types that are defined elsewhere.

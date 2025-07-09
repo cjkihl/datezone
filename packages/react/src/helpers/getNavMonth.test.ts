@@ -1,3 +1,4 @@
+import { describe, expect, test } from "bun:test";
 import {
 	addYears,
 	endOfMonth,
@@ -6,10 +7,9 @@ import {
 	startOfMonth,
 	startOfYear,
 } from "date-fns";
-import type { DayPickerProps } from "react-day-picker/types";
 
 import { defaultDateLib } from "../classes/DateLib";
-
+import type { DayPickerProps } from "../types";
 import { getNavMonths } from "./getNavMonth";
 
 describe('when "startMonth" is not set', () => {

@@ -1,3 +1,4 @@
+import { describe, expect, it } from "bun:test";
 import { addMonths, isSameMonth } from "date-fns";
 
 import { defaultDateLib } from "../classes/DateLib";
@@ -17,7 +18,7 @@ describe("when number of months is 1", () => {
 				},
 				defaultDateLib,
 			);
-			expect(result).toBe(undefined);
+			expect(result).toBeUndefined();
 		});
 	});
 	describe("when in the navigable range", () => {
@@ -32,7 +33,7 @@ describe("when number of months is 1", () => {
 		const endMonth = startingMonth;
 		it("the next month is undefined", () => {
 			const result = getNextMonth(startingMonth, endMonth, {}, defaultDateLib);
-			expect(result).toBe(undefined);
+			expect(result).toBeUndefined();
 		});
 	});
 });
@@ -64,7 +65,7 @@ describe("when displaying 3 months", () => {
 					},
 					defaultDateLib,
 				);
-				expect(result).toBe(undefined);
+				expect(result).toBeUndefined();
 			});
 		});
 	});
@@ -94,7 +95,7 @@ describe("when displaying 3 months", () => {
 					},
 					defaultDateLib,
 				);
-				expect(result).toBe(undefined);
+				expect(result).toBeUndefined();
 			});
 		});
 	});

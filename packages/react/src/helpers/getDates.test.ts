@@ -1,3 +1,4 @@
+import { describe, expect, it } from "bun:test";
 import { DateLib, defaultDateLib } from "../classes/DateLib";
 
 import { getDates } from "./getDates";
@@ -105,7 +106,6 @@ describe("when the first month and the last month are the same", () => {
 				{},
 				new DateLib({ weekStartsOn: 1 }),
 			);
-			expect(dates[0]).toBeMonday();
 			expect(dates[0]).toEqual(new Date(2023, 4, 1));
 			expect(dates[dates.length - 1]).toEqual(new Date(2023, 5, 4));
 		});
@@ -134,7 +134,6 @@ describe("when the first month and the last month are the same", () => {
 				{ ISOWeek: true },
 				defaultDateLib,
 			);
-			expect(dates[0]).toBeMonday();
 			expect(dates[0]).toEqual(new Date(2023, 4, 1));
 			expect(dates[dates.length - 1]).toEqual(new Date(2023, 5, 4));
 		});
@@ -182,7 +181,6 @@ describe("when the first month and the last month are different", () => {
 				{ ISOWeek: true },
 				defaultDateLib,
 			);
-			expect(dates[0]).toBeMonday();
 			expect(dates[0]).toEqual(new Date(2023, 4, 1));
 			expect(dates[dates.length - 1]).toEqual(new Date(2023, 5, 4));
 		});

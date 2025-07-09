@@ -1,3 +1,4 @@
+import { expect, it } from "bun:test";
 import { CalendarMonth } from "../classes";
 import { DateLib } from "../classes/DateLib";
 import type { DayPickerProps } from "../types";

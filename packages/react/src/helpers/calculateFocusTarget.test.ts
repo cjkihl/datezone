@@ -1,3 +1,5 @@
+import { describe, expect, it } from "bun:test";
+
 import { CalendarDay } from "../classes/index.js";
 import type { Modifiers } from "../types/index.js";
 import { DayFlag } from "../UI.js";

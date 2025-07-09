@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, test } from "bun:test";
 import { es } from "date-fns/locale/es";
 
 import { DateLib, defaultDateLib } from "../classes/DateLib";
@@ -14,7 +15,7 @@ describe("when rendered without a locale", () => {
 		expect(result).toHaveLength(7);
 	});
 	test("should return Sunday as first day", () => {
-		expect(result[0]).toBeSunday();
+		expect(result[0].getDay()).toBe(0);
 	});
 });
 
@@ -39,6 +40,6 @@ describe("when using ISO week", () => {
 		);
 	});
 	test("should return Monday as first day", () => {
-		expect(result[0]).toBeMonday();
+		expect(result[0].getDay()).toBe(1);
 	});
 });

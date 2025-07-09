@@ -75,13 +75,13 @@ export function useAnimation(
 		}
 
 		const isSameMonth = dateLib.isSameMonth(
-			months[0].date,
-			previousMonths[0].date,
+			months[0]!.date,
+			previousMonths[0]!.date,
 		);
 
 		const isAfterPreviousMonth = dateLib.isAfter(
-			months[0].date,
-			previousMonths[0].date,
+			months[0]!.date,
+			previousMonths[0]!.date,
 		);
 
 		const captionAnimationClass = isAfterPreviousMonth
