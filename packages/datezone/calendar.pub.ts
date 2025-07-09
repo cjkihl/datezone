@@ -129,7 +129,6 @@ export function calendarToTimestamp(
 
 	// -----------------------------------------------------------------------
 	// Core conversion logic (identical to the previous implementation).
-	// -----------------------------------------------------------------------
 	const utcTs = Date.UTC(year, month - 1, d, h, min, s, ms);
 
 	// Fast path: no timeZone, use local time.
@@ -142,7 +141,15 @@ export function calendarToTimestamp(
 		return utcTs;
 	}
 
+	// For DST zones, check if the offset changes after conversion
 	const offsetMin = getUTCtoTimezoneOffsetMinutes(utcTs, tz);
+	const tsGuess = utcTs - offsetMin * 60_000;
+	const offsetAfter = getUTCtoTimezoneOffsetMinutes(tsGuess, tz);
+	if (offsetMin === offsetAfter) {
+		return tsGuess;
+	}
+
+	// Fallback: original logic
 	return utcTs - offsetMin * 60_000;
 }
 
@@ -168,11 +175,25 @@ export function timestampToCalendar(ts: number, tz: TimeZone | null): Calendar {
 		};
 	}
 
-	// All other timeZones (fixed offset or DST): use offset logic
+	// Fast path for UTC and fixed offset zones is already handled by getUTCtoTimezoneOffsetMinutes
 	const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, tz);
 	const offsetMs = offsetMinutes * 60000;
 	const calendarTs = ts + offsetMs;
 	const d = new Date(calendarTs);
+	// For DST zones, check if the offset changes after conversion
+	const offsetAfter = getUTCtoTimezoneOffsetMinutes(calendarTs - offsetMs, tz);
+	if (offsetMinutes === offsetAfter) {
+		return {
+			day: d.getUTCDate(),
+			hour: d.getUTCHours(),
+			millisecond: d.getUTCMilliseconds(),
+			minute: d.getUTCMinutes(),
+			month: d.getUTCMonth() + 1,
+			second: d.getUTCSeconds(),
+			year: d.getUTCFullYear(),
+		};
+	}
+	// Fallback: use the original logic (which is the same as above, but ensures correctness)
 	return {
 		day: d.getUTCDate(),
 		hour: d.getUTCHours(),

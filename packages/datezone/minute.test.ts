@@ -387,3 +387,27 @@ describe("minute (edge cases & DST)", () => {
 		expect(minute(ts, tz)).toBe(59);
 	});
 });
+
+describe("Coverage: addMinutes and subMinutes from coverage-tests", () => {
+	it("addMinutes with timestamp", () => {
+		const timestamp = Date.now();
+		const result = addMinutes(timestamp, 30);
+		expect(result).toBeGreaterThan(0);
+	});
+
+	it("subMinutes with timestamp", () => {
+		const timestamp = Date.now();
+		const result = subMinutes(timestamp, 30);
+		expect(result).toBeGreaterThan(0);
+	});
+
+	it("addMinutes with zero value", () => {
+		const now = Date.now();
+		expect(addMinutes(now, 0)).toBe(now);
+	});
+
+	it("subMinutes with zero value", () => {
+		const now = Date.now();
+		expect(subMinutes(now, 0)).toBe(now);
+	});
+});

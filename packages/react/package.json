@@ -1,0 +1,51 @@
+{
+  "name": "datezone-react",
+  "version": "1.0.2",
+  "description": "A lightweight and comprehensive react calendar with time zone support.",
+  "keywords": [
+    "date",
+    "timeZone",
+    "utilities",
+    "javascript",
+    "typescript",
+    "intl",
+    "date-fns",
+    "performance",
+    "tree-shakeable"
+  ],
+  "homepage": "https://github.com/cjkihl/datezone#readme",
+  "bugs": {
+    "url": "https://github.com/cjkihl/datezone/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cjkihl/datezone.git"
+  },
+  "license": "MIT",
+  "author": "CJ Kihl",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc && create-exports",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cjkihl/tsconfig": "^1.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

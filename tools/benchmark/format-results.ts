@@ -475,13 +475,40 @@ function generateInternalComparisons(
 	return comparisons;
 }
 
-function main() {
-	const raw = readFileSync(
-		join(__dirname, "output/comprehensive-output.json"),
-		"utf8",
-	);
-	const data: MitataOutput = JSON.parse(raw);
-	const rows = extractComparisonRows(data);
+async function main() {
+	const benchDir = join(__dirname, "../../packages/datezone/.bench");
+	const glob = new Bun.Glob("*.json");
+	const jsonFiles: string[] = [];
+	for await (const file of glob.scan({ cwd: benchDir })) {
+		if (file === "fastpaths.json") continue;
+		jsonFiles.push(join(benchDir, file));
+	}
+
+	if (jsonFiles.length === 0) {
+		console.error(
+			"No benchmark .json files found in packages/datezone/.bench.\nRun: bun run tools/benchmark/run.ts --json first.",
+		);
+		process.exit(1);
+	}
+
+	// Aggregate all benchmarks
+	let allBenchmarks: MitataBenchmark[] = [];
+	let allLayouts: MitataLayoutGroup[] = [];
+	for (const file of jsonFiles) {
+		const raw = readFileSync(file, "utf8");
+		const data: MitataOutput = JSON.parse(raw);
+		if (Array.isArray(data.benchmarks)) {
+			allBenchmarks = allBenchmarks.concat(data.benchmarks);
+		}
+		if (Array.isArray(data.layout)) {
+			allLayouts = allLayouts.concat(data.layout);
+		}
+	}
+	const mergedData: MitataOutput = {
+		benchmarks: allBenchmarks,
+		layout: allLayouts,
+	};
+	const rows = extractComparisonRows(mergedData);
 	const md = generateCreativeMarkdown(rows);
 	writeFileSync(join(__dirname, "reports/comparison-report.md"), md);
 	console.log("Report generated: reports/comparison-report.md");

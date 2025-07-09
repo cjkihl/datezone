@@ -1,4 +1,5 @@
 import { describe, expect, it } from "bun:test";
+import { DateTime } from "luxon";
 import {
 	addHours,
 	endOfHour,
@@ -82,6 +83,66 @@ describe("Hour Functions", () => {
 			const localHour = hour(timestamp, null);
 			const jsHour = new Date(timestamp).getHours();
 			expect(localHour).toBe(jsHour);
+		});
+	});
+
+	describe("DST Edge Cases (America/New_York)", () => {
+		it("should handle spring forward (gap hour)", () => {
+			// DST starts: 2024-03-10T07:00:00Z (2:00 AM local jumps to 3:00 AM)
+			const beforeDST = Date.UTC(2024, 2, 10, 6, 59, 59, 999); // 1:59:59.999 AM EST
+			const atDST = Date.UTC(2024, 2, 10, 7, 0, 0, 0); // 3:00:00.000 AM EDT (2:00-2:59 does not exist)
+
+			// 1:59:59.999 local time (EST)
+			expect(hour(beforeDST, "America/New_York")).toBe(1);
+			// 3:00:00.000 local time (EDT)
+			expect(hour(atDST, "America/New_York")).toBe(3);
+		});
+
+		it("should handle fall back (repeated hour)", () => {
+			// DST ends: 2024-11-03T06:00:00Z (2:00 AM local repeats)
+			const beforeEndDST = Date.UTC(2024, 10, 3, 5, 59, 59, 999); // 1:59:59.999 AM EDT
+			const atEndDST = Date.UTC(2024, 10, 3, 6, 0, 0, 0); // 1:00:00.000 AM EST (repeated hour)
+			const afterEndDST = Date.UTC(2024, 10, 3, 7, 0, 0, 0); // 2:00:00.000 AM EST
+
+			// 1:59:59.999 local time (EDT)
+			expect(hour(beforeEndDST, "America/New_York")).toBe(1);
+			// 1:00:00.000 local time (EST, repeated hour)
+			expect(hour(atEndDST, "America/New_York")).toBe(1);
+			// 2:00:00.000 local time (EST)
+			expect(hour(afterEndDST, "America/New_York")).toBe(2);
+		});
+	});
+
+	describe("Granular DST Transition Edge Cases (America/New_York)", () => {
+		it("should not return 2 during spring forward gap (non-existent hour)", () => {
+			// 2024-03-10T07:00:00Z is 3:00 AM local (gap: 2:00-2:59 does not exist)
+			// Test every minute from 2:00 to 2:59 local time (should not exist)
+			for (let min = 0; min < 60; min++) {
+				// 2:MM AM local time (non-existent)
+				// Find UTC timestamp that would correspond to 2:MM AM if it existed (EST, UTC-5)
+				const fakeLocal = Date.UTC(2024, 2, 10, 7, min, 0); // 2:MM AM EST (should not exist)
+				const h = hour(fakeLocal, "America/New_York");
+				// Should never return 2 during the gap
+				expect(h).not.toBe(2);
+			}
+		});
+
+		it("should distinguish repeated hour during fall back (ambiguous hour) using luxon", () => {
+			// 2024-11-03T05:30:00Z is 1:30 AM EDT
+			// 2024-11-03T06:30:00Z is 1:30 AM EST (repeated hour)
+			const first1am = Date.UTC(2024, 10, 3, 5, 30, 0); // 1:30 AM EDT
+			const second1am = Date.UTC(2024, 10, 3, 6, 30, 0); // 1:30 AM EST
+			const h1 = hour(first1am, "America/New_York");
+			const h2 = hour(second1am, "America/New_York");
+			// Both are 1, but they are different local times (should be distinguishable by offset, but hour() can't distinguish)
+			expect(h1).toBe(1);
+			expect(h2).toBe(1);
+			// Use luxon to get the offset in minutes for each UTC timestamp in America/New_York
+			const luxonOffset1 =
+				DateTime.fromMillis(first1am).setZone("America/New_York").offset;
+			const luxonOffset2 =
+				DateTime.fromMillis(second1am).setZone("America/New_York").offset;
+			expect(luxonOffset1).not.toBe(luxonOffset2);
 		});
 	});
 
@@ -278,6 +339,30 @@ describe("Hour Functions", () => {
 			const added = addHours(timestamp, 1);
 			const subtracted = subHours(added, 1);
 			expect(subtracted).toBe(timestamp);
+		});
+	});
+
+	describe("Coverage: addHours and subHours from coverage-tests", () => {
+		it("addHours with timestamp", () => {
+			const timestamp = Date.now();
+			const result = addHours(timestamp, 2);
+			expect(result).toBeGreaterThan(0);
+		});
+
+		it("subHours with timestamp", () => {
+			const timestamp = Date.now();
+			const result = subHours(timestamp, 2);
+			expect(result).toBeGreaterThan(0);
+		});
+
+		it("addHours with zero value", () => {
+			const now = Date.now();
+			expect(addHours(now, 0)).toBe(now);
+		});
+
+		it("subHours with zero value", () => {
+			const now = Date.now();
+			expect(subHours(now, 0)).toBe(now);
 		});
 	});
 

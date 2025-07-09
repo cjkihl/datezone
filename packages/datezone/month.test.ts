@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { calendarToTimestamp } from "./calendar.pub.js";
-import { formatToParts } from "./format-parts";
+import { formatToParts } from "./format-parts.pub.js";
 import {
 	addMonths,
 	addMonthsBase,
@@ -878,6 +878,36 @@ describe("Edge cases for 100% coverage", () => {
 			expect(typeof quarterResult).toBe("number");
 			expect(typeof daysResult).toBe("number");
 		}
+	});
+});
+
+describe("Coverage: addMonths and daysInMonth from coverage-tests", () => {
+	it("addMonths with timestamp", () => {
+		const timestamp = new Date(2024, 2, 15).getTime(); // March 15, 2024
+		const result = addMonths(timestamp, 2, "UTC");
+		expect(result).toBeGreaterThan(0);
+	});
+
+	it("daysInMonth with MonthOptions", () => {
+		const timestamp = new Date(2024, 1, 1).getTime(); // February 2024
+		const result = daysInMonth(timestamp, "UTC");
+		expect(result).toBe(29); // 2024 is a leap year
+	});
+
+	it("daysInMonth with timestamp", () => {
+		const timestamp = new Date(2024, 1, 15).getTime(); // February 2024
+		const result = daysInMonth(timestamp, "UTC");
+		expect(result).toBe(29);
+	});
+
+	it("Month functions with overflow conditions", () => {
+		const jan31 = new Date(2024, 0, 31).getTime(); // Jan 31, 2024
+		const result = addMonths(jan31, 1, "UTC"); // Should clamp to Feb 29
+		expect(result).toBeGreaterThan(0);
+
+		const feb29 = new Date(2024, 1, 29).getTime(); // Feb 29, 2024
+		const result2 = addMonths(feb29, 1, "UTC"); // Should go to March 29
+		expect(result2).toBeGreaterThan(0);
 	});
 });
 

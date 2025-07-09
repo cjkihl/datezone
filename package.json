@@ -19,12 +19,12 @@
 		"format": "biome format .",
 		"type-check": "turbo type-check",
 		"up": "bunx npm-check-updates -ws --root --format group -u",
-		"bench-debug": "bun run -F benchmarks debug",
+		"bench": "bun run -F benchmarks comprehensive",
 		"bench-report": "bun run -F benchmarks comprehensive && bun run -F benchmarks report",
 		"bench-cache": "bun run -F benchmarks cache"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.0.6",
+		"@biomejs/biome": "^2.1.1",
 		"@changesets/cli": "^2.29.5",
 		"@cjkihl/changeset-dep-resolver": "^1.0.3",
 		"@cjkihl/create-exports": "^1.0.2",
@@ -35,14 +35,16 @@
 		"@types/semver": "^7.7.0",
 		"date-fns": "^4.1.0",
 		"date-fns-tz": "^3.2.0",
-		"fumadocs-core": "^15.6.1",
+		"fast-glob": "^3.3.3",
+		"fumadocs-core": "^15.6.2",
 		"fumadocs-mdx": "^11.6.10",
-		"fumadocs-ui": "^15.6.1",
+		"fumadocs-ui": "^15.6.2",
+		"luxon": "^3.6.1",
 		"mitata": "^1.0.34",
 		"semver": "^7.7.2",
 		"turbo": "^2.5.4",
 		"typescript": "^5",
-		"zod": "^3.25.74"
+		"zod": "^3.25.76"
 	},
 	"peerDependencies": {
 		"typescript": "^5"

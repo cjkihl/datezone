@@ -25,7 +25,7 @@ function startOfToday(timeZone: TimeZone): number {
  */
 export function isToday(ts: number, timeZone: TimeZone): boolean {
 	const todayStart = startOfToday(timeZone);
-	return todayStart === startOfDay(ts, timeZone);
+	return ts >= todayStart && ts < todayStart + 86_400_000;
 }
 
 /**

@@ -5,7 +5,7 @@ export function GithubStat({ stars }: { stars: string | null }) {
 	if (stars) {
 		result = Number.parseInt(stars?.replace(/,/g, ""), 10);
 	} else {
-		return <></>;
+		return null;
 	}
 
 	return (

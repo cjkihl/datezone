@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"jsx": "preserve"
+	},
+	"exclude": [
+		"node_modules",
+		"dist",
+		"${configDir}/dist",
+		"${configDir}/**/*.test.ts",
+		"${configDir}/**/*.bench.ts"
+	],
+	"extends": "@cjkihl/tsconfig/browser"
+}

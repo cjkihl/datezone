@@ -5,7 +5,7 @@ node_modules
 
 *.tmp
 *.gen.*
-
+*.bench
 # Build output
 dist
 tools/benchmark/output

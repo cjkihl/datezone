@@ -1,9 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { addDays, getDayPeriod, subDays } from "./day.pub";
+import { getDayPeriod } from "./day.pub";
 import { formatGMT, formatTimestamp, formatTimezone } from "./format/utils";
 import { addHours, subHours } from "./hour.pub.js";
 import { getLocalTimezone } from "./index.pub";
-import { addMinutes, subMinutes } from "./minute.pub.js";
 import { addMonths, daysInMonth } from "./month.pub.js";
 import { getTimezoneOffsetMinutes } from "./offset.pub.js";
 import {
@@ -89,16 +88,6 @@ describe("Coverage Tests - Missing Lines", () => {
 			expect(result).toBeGreaterThan(0);
 		});
 
-		test("addMinutes with timestamp", () => {
-			const result = addMinutes(timestamp, 30);
-			expect(result).toBeGreaterThan(0);
-		});
-
-		test("subMinutes with timestamp", () => {
-			const result = subMinutes(timestamp, 30);
-			expect(result).toBeGreaterThan(0);
-		});
-
 		test("addSeconds with timestamp", () => {
 			const result = addSeconds(timestamp, 30);
 			expect(result).toBeGreaterThan(0);
@@ -176,19 +165,10 @@ describe("Coverage Tests - Missing Lines", () => {
 			const now = Date.now();
 			expect(addHours(now, 0)).toBe(now);
 			expect(subHours(now, 0)).toBe(now);
-			expect(addMinutes(now, 0)).toBe(now);
-			expect(subMinutes(now, 0)).toBe(now);
 			expect(addSeconds(now, 0)).toBe(now);
 			expect(subSeconds(now, 0)).toBe(now);
 			expect(addMilliseconds(now, 0)).toBe(now);
 			expect(subMilliseconds(now, 0)).toBe(now);
-		});
-
-		test("Day functions with edge date values", () => {
-			// Test end of month boundaries
-			const endOfMonth = new Date(2024, 1, 29).getTime(); // Feb 29, 2024 (leap year)
-			expect(addDays(endOfMonth, 1, "UTC")).toBeGreaterThan(endOfMonth);
-			expect(subDays(endOfMonth, 1, "UTC")).toBeLessThan(endOfMonth);
 		});
 
 		test("Month functions with overflow conditions", () => {

@@ -1,5 +1,6 @@
-import { timestampToCalendar } from "./calendar.pub.js";
-import { HOUR, type TimeZone } from "./index.pub.js";
+import { HOUR } from "./constants.pub.js";
+import { getUTCtoTimezoneOffsetMinutes } from "./offset.pub.js";
+import type { TimeZone } from "./timezone.pub.js";
 
 /**
  * To12 hour.
@@ -32,10 +33,32 @@ export function to24Hour(hour: number): number {
  * @see https://datezone.dev/docs/reference/hour#hour
  */
 export function hour(ts: number, timeZone: TimeZone | null): number {
-	if (!timeZone) {
-		return new Date(ts).getHours();
+	if (timeZone === null) {
+		return getLocalHour(ts, getUTCtoTimezoneOffsetMinutes(ts, null));
 	}
-	return timestampToCalendar(ts, timeZone).hour;
+	if (timeZone === "UTC") {
+		return getUTCHour(ts);
+	}
+
+	const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
+	const offsetMs = offsetMinutes * 60000;
+	const d = new Date(ts + offsetMs);
+	return d.getUTCHours();
+}
+
+function getUTCHour(ts: number): number {
+	const msInDay = 86_400_000;
+	const msInHour = 3_600_000;
+	const msSinceMidnight = ((ts % msInDay) + msInDay) % msInDay;
+	return Math.floor(msSinceMidnight / msInHour);
+}
+
+function getLocalHour(ts: number, localOffsetMs: number): number {
+	const msInDay = 86_400_000;
+	const msInHour = 3_600_000;
+	const localTs = ts + localOffsetMs;
+	const msSinceMidnight = ((localTs % msInDay) + msInDay) % msInDay;
+	return Math.floor(msSinceMidnight / msInHour);
 }
 
 /**

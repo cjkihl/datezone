@@ -16,12 +16,6 @@ const REFERENCE_ROOT = path.resolve(
 	"reference",
 );
 
-interface ModuleInfo {
-	filePath: string; // absolute path to *.pub.ts file
-	moduleName: string; // expected reference doc filename (without .mdx)
-	exportNames: string[]; // exported symbol identifiers
-}
-
 interface ExportInfo {
 	name: string;
 	description: string;
@@ -68,6 +62,7 @@ function hasExportModifier(node: ts.Node): boolean {
 	// Many node kinds support the `modifiers` property, but it's not present on the base `Node` type.
 	// We therefore access it via a type cast to avoid compiler complaints.
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+	// biome-ignore lint/suspicious/noExplicitAny: Fix later
 	const mods: ts.Modifier[] | undefined = (node as any).modifiers;
 	return (
 		Array.isArray(mods) &&
@@ -77,6 +72,7 @@ function hasExportModifier(node: ts.Node): boolean {
 
 function getJsDocDescription(node: ts.Node): string {
 	// The .jsDoc property is not on the base type – cast to any.
+	// biome-ignore lint/suspicious/noExplicitAny: Fix later
 	const jsDocs: ts.JSDoc[] | undefined = (node as any).jsDoc;
 	if (jsDocs && jsDocs.length > 0) {
 		// Use the last JSDoc block (closest one).

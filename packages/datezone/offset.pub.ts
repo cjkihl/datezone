@@ -10,23 +10,10 @@ const perHourOffsetCache = new Map<
 const fixedOffsetCache = new Map<TimeZone | null, number>();
 let checkedLocalDST = false;
 let localFixedOffset: number | null = null;
+let lastLocalHourStart: number | null = null;
+let lastLocalOffset: number | null = null;
 
-function isFixedOffsetZone(tz: TimeZone | null | undefined): boolean {
-	if (!tz) {
-		if (!checkedLocalDST) {
-			const jan = new Date(
-				Date.UTC(new Date().getFullYear(), 0, 1),
-			).getTimezoneOffset();
-			const jul = new Date(
-				Date.UTC(new Date().getFullYear(), 6, 1),
-			).getTimezoneOffset();
-			if (jan === jul) {
-				localFixedOffset = -jan;
-			}
-			checkedLocalDST = true;
-		}
-		return localFixedOffset !== null;
-	}
+function isFixedOffsetZone(tz: TimeZone): boolean {
 	if (isUTC(tz)) return true;
 	return !isDST(tz);
 }
@@ -61,23 +48,63 @@ function calcOffset(ts: number, tz: TimeZone | null): number {
  */
 export function getUTCtoTimezoneOffsetMinutes(
 	ts: number,
-	tz?: TimeZone | null,
+	tz: TimeZone | null,
 ): number {
-	const zoneKey = tz ?? null;
-	if (isFixedOffsetZone(zoneKey)) {
-		const cached = fixedOffsetCache.get(zoneKey);
+	if (tz === null) {
+		return getUTCtoLocalOffsetMinutes(ts);
+	}
+	if (isFixedOffsetZone(tz)) {
+		const cached = fixedOffsetCache.get(tz);
 		if (cached !== undefined) return cached;
-		const offset = calcOffset(ts, zoneKey);
-		fixedOffsetCache.set(zoneKey, offset);
+		const offset = calcOffset(ts, tz);
+		fixedOffsetCache.set(tz, offset);
 		return offset;
 	}
 	const hourStart = Math.floor(ts / HOUR) * HOUR;
-	const cache = perHourOffsetCache.get(zoneKey);
+	const cache = perHourOffsetCache.get(tz);
 	if (cache && cache.hourStart === hourStart) {
 		return cache.offset;
 	}
-	const offset = calcOffset(ts, zoneKey);
-	perHourOffsetCache.set(zoneKey, { hourStart, offset });
+	const offset = calcOffset(ts, tz);
+	perHourOffsetCache.set(tz, { hourStart, offset });
+	return offset;
+}
+
+/**
+ * Get UTC to local timezone offset minutes.
+ *
+ * Returns the offset in minutes between UTC and the system's local time zone for the given timestamp.
+ * Optimized for local time zone only, with direct cache access.
+ *
+ * @param ts - Timestamp in milliseconds
+ * @returns Offset in minutes (positive if ahead of UTC, negative if behind)
+ * @see https://datezone.dev/docs/reference/offset#getUTCtoLocalOffsetMinutes
+ */
+export function getUTCtoLocalOffsetMinutes(ts: number): number {
+	// Fast path for fixed offset local zone
+	if (!checkedLocalDST) {
+		const jan = new Date(
+			Date.UTC(new Date().getFullYear(), 0, 1),
+		).getTimezoneOffset();
+		const jul = new Date(
+			Date.UTC(new Date().getFullYear(), 6, 1),
+		).getTimezoneOffset();
+		if (jan === jul) {
+			localFixedOffset = -jan;
+		}
+		checkedLocalDST = true;
+	}
+	if (localFixedOffset !== null) {
+		return localFixedOffset;
+	}
+	// Per-hour cache for non-fixed local zones
+	const hourStart = Math.floor(ts / HOUR) * HOUR;
+	if (lastLocalHourStart === hourStart && lastLocalOffset !== null) {
+		return lastLocalOffset;
+	}
+	const offset = -new Date(ts).getTimezoneOffset();
+	lastLocalHourStart = hourStart;
+	lastLocalOffset = offset;
 	return offset;
 }
 

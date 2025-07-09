@@ -1,4 +1,6 @@
 import { describe, expect, it } from "bun:test";
+import { TZDate } from "@date-fns/tz";
+import * as fns from "date-fns";
 import {
 	addDays,
 	dayOfMonth,
@@ -23,6 +25,9 @@ describe("startOfDay", () => {
 		expect(result.getUTCMinutes()).toBe(0);
 		expect(result.getUTCSeconds()).toBe(0);
 		expect(result.getUTCMilliseconds()).toBe(0);
+		// Compare with date-fns
+		const dfns = fns.startOfDay(d);
+		expect(result.getTime()).toBe(dfns.getTime());
 	});
 	it("returns 00:00:00.000 in Asia/Singapore", () => {
 		const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
@@ -31,6 +36,10 @@ describe("startOfDay", () => {
 		// Asia/Singapore is UTC+8, so 00:00 local = 16:00 UTC previous day
 		expect(result.getUTCHours()).toBe(16);
 		expect(result.getUTCDate()).toBe(14); // Previous day in UTC
+		// Compare with date-fns using TZDate
+		const tzDate = new TZDate(d.getTime(), "Asia/Singapore");
+		const dfns = fns.startOfDay(tzDate);
+		expect(result.getTime()).toBe(dfns.getTime());
 	});
 	it("defaults to local timeZone when timeZone is undefined", () => {
 		const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
@@ -48,6 +57,10 @@ describe("startOfDay", () => {
 			const utcStart = startOfDay(d.getTime(), "UTC");
 			expect(start).not.toBe(utcStart);
 		}
+		// Compare with date-fns using TZDate for local timeZone
+		const tzDate = new TZDate(d.getTime(), localTz);
+		const dfns = fns.startOfDay(tzDate);
+		expect(new Date(start).getTime()).toBe(dfns.getTime());
 	});
 });
 
@@ -60,6 +73,9 @@ describe("endOfDay", () => {
 		expect(result.getUTCMinutes()).toBe(59);
 		expect(result.getUTCSeconds()).toBe(59);
 		expect(result.getUTCMilliseconds()).toBe(999);
+		// Compare with date-fns
+		const dfns = fns.endOfDay(d);
+		expect(result.getTime()).toBe(dfns.getTime());
 	});
 	it("returns 23:59:59.999 in Asia/Singapore", () => {
 		const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
@@ -68,6 +84,10 @@ describe("endOfDay", () => {
 		// Asia/Singapore is UTC+8, so 23:59 local = 15:59 UTC same day
 		expect(result.getUTCHours()).toBe(15);
 		expect(result.getUTCDate()).toBe(15); // Same day in UTC
+		// Compare with date-fns using TZDate
+		const tzDate = new TZDate(d.getTime(), "Asia/Singapore");
+		const dfns = fns.endOfDay(tzDate);
+		expect(result.getTime()).toBe(dfns.getTime());
 	});
 	it("defaults to local timeZone when timeZone is undefined", () => {
 		const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
@@ -85,6 +105,10 @@ describe("endOfDay", () => {
 			const utcEnd = endOfDay(d.getTime(), "UTC");
 			expect(end).not.toBe(utcEnd);
 		}
+		// Compare with date-fns using TZDate for local timeZone
+		const tzDate = new TZDate(d.getTime(), localTz);
+		const dfns = fns.endOfDay(tzDate);
+		expect(new Date(end).getTime()).toBe(dfns.getTime());
 	});
 });
 
@@ -151,102 +175,164 @@ describe("endOfDay edge cases", () => {
 describe("addDays", () => {
 	it("adds days to a timestamp (no timeZone)", () => {
 		const d = new Date(Date.UTC(2024, 0, 15));
-		expect(new Date(addDays(d.getTime(), 5, null)).getUTCDate()).toBe(20);
-		expect(new Date(addDays(d.getTime(), -10, null)).getUTCDate()).toBe(5);
+		const dzPlus = addDays(d.getTime(), 5, null);
+		const dzMinus = addDays(d.getTime(), -10, null);
+		expect(new Date(dzPlus).getUTCDate()).toBe(20);
+		expect(new Date(dzMinus).getUTCDate()).toBe(5);
+		// Compare with date-fns
+		expect(new Date(dzPlus).getTime()).toBe(fns.addDays(d, 5).getTime());
+		expect(new Date(dzMinus).getTime()).toBe(fns.addDays(d, -10).getTime());
 	});
 	it("adds days with timeZone (Asia/Singapore)", () => {
 		const ts = new Date("2024-05-22T15:23:45.123Z").getTime();
-		const result = addDays(ts, 2, "Asia/Singapore");
-		expect(new Date(result).toISOString()).toBe("2024-05-24T15:23:45.123Z");
+		const dz = addDays(ts, 2, "Asia/Singapore");
+		expect(new Date(dz).toISOString()).toBe("2024-05-24T15:23:45.123Z");
+		// Compare with date-fns + TZDate
+		const tzDate = new TZDate(ts, "Asia/Singapore");
+		const dfns = fns.addDays(tzDate, 2).getTime();
+		expect(dz).toBe(dfns);
 	});
 });
 
 describe("subDays", () => {
 	it("subtracts days from a timestamp (no timeZone)", () => {
 		const d = new Date(Date.UTC(2024, 0, 15));
-		expect(new Date(subDays(d.getTime(), 5, null)).getUTCDate()).toBe(10);
+		const dz = subDays(d.getTime(), 5, null);
+		expect(new Date(dz).getUTCDate()).toBe(10);
+		// Compare with date-fns
+		expect(new Date(dz).getTime()).toBe(fns.addDays(d, -5).getTime());
 	});
 });
 
 describe("dayOfMonth", () => {
 	it("returns the correct day of the month for a given timestamp (local timeZone)", () => {
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
-		expect(dayOfMonth(ts)).toBe(15);
+		const dz = dayOfMonth(ts, null);
+		expect(dz).toBe(15);
+		// Compare with date-fns
+		expect(dz).toBe(fns.getDate(new Date(ts)));
 	});
-
 	it("returns the correct day of the month for a given timestamp in UTC", () => {
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
-		expect(dayOfMonth(ts, "UTC")).toBe(15);
+		const dz = dayOfMonth(ts, "UTC");
+		expect(dz).toBe(15);
+		// Compare with date-fns + TZDate
+		const tzDate = new TZDate(ts, "UTC");
+		expect(dz).toBe(fns.getDate(tzDate));
 	});
-
 	it("returns the correct day of the month for a given timestamp in a non-DST timeZone", () => {
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
-		expect(dayOfMonth(ts, "Asia/Tokyo")).toBe(15);
+		const dz = dayOfMonth(ts, "Asia/Tokyo");
+		expect(dz).toBe(15);
+		const tzDate = new TZDate(ts, "Asia/Tokyo");
+		expect(dz).toBe(fns.getDate(tzDate));
 	});
-
 	it("returns the correct day of the month for a given timestamp in a DST timeZone", () => {
 		const ts = new Date("2024-03-10T12:00:00.000Z").getTime(); // DST start day in America/New_York
-		expect(dayOfMonth(ts, "America/New_York")).toBe(10);
+		const dz = dayOfMonth(ts, "America/New_York");
+		expect(dz).toBe(10);
+		const tzDate = new TZDate(ts, "America/New_York");
+		expect(dz).toBe(fns.getDate(tzDate));
 	});
 });
 
 describe("dayOfWeek", () => {
 	it("returns ISO day of week for timestamp (no timeZone)", () => {
 		const d = new Date(Date.UTC(2024, 0, 15)); // Monday
-		expect(dayOfWeek(d.getTime())).toBe(1);
+		const dz = dayOfWeek(d.getTime(), null);
+		expect(dz).toBe(1);
+		// Compare with date-fns (getDay: 0=Sunday, 1=Monday...)
+		const jsDay = fns.getDay(d);
+		const isoDay = jsDay === 0 ? 7 : jsDay;
+		expect(dz).toBe(isoDay);
 	});
 	it("returns ISO day of week for DayOptions (UTC)", () => {
 		const opts = { day: 14, month: 1, year: 2024 }; // Sunday
-		expect(dayOfWeekBase(opts.year, opts.month, opts.day)).toBe(7);
+		const dz = dayOfWeekBase(opts.year, opts.month, opts.day);
+		const jsDay = fns.getDay(
+			new Date(Date.UTC(opts.year, opts.month - 1, opts.day)),
+		);
+		const isoDay = jsDay === 0 ? 7 : jsDay;
+		expect(dz).toBe(isoDay);
 	});
 	it("returns ISO day of week with timeZone (Asia/Singapore)", () => {
 		const opts = { day: 22, month: 5, year: 2024 }; // Wednesday
-		expect(dayOfWeekBase(opts.year, opts.month, opts.day)).toBe(3);
+		const dz = dayOfWeekBase(opts.year, opts.month, opts.day);
+		const jsDay = fns.getDay(
+			new Date(Date.UTC(opts.year, opts.month - 1, opts.day)),
+		);
+		const isoDay = jsDay === 0 ? 7 : jsDay;
+		expect(dz).toBe(isoDay);
 	});
-
 	it("returns ISO day of week for a given timestamp in a non-DST timeZone", () => {
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime(); // Monday
-		expect(dayOfWeek(ts, "Asia/Tokyo")).toBe(1);
+		const dz = dayOfWeek(ts, "Asia/Tokyo");
+		const tzDate = new TZDate(ts, "Asia/Tokyo");
+		const jsDay = fns.getDay(tzDate);
+		const isoDay = jsDay === 0 ? 7 : jsDay;
+		expect(dz).toBe(isoDay);
 	});
-
 	it("returns ISO day of week for a given timestamp in a DST timeZone", () => {
 		const ts = new Date("2024-03-10T12:00:00.000Z").getTime(); // Sunday in America/New_York
-		expect(dayOfWeek(ts, "America/New_York")).toBe(7);
+		const dz = dayOfWeek(ts, "America/New_York");
+		const tzDate = new TZDate(ts, "America/New_York");
+		const jsDay = fns.getDay(tzDate);
+		const isoDay = jsDay === 0 ? 7 : jsDay;
+		expect(dz).toBe(isoDay);
 	});
 });
 
 describe("dayOfYear", () => {
 	it("returns day of year for timestamp (no timeZone)", () => {
 		const d = new Date(Date.UTC(2024, 2, 1)); // March 1, 2024 (leap year)
-		expect(dayOfYear(d.getTime())).toBe(61);
+		const dz = dayOfYear(d.getTime(), null);
+		expect(dz).toBe(61);
+		// Compare with date-fns
+		expect(dz).toBe(fns.getDayOfYear(d));
 	});
 	it("returns day of year for DayOptions (UTC)", () => {
 		const opts = { day: 31, month: 12, year: 2023 };
-		expect(dayOfYearBase(opts.year, opts.month, opts.day)).toBe(365);
+		const dz = dayOfYearBase(opts.year, opts.month, opts.day);
+		const jsDayOfYear = fns.getDayOfYear(
+			new Date(Date.UTC(opts.year, opts.month - 1, opts.day)),
+		);
+		expect(dz).toBe(jsDayOfYear);
 	});
 	it("returns day of year with timeZone (Asia/Singapore)", () => {
 		const opts = { day: 22, month: 5, year: 2024 };
-		expect(dayOfYearBase(opts.year, opts.month, opts.day)).toBe(143);
+		const dz = dayOfYearBase(opts.year, opts.month, opts.day);
+		const jsDayOfYear = fns.getDayOfYear(
+			new Date(Date.UTC(opts.year, opts.month - 1, opts.day)),
+		);
+		expect(dz).toBe(jsDayOfYear);
 	});
-
 	it("returns the correct day of the year for a given timestamp in a non-DST timeZone", () => {
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
-		expect(dayOfYear(ts, "Asia/Tokyo")).toBe(197);
+		const dz = dayOfYear(ts, "Asia/Tokyo");
+		const tzDate = new TZDate(ts, "Asia/Tokyo");
+		const jsDayOfYear = fns.getDayOfYear(tzDate);
+		expect(dz).toBe(jsDayOfYear);
 	});
-
 	it("returns the correct day of the year for a given timestamp in a DST timeZone", () => {
 		const ts = new Date("2024-03-10T12:00:00.000Z").getTime(); // DST start day in America/New_York
-		expect(dayOfYear(ts, "America/New_York")).toBe(70);
+		const dz = dayOfYear(ts, "America/New_York");
+		const tzDate = new TZDate(ts, "America/New_York");
+		const jsDayOfYear = fns.getDayOfYear(tzDate);
+		expect(dz).toBe(jsDayOfYear);
 	});
-
 	it("returns the correct day of the year for a given timestamp in UTC", () => {
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
-		expect(dayOfYear(ts, "UTC")).toBe(197);
+		const dz = dayOfYear(ts, "UTC");
+		const tzDate = new TZDate(ts, "UTC");
+		const jsDayOfYear = fns.getDayOfYear(tzDate);
+		expect(dz).toBe(jsDayOfYear);
 	});
-
 	it("returns the correct day of the year for a given timestamp (local timeZone)", () => {
 		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
-		expect(dayOfYear(ts)).toBe(197);
+		const dz = dayOfYear(ts, null);
+		expect(dz).toBe(197);
+		// Compare with date-fns
+		expect(dz).toBe(fns.getDayOfYear(new Date(ts)));
 	});
 });
 
