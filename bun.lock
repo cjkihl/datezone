@@ -34,7 +34,7 @@
     },
     "apps/docs": {
       "name": "docs",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "dependencies": {
         "@better-fetch/fetch": "^1.1.18",
         "@date-fns/tz": "^1.2.0",
@@ -123,7 +123,7 @@
     },
     "packages/datezone": {
       "name": "datezone",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "devDependencies": {
         "@cjkihl/tsconfig": "^1.0.2",
       },
@@ -141,7 +141,7 @@
     },
     "tools/benchmark": {
       "name": "benchmarks",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "dependencies": {
         "@date-fns/tz": "^1.2.0",
         "date-fns": "^4.1.0",
