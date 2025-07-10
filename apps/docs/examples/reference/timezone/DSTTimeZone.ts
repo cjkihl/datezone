@@ -1,1 +1,3 @@
-// TODO: implement example code
+import { DSTTimeZone } from "datezone";
+
+console.log(DSTTimeZone);

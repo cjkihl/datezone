@@ -4,7 +4,7 @@ title: Week
 
 ## `week`
 
-> TODO: Add description.
+Returns the ISO week number (1-53) for the given timestamp and time-zone.
 
 ```ts
 import { week } from "@datezone/week";
@@ -14,7 +14,7 @@ import { week } from "@datezone/week";
 
 ## `weekBase`
 
-> TODO: Add description.
+Calculates the ISO week number (1-53) from a plain calendar date (year, month, day).
 
 ```ts
 import { weekBase } from "@datezone/week";
@@ -24,7 +24,7 @@ import { weekBase } from "@datezone/week";
 
 ## `getISOWeekYear`
 
-> TODO: Add description.
+Returns the ISO week-numbering year for the supplied timestamp.
 
 ```ts
 import { getISOWeekYear } from "@datezone/week";
@@ -34,7 +34,7 @@ import { getISOWeekYear } from "@datezone/week";
 
 ## `getISOWeekYearBase`
 
-> TODO: Add description.
+Calculates the ISO week-numbering year from a plain calendar date.
 
 ```ts
 import { getISOWeekYearBase } from "@datezone/week";
@@ -44,7 +44,7 @@ import { getISOWeekYearBase } from "@datezone/week";
 
 ## `startOfWeek`
 
-> TODO: Add description.
+Returns the timestamp for the start of the week (00:00:00.000) respecting the `weekStartsOn` option.
 
 ```ts
 import { startOfWeek } from "@datezone/week";
@@ -54,7 +54,7 @@ import { startOfWeek } from "@datezone/week";
 
 ## `startOfWeekBase`
 
-Returns the start of the week (00:00:00.000) in the given timeZone.
+Returns the timestamp for the end of the week (23:59:59.999) respecting `weekStartsOn`.
 
 ```ts
 import { startOfWeekBase } from "@datezone/week";
@@ -64,7 +64,7 @@ import { startOfWeekBase } from "@datezone/week";
 
 ## `endOfWeek`
 
-> TODO: Add description.
+Returns the Monday-based start of ISO week for the given timestamp.
 
 ```ts
 import { endOfWeek } from "@datezone/week";
@@ -74,7 +74,7 @@ import { endOfWeek } from "@datezone/week";
 
 ## `endOfWeekBase`
 
-Returns the end of the week (23:59:59.999) in the given timeZone.
+Returns the Sunday-based end of ISO week for the given timestamp.
 
 ```ts
 import { endOfWeekBase } from "@datezone/week";
@@ -84,7 +84,7 @@ import { endOfWeekBase } from "@datezone/week";
 
 ## `addWeeks`
 
-> TODO: Add description.
+Adds a specified number of weeks to a timestamp, correctly handling time-zone differences.
 
 ```ts
 import { addWeeks } from "@datezone/week";
@@ -104,7 +104,7 @@ import { addWeeksBase } from "@datezone/week";
 
 ## `subWeeks`
 
-> TODO: Add description.
+Subtracts a specified number of weeks from a timestamp.
 
 ```ts
 import { subWeeks } from "@datezone/week";
@@ -114,7 +114,7 @@ import { subWeeks } from "@datezone/week";
 
 ## `startOfISOWeek`
 
-> TODO: Add description.
+Returns the Monday-based start of ISO week for the given timestamp.
 
 ```ts
 import { startOfISOWeek } from "@datezone/week";
@@ -124,7 +124,7 @@ import { startOfISOWeek } from "@datezone/week";
 
 ## `endOfISOWeek`
 
-> TODO: Add description.
+Returns the Sunday-based end of ISO week for the given timestamp.
 
 ```ts
 import { endOfISOWeek } from "@datezone/week";
@@ -134,7 +134,7 @@ import { endOfISOWeek } from "@datezone/week";
 
 ## `weeksInMonth`
 
-> TODO: Add description.
+Calculates how many ISO weeks are contained in the month of the provided timestamp.
 
 ```ts
 import { weeksInMonth } from "@datezone/week";

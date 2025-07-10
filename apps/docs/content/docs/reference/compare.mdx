@@ -4,7 +4,7 @@ title: Compare
 
 ## `OptionsOrTimestamp`
 
-> TODO: Add description.
+Utility type that allows API functions to accept **either** a raw timestamp `number` **or** a `{ year, month, day }` object.
 
 ```ts
 import { OptionsOrTimestamp } from "@datezone/compare";
@@ -24,7 +24,7 @@ import { isToday } from "@datezone/compare";
 
 ## `isTodayBase`
 
-> TODO: Add description.
+Core helper used by `isToday()`/`isYesterday()` et al. It checks if the given calendar date matches the current day in the provided time-zone. Not intended for direct public use.
 
 ```ts
 import { isTodayBase } from "@datezone/compare";
