@@ -1,20 +1,8 @@
-import { type TimeZone, toISOString } from "datezone";
+import { toISOString } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-// Current timestamp
-const now = Date.now();
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
 
-// Different timezone examples
-console.log("ISO string in different timezones:");
-console.log(`UTC: ${toISOString(now, "UTC")}`);
-console.log(`New York: ${toISOString(now, "America/New_York")}`);
-console.log(`Tokyo: ${toISOString(now, "Asia/Tokyo")}`);
-console.log(`London: ${toISOString(now, "Europe/London")}`);
-
-// Local timezone (null parameter)
-console.log(`Local: ${toISOString(now, null)}`);
-
-// Historical timestamp
-const historical = new Date("2023-06-15T12:30:45.123Z").getTime();
-console.log(
-	`\nHistorical date in EST: ${toISOString(historical, "America/New_York")}`,
-);
+const result = toISOString(Date.UTC(2025, 0, 1));
+console.log(result);

@@ -1,5 +1,8 @@
-// @ts-nocheck  – simplified demo code
-import { isYesterday } from "datezone";
+import { isYesterday } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-const result = isYesterday(Date.UTC(2025, 0, 1), "UTC");
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
+
+const result = isYesterday(Date.UTC(2025, 0, 1), tz);
 console.log(result);

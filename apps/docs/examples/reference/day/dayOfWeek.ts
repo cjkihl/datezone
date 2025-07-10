@@ -1,9 +1,8 @@
-import { dayOfWeek, type TimeZone } from "datezone";
+import { dayOfWeek } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-// July 7, 2024 is a Sunday (ISO 7)
-const ts = Date.UTC(2024, 6, 7);
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
 
-console.log(dayOfWeek(ts, null)); // 7
-
-const tz: TimeZone = "America/Los_Angeles";
-console.log(dayOfWeek(ts, tz)); // 7
+const result = dayOfWeek(Date.UTC(2025, 0, 1), tz);
+console.log(result);

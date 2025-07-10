@@ -1,6 +1,8 @@
-import { weekDayName } from "datezone";
+import { weekDayName } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-// Localized weekday names
-console.log(weekDayName("en-US", "long", 1)); // "Monday"
-console.log(weekDayName("en-US", "short", 5)); // "Fri"
-console.log(weekDayName("ja-JP", "narrow", 7)); // "日"
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
+
+const result = weekDayName(Date.UTC(2025, 0, 1), tz);
+console.log(result);

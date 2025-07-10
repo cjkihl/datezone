@@ -1,8 +1,8 @@
-import { dayOfMonth, type TimeZone } from "datezone";
+import { dayOfMonth } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-const ts = Date.UTC(2024, 5, 21, 12); // 2024-06-21T12:00:00.000Z
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
 
-console.log(dayOfMonth(ts, null)); // 21
-
-const tz: TimeZone = "Asia/Tokyo";
-console.log(dayOfMonth(ts, tz)); // 21
+const result = dayOfMonth(Date.UTC(2025, 0, 1), tz);
+console.log(result);

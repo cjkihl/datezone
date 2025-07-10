@@ -1,5 +1,8 @@
-// @ts-nocheck  – simplified demo code
-import { endOfPrevMonth } from "datezone";
+import { endOfPrevMonth } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-const result = endOfPrevMonth(Date.UTC(2025, 0, 1), "UTC");
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
+
+const result = endOfPrevMonth(Date.UTC(2025, 0, 1), tz);
 console.log(result);

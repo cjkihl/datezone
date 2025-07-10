@@ -1,8 +1,8 @@
-import { endOfDay, type TimeZone, toISOString } from "datezone";
+import { endOfDay } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
 const tz: TimeZone = "UTC";
-const now = Date.now();
+const ts = Date.UTC(2025, 0, 1);
 
-const end = endOfDay(now, tz);
-
-console.log(`End of UTC day: ${toISOString(end, tz)}`);
+const result = endOfDay(Date.UTC(2025, 0, 1), tz);
+console.log(result);

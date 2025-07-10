@@ -1,23 +1,8 @@
-import { format, type TimeZone } from "datezone";
+import { format } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-// Current timestamp
-const now = Date.now();
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
 
-// Example timezone
-const timeZone: TimeZone = "America/New_York";
-
-// Format examples
-console.log("Basic formatting:");
-console.log(format(now, "yyyy-MM-dd", { timeZone }));
-console.log(format(now, "MMM dd, yyyy", { timeZone }));
-console.log(format(now, "h:mm a", { timeZone }));
-console.log(format(now, "EEEE, MMMM do, yyyy", { timeZone }));
-
-// With different locales
-console.log("\nWith different locales:");
-console.log(format(now, "MMMM dd, yyyy", { locale: "en-US", timeZone }));
-console.log(format(now, "dd MMMM yyyy", { locale: "es-ES", timeZone }));
-
-// Complex formatting
-console.log("\nComplex format:");
-console.log(format(now, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx", { timeZone }));
+const result = format(Date.UTC(2025, 0, 1));
+console.log(result);

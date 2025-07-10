@@ -1,3 +1,3 @@
-import { OptionsOrTimestamp } from "datezone";
+import { OptionsOrTimestamp } from "@datezone/compare";
 
 console.log(OptionsOrTimestamp);

@@ -1,5 +1,8 @@
-// @ts-nocheck  – simplified demo code
-import { endOfYear } from "datezone";
+import { endOfYear } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-const result = endOfYear(Date.UTC(2025, 0, 1), "UTC");
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
+
+const result = endOfYear(Date.UTC(2025, 0, 1), tz);
 console.log(result);

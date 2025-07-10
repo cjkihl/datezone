@@ -34,36 +34,66 @@ function walk(dir: string, list: string[] = []) {
 
 function needsGeneration(file: string): boolean {
 	const content = fs.readFileSync(file, "utf8").trim();
-	return content === "" || /TODO:\s*implement example code/i.test(content);
+	return (
+		content === "" ||
+		/TODO:\s*implement example code/i.test(content) ||
+		/@ts-nocheck/i.test(content) ||
+		/from\s+["']datezone["']/.test(content)
+	);
 }
 
-function buildSnippet(symbol: string): string {
+function buildSnippet(symbol: string, importPath: string): string {
 	// Generic safe arguments
 	const safeTs = "Date.UTC(2025, 0, 1)"; // Jan 1, 2025 UTC
 	const timeZone = '"UTC"';
 
-	const fnLike = /^[a-z].*/.test(symbol); // crudely assume lowercase start = function
+	const fnLike = /^[a-z].*/.test(symbol); // rudimentary check: camelCase implies a function, PascalCase implies a type/constant
 	if (!fnLike) {
-		return `import { ${symbol} } from "datezone";
+		return `import { ${symbol} } from "${importPath}";
 
 console.log(${symbol});\n`;
 	}
 
-	// Determine arity heuristically from name
+	const ONLY_TS = new Set([
+		"isPast",
+		"isFuture",
+		"toISOString",
+		"fromISOString",
+		"clearFixedOffsetCache",
+	]);
+	const TWO_TS = new Set(["isBefore", "isAfter", "isEqual"]);
+
 	let call: string;
-	if (symbol.match(/^(add|sub)/)) {
-		call = `${symbol}(${safeTs}, 1, ${timeZone})`;
+	if (ONLY_TS.has(symbol)) {
+		call = `${symbol}(${safeTs})`;
+	} else if (TWO_TS.has(symbol)) {
+		call = `${symbol}(${safeTs}, ${safeTs} + 1000)`;
+	} else if (symbol.match(/^(add|sub)/)) {
+		call = `${symbol}(${safeTs}, 1, tz)`;
 	} else if (symbol.match(/^is/)) {
-		call = `${symbol}(${safeTs}, ${timeZone})`;
+		call = `${symbol}(${safeTs}, tz)`;
 	} else if (symbol.endsWith("Base")) {
-		call = `${symbol}(2025, 1, 1, 1, ${timeZone})`;
-	} else if (symbol.match(/startOf|endOf/)) {
-		call = `${symbol}(${safeTs}, ${timeZone})`;
+		// Many base-level helpers use numeric Y/M/D plus optional amount/timeZone
+		if (
+			symbol.includes("Weeks") ||
+			symbol.includes("Months") ||
+			symbol.includes("Years")
+		) {
+			call = `${symbol}(2025, 1, 1, 1, tz)`;
+		} else {
+			call = `${symbol}(2025, 1, 1)`;
+		}
+	} else if (symbol.match(/startOf|endOf|week|day|month|year/)) {
+		call = `${symbol}(${safeTs}, tz)`;
 	} else {
 		call = `${symbol}(${safeTs})`;
 	}
 
-	return `// @ts-nocheck  – simplified demo code\nimport { ${symbol} } from "datezone";
+	return `import { ${symbol} } from "${importPath}";
+import type { TimeZone } from "${importPath}";
+
+const tz: TimeZone = "UTC";
+const ts = ${safeTs};
 
 const result = ${call};
 console.log(result);\n`;
@@ -76,7 +106,18 @@ function main() {
 	for (const file of files) {
 		if (!needsGeneration(file)) continue;
 		const symbol = path.basename(file, ".ts");
-		const snippet = buildSnippet(symbol);
+		const fileDir = path.dirname(file);
+		let importPath = path
+			.relative(
+				fileDir,
+				path.join(process.cwd(), "packages", "datezone", "index.pub.ts"),
+			)
+			.replace(/\\/g, "/");
+		if (!importPath.startsWith(".")) {
+			importPath = "./" + importPath;
+		}
+
+		const snippet = buildSnippet(symbol, importPath);
 		fs.writeFileSync(file, snippet);
 		updated.push(path.relative(EXAMPLES_DIR, file));
 	}

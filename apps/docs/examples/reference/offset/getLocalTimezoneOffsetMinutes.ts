@@ -1,5 +1,8 @@
-// @ts-nocheck  – simplified demo code
-import { getLocalTimezoneOffsetMinutes } from "datezone";
+import { getLocalTimezoneOffsetMinutes } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
+
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
 
 const result = getLocalTimezoneOffsetMinutes(Date.UTC(2025, 0, 1));
 console.log(result);

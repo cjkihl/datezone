@@ -1,9 +1,8 @@
-import { dayOfYear, type TimeZone } from "datezone";
+import { dayOfYear } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-// March 1, 2024 (leap year)
-const ts = Date.UTC(2024, 2, 1);
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
 
-console.log(dayOfYear(ts, null)); // 61
-
-const tz: TimeZone = "America/New_York";
-console.log(dayOfYear(ts, tz)); // 61
+const result = dayOfYear(Date.UTC(2025, 0, 1), tz);
+console.log(result);

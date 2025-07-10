@@ -1,5 +1,8 @@
-// @ts-nocheck  – simplified demo code
-import { weeksInMonthBase } from "datezone";
+import { weeksInMonthBase } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-const result = weeksInMonthBase(2025, 1, 1, 1, "UTC");
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
+
+const result = weeksInMonthBase(2025, 1, 1);
 console.log(result);

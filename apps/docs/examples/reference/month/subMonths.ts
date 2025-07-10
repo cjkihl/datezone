@@ -1,5 +1,8 @@
-// @ts-nocheck  – simplified demo code
-import { subMonths } from "datezone";
+import { subMonths } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-const result = subMonths(Date.UTC(2025, 0, 1), 1, "UTC");
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
+
+const result = subMonths(Date.UTC(2025, 0, 1), 1, tz);
 console.log(result);

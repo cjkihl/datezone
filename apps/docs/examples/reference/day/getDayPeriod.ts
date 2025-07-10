@@ -1,5 +1,8 @@
-import { getDayPeriod } from "datezone";
+import { getDayPeriod } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-console.log(getDayPeriod("en-US", 9)); // AM
-console.log(getDayPeriod("en-US", 15)); // PM
-console.log(getDayPeriod("fr-FR", 23)); // PM in French locale
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
+
+const result = getDayPeriod(Date.UTC(2025, 0, 1));
+console.log(result);

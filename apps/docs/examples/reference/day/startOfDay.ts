@@ -1,8 +1,8 @@
-import { startOfDay, type TimeZone, toISOString } from "datezone";
+import { startOfDay } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-const tz: TimeZone = "Asia/Tokyo";
-const now = Date.now();
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
 
-const start = startOfDay(now, tz);
-
-console.log(`Start of day in ${tz}: ${toISOString(start, tz)}`);
+const result = startOfDay(Date.UTC(2025, 0, 1), tz);
+console.log(result);

@@ -1,4 +1,8 @@
-import { dayOfYearBase } from "datezone";
+import { dayOfYearBase } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-// December 31, 2024 (leap year) → 366th day
-console.log(dayOfYearBase(2024, 12, 31)); // 366
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
+
+const result = dayOfYearBase(2025, 1, 1);
+console.log(result);

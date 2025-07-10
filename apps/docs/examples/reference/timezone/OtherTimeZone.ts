@@ -1,3 +1,3 @@
-import { OtherTimeZone } from "datezone";
+import { OtherTimeZone } from "@datezone/timezone";
 
 console.log(OtherTimeZone);

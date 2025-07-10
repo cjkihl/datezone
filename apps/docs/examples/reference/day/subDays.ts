@@ -1,9 +1,8 @@
-import { subDays, type TimeZone, toISOString } from "datezone";
+import { subDays } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-const tz: TimeZone = "Europe/London";
-const now = Date.now();
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
 
-// Go back 7 days in the given timeZone
-const lastWeek = subDays(now, 7, tz);
-
-console.log(`Last week in ${tz}: ${toISOString(lastWeek, tz)}`);
+const result = subDays(Date.UTC(2025, 0, 1), 1, tz);
+console.log(result);

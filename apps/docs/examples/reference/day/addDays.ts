@@ -1,13 +1,8 @@
-import { addDays, type TimeZone, toISOString } from "datezone";
+import { addDays } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-// Current timestamp
-const now = Date.now();
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
 
-// Example timeZone that observes daylight-saving time
-const timeZone: TimeZone = "America/New_York";
-
-// Add 5 calendar days in the given timeZone
-const inFiveDays = addDays(now, 5, timeZone);
-
-console.log(`Now: ${toISOString(now, timeZone)}`);
-console.log(`In 5 days (${timeZone}): ${toISOString(inFiveDays, timeZone)}`);
+const result = addDays(Date.UTC(2025, 0, 1), 1, tz);
+console.log(result);

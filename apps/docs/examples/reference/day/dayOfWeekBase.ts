@@ -1,5 +1,8 @@
-import { dayOfWeekBase } from "datezone";
+import { dayOfWeekBase } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
 
-// ISO day of week: 1 (Mon) ... 7 (Sun)
-console.log(dayOfWeekBase(2024, 7, 4)); // Independence Day 2024 → Thursday (4)
-console.log(dayOfWeekBase(2024, 7, 7)); // Sunday → 7
+const tz: TimeZone = "UTC";
+const ts = Date.UTC(2025, 0, 1);
+
+const result = dayOfWeekBase(2025, 1, 1);
+console.log(result);
