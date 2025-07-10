@@ -4,17 +4,13 @@ title: Timezone
 
 ## `UTCTimeZone`
 
-> TODO: Add description.
-
-```ts
-import { UTCTimeZone } from "@datezone/timezone";
-```
+Union type listing all IANA zone names that have a fixed **UTC±00:00** offset (no DST).
 
 <CodeExample file="reference/timezone/UTCTimeZone.ts" title="UTCTimeZone" />
 
 ## `DSTTimeZone`
 
-> TODO: Add description.
+Union type listing IANA zones that observe **Daylight Saving Time** and therefore change their offset during the year.
 
 ```ts
 import { DSTTimeZone } from "@datezone/timezone";
@@ -24,7 +20,7 @@ import { DSTTimeZone } from "@datezone/timezone";
 
 ## `OtherTimeZone`
 
-> TODO: Add description.
+Union type for every IANA zone that is neither purely UTC nor uses DST (fixed non-zero offset).
 
 ```ts
 import { OtherTimeZone } from "@datezone/timezone";
@@ -34,7 +30,7 @@ import { OtherTimeZone } from "@datezone/timezone";
 
 ## `TimeZone`
 
-> TODO: Add description.
+Combined union of `UTCTimeZone | DSTTimeZone | OtherTimeZone`; represents **any** valid time-zone string accepted by Datezone.
 
 ```ts
 import { TimeZone } from "@datezone/timezone";

@@ -4,7 +4,7 @@ title: Iso
 
 ## `toISOString`
 
-> TODO: Add description.
+> Converts a timestamp (milliseconds since epoch) to an ISO-8601 string without constructing a JavaScript `Date` object. Fast and allocation-free.
 
 ```ts
 import { toISOString } from "@datezone/iso";
@@ -14,7 +14,7 @@ import { toISOString } from "@datezone/iso";
 
 ## `fromISOString`
 
-> TODO: Add description.
+> Parses an ISO-8601 string into a UTC timestamp (milliseconds since epoch). Significantly faster than `Date.parse()` and works the same in every runtime.
 
 ```ts
 import { fromISOString } from "@datezone/iso";
