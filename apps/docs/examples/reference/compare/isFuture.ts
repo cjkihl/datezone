@@ -1,5 +1,5 @@
-import { isFuture } from "../../../../../packages/datezone/index.pub.ts";
-import type { TimeZone } from "../../../../../packages/datezone/index.pub.ts";
+import type { TimeZone } from "datezone";
+import { isFuture } from "datezone";
 
 const tz: TimeZone = "UTC";
 const ts = Date.UTC(2025, 0, 1);
