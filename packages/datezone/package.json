@@ -1,6 +1,6 @@
 {
   "name": "datezone",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A lightweight and comprehensive date and timeZone utility library for JavaScript.",
   "keywords": [
     "date",
