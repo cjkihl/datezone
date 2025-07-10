@@ -56,6 +56,11 @@ export function subMinutes(ts: number, amount: number): number {
  * @see https://datezone.dev/docs/reference/minute#minute
  */
 export function minute(ts: number, timeZone: TimeZone | null): number {
+	if (timeZone === null) {
+		const d = new Date(ts);
+		return d.getMinutes();
+	}
+
 	const m =
 		Math.floor(
 			(ts + getUTCtoTimezoneOffsetMinutes(ts, timeZone) * 60000) / 60000,

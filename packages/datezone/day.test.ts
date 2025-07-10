@@ -238,11 +238,9 @@ describe("dayOfMonth", () => {
 
 describe("dayOfWeek", () => {
 	it("returns ISO day of week for timestamp (no timeZone)", () => {
-		const d = new Date(Date.UTC(2024, 0, 15)); // Monday
+		const d = new Date(Date.UTC(2024, 0, 15));
 		const dz = dayOfWeek(d.getTime(), null);
-		expect(dz).toBe(1);
-		// Compare with date-fns (getDay: 0=Sunday, 1=Monday...)
-		const jsDay = fns.getDay(d);
+		const jsDay = d.getDay(); // local time
 		const isoDay = jsDay === 0 ? 7 : jsDay;
 		expect(dz).toBe(isoDay);
 	});

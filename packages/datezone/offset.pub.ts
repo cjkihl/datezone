@@ -113,8 +113,7 @@ function getCachedOffsetDST(ts: number, tz: TimeZone): number | null {
 }
 
 function isFixedOffsetZone(tz: TimeZone): boolean {
-	if (isUTC(tz)) return true;
-	return !isDST(tz);
+	return isUTC(tz) || !isDST(tz);
 }
 
 function calcOffset(
@@ -158,11 +157,8 @@ function calcOffset(
  */
 export function getUTCtoTimezoneOffsetMinutes(
 	ts: number,
-	tz: TimeZone | null,
+	tz: TimeZone,
 ): number {
-	if (tz === null) {
-		return getUTCtoLocalOffsetMinutes(ts);
-	}
 	if (isFixedOffsetZone(tz)) {
 		const cached = fixedOffsetCache.get(tz);
 		if (cached !== undefined) return cached;
@@ -236,14 +232,14 @@ export function getTimezoneOffsetMinutes(
 	if (from === "Etc/UTC" || from === "UTC") {
 		if (!to) {
 			// If 'to' is undefined, treat as local time offset
-			return getUTCtoTimezoneOffsetMinutes(ts, null);
+			return getUTCtoLocalOffsetMinutes(ts);
 		}
 		return getUTCtoTimezoneOffsetMinutes(ts, to);
 	}
 	if (to === "Etc/UTC" || to === "UTC") {
 		if (!from) {
 			// If 'from' is undefined, treat as local time offset
-			return -getUTCtoTimezoneOffsetMinutes(ts, null);
+			return -getUTCtoLocalOffsetMinutes(ts);
 		}
 		return -getUTCtoTimezoneOffsetMinutes(ts, from);
 	}
@@ -256,14 +252,14 @@ export function getTimezoneOffsetMinutes(
 	// If one is local and one is specified
 	if (!from && to) {
 		// Local to specified timeZone
-		const localOffset = getUTCtoTimezoneOffsetMinutes(ts, null);
+		const localOffset = getUTCtoLocalOffsetMinutes(ts);
 		const toOffset = getUTCtoTimezoneOffsetMinutes(ts, to);
 		return toOffset - localOffset;
 	}
 	if (from && !to) {
 		// Specified timeZone to local
 		const fromOffset = getUTCtoTimezoneOffsetMinutes(ts, from);
-		const localOffset = getUTCtoTimezoneOffsetMinutes(ts, null);
+		const localOffset = getUTCtoLocalOffsetMinutes(ts);
 		return localOffset - fromOffset;
 	}
 

@@ -33,13 +33,18 @@ export function to24Hour(hour: number): number {
  * @see https://datezone.dev/docs/reference/hour#hour
  */
 export function hour(ts: number, timeZone: TimeZone | null): number {
+	// Fast path: local time
 	if (timeZone === null) {
-		return getLocalHour(ts, getUTCtoTimezoneOffsetMinutes(ts, null));
+		const d = new Date(ts);
+		return d.getHours();
 	}
+
+	// Fast path: UTC
 	if (timeZone === "UTC") {
 		return getUTCHour(ts);
 	}
 
+	// For DST zones, check if offset changes
 	const offsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
 	const offsetMs = offsetMinutes * 60000;
 	const d = new Date(ts + offsetMs);
@@ -50,14 +55,6 @@ function getUTCHour(ts: number): number {
 	const msInDay = 86_400_000;
 	const msInHour = 3_600_000;
 	const msSinceMidnight = ((ts % msInDay) + msInDay) % msInDay;
-	return Math.floor(msSinceMidnight / msInHour);
-}
-
-function getLocalHour(ts: number, localOffsetMs: number): number {
-	const msInDay = 86_400_000;
-	const msInHour = 3_600_000;
-	const localTs = ts + localOffsetMs;
-	const msSinceMidnight = ((localTs % msInDay) + msInDay) % msInDay;
 	return Math.floor(msSinceMidnight / msInHour);
 }
 

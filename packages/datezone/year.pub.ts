@@ -1,5 +1,7 @@
-import { calendarToTimestamp, timestampToCalendar } from "./calendar.pub.js";
+import { calendarToTimestamp } from "./calendar.pub.js";
 import type { TimeZone } from "./index.pub.js";
+import { getUTCtoTimezoneOffsetMinutes } from "./offset.pub.js";
+import { isDST, isUTC } from "./timezone.pub.js";
 
 /**
  * Extracts the year from a timestamp.
@@ -13,7 +15,15 @@ export function year(ts: number, tz?: TimeZone): number {
 	if (!tz) {
 		return new Date(ts).getFullYear();
 	}
-	return timestampToCalendar(ts, tz).year;
+	if (isUTC(tz) || !isDST(tz)) {
+		const offset = getUTCtoTimezoneOffsetMinutes(ts, tz);
+		const d = new Date(ts + offset * 60000);
+		return d.getUTCFullYear();
+	}
+	// DST zone: only apply offset once, do not double-check
+	const offset = getUTCtoTimezoneOffsetMinutes(ts, tz);
+	const d = new Date(ts + offset * 60000);
+	return d.getUTCFullYear();
 }
 
 /**
@@ -94,26 +104,46 @@ export function addYears(ts: number, amount: number, tz?: TimeZone): number {
 		return d.getTime();
 	}
 
-	const { year, month, day, hour, minute, second, millisecond } =
-		timestampToCalendar(ts, tz);
-
-	const targetYear = year + amount;
-	let targetDay = day;
-
-	if (month === 2 && day === 29 && !isLeapYearBase(targetYear)) {
-		targetDay = 28;
+	if (isUTC(tz) || !isDST(tz)) {
+		const offset = getUTCtoTimezoneOffsetMinutes(ts, tz);
+		const d = new Date(ts + offset * 60000);
+		const targetYear = d.getUTCFullYear() + amount;
+		let targetDay = d.getUTCDate();
+		const month = d.getUTCMonth() + 1;
+		if (month === 2 && targetDay === 29 && !isLeapYearBase(targetYear)) {
+			targetDay = 28;
+		}
+		const newDate = Date.UTC(
+			targetYear,
+			month - 1,
+			targetDay,
+			d.getUTCHours(),
+			d.getUTCMinutes(),
+			d.getUTCSeconds(),
+			d.getUTCMilliseconds(),
+		);
+		return newDate - offset * 60000;
 	}
 
-	return calendarToTimestamp(
+	// DST zone: single offset calculation for both extraction and composition
+	const offset = getUTCtoTimezoneOffsetMinutes(ts, tz);
+	const d = new Date(ts + offset * 60000);
+	const targetYear = d.getUTCFullYear() + amount;
+	let targetDay = d.getUTCDate();
+	const month = d.getUTCMonth() + 1;
+	if (month === 2 && targetDay === 29 && !isLeapYearBase(targetYear)) {
+		targetDay = 28;
+	}
+	const newDate = Date.UTC(
 		targetYear,
-		month,
+		month - 1,
 		targetDay,
-		hour,
-		minute,
-		second,
-		millisecond,
-		tz,
+		d.getUTCHours(),
+		d.getUTCMinutes(),
+		d.getUTCSeconds(),
+		d.getUTCMilliseconds(),
 	);
+	return newDate - offset * 60000;
 }
 
 /**

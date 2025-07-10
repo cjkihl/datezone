@@ -32,10 +32,6 @@ group("Day - Local Time", () => {
 		do_not_optimize(fns.endOfDay(testTimestamp).getTime()),
 	);
 
-	bench("date-fns: nextDay (local)", () =>
-		do_not_optimize(fns.addDays(testTimestamp, 1).getTime()),
-	);
-
 	bench("datezone: dayOfWeek (local)", () =>
 		do_not_optimize(dz.dayOfWeek(testTimestamp, null)),
 	);
@@ -77,13 +73,6 @@ group("Day - UTC", () => {
 		do_not_optimize(fns.endOfDay(new TZDate(testTimestamp, utcTimezone))),
 	);
 
-	bench("datezone: nextDay (UTC)", () =>
-		do_not_optimize(dz.addDays(testTimestamp, 1, utcTimezone)),
-	);
-	bench("date-fns: nextDay (UTC)", () =>
-		do_not_optimize(fns.addDays(new TZDate(testTimestamp, utcTimezone), 1)),
-	);
-
 	bench("datezone: dayOfWeek (UTC)", () =>
 		do_not_optimize(dz.dayOfWeek(testTimestamp, utcTimezone)),
 	);
@@ -123,13 +112,6 @@ group("Day - Non-DST", () => {
 		do_not_optimize(fns.endOfDay(new TZDate(testTimestamp, nonDstTimezone))),
 	);
 
-	bench("datezone: nextDay (Non-DST)", () =>
-		do_not_optimize(dz.addDays(testTimestamp, 1, nonDstTimezone)),
-	);
-	bench("date-fns: nextDay (Non-DST)", () =>
-		do_not_optimize(fns.addDays(new TZDate(testTimestamp, nonDstTimezone), 1)),
-	);
-
 	bench("datezone: dayOfWeek (Non-DST)", () =>
 		do_not_optimize(dz.dayOfWeek(testTimestamp, nonDstTimezone)),
 	);
@@ -167,13 +149,6 @@ group("Day - DST", () => {
 	);
 	bench("date-fns: endOfDay (DST)", () =>
 		do_not_optimize(fns.endOfDay(new TZDate(testTimestamp, dstTimezone))),
-	);
-
-	bench("datezone: nextDay (DST)", () =>
-		do_not_optimize(dz.addDays(testTimestamp, 1, dstTimezone)),
-	);
-	bench("date-fns: nextDay (DST)", () =>
-		do_not_optimize(fns.addDays(new TZDate(testTimestamp, dstTimezone), 1)),
 	);
 
 	bench("datezone: dayOfWeek (DST)", () =>

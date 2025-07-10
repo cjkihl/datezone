@@ -10,26 +10,26 @@ const utcTimezone: TimeZone = "UTC";
 const nonDstTimezone: TimeZone = "Asia/Tokyo";
 const dstTimezone: TimeZone = "America/New_York";
 
-group("📆 Year - Local Time", () => {
+group("Year - Local Time", () => {
 	bench("datezone: addYears (local)", () =>
 		do_not_optimize(dz.addYears(testTimestamp, 2, undefined)),
 	);
 	bench("date-fns: addYears (local)", () =>
-		do_not_optimize(fns.addYears(testTimestamp, 2).getTime()),
+		do_not_optimize(fns.addYears(testTimestamp, 2)),
 	);
 
 	bench("datezone: startOfYear (local)", () =>
 		do_not_optimize(dz.startOfYear(testTimestamp, undefined)),
 	);
 	bench("date-fns: startOfYear (local)", () =>
-		do_not_optimize(fns.startOfYear(testTimestamp).getTime()),
+		do_not_optimize(fns.startOfYear(testTimestamp)),
 	);
 
 	bench("datezone: endOfYear (local)", () =>
 		do_not_optimize(dz.endOfYear(testTimestamp, undefined)),
 	);
 	bench("date-fns: endOfYear (local)", () =>
-		do_not_optimize(fns.endOfYear(testTimestamp).getTime()),
+		do_not_optimize(fns.endOfYear(testTimestamp)),
 	);
 
 	bench("datezone: year (local)", () =>
@@ -41,32 +41,26 @@ group("📆 Year - Local Time", () => {
 	});
 });
 
-group("📆 Year - UTC", () => {
+group("Year - UTC", () => {
 	bench("datezone: addYears (UTC)", () =>
 		do_not_optimize(dz.addYears(testTimestamp, 2, utcTimezone)),
 	);
 	bench("date-fns: addYears (UTC)", () =>
-		do_not_optimize(
-			fns.addYears(new TZDate(testTimestamp, utcTimezone), 2).getTime(),
-		),
+		do_not_optimize(fns.addYears(new TZDate(testTimestamp, utcTimezone), 2)),
 	);
 
 	bench("datezone: startOfYear (UTC)", () =>
 		do_not_optimize(dz.startOfYear(testTimestamp, utcTimezone)),
 	);
 	bench("date-fns: startOfYear (UTC)", () =>
-		do_not_optimize(
-			fns.startOfYear(new TZDate(testTimestamp, utcTimezone)).getTime(),
-		),
+		do_not_optimize(fns.startOfYear(new TZDate(testTimestamp, utcTimezone))),
 	);
 
 	bench("datezone: endOfYear (UTC)", () =>
 		do_not_optimize(dz.endOfYear(testTimestamp, utcTimezone)),
 	);
 	bench("date-fns: endOfYear (UTC)", () =>
-		do_not_optimize(
-			fns.endOfYear(new TZDate(testTimestamp, utcTimezone)).getTime(),
-		),
+		do_not_optimize(fns.endOfYear(new TZDate(testTimestamp, utcTimezone))),
 	);
 
 	bench("datezone: year (UTC)", () =>
@@ -77,32 +71,26 @@ group("📆 Year - UTC", () => {
 	);
 });
 
-group("📆 Year - Non-DST", () => {
+group("Year - Non-DST", () => {
 	bench("datezone: addYears (Non-DST)", () =>
 		do_not_optimize(dz.addYears(testTimestamp, 2, nonDstTimezone)),
 	);
 	bench("date-fns: addYears (Non-DST)", () =>
-		do_not_optimize(
-			fns.addYears(new TZDate(testTimestamp, nonDstTimezone), 2).getTime(),
-		),
+		do_not_optimize(fns.addYears(new TZDate(testTimestamp, nonDstTimezone), 2)),
 	);
 
 	bench("datezone: startOfYear (Non-DST)", () =>
 		do_not_optimize(dz.startOfYear(testTimestamp, nonDstTimezone)),
 	);
 	bench("date-fns: startOfYear (Non-DST)", () =>
-		do_not_optimize(
-			fns.startOfYear(new TZDate(testTimestamp, nonDstTimezone)).getTime(),
-		),
+		do_not_optimize(fns.startOfYear(new TZDate(testTimestamp, nonDstTimezone))),
 	);
 
 	bench("datezone: endOfYear (Non-DST)", () =>
 		do_not_optimize(dz.endOfYear(testTimestamp, nonDstTimezone)),
 	);
 	bench("date-fns: endOfYear (Non-DST)", () =>
-		do_not_optimize(
-			fns.endOfYear(new TZDate(testTimestamp, nonDstTimezone)).getTime(),
-		),
+		do_not_optimize(fns.endOfYear(new TZDate(testTimestamp, nonDstTimezone))),
 	);
 
 	bench("datezone: year (Non-DST)", () =>
@@ -113,32 +101,26 @@ group("📆 Year - Non-DST", () => {
 	);
 });
 
-group("📆 Year - DST", () => {
+group("Year - DST", () => {
 	bench("datezone: addYears (DST)", () =>
 		do_not_optimize(dz.addYears(testTimestamp, 2, dstTimezone)),
 	);
 	bench("date-fns: addYears (DST)", () =>
-		do_not_optimize(
-			fns.addYears(new TZDate(testTimestamp, dstTimezone), 2).getTime(),
-		),
+		do_not_optimize(fns.addYears(new TZDate(testTimestamp, dstTimezone), 2)),
 	);
 
 	bench("datezone: startOfYear (DST)", () =>
 		do_not_optimize(dz.startOfYear(testTimestamp, dstTimezone)),
 	);
 	bench("date-fns: startOfYear (DST)", () =>
-		do_not_optimize(
-			fns.startOfYear(new TZDate(testTimestamp, dstTimezone)).getTime(),
-		),
+		do_not_optimize(fns.startOfYear(new TZDate(testTimestamp, dstTimezone))),
 	);
 
 	bench("datezone: endOfYear (DST)", () =>
 		do_not_optimize(dz.endOfYear(testTimestamp, dstTimezone)),
 	);
 	bench("date-fns: endOfYear (DST)", () =>
-		do_not_optimize(
-			fns.endOfYear(new TZDate(testTimestamp, dstTimezone)).getTime(),
-		),
+		do_not_optimize(fns.endOfYear(new TZDate(testTimestamp, dstTimezone))),
 	);
 
 	bench("datezone: year (DST)", () =>

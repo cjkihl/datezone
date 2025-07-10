@@ -19,12 +19,19 @@ export function addDays(
 	days: number,
 	timeZone: TimeZone | null,
 ): number {
+	// Fast path: local time
+	if (timeZone === null) {
+		const d = new Date(ts);
+		d.setDate(d.getDate() + days);
+		return d.getTime();
+	}
+
 	// Fast path: UTC or fixed offset (no DST)
-	if (timeZone !== null && (isUTC(timeZone) || !isDST(timeZone))) {
+	if (isUTC(timeZone) || !isDST(timeZone)) {
 		return ts + days * 86400000;
 	}
 
-	// For local (null) or DST zones, check if offset changes
+	// For DST zones, check if offset changes
 	const offsetStart = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
 	const tsEnd = ts + days * 86400000;
 	const offsetEnd = getUTCtoTimezoneOffsetMinutes(tsEnd, timeZone);
@@ -68,6 +75,11 @@ export function subDays(ts: number, days: number, timeZone: TimeZone | null) {
  * @see https://datezone.dev/docs/reference/day#startOfDay
  */
 export function startOfDay(ts: number, timeZone: TimeZone | null): number {
+	if (timeZone === null) {
+		const d = new Date(ts);
+		d.setHours(0, 0, 0, 0);
+		return d.getTime();
+	}
 	if (timeZone !== null && (isUTC(timeZone) || !isDST(timeZone))) {
 		const offset = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
 		const d = new Date(ts + offset * 60000);
@@ -84,7 +96,7 @@ export function startOfDay(ts: number, timeZone: TimeZone | null): number {
 			offset * 60000
 		);
 	}
-	// For local (null) or DST zones, check if offset changes
+	// For DST zones, check if offset changes
 	const offsetStart = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
 	const { year, month, day } = timestampToCalendar(ts, timeZone);
 	const startOfDayTs = calendarToTimestamp(
@@ -114,7 +126,15 @@ export function startOfDay(ts: number, timeZone: TimeZone | null): number {
  * @see https://datezone.dev/docs/reference/day#endOfDay
  */
 export function endOfDay(ts: number, timeZone: TimeZone | null): number {
-	if (timeZone !== null && (isUTC(timeZone) || !isDST(timeZone))) {
+	// Fast path: local time
+	if (timeZone === null) {
+		const d = new Date(ts);
+		d.setHours(23, 59, 59, 999);
+		return d.getTime();
+	}
+
+	// Fast path: UTC or fixed offset (no DST)
+	if (isUTC(timeZone) || !isDST(timeZone)) {
 		const offset = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
 		const d = new Date(ts + offset * 60000);
 		return (
@@ -130,7 +150,8 @@ export function endOfDay(ts: number, timeZone: TimeZone | null): number {
 			offset * 60000
 		);
 	}
-	// For local (null) or DST zones, check if offset changes
+
+	// For DST zones, check if offset changes
 	const offsetStart = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
 	const { year, month, day } = timestampToCalendar(ts, timeZone);
 	const endOfDayTs = calendarToTimestamp(
@@ -172,13 +193,22 @@ export function dayOfMonth(ts: number, timeZone: TimeZone | null): number {
  * @see https://datezone.dev/docs/reference/day#dayOfWeek
  */
 export function dayOfWeek(ts: number, timeZone: TimeZone | null): number {
-	if (timeZone !== null && (isUTC(timeZone) || !isDST(timeZone))) {
+	// Fast path: local time
+	if (timeZone === null) {
+		const d = new Date(ts);
+		const jsDay = d.getDay();
+		return jsDay === 0 ? 7 : jsDay;
+	}
+
+	// Fast path: UTC or fixed offset (no DST)
+	if (isUTC(timeZone) || !isDST(timeZone)) {
 		const offset = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
 		const d = new Date(ts + offset * 60000);
 		const jsDay = d.getDay();
 		return ((jsDay + 6) % 7) + 1;
 	}
-	// For local (null) or DST zones, check if offset changes
+
+	// For DST zones, check if offset changes
 	const offsetStart = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
 	const { year, month, day } = timestampToCalendar(ts, timeZone);
 	const dayOfWeekTs = calendarToTimestamp(
@@ -244,6 +274,13 @@ export function dayOfWeekBase(
  * @see https://datezone.dev/docs/reference/day#dayOfYear
  */
 export function dayOfYear(ts: number, timeZone: TimeZone | null): number {
+	// Fast path: local time
+	if (timeZone === null) {
+		const d = new Date(ts);
+		const startOfYear = new Date(d.getFullYear(), 0, 1);
+		const diff = ts - startOfYear.getTime();
+		return Math.floor(diff / 86400000) + 1;
+	}
 	const { year, month, day } = timestampToCalendar(ts, timeZone ?? null);
 	return dayOfYearBase(year, month, day);
 }
