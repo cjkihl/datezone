@@ -1,8 +1,0 @@
-// Database schema (example with Prisma)
-model Event {
-  id        String   @id
-  name      String
-  createdAt BigInt   // Timestamp as BigInt
-  startTime BigInt   // Event start as timestamp
-  endTime   BigInt   // Event end as timestamp
-}
