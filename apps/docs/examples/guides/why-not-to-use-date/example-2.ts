@@ -1,4 +1,4 @@
-// These similar constructors behaves differently:
+// Same same but different:
 
 // Use a Date in the constructor, interpeted as UTC, no problem.
 console.log(new Date("2024-01-01"));

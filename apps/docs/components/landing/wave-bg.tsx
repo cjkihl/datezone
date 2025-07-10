@@ -47,7 +47,6 @@ function generateWavePath({
 // ---- Wave configuration ----------------------------------------------------
 
 export type WaveConfig = {
-	color: string;
 	/** Factor multiplied by baseOpacity */
 	opacityFactor: number;
 	/** Seconds for one full horizontal cycle */
@@ -66,7 +65,6 @@ export type WaveConfig = {
 // Fine-tune individual layers here; each gets its own procedural path.
 const WAVE_CONFIG: WaveConfig[] = [
 	{
-		color: "#ffffff",
 		opacityFactor: 0.5,
 		path: generateWavePath({
 			amplitude: 90,
@@ -81,7 +79,6 @@ const WAVE_CONFIG: WaveConfig[] = [
 		yOffset: 0,
 	},
 	{
-		color: "#ffffff",
 		opacityFactor: 0.4,
 		path: generateWavePath({
 			amplitude: 30,
@@ -96,7 +93,6 @@ const WAVE_CONFIG: WaveConfig[] = [
 		yOffset: 20,
 	},
 	{
-		color: "#ffffff",
 		opacityFactor: 0.3,
 		path: generateWavePath({
 			amplitude: 130,
@@ -137,14 +133,14 @@ const Wave: React.FC<{
 			>
 				{/* two copies for seamless repeat */}
 				<path
+					className="fill-black dark:fill-white"
 					d={config.path}
-					fill={config.color}
 					fillOpacity={baseOpacity * config.opacityFactor}
 					transform={`translate(0 ${config.yOffset}) scale(1 ${config.scale})`}
 				/>
 				<path
+					className="fill-black dark:fill-white"
 					d={config.path}
-					fill={config.color}
 					fillOpacity={baseOpacity * config.opacityFactor}
 					transform={`translate(1440 ${config.yOffset}) scale(1 ${config.scale})`}
 				/>

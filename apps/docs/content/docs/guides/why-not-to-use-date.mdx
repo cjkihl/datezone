@@ -5,13 +5,13 @@ description: Understanding the fundamental problems with JavaScript's Date objec
 
 
 
-JavaScript's `Date` object is one of the most problematic APIs in the language. While it seems convenient at first, it's the source of countless bugs and unpredictable behavior in applications. Here's why you should avoid it and what to use instead.
+JavaScript's `Date` object is one of the most problematic APIs in the language. While it seems convenient at first, it's the source of countless bugs and unpredictable behavior in applications. Here's why you should avoid it at any cost.
 
 ## The Core Problems
 
 ### 1. No Timezone Support
 
-The `Date` object doesn't properly support timeZones. It only knows about the local system timeZone and UTC, making it difficult to work with dates in specific timeZones reliably.
+The `Date` object doesn't support explicit timezones. It only knows about the local system timezone and UTC, making it really difficult to work with dates in a predictable way.
 
 <CodeExample tabs={[{ name: "Example 1", file: "guides/why-not-to-use-date/example-1.ts" }]} />
 
@@ -20,18 +20,18 @@ The `Date` object doesn't properly support timeZones. It only knows about the lo
 
 - The JavaScript `Date` object reflects the host system's **local time zone**.
 
-- There is no API in JavaScript to override the time zone globally.
+- There is no API in JavaScript to override this.
 </Callout>
 
 ### 2. Confusing constructor
 
-The `Date` object's constructor string parser have strange implicit behavours and is prone to a lot a hard to track errors.
+The `Date` object's constructor string parser have strange behavours. These might lead to errors that are really hard to track down.
 
 <CodeExample tabs={[{ name: "Example 2", file: "guides/why-not-to-use-date/example-2.ts" }]} />
 
 ### 3. Mutable State = Bugs
 
-`Date` objects are mutable, which leads to unexpected side effects and hard-to-track bugs.
+`Date` objects are mutable, which might lead to unexpected side effects and hard-to-track bugs.
 
 <CodeExample tabs={[{ name: "Example 3", file: "guides/why-not-to-use-date/example-3.ts" }]} />
 
@@ -43,7 +43,7 @@ The `Date` object's constructor string parser have strange implicit behavours an
 
 ### 4. Unpredictable Results
 
-The same code returns different results depending on the system timeZone, making unit testing unreliable.
+The same code returns different results depending on the system timezone, making unit testing unreliable.
 
 <CodeExample tabs={[{ name: "Example 4", file: "guides/why-not-to-use-date/example-4.ts" }]} />
 
@@ -71,16 +71,16 @@ JavaScript has a much better built-in native type for handling dates: `number` (
 
 ### Why Timestamps Are Better
 
-- **Immutable**: Numbers can't be mutated
-- **Serializable**: Numbers work perfectly with JSON
-- **Predictable**: Always represent the same moment in time no matter environment and calendar system 
-- **Efficient**: No memory overhead on the JavaScript heap
-- **Testable**: Same input always produces the same output
+- **Immutable**: It's just numbers
+- **Serializable**: Work perfectly with JSON
+- **Predictable**: Always represent the same moment in time no matter environment, timezone or calendar system 
+- **Efficient**: No extra object allocation or garbage collection overhead
+- **Testable**: Easy to create predictable tests that works everywhere.
 
 <CodeExample tabs={[{ name: "Example 6", file: "guides/why-not-to-use-date/example-6.ts" }]} />
 
 ## Summary
 
-The JavaScript `Date` object is fundamentally flawed and are a big cause of Date & Time related bugs in global applications. 
+The JavaScript `Date` object is tricky and are a big cause of Date & Time related bugs in global applications. 
 
 Next, learn about [why timestamps are the better choice](/docs/guides/why-use-timestamps) for your applications.

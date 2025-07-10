@@ -65,6 +65,11 @@ export const contents: Content[] = [
 		Icon: () => <FileText className="w-5 h-5" />,
 		list: [
 			{
+				href: "/docs/guides/best-practices",
+				icon: () => <CheckCircle className="w-4 h-4 text-muted-foreground" />,
+				title: "Best Practices",
+			},
+			{
 				href: "/docs/guides/why-not-to-use-date",
 				icon: () => <AlertTriangle className="w-4 h-4 text-muted-foreground" />,
 				title: "Why NOT to use Date",
@@ -78,11 +83,6 @@ export const contents: Content[] = [
 				href: "/docs/guides/how-dst-works",
 				icon: () => <Globe className="w-4 h-4 text-muted-foreground" />,
 				title: "How DST Works",
-			},
-			{
-				href: "/docs/guides/best-practices",
-				icon: () => <CheckCircle className="w-4 h-4 text-muted-foreground" />,
-				title: "Best Practices",
 			},
 		],
 		title: "Guides",
