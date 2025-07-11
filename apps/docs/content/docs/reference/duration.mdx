@@ -15,8 +15,6 @@ the target zone and then delegates the heavy-lifting to
 The **sign** of the interval does not matter – if `start` is after `end`
 the arguments are swapped so the returned duration is always positive.
 
-<CodeExample tabs={[{ name: "Example 1", file: "reference/duration/example-1.ts" }]} />
-
 <CodeExample file="reference/duration/intervalToDuration.ts" title="intervalToDuration" />
 
 ## `intervalToDurationBase`
@@ -27,8 +25,6 @@ in the **same timeZone context** – normally produced with
 
 It performs a calendar subtraction using a classic borrow-chain so that the
 result components are always non-negative.
-
-<CodeExample tabs={[{ name: "Example 2", file: "reference/duration/example-2.ts" }]} />
 
 <CodeExample file="reference/duration/intervalToDurationBase.ts" title="intervalToDurationBase" />
 
@@ -41,16 +37,12 @@ Mathematically the function answers whether
 Border-touching intervals (e.g. `end1 == start2`) are **not** considered an
 overlap.
 
-<CodeExample tabs={[{ name: "Example 3", file: "reference/duration/example-3.ts" }]} />
-
 <CodeExample file="reference/duration/areIntervalsOverlapping.ts" title="areIntervalsOverlapping" />
 
 ## `clamp`
 
-Restricts a numeric `value` to the [min, max] range.
+Restricts a numeric `value` to the [min, max] range.
 Equivalent to `Math.min(Math.max(value, min), max)` but without the extra
 function calls.
-
-<CodeExample tabs={[{ name: "Example 4", file: "reference/duration/example-4.ts" }]} />
 
 <CodeExample file="reference/duration/clamp.ts" title="clamp" />
