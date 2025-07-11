@@ -8,42 +8,15 @@ Represents a wall clock time with individual date and time components.
 This type is used for representing time as it appears on a wall clock
 in a specific timeZone, without any timeZone offset information.
 
-```ts
-import { Calendar } from "@datezone/calendar";
-```
+<CodeExample tabs={[{ name: "Example 1", file: "reference/calendar/example-1.ts" }]} />
 
 <CodeExample file="reference/calendar/Calendar.ts" title="Calendar" />
 
 ## `calendarToTimestamp`
 
-Converts a calendar in a specific timeZone to Timestamp in milliseconds.
+Converts a wall-clock `Calendar` value in a specific time-zone to a UTC timestamp (milliseconds since epoch).
 
-Takes individual date/time components representing a time in the specified timeZone
-and returns the corresponding UTC timestamp in milliseconds.
-
-```ts
-import { calendarToTimestamp } from "@datezone/calendar";
-```
-
-<CodeExample file="reference/calendar/calendarToTimestamp.ts" title="calendarToTimestamp" />
-
-## `calendarToTimestamp`
-
-> TODO: Add description.
-
-```ts
-import { calendarToTimestamp } from "@datezone/calendar";
-```
-
-<CodeExample file="reference/calendar/calendarToTimestamp.ts" title="calendarToTimestamp" />
-
-## `calendarToTimestamp`
-
-> TODO: Add description.
-
-```ts
-import { calendarToTimestamp } from "@datezone/calendar";
-```
+<CodeExample tabs={[{ name: "Example 2", file: "reference/calendar/example-2.ts" }]} />
 
 <CodeExample file="reference/calendar/calendarToTimestamp.ts" title="calendarToTimestamp" />
 
@@ -51,8 +24,6 @@ import { calendarToTimestamp } from "@datezone/calendar";
 
 Converts a timestamp in UTC to a calendar in a specific timeZone.
 
-```ts
-import { timestampToCalendar } from "@datezone/calendar";
-```
+<CodeExample tabs={[{ name: "Example 3", file: "reference/calendar/example-3.ts" }]} />
 
 <CodeExample file="reference/calendar/timestampToCalendar.ts" title="timestampToCalendar" />

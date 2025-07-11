@@ -1,3 +1,7 @@
+// Updates JSDoc comments in .pub.ts files to be more consistent and descriptive.
+// It looks for exported functions and updates the JSDoc comments to be more descriptive.
+// It also adds a @see line to the JSDoc comments.
+
 import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { basename, join } from "node:path";
 

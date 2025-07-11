@@ -1,4 +1,4 @@
-import { type TimeZone, toISOString } from "datezone";
+import { toISOString } from "datezone";
 
 // Current timestamp
 const now = Date.now();

@@ -55,13 +55,7 @@ Even though timestamps are the best *storage* format, they are not the best *pre
 
 Humans think in calendar units: "March&nbsp;14 at 3 PM", not `1710436800000`. Whenever you need to **display** a date or accept input from a human, convert the raw timestamp with datezone's formatting helpers.
 
-```ts
-import { format } from "datezone/format";
-
-const launch = 1710436800000; // timestamp
-console.log(format(launch, "yyyy-MM-dd HH:mm zzzz"));
-// → "2024-03-14 15:00 America/New_York"
-```
+<CodeExample tabs={[{ name: "Example 1", file: "guides/why-use-timestamps/example-1.ts" }]} />
 
 ### 2. No Built-in DST Awareness
 

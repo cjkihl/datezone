@@ -9,9 +9,7 @@ Positive if the zone is ahead of UTC, negative if behind.
 Uses a per-hour cache for performance.
 If no timeZone is specified, defaults to local system timeZone.
 
-```ts
-import { getUTCtoTimezoneOffsetMinutes } from "@datezone/offset";
-```
+<CodeExample tabs={[{ name: "Example 1", file: "reference/offset/example-1.ts" }]} />
 
 <CodeExample file="reference/offset/getUTCtoTimezoneOffsetMinutes.ts" title="getUTCtoTimezoneOffsetMinutes" />
 
@@ -20,9 +18,7 @@ import { getUTCtoTimezoneOffsetMinutes } from "@datezone/offset";
 Fast path for local timeZone offset calculation.
 Uses native Date.getTimezoneOffset() for better performance when working with the system timeZone.
 
-```ts
-import { getLocalTimezoneOffsetMinutes } from "@datezone/offset";
-```
+<CodeExample tabs={[{ name: "Example 2", file: "reference/offset/example-2.ts" }]} />
 
 <CodeExample file="reference/offset/getLocalTimezoneOffsetMinutes.ts" title="getLocalTimezoneOffsetMinutes" />
 
@@ -32,9 +28,7 @@ Returns the offset in minutes from fromZone to toZone at the given date.
 Fast path for UTC zones to avoid extra formatToParts calls.
 If timeZone parameters are not specified, defaults to local system timeZone.
 
-```ts
-import { getTimezoneOffsetMinutes } from "@datezone/offset";
-```
+<CodeExample tabs={[{ name: "Example 3", file: "reference/offset/example-3.ts" }]} />
 
 <CodeExample file="reference/offset/getTimezoneOffsetMinutes.ts" title="getTimezoneOffsetMinutes" />
 
@@ -42,9 +36,7 @@ import { getTimezoneOffsetMinutes } from "@datezone/offset";
 
 Returns information about the fixed offset cache for debugging purposes.
 
-```ts
-import { getFixedOffsetCacheInfo } from "@datezone/offset";
-```
+<CodeExample tabs={[{ name: "Example 4", file: "reference/offset/example-4.ts" }]} />
 
 <CodeExample file="reference/offset/getFixedOffsetCacheInfo.ts" title="getFixedOffsetCacheInfo" />
 
@@ -52,8 +44,6 @@ import { getFixedOffsetCacheInfo } from "@datezone/offset";
 
 Clears the fixed offset cache. Useful for testing or memory management.
 
-```ts
-import { clearFixedOffsetCache } from "@datezone/offset";
-```
+<CodeExample tabs={[{ name: "Example 5", file: "reference/offset/example-5.ts" }]} />
 
 <CodeExample file="reference/offset/clearFixedOffsetCache.ts" title="clearFixedOffsetCache" />

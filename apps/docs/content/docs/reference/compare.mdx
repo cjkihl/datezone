@@ -4,11 +4,9 @@ title: Compare
 
 ## `OptionsOrTimestamp`
 
-> TODO: Add description.
+Utility type that allows API functions to accept **either** a raw timestamp `number` **or** a `{ year, month, day }` object.
 
-```ts
-import { OptionsOrTimestamp } from "@datezone/compare";
-```
+<CodeExample tabs={[{ name: "Example 1", file: "reference/compare/example-1.ts" }]} />
 
 <CodeExample file="reference/compare/OptionsOrTimestamp.ts" title="OptionsOrTimestamp" />
 
@@ -16,19 +14,15 @@ import { OptionsOrTimestamp } from "@datezone/compare";
 
 Performance: Timezone required for converting timestamp to current day
 
-```ts
-import { isToday } from "@datezone/compare";
-```
+<CodeExample tabs={[{ name: "Example 2", file: "reference/compare/example-2.ts" }]} />
 
 <CodeExample file="reference/compare/isToday.ts" title="isToday" />
 
 ## `isTodayBase`
 
-> TODO: Add description.
+Core helper used by `isToday()`/`isYesterday()` et al. It checks if the given calendar date matches the current day in the provided time-zone. Not intended for direct public use.
 
-```ts
-import { isTodayBase } from "@datezone/compare";
-```
+<CodeExample tabs={[{ name: "Example 3", file: "reference/compare/example-3.ts" }]} />
 
 <CodeExample file="reference/compare/isTodayBase.ts" title="isTodayBase" />
 
@@ -36,9 +30,7 @@ import { isTodayBase } from "@datezone/compare";
 
 Performance: Timezone required for converting timestamp to current day
 
-```ts
-import { isTomorrow } from "@datezone/compare";
-```
+<CodeExample tabs={[{ name: "Example 4", file: "reference/compare/example-4.ts" }]} />
 
 <CodeExample file="reference/compare/isTomorrow.ts" title="isTomorrow" />
 
@@ -46,9 +38,7 @@ import { isTomorrow } from "@datezone/compare";
 
 Performance: Timezone required for converting timestamp to current day
 
-```ts
-import { isYesterday } from "@datezone/compare";
-```
+<CodeExample tabs={[{ name: "Example 5", file: "reference/compare/example-5.ts" }]} />
 
 <CodeExample file="reference/compare/isYesterday.ts" title="isYesterday" />
 
@@ -56,9 +46,7 @@ import { isYesterday } from "@datezone/compare";
 
 Performance: Timezone required for DST-aware comparison with current time
 
-```ts
-import { isPast } from "@datezone/compare";
-```
+<CodeExample tabs={[{ name: "Example 6", file: "reference/compare/example-6.ts" }]} />
 
 <CodeExample file="reference/compare/isPast.ts" title="isPast" />
 
@@ -66,9 +54,7 @@ import { isPast } from "@datezone/compare";
 
 Performance: Timezone required for DST-aware comparison with current time
 
-```ts
-import { isFuture } from "@datezone/compare";
-```
+<CodeExample tabs={[{ name: "Example 7", file: "reference/compare/example-7.ts" }]} />
 
 <CodeExample file="reference/compare/isFuture.ts" title="isFuture" />
 
@@ -76,9 +62,7 @@ import { isFuture } from "@datezone/compare";
 
 Performance: Timezone only needed for timestamp-to-date conversion, not DST
 
-```ts
-import { isWeekend } from "@datezone/compare";
-```
+<CodeExample tabs={[{ name: "Example 8", file: "reference/compare/example-8.ts" }]} />
 
 <CodeExample file="reference/compare/isWeekend.ts" title="isWeekend" />
 
@@ -86,9 +70,7 @@ import { isWeekend } from "@datezone/compare";
 
 Performance: Simple timestamp comparison, no timeZone conversion needed
 
-```ts
-import { isBefore } from "@datezone/compare";
-```
+<CodeExample tabs={[{ name: "Example 9", file: "reference/compare/example-9.ts" }]} />
 
 <CodeExample file="reference/compare/isBefore.ts" title="isBefore" />
 
@@ -96,9 +78,7 @@ import { isBefore } from "@datezone/compare";
 
 Performance: Simple timestamp comparison, no timeZone conversion needed
 
-```ts
-import { isAfter } from "@datezone/compare";
-```
+<CodeExample tabs={[{ name: "Example 10", file: "reference/compare/example-10.ts" }]} />
 
 <CodeExample file="reference/compare/isAfter.ts" title="isAfter" />
 
@@ -106,9 +86,7 @@ import { isAfter } from "@datezone/compare";
 
 Performance: Simple timestamp comparison, no timeZone conversion needed
 
-```ts
-import { isEqual } from "@datezone/compare";
-```
+<CodeExample tabs={[{ name: "Example 11", file: "reference/compare/example-11.ts" }]} />
 
 <CodeExample file="reference/compare/isEqual.ts" title="isEqual" />
 
@@ -116,9 +94,7 @@ import { isEqual } from "@datezone/compare";
 
 Performance: Timezone only needed for timestamp-to-date conversion, not DST
 
-```ts
-import { isSameDay } from "@datezone/compare";
-```
+<CodeExample tabs={[{ name: "Example 12", file: "reference/compare/example-12.ts" }]} />
 
 <CodeExample file="reference/compare/isSameDay.ts" title="isSameDay" />
 
@@ -126,9 +102,7 @@ import { isSameDay } from "@datezone/compare";
 
 Performance: Timezone only needed for timestamp-to-date conversion, not DST
 
-```ts
-import { isSameWeek } from "@datezone/compare";
-```
+<CodeExample tabs={[{ name: "Example 13", file: "reference/compare/example-13.ts" }]} />
 
 <CodeExample file="reference/compare/isSameWeek.ts" title="isSameWeek" />
 
@@ -136,9 +110,7 @@ import { isSameWeek } from "@datezone/compare";
 
 Performance: Timezone only needed for timestamp-to-date conversion
 
-```ts
-import { isSameMonth } from "@datezone/compare";
-```
+<CodeExample tabs={[{ name: "Example 14", file: "reference/compare/example-14.ts" }]} />
 
 <CodeExample file="reference/compare/isSameMonth.ts" title="isSameMonth" />
 
@@ -146,8 +118,6 @@ import { isSameMonth } from "@datezone/compare";
 
 Performance: Timezone only needed for timestamp-to-date conversion
 
-```ts
-import { isSameYear } from "@datezone/compare";
-```
+<CodeExample tabs={[{ name: "Example 15", file: "reference/compare/example-15.ts" }]} />
 
 <CodeExample file="reference/compare/isSameYear.ts" title="isSameYear" />

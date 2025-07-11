@@ -175,7 +175,7 @@ export async function GET(req: Request) {
 								}}
 								tw="flex ml-2"
 							>
-								github.com/better-auth/better-auth
+								github.com/cjkihl/datezone
 							</span>
 						</div>
 					</div>

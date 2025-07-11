@@ -1,4 +1,4 @@
-import { type Calendar, calendarToTimestamp, type TimeZone } from "datezone";
+import { type Calendar, calendarToTimestamp } from "datezone";
 
 // Create a calendar representation
 const calendar: Calendar = {

@@ -1,4 +1,4 @@
-import { type TimeZone, timestampToCalendar } from "datezone";
+import { timestampToCalendar } from "datezone";
 
 // Current timestamp
 const now = Date.now();

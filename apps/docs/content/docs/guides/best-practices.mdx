@@ -82,14 +82,7 @@ CREATE TABLE events (
 );
 ```
 
-```ts
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  database: 'test',
-  dateStrings: true // Set to true to return ISO Strings instead of Date objects
-});
-```
+<CodeExample tabs={[{ name: "Example 1", file: "guides/best-practices/example-1.ts" }]} />
 
 <Callout type="info">
 - Storing all dates in UTC (as numbers or ISO strings) ensures consistent, unambiguous comparisons and makes analytics/statistical queries much simpler.

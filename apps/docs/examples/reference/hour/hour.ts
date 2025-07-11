@@ -1,4 +1,4 @@
-import { hour, type TimeZone } from "datezone";
+import { hour } from "datezone";
 
 // Current timestamp
 const now = Date.now();

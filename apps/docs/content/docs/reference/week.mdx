@@ -4,91 +4,73 @@ title: Week
 
 ## `week`
 
-> TODO: Add description.
+Returns the ISO week number (1-53) for the given timestamp and time-zone.
 
-```ts
-import { week } from "@datezone/week";
-```
+<CodeExample tabs={[{ name: "Example 1", file: "reference/week/example-1.ts" }]} />
 
 <CodeExample file="reference/week/week.ts" title="week" />
 
 ## `weekBase`
 
-> TODO: Add description.
+Calculates the ISO week number (1-53) from a plain calendar date (year, month, day).
 
-```ts
-import { weekBase } from "@datezone/week";
-```
+<CodeExample tabs={[{ name: "Example 2", file: "reference/week/example-2.ts" }]} />
 
 <CodeExample file="reference/week/weekBase.ts" title="weekBase" />
 
 ## `getISOWeekYear`
 
-> TODO: Add description.
+Returns the ISO week-numbering year for the supplied timestamp.
 
-```ts
-import { getISOWeekYear } from "@datezone/week";
-```
+<CodeExample tabs={[{ name: "Example 3", file: "reference/week/example-3.ts" }]} />
 
 <CodeExample file="reference/week/getISOWeekYear.ts" title="getISOWeekYear" />
 
 ## `getISOWeekYearBase`
 
-> TODO: Add description.
+Calculates the ISO week-numbering year from a plain calendar date.
 
-```ts
-import { getISOWeekYearBase } from "@datezone/week";
-```
+<CodeExample tabs={[{ name: "Example 4", file: "reference/week/example-4.ts" }]} />
 
 <CodeExample file="reference/week/getISOWeekYearBase.ts" title="getISOWeekYearBase" />
 
 ## `startOfWeek`
 
-> TODO: Add description.
+Returns the timestamp for the start of the week (00:00:00.000) respecting the `weekStartsOn` option.
 
-```ts
-import { startOfWeek } from "@datezone/week";
-```
+<CodeExample tabs={[{ name: "Example 5", file: "reference/week/example-5.ts" }]} />
 
 <CodeExample file="reference/week/startOfWeek.ts" title="startOfWeek" />
 
 ## `startOfWeekBase`
 
-Returns the start of the week (00:00:00.000) in the given timeZone.
+Returns the timestamp for the end of the week (23:59:59.999) respecting `weekStartsOn`.
 
-```ts
-import { startOfWeekBase } from "@datezone/week";
-```
+<CodeExample tabs={[{ name: "Example 6", file: "reference/week/example-6.ts" }]} />
 
 <CodeExample file="reference/week/startOfWeekBase.ts" title="startOfWeekBase" />
 
 ## `endOfWeek`
 
-> TODO: Add description.
+Returns the Monday-based start of ISO week for the given timestamp.
 
-```ts
-import { endOfWeek } from "@datezone/week";
-```
+<CodeExample tabs={[{ name: "Example 7", file: "reference/week/example-7.ts" }]} />
 
 <CodeExample file="reference/week/endOfWeek.ts" title="endOfWeek" />
 
 ## `endOfWeekBase`
 
-Returns the end of the week (23:59:59.999) in the given timeZone.
+Returns the Sunday-based end of ISO week for the given timestamp.
 
-```ts
-import { endOfWeekBase } from "@datezone/week";
-```
+<CodeExample tabs={[{ name: "Example 8", file: "reference/week/example-8.ts" }]} />
 
 <CodeExample file="reference/week/endOfWeekBase.ts" title="endOfWeekBase" />
 
 ## `addWeeks`
 
-> TODO: Add description.
+Adds a specified number of weeks to a timestamp, correctly handling time-zone differences.
 
-```ts
-import { addWeeks } from "@datezone/week";
-```
+<CodeExample tabs={[{ name: "Example 9", file: "reference/week/example-9.ts" }]} />
 
 <CodeExample file="reference/week/addWeeks.ts" title="addWeeks" />
 
@@ -96,49 +78,39 @@ import { addWeeks } from "@datezone/week";
 
 Returns the timestamp for the given date plus the given number of weeks.
 
-```ts
-import { addWeeksBase } from "@datezone/week";
-```
+<CodeExample tabs={[{ name: "Example 10", file: "reference/week/example-10.ts" }]} />
 
 <CodeExample file="reference/week/addWeeksBase.ts" title="addWeeksBase" />
 
 ## `subWeeks`
 
-> TODO: Add description.
+Subtracts a specified number of weeks from a timestamp.
 
-```ts
-import { subWeeks } from "@datezone/week";
-```
+<CodeExample tabs={[{ name: "Example 11", file: "reference/week/example-11.ts" }]} />
 
 <CodeExample file="reference/week/subWeeks.ts" title="subWeeks" />
 
 ## `startOfISOWeek`
 
-> TODO: Add description.
+Returns the Monday-based start of ISO week for the given timestamp.
 
-```ts
-import { startOfISOWeek } from "@datezone/week";
-```
+<CodeExample tabs={[{ name: "Example 12", file: "reference/week/example-12.ts" }]} />
 
 <CodeExample file="reference/week/startOfISOWeek.ts" title="startOfISOWeek" />
 
 ## `endOfISOWeek`
 
-> TODO: Add description.
+Returns the Sunday-based end of ISO week for the given timestamp.
 
-```ts
-import { endOfISOWeek } from "@datezone/week";
-```
+<CodeExample tabs={[{ name: "Example 13", file: "reference/week/example-13.ts" }]} />
 
 <CodeExample file="reference/week/endOfISOWeek.ts" title="endOfISOWeek" />
 
 ## `weeksInMonth`
 
-> TODO: Add description.
+Calculates how many ISO weeks are contained in the month of the provided timestamp.
 
-```ts
-import { weeksInMonth } from "@datezone/week";
-```
+<CodeExample tabs={[{ name: "Example 14", file: "reference/week/example-14.ts" }]} />
 
 <CodeExample file="reference/week/weeksInMonth.ts" title="weeksInMonth" />
 
@@ -146,8 +118,6 @@ import { weeksInMonth } from "@datezone/week";
 
 Returns the number of weeks in the given month.
 
-```ts
-import { weeksInMonthBase } from "@datezone/week";
-```
+<CodeExample tabs={[{ name: "Example 15", file: "reference/week/example-15.ts" }]} />
 
 <CodeExample file="reference/week/weeksInMonthBase.ts" title="weeksInMonthBase" />

@@ -11,7 +11,7 @@
 			"port": 3000
 		}
 	],
-	"start": "bun install",
+	"start": "bun install && bun run build",
 	"terminals": [
 		{
 			"command": "bun install",
