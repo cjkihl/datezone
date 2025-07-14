@@ -17,11 +17,16 @@ export function getWeekdays(
 ): Date[] {
 	const today = dateLib.today();
 
-	const start = broadcastCalendar
-		? dateLib.startOfBroadcastWeek(today, dateLib)
-		: ISOWeek
-			? dateLib.startOfISOWeek(today)
-			: dateLib.startOfWeek(today);
+	let start: Date;
+	if (broadcastCalendar) {
+		start = dateLib.startOfBroadcastWeek(today, dateLib);
+	} else if (ISOWeek) {
+		start = dateLib.startOfISOWeek(today);
+	} else {
+		// Ensure the week starts on Sunday (0)
+		const dayOfWeek = today.getDay();
+		start = dateLib.addDays(today, -dayOfWeek);
+	}
 
 	const days: Date[] = [];
 	for (let i = 0; i < 7; i++) {

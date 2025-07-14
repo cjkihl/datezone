@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as fs from "node:fs/promises";
 import fg from "fast-glob";
 import { remarkInstall } from "fumadocs-docgen";

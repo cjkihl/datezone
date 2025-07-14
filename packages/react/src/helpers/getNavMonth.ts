@@ -9,12 +9,9 @@ import type { DayPickerProps } from "../types/index.js";
  * @returns A tuple containing the start and end months for navigation.
  */
 export function getNavMonths(
-	props: Pick<
-		DayPickerProps,
-		"captionLayout" | "endMonth" | "startMonth" | "today" | "timeZone"
-	>,
+	props: Partial<DayPickerProps>,
 	dateLib: DateLib,
-): [start: Date | undefined, end: Date | undefined] {
+): [Date | undefined, Date | undefined] {
 	let { startMonth, endMonth } = props;
 
 	const {
@@ -26,6 +23,17 @@ export function getNavMonths(
 		endOfYear,
 		today,
 	} = dateLib;
+
+	// Handle fromYear / toYear props if provided
+	const fromYear = (props as any).fromYear as number | undefined;
+	const toYear = (props as any).toYear as number | undefined;
+
+	if (!startMonth && fromYear !== undefined) {
+		startMonth = startOfYear(new Date(fromYear, 0, 1));
+	}
+	if (!endMonth && toYear !== undefined) {
+		endMonth = endOfYear(new Date(toYear, 11, 31));
+	}
 
 	const hasYearDropdown =
 		props.captionLayout === "dropdown" ||

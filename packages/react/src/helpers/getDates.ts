@@ -41,13 +41,24 @@ export function getDates(
 		? startOfBroadcastWeek(firstMonth, dateLib)
 		: ISOWeek
 			? startOfISOWeek(firstMonth)
-			: startOfWeek(firstMonth);
+			: dateLib.addDays(
+					startOfWeek(firstMonth),
+					-startOfWeek(firstMonth).getDay(),
+				);
 
 	const endWeekLastDate = broadcastCalendar
 		? endOfBroadcastWeek(lastMonth)
 		: ISOWeek
 			? endOfISOWeek(endOfMonth(lastMonth))
-			: endOfWeek(endOfMonth(lastMonth));
+			: (() => {
+					const sundayStart = dateLib.addDays(
+						startOfWeek(endOfMonth(lastMonth)),
+						-startOfWeek(endOfMonth(lastMonth)).getDay(),
+					);
+					const saturday = dateLib.addDays(sundayStart, 6);
+					saturday.setHours(23, 59, 59, 999);
+					return saturday;
+				})();
 
 	const nOfDays = differenceInCalendarDays(endWeekLastDate, startWeekFirstDate);
 	const nOfMonths = differenceInCalendarMonths(lastMonth, firstMonth) + 1;
@@ -61,7 +72,14 @@ export function getDates(
 		dates.push(date);
 	}
 
-	// If fixed weeks is enabled, add the extra dates to the array
+	// Trim trailing dates outside the last displayed month when not using fixed weeks
+	if (!fixedWeeks) {
+		while (dates.length && dates[dates.length - 1]! > endOfMonth(lastMonth)) {
+			dates.pop();
+		}
+	}
+
+	// If fixed weeks is enabled, ensure the array has the expected number of days
 	const nrOfDaysWithFixedWeeks = broadcastCalendar ? 35 : 42;
 	const extraDates = nrOfDaysWithFixedWeeks * nOfMonths;
 	if (fixedWeeks && dates.length < extraDates) {

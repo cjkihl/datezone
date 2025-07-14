@@ -9,8 +9,19 @@ import type { DayPickerProps } from "../types/index.js";
  * @returns The merged formatters object.
  */
 export function getFormatters(customFormatters: DayPickerProps["formatters"]) {
-	return {
+	const merged = {
 		...defaultFormatters,
 		...customFormatters,
 	};
+
+	const m: any = merged;
+	const cf: any = customFormatters ?? {};
+	if (cf.formatMonthCaption && !cf.formatCaption) {
+		m.formatCaption = cf.formatMonthCaption;
+	}
+	if (cf.formatYearCaption && !cf.formatYearDropdown) {
+		m.formatYearDropdown = cf.formatYearCaption;
+	}
+
+	return merged;
 }

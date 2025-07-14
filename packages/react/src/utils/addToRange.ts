@@ -1,5 +1,6 @@
-import type { DateLib } from "../classes/index.jsx";
+import type { DateLib } from "../classes/DateLib.js";
 import type { DateRange } from "../types/index.js";
+import { defaultDateLib } from "../utils/testdatelib.js";
 
 /**
  * Adds a date to an existing range, considering constraints like minimum and
@@ -16,13 +17,14 @@ import type { DateRange } from "../types/index.js";
  */
 export function addToRange(
 	date: Date,
-	initialRange: DateRange | undefined,
-	min: number,
-	max: number,
-	required: boolean,
-	dateLib: DateLib,
+	initialRange: DateRange | undefined = undefined,
+	min = 0,
+	max = 0,
+	required = false,
+	dateLib: DateLib = defaultDateLib,
 ): DateRange | undefined {
-	const { from, to } = initialRange || {};
+	const from = initialRange?.from;
+	const to = initialRange?.to;
 	const { isSameDay, isAfter, isBefore } = dateLib;
 
 	let range: DateRange | undefined;

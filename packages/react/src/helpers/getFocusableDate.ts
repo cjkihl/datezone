@@ -47,19 +47,23 @@ export function getFocusableDate(
 	} = dateLib;
 	const moveFns = {
 		day: addDays,
-		endOfWeek: (date: Date) =>
-			broadcastCalendar
-				? endOfBroadcastWeek(date)
-				: ISOWeek
-					? endOfISOWeek(date)
-					: endOfWeek(date),
+		endOfWeek: (date: Date) => {
+			if (broadcastCalendar) return endOfBroadcastWeek(date);
+			if (ISOWeek) return endOfISOWeek(date);
+			const sundayStart = dateLib.addDays(
+				startOfWeek(date),
+				-startOfWeek(date).getDay(),
+			);
+			const saturday = dateLib.addDays(sundayStart, 6);
+			saturday.setHours(23, 59, 59, 999);
+			return saturday;
+		},
 		month: addMonths,
-		startOfWeek: (date: Date) =>
-			broadcastCalendar
-				? startOfBroadcastWeek(date, dateLib)
-				: ISOWeek
-					? startOfISOWeek(date)
-					: startOfWeek(date),
+		startOfWeek: (date: Date) => {
+			if (broadcastCalendar) return startOfBroadcastWeek(date, dateLib);
+			if (ISOWeek) return startOfISOWeek(date);
+			return dateLib.addDays(startOfWeek(date), -startOfWeek(date).getDay());
+		},
 		week: addWeeks,
 		year: addYears,
 	};

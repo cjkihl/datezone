@@ -27,6 +27,8 @@ import { startOfBroadcastWeek } from "../helpers/startOfBroadcastWeek.js";
 
 import type { Numerals } from "../types/shared.js";
 
+export const defaultLocale = "en";
+
 export type Month = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 10 | 7 | 8 | 9 | 11;
 
 /**
@@ -323,7 +325,10 @@ export class DateLib {
 	format = (date: Date, formatStr: string): string => {
 		const ts = date.getTime();
 		const formatted = dzFormat(ts, formatStr, {
-			locale: this.options.locale || "en",
+			locale:
+				typeof this.options.locale === "string"
+					? this.options.locale
+					: ((this.options.locale as any)?.code ?? "en"),
 			timeZone: this.options.timeZone ?? null,
 		});
 		if (this.options.numerals && this.options.numerals !== "latn") {

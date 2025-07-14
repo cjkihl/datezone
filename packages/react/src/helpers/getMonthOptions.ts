@@ -39,7 +39,7 @@ export function getMonthOptions(
 
 	const options = months.map((month) => {
 		const label = formatters.formatMonthDropdown(month, dateLib);
-		const value = getMonth(month);
+		const value = getMonth(month) - 1;
 		const disabled =
 			(navStart && month < startOfMonth(navStart)) ||
 			(navEnd && month > startOfMonth(navEnd)) ||
