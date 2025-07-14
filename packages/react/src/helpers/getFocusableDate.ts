@@ -50,10 +50,7 @@ export function getFocusableDate(
 		endOfWeek: (date: Date) => {
 			if (broadcastCalendar) return endOfBroadcastWeek(date);
 			if (ISOWeek) return endOfISOWeek(date);
-			const sundayStart = dateLib.addDays(
-				startOfWeek(date),
-				-startOfWeek(date).getDay(),
-			);
+			const sundayStart = dateLib.addDays(date, -date.getDay());
 			const saturday = dateLib.addDays(sundayStart, 6);
 			saturday.setHours(23, 59, 59, 999);
 			return saturday;
@@ -62,7 +59,7 @@ export function getFocusableDate(
 		startOfWeek: (date: Date) => {
 			if (broadcastCalendar) return startOfBroadcastWeek(date, dateLib);
 			if (ISOWeek) return startOfISOWeek(date);
-			return dateLib.addDays(startOfWeek(date), -startOfWeek(date).getDay());
+			return dateLib.addDays(date, -date.getDay());
 		},
 		week: addWeeks,
 		year: addYears,

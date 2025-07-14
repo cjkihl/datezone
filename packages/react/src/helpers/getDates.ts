@@ -41,10 +41,7 @@ export function getDates(
 		? startOfBroadcastWeek(firstMonth, dateLib)
 		: ISOWeek
 			? startOfISOWeek(firstMonth)
-			: dateLib.addDays(
-					startOfWeek(firstMonth),
-					-startOfWeek(firstMonth).getDay(),
-				);
+			: dateLib.addDays(firstMonth, -firstMonth.getDay());
 
 	const endWeekLastDate = broadcastCalendar
 		? endOfBroadcastWeek(lastMonth)
@@ -52,8 +49,8 @@ export function getDates(
 			? endOfISOWeek(endOfMonth(lastMonth))
 			: (() => {
 					const sundayStart = dateLib.addDays(
-						startOfWeek(endOfMonth(lastMonth)),
-						-startOfWeek(endOfMonth(lastMonth)).getDay(),
+						endOfMonth(lastMonth),
+						-endOfMonth(lastMonth).getDay(),
 					);
 					const saturday = dateLib.addDays(sundayStart, 6);
 					saturday.setHours(23, 59, 59, 999);

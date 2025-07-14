@@ -30,7 +30,7 @@ export function labelDayButton(
 
 	let pattern = "PPPP";
 	if (localeCode?.startsWith("es")) {
-		pattern = "EEEE, d 'de' LLLL 'de' yyyy";
+		pattern = "EEEE, d 'de' MMMM 'de' yyyy";
 	}
 	let label = dl.format(date, pattern);
 	if (modifiers.today) label = `Today, ${label}`;
