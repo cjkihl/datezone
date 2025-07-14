@@ -69,12 +69,7 @@ export function getDates(
 		dates.push(date);
 	}
 
-	// Trim trailing dates outside the last displayed month when not using fixed weeks
-	if (!fixedWeeks) {
-		while (dates.length && dates[dates.length - 1]! > endOfMonth(lastMonth)) {
-			dates.pop();
-		}
-	}
+	// No trimming: keep full weeks between boundaries for calendar completeness
 
 	// If fixed weeks is enabled, ensure the array has the expected number of days
 	const nrOfDaysWithFixedWeeks = broadcastCalendar ? 35 : 42;
