@@ -117,7 +117,7 @@ export function isEqual(ts1: number, ts2: number): boolean {
 export function isSameDay(
 	ts1: number,
 	ts2: number,
-	timeZone: TimeZone,
+	timeZone: TimeZone | null,
 ): boolean {
 	const start1 = startOfDay(ts1, timeZone);
 	const start2 = startOfDay(ts2, timeZone);
@@ -151,10 +151,19 @@ export function isSameWeek(
 export function isSameMonth(
 	ts1: number,
 	ts2: number,
-	timeZone: TimeZone,
+	timeZone: TimeZone | null,
 ): boolean {
+	// Fastpath local timezone
+	if (!timeZone === null) {
+		const d1 = new Date(ts1);
+		const d2 = new Date(ts2);
+		return (
+			d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth()
+		);
+	}
 	const d1 = timestampToCalendar(ts1, timeZone);
 	const d2 = timestampToCalendar(ts2, timeZone);
+
 	return d1.year === d2.year && d1.month === d2.month;
 }
 
@@ -166,9 +175,17 @@ export function isSameMonth(
 export function isSameYear(
 	ts1: number,
 	ts2: number,
-	timeZone: TimeZone,
+	timeZone: TimeZone | null,
 ): boolean {
+	// Fastpath local timezone
+	if (timeZone === null) {
+		const d1 = new Date(ts1);
+		const d2 = new Date(ts2);
+		return d1.getFullYear() === d2.getFullYear();
+	}
+
 	const d1 = timestampToCalendar(ts1, timeZone);
 	const d2 = timestampToCalendar(ts2, timeZone);
+
 	return d1.year === d2.year;
 }

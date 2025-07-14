@@ -1,7 +1,7 @@
 import { expect, it } from "bun:test";
 import { CalendarDay } from "../classes";
-import { defaultDateLib } from "../classes/DateLib";
 import type { DayPickerProps, MoveFocusBy, MoveFocusDir } from "../types";
+import { defaultDateLib } from "../utils/testdatelib";
 import { getNextFocus } from "./getNextFocus";
 
 const props: Pick<

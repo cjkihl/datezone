@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { defaultDateLib } from "../classes/DateLib";
+import { defaultDateLib } from "../utils/testdatelib";
 
 import { getDisplayMonths } from "./getDisplayMonths";
 

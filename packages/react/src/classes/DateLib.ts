@@ -1,66 +1,33 @@
-import { TZDate } from "@date-fns/tz";
-import type {
-	FormatOptions as DateFnsFormatOptions,
-	EndOfWeekOptions,
-	GetMonthOptions,
-	GetWeekOptions,
-	GetYearOptions,
-	Interval,
-	StartOfWeekOptions,
-} from "date-fns";
 import {
 	addDays,
-	addMonths,
-	addWeeks,
-	addYears,
-	differenceInCalendarDays,
-	differenceInCalendarMonths,
-	eachMonthOfInterval,
-	endOfISOWeek,
-	endOfMonth,
-	endOfWeek,
-	endOfYear,
-	format,
-	getISOWeek,
-	getMonth,
-	getWeek,
-	getYear,
+	calendarToTimestamp,
 	isAfter,
 	isBefore,
-	isDate,
 	isSameDay,
 	isSameMonth,
 	isSameYear,
-	max,
-	min,
-	setMonth,
-	setYear,
 	startOfDay,
+	type TimeZone,
+	timestampToCalendar,
+} from "datezone";
+import { format as dzFormat } from "datezone/format";
+import { addMonths, endOfMonth, month, startOfMonth } from "datezone/month";
+import {
+	addWeeks,
+	endOfISOWeek,
+	endOfWeek,
 	startOfISOWeek,
-	startOfMonth,
 	startOfWeek,
-	startOfYear,
-} from "date-fns";
-import type { Locale } from "date-fns/locale";
-import { enUS } from "date-fns/locale/en-US";
+	week,
+} from "datezone/week";
+import { addYears, endOfYear, startOfYear, year } from "datezone/year";
 
 import { endOfBroadcastWeek } from "../helpers/endOfBroadcastWeek.js";
 import { startOfBroadcastWeek } from "../helpers/startOfBroadcastWeek.js";
+
 import type { Numerals } from "../types/shared.js";
 
-export type { Month as DateFnsMonth } from "date-fns";
-export type { Locale } from "date-fns/locale";
-
-/**
- * @ignore
- * @deprecated Use {@link DateLibOptions} instead.
- */
-export type FormatOptions = DateLibOptions;
-/**
- * @ignore
- * @deprecated Use {@link DateLibOptions} instead.
- */
-export type LabelOptions = DateLibOptions;
+export type Month = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 10 | 7 | 8 | 9 | 11;
 
 /**
  * The options for the `DateLib` class.
@@ -71,20 +38,15 @@ export type LabelOptions = DateLibOptions;
  *
  * @since 9.2.0
  */
-export interface DateLibOptions
-	extends DateFnsFormatOptions,
-		StartOfWeekOptions,
-		EndOfWeekOptions {
-	/** A constructor for the `Date` object. */
-	Date?: typeof Date;
+export interface DateLibOptions {
 	/** A locale to use for formatting dates. */
-	locale?: Locale;
+	locale?: string; // BCP 47 string, e.g. 'en', 'fr', 'es-ES'
 	/**
 	 * A time zone to use for dates.
 	 *
 	 * @since 9.5.0
 	 */
-	timeZone?: string;
+	timeZone?: TimeZone;
 	/**
 	 * The numbering system to use for formatting numbers.
 	 *
@@ -119,7 +81,7 @@ export class DateLib {
 		options?: DateLibOptions,
 		overrides?: Partial<typeof DateLib.prototype>,
 	) {
-		this.options = { locale: enUS, ...options };
+		this.options = { locale: "en", ...options };
 		this.overrides = overrides;
 	}
 
@@ -134,7 +96,7 @@ export class DateLib {
 		const { numerals = "latn" } = this.options;
 
 		// Use Intl.NumberFormat to create a formatter with the specified numbering system
-		const formatter = new Intl.NumberFormat("en-US", {
+		const formatter = new Intl.NumberFormat(this.options.locale || "en", {
 			numberingSystem: numerals,
 		});
 
@@ -171,13 +133,6 @@ export class DateLib {
 	}
 
 	/**
-	 * Reference to the built-in Date constructor.
-	 *
-	 * @deprecated Use `newDate()` or `today()`.
-	 */
-	Date: typeof Date = Date;
-
-	/**
 	 * Creates a new `Date` object representing today's date.
 	 *
 	 * @since 9.5.0
@@ -187,10 +142,7 @@ export class DateLib {
 		if (this.overrides?.today) {
 			return this.overrides.today();
 		}
-		if (this.options.timeZone) {
-			return TZDate.tz(this.options.timeZone);
-		}
-		return new this.Date();
+		return new Date();
 	};
 
 	/**
@@ -206,9 +158,6 @@ export class DateLib {
 		if (this.overrides?.newDate) {
 			return this.overrides.newDate(year, monthIndex, date);
 		}
-		if (this.options.timeZone) {
-			return new TZDate(year, monthIndex, date, this.options.timeZone);
-		}
 		return new Date(year, monthIndex, date);
 	};
 
@@ -220,9 +169,9 @@ export class DateLib {
 	 * @returns The new date with the days added.
 	 */
 	addDays = (date: Date, amount: number): Date => {
-		return this.overrides?.addDays
-			? this.overrides.addDays(date, amount)
-			: addDays(date, amount);
+		const ts = date.getTime();
+		const resultTs = addDays(ts, amount, this.options.timeZone ?? null);
+		return new Date(resultTs);
 	};
 
 	/**
@@ -233,9 +182,9 @@ export class DateLib {
 	 * @returns The new date with the months added.
 	 */
 	addMonths = (date: Date, amount: number): Date => {
-		return this.overrides?.addMonths
-			? this.overrides.addMonths(date, amount)
-			: addMonths(date, amount);
+		const ts = date.getTime();
+		const resultTs = addMonths(ts, amount, this.options.timeZone ?? null);
+		return new Date(resultTs);
 	};
 
 	/**
@@ -246,9 +195,9 @@ export class DateLib {
 	 * @returns The new date with the weeks added.
 	 */
 	addWeeks = (date: Date, amount: number): Date => {
-		return this.overrides?.addWeeks
-			? this.overrides.addWeeks(date, amount)
-			: addWeeks(date, amount);
+		const ts = date.getTime();
+		const resultTs = addWeeks(ts, amount, this.options.timeZone ?? null);
+		return new Date(resultTs);
 	};
 
 	/**
@@ -259,9 +208,9 @@ export class DateLib {
 	 * @returns The new date with the years added.
 	 */
 	addYears = (date: Date, amount: number): Date => {
-		return this.overrides?.addYears
-			? this.overrides.addYears(date, amount)
-			: addYears(date, amount);
+		const ts = date.getTime();
+		const resultTs = addYears(ts, amount, this.options.timeZone ?? null);
+		return new Date(resultTs);
 	};
 
 	/**
@@ -272,9 +221,11 @@ export class DateLib {
 	 * @returns The number of calendar days between the dates.
 	 */
 	differenceInCalendarDays = (dateLeft: Date, dateRight: Date): number => {
-		return this.overrides?.differenceInCalendarDays
-			? this.overrides.differenceInCalendarDays(dateLeft, dateRight)
-			: differenceInCalendarDays(dateLeft, dateRight);
+		return differenceInCalendarDays(
+			dateLeft,
+			dateRight,
+			this.options.timeZone ?? null,
+		);
 	};
 
 	/**
@@ -285,9 +236,11 @@ export class DateLib {
 	 * @returns The number of calendar months between the dates.
 	 */
 	differenceInCalendarMonths = (dateLeft: Date, dateRight: Date): number => {
-		return this.overrides?.differenceInCalendarMonths
-			? this.overrides.differenceInCalendarMonths(dateLeft, dateRight)
-			: differenceInCalendarMonths(dateLeft, dateRight);
+		return differenceInCalendarMonths(
+			dateLeft,
+			dateRight,
+			this.options.timeZone,
+		);
 	};
 
 	/**
@@ -295,10 +248,8 @@ export class DateLib {
 	 *
 	 * @param interval The interval to get the months for.
 	 */
-	eachMonthOfInterval = (interval: Interval): Date[] => {
-		return this.overrides?.eachMonthOfInterval
-			? this.overrides.eachMonthOfInterval(interval)
-			: eachMonthOfInterval(interval);
+	eachMonthOfInterval = (interval: { start: Date; end: Date }): Date[] => {
+		return eachMonthOfInterval(interval, this.options.timeZone);
 	};
 
 	/**
@@ -308,6 +259,7 @@ export class DateLib {
 	 * @returns The end of the broadcast week.
 	 */
 	endOfBroadcastWeek = (date: Date): Date => {
+		// Assuming this is a custom helper, keep as is
 		return this.overrides?.endOfBroadcastWeek
 			? this.overrides.endOfBroadcastWeek(date)
 			: endOfBroadcastWeek(date, this);
@@ -320,9 +272,9 @@ export class DateLib {
 	 * @returns The end of the ISO week.
 	 */
 	endOfISOWeek = (date: Date): Date => {
-		return this.overrides?.endOfISOWeek
-			? this.overrides.endOfISOWeek(date)
-			: endOfISOWeek(date);
+		const ts = date.getTime();
+		const resultTs = endOfISOWeek(ts, this.options.timeZone ?? null);
+		return new Date(resultTs);
 	};
 
 	/**
@@ -332,9 +284,9 @@ export class DateLib {
 	 * @returns The end of the month.
 	 */
 	endOfMonth = (date: Date): Date => {
-		return this.overrides?.endOfMonth
-			? this.overrides.endOfMonth(date)
-			: endOfMonth(date);
+		const ts = date.getTime();
+		const resultTs = endOfMonth(ts, this.options.timeZone ?? null);
+		return new Date(resultTs);
 	};
 
 	/**
@@ -343,10 +295,10 @@ export class DateLib {
 	 * @param date The original date.
 	 * @returns The end of the week.
 	 */
-	endOfWeek = (date: Date, options?: EndOfWeekOptions<Date>): Date => {
-		return this.overrides?.endOfWeek
-			? this.overrides.endOfWeek(date, options)
-			: endOfWeek(date, this.options);
+	endOfWeek = (date: Date): Date => {
+		const ts = date.getTime();
+		const resultTs = endOfWeek(ts, this.options.timeZone ?? null);
+		return new Date(resultTs);
 	};
 
 	/**
@@ -356,9 +308,9 @@ export class DateLib {
 	 * @returns The end of the year.
 	 */
 	endOfYear = (date: Date): Date => {
-		return this.overrides?.endOfYear
-			? this.overrides.endOfYear(date)
-			: endOfYear(date);
+		const ts = date.getTime();
+		const resultTs = endOfYear(ts, this.options.timeZone ?? null);
+		return new Date(resultTs);
 	};
 
 	/**
@@ -368,14 +320,12 @@ export class DateLib {
 	 * @param formatStr The format string.
 	 * @returns The formatted date string.
 	 */
-	format = (
-		date: Date,
-		formatStr: string,
-		_options?: DateFnsFormatOptions,
-	): string => {
-		const formatted = this.overrides?.format
-			? this.overrides.format(date, formatStr, this.options)
-			: format(date, formatStr, this.options);
+	format = (date: Date, formatStr: string): string => {
+		const ts = date.getTime();
+		const formatted = dzFormat(ts, formatStr, {
+			locale: this.options.locale || "en",
+			timeZone: this.options.timeZone ?? null,
+		});
 		if (this.options.numerals && this.options.numerals !== "latn") {
 			return this.replaceDigits(formatted);
 		}
@@ -389,9 +339,7 @@ export class DateLib {
 	 * @returns The ISO week number.
 	 */
 	getISOWeek = (date: Date): number => {
-		return this.overrides?.getISOWeek
-			? this.overrides.getISOWeek(date)
-			: getISOWeek(date);
+		return week(date.getTime(), this.options.timeZone ?? null);
 	};
 
 	/**
@@ -400,10 +348,8 @@ export class DateLib {
 	 * @param date The date to get the month for.
 	 * @returns The month.
 	 */
-	getMonth = (date: Date, _options?: GetMonthOptions): number => {
-		return this.overrides?.getMonth
-			? this.overrides.getMonth(date, this.options)
-			: getMonth(date, this.options);
+	getMonth = (date: Date): number => {
+		return month(date.getTime(), this.options.timeZone ?? null);
 	};
 
 	/**
@@ -412,10 +358,8 @@ export class DateLib {
 	 * @param date The date to get the year for.
 	 * @returns The year.
 	 */
-	getYear = (date: Date, _options?: GetYearOptions): number => {
-		return this.overrides?.getYear
-			? this.overrides.getYear(date, this.options)
-			: getYear(date, this.options);
+	getYear = (date: Date): number => {
+		return year(date.getTime(), this.options.timeZone ?? null);
 	};
 
 	/**
@@ -424,10 +368,8 @@ export class DateLib {
 	 * @param date The date to get the week number for.
 	 * @returns The week number.
 	 */
-	getWeek = (date: Date, _options?: GetWeekOptions): number => {
-		return this.overrides?.getWeek
-			? this.overrides.getWeek(date, this.options)
-			: getWeek(date, this.options);
+	getWeek = (date: Date): number => {
+		return week(date.getTime(), this.options.timeZone ?? null);
 	};
 
 	/**
@@ -438,9 +380,7 @@ export class DateLib {
 	 * @returns True if the first date is after the second date.
 	 */
 	isAfter = (date: Date, dateToCompare: Date): boolean => {
-		return this.overrides?.isAfter
-			? this.overrides.isAfter(date, dateToCompare)
-			: isAfter(date, dateToCompare);
+		return isAfter(date.getTime(), dateToCompare.getTime());
 	};
 
 	/**
@@ -451,9 +391,7 @@ export class DateLib {
 	 * @returns True if the first date is before the second date.
 	 */
 	isBefore = (date: Date, dateToCompare: Date): boolean => {
-		return this.overrides?.isBefore
-			? this.overrides.isBefore(date, dateToCompare)
-			: isBefore(date, dateToCompare);
+		return isBefore(date.getTime(), dateToCompare.getTime());
 	};
 
 	/**
@@ -463,9 +401,7 @@ export class DateLib {
 	 * @returns True if the value is a Date object.
 	 */
 	isDate: (value: unknown) => value is Date = (value): value is Date => {
-		return this.overrides?.isDate
-			? this.overrides.isDate(value)
-			: isDate(value);
+		return value instanceof Date;
 	};
 
 	/**
@@ -476,9 +412,11 @@ export class DateLib {
 	 * @returns True if the dates are on the same day.
 	 */
 	isSameDay = (dateLeft: Date, dateRight: Date): boolean => {
-		return this.overrides?.isSameDay
-			? this.overrides.isSameDay(dateLeft, dateRight)
-			: isSameDay(dateLeft, dateRight);
+		return isSameDay(
+			dateLeft.getTime(),
+			dateRight.getTime(),
+			this.options.timeZone ?? null,
+		);
 	};
 
 	/**
@@ -489,9 +427,11 @@ export class DateLib {
 	 * @returns True if the dates are in the same month.
 	 */
 	isSameMonth = (dateLeft: Date, dateRight: Date): boolean => {
-		return this.overrides?.isSameMonth
-			? this.overrides.isSameMonth(dateLeft, dateRight)
-			: isSameMonth(dateLeft, dateRight);
+		return isSameMonth(
+			dateLeft.getTime(),
+			dateRight.getTime(),
+			this.options.timeZone || null,
+		);
 	};
 
 	/**
@@ -502,9 +442,11 @@ export class DateLib {
 	 * @returns True if the dates are in the same year.
 	 */
 	isSameYear = (dateLeft: Date, dateRight: Date): boolean => {
-		return this.overrides?.isSameYear
-			? this.overrides.isSameYear(dateLeft, dateRight)
-			: isSameYear(dateLeft, dateRight);
+		return isSameYear(
+			dateLeft.getTime(),
+			dateRight.getTime(),
+			this.options.timeZone ?? null,
+		);
 	};
 
 	/**
@@ -514,7 +456,8 @@ export class DateLib {
 	 * @returns The latest date.
 	 */
 	max = (dates: Date[]): Date => {
-		return this.overrides?.max ? this.overrides.max(dates) : max(dates);
+		const timestamps = dates.map((d) => d.getTime());
+		return new Date(Math.max(...timestamps));
 	};
 
 	/**
@@ -524,7 +467,8 @@ export class DateLib {
 	 * @returns The earliest date.
 	 */
 	min = (dates: Date[]): Date => {
-		return this.overrides?.min ? this.overrides.min(dates) : min(dates);
+		const timestamps = dates.map((d) => d.getTime());
+		return new Date(Math.min(...timestamps));
 	};
 
 	/**
@@ -534,10 +478,16 @@ export class DateLib {
 	 * @param month The month to set (0-11).
 	 * @returns The new date with the month set.
 	 */
-	setMonth = (date: Date, month: number): Date => {
-		return this.overrides?.setMonth
-			? this.overrides.setMonth(date, month)
-			: setMonth(date, month);
+	setMonth = (date: Date, monthValue: number): Date => {
+		const cal = timestampToCalendar(
+			date.getTime(),
+			this.options.timeZone ?? null,
+		);
+		const ts = calendarToTimestamp(
+			{ ...cal, month: monthValue },
+			this.options.timeZone ?? null,
+		);
+		return new Date(ts);
 	};
 
 	/**
@@ -547,10 +497,12 @@ export class DateLib {
 	 * @param year The year to set.
 	 * @returns The new date with the year set.
 	 */
-	setYear = (date: Date, year: number): Date => {
-		return this.overrides?.setYear
-			? this.overrides.setYear(date, year)
-			: setYear(date, year);
+	setYear = (date: Date, yearValue: number): Date => {
+		const ts = date.getTime();
+		const cal = timestampToCalendar(ts, this.options.timeZone ?? null);
+		const newCal = { ...cal, year: yearValue };
+		const resultTs = calendarToTimestamp(newCal, this.options.timeZone ?? null);
+		return new Date(resultTs);
 	};
 
 	/**
@@ -572,9 +524,9 @@ export class DateLib {
 	 * @returns The start of the day.
 	 */
 	startOfDay = (date: Date): Date => {
-		return this.overrides?.startOfDay
-			? this.overrides.startOfDay(date)
-			: startOfDay(date);
+		const ts = date.getTime();
+		const resultTs = startOfDay(ts, this.options.timeZone ?? null);
+		return new Date(resultTs);
 	};
 
 	/**
@@ -584,9 +536,9 @@ export class DateLib {
 	 * @returns The start of the ISO week.
 	 */
 	startOfISOWeek = (date: Date): Date => {
-		return this.overrides?.startOfISOWeek
-			? this.overrides.startOfISOWeek(date)
-			: startOfISOWeek(date);
+		const ts = date.getTime();
+		const resultTs = startOfISOWeek(ts, this.options.timeZone ?? null);
+		return new Date(resultTs);
 	};
 
 	/**
@@ -596,9 +548,9 @@ export class DateLib {
 	 * @returns The start of the month.
 	 */
 	startOfMonth = (date: Date): Date => {
-		return this.overrides?.startOfMonth
-			? this.overrides.startOfMonth(date)
-			: startOfMonth(date);
+		const ts = date.getTime();
+		const resultTs = startOfMonth(ts, this.options.timeZone ?? null);
+		return new Date(resultTs);
 	};
 
 	/**
@@ -607,10 +559,10 @@ export class DateLib {
 	 * @param date The original date.
 	 * @returns The start of the week.
 	 */
-	startOfWeek = (date: Date, _options?: StartOfWeekOptions): Date => {
-		return this.overrides?.startOfWeek
-			? this.overrides.startOfWeek(date, this.options)
-			: startOfWeek(date, this.options);
+	startOfWeek = (date: Date): Date => {
+		const ts = date.getTime();
+		const resultTs = startOfWeek(ts, this.options.timeZone ?? null);
+		return new Date(resultTs);
 	};
 
 	/**
@@ -620,23 +572,45 @@ export class DateLib {
 	 * @returns The start of the year.
 	 */
 	startOfYear = (date: Date): Date => {
-		return this.overrides?.startOfYear
-			? this.overrides.startOfYear(date)
-			: startOfYear(date);
+		const ts = date.getTime();
+		const resultTs = startOfYear(ts, this.options.timeZone ?? null);
+		return new Date(resultTs);
 	};
 }
-/** The default locale (English). */
-export { enUS as defaultLocale } from "date-fns/locale/en-US";
 
-/**
- * The default date library with English locale.
- *
- * @since 9.2.0
- */
-export const defaultDateLib = new DateLib();
+// Utility functions for missing date-fns replacements
+function differenceInCalendarDays(
+	dateLeft: Date,
+	dateRight: Date,
+	timeZone: TimeZone | null,
+): number {
+	const startLeft = startOfDay(dateLeft.getTime(), timeZone);
+	const startRight = startOfDay(dateRight.getTime(), timeZone);
+	return Math.round((startLeft - startRight) / 86400000);
+}
 
-/**
- * @ignore
- * @deprecated Use `defaultDateLib`.
- */
-export const dateLib = defaultDateLib;
+function differenceInCalendarMonths(
+	dateLeft: Date,
+	dateRight: Date,
+	timeZone?: TimeZone,
+): number {
+	const tz = timeZone ?? null;
+	const left = timestampToCalendar(dateLeft.getTime(), tz);
+	const right = timestampToCalendar(dateRight.getTime(), tz);
+	return (left.year - right.year) * 12 + (left.month - right.month);
+}
+
+function eachMonthOfInterval(
+	interval: { start: Date; end: Date },
+	timeZone?: TimeZone,
+): Date[] {
+	const tz = timeZone ?? null;
+	const result: Date[] = [];
+	let current = startOfMonth(interval.start.getTime(), tz);
+	const end = startOfMonth(interval.end.getTime(), tz);
+	while (current <= end) {
+		result.push(new Date(current));
+		current = addMonths(current, 1, tz);
+	}
+	return result;
+}

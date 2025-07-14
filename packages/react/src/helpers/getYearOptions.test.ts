@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { defaultDateLib } from "../classes/DateLib";
+import { defaultDateLib } from "../utils/testdatelib";
 
 import { getFormatters } from "./getFormatters";
 import { getYearOptions } from "./getYearOptions";

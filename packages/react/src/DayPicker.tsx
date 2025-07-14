@@ -2,7 +2,7 @@ import { TZDate } from "@date-fns/tz";
 import type { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent } from "react";
 import { useCallback, useMemo, useRef } from "react";
 import type { CalendarDay } from "./classes/CalendarDay.js";
-import { DateLib, defaultLocale } from "./classes/DateLib.js";
+import { DateLib } from "./classes/DateLib.js";
 import { createGetModifiers } from "./helpers/createGetModifiers.js";
 import { getClassNamesForModifiers } from "./helpers/getClassNamesForModifiers.js";
 import { getComponents } from "./helpers/getComponents.js";
@@ -78,19 +78,13 @@ export function DayPicker(initialProps: DayPickerProps) {
 			};
 		}
 	}
-	const { components, formatters, labels, dateLib, locale, classNames } =
+	const { components, formatters, labels, dateLib, classNames } =
 		useMemo(() => {
-			const locale = { ...defaultLocale, ...props.locale };
-
 			const dateLib = new DateLib(
 				{
-					firstWeekContainsDate: props.firstWeekContainsDate,
-					locale,
+					locale: props.locale,
 					numerals: props.numerals,
 					timeZone: props.timeZone,
-					useAdditionalDayOfYearTokens: props.useAdditionalDayOfYearTokens,
-					useAdditionalWeekYearTokens: props.useAdditionalWeekYearTokens,
-					weekStartsOn: props.broadcastCalendar ? 1 : props.weekStartsOn,
 				},
 				props.dateLib,
 			);
@@ -101,15 +95,9 @@ export function DayPicker(initialProps: DayPickerProps) {
 				dateLib,
 				formatters: getFormatters(props.formatters),
 				labels: { ...defaultLabels, ...props.labels },
-				locale,
 			};
 		}, [
 			props.locale,
-			props.broadcastCalendar,
-			props.weekStartsOn,
-			props.firstWeekContainsDate,
-			props.useAdditionalWeekYearTokens,
-			props.useAdditionalDayOfYearTokens,
 			props.timeZone,
 			props.numerals,
 			props.dateLib,
@@ -594,7 +582,7 @@ export function DayPicker(initialProps: DayPickerProps) {
 														// biome-ignore lint/a11y/useSemanticElements: not needed
 														<components.WeekNumber
 															aria-label={labelWeekNumber(week.weekNumber, {
-																locale,
+																locale: props.locale,
 															})}
 															className={classNames[UI.WeekNumber]}
 															role="rowheader"

@@ -1,6 +1,4 @@
 import { addDays, subDays } from "date-fns";
-
-import { defaultDateLib } from "../classes/DateLib";
 import type {
 	DateAfter,
 	DateBefore,
@@ -8,6 +6,7 @@ import type {
 	DateRange,
 	DayOfWeek,
 } from "../types";
+import { defaultDateLib } from "../utils/testdatelib";
 
 import { dateMatchModifiers } from "./dateMatchModifiers";
 

@@ -1,4 +1,4 @@
-import { defaultDateLib } from "../classes/DateLib";
+import { defaultDateLib } from "../utils/testdatelib";
 
 import { rangeOverlaps } from "./rangeOverlaps";
 

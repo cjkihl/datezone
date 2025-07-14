@@ -1,7 +1,7 @@
 import { describe, expect, it } from "bun:test";
 import { addMonths, isSameMonth } from "date-fns";
 
-import { defaultDateLib } from "../classes/DateLib";
+import { defaultDateLib } from "../utils/testdatelib";
 
 import { getNextMonth } from "./getNextMonth";
 

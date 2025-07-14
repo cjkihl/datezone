@@ -10,15 +10,10 @@ export enum WeekStartsOn {
 
 export function week(timestamp: number, timeZone: TimeZone | null): number {
 	const dt = timestampToCalendar(timestamp, timeZone);
-	return weekBase(dt.year, dt.month, dt.day, timeZone);
+	return weekBase(dt.year, dt.month, dt.day);
 }
 
-export function weekBase(
-	year: number,
-	month: number,
-	day: number,
-	_timeZone: TimeZone | null,
-): number {
+export function weekBase(year: number, month: number, day: number): number {
 	const d = new Date(Date.UTC(year, month - 1, day));
 	const dayOfWeek = d.getUTCDay() || 7;
 	d.setUTCDate(d.getUTCDate() + 4 - dayOfWeek);
@@ -31,14 +26,13 @@ export function getISOWeekYear(
 	timeZone: TimeZone | null,
 ): number {
 	const dt = timestampToCalendar(timestamp, timeZone);
-	return getISOWeekYearBase(dt.year, dt.month, dt.day, timeZone);
+	return getISOWeekYearBase(dt.year, dt.month, dt.day);
 }
 
 export function getISOWeekYearBase(
 	year: number,
 	month: number,
 	day: number,
-	_timeZone: TimeZone | null,
 ): number {
 	const d = new Date(Date.UTC(year, month - 1, day));
 	const dayOfWeek = d.getUTCDay() || 7;

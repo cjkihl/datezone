@@ -7,9 +7,8 @@ import {
 	startOfMonth,
 	startOfYear,
 } from "date-fns";
-
-import { defaultDateLib } from "../classes/DateLib";
 import type { DayPickerProps } from "../types";
+import { defaultDateLib } from "../utils/testdatelib";
 import { getNavMonths } from "./getNavMonth";
 
 describe('when "startMonth" is not set', () => {

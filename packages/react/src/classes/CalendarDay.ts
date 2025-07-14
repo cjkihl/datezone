@@ -1,4 +1,4 @@
-import { type DateLib, defaultDateLib } from "./DateLib.js";
+import type { DateLib } from "./DateLib.js";
 
 /**
  * Represents a day displayed in the calendar.
@@ -8,11 +8,7 @@ import { type DateLib, defaultDateLib } from "./DateLib.js";
  * the displayed month.
  */
 export class CalendarDay {
-	constructor(
-		date: Date,
-		displayMonth: Date,
-		dateLib: DateLib = defaultDateLib,
-	) {
+	constructor(date: Date, displayMonth: Date, dateLib: DateLib) {
 		this.date = date;
 		this.displayMonth = displayMonth;
 		this.outside = Boolean(

@@ -11,7 +11,7 @@ import { isDST, isUTC } from "./timezone.pub.js";
  * @returns The year as a number
  * @see https://datezone.dev/docs/reference/year#year
  */
-export function year(ts: number, tz?: TimeZone): number {
+export function year(ts: number, tz: TimeZone | null): number {
 	if (!tz) {
 		return new Date(ts).getFullYear();
 	}
@@ -34,7 +34,7 @@ export function year(ts: number, tz?: TimeZone): number {
  * @returns True if the year is a leap year, false otherwise
  * @see https://datezone.dev/docs/reference/year#isLeapYear
  */
-export function isLeapYear(ts: number, tz?: TimeZone): boolean {
+export function isLeapYear(ts: number, tz: TimeZone | null): boolean {
 	const y = year(ts, tz);
 	return isLeapYearBase(y);
 }
@@ -58,7 +58,7 @@ export function isLeapYearBase(year: number): boolean {
  * @returns Timestamp for the start of the year (January 1st, 00:00:00.000)
  * @see https://datezone.dev/docs/reference/year#startOfYear
  */
-export function startOfYear(ts: number, tz?: TimeZone): number {
+export function startOfYear(ts: number, tz: TimeZone | null): number {
 	if (!tz) {
 		const y = new Date(ts).getFullYear();
 		return new Date(y, 0, 1).getTime();
@@ -75,7 +75,7 @@ export function startOfYear(ts: number, tz?: TimeZone): number {
  * @returns Timestamp for the end of the year (December 31st, 23:59:59.999)
  * @see https://datezone.dev/docs/reference/year#endOfYear
  */
-export function endOfYear(ts: number, tz?: TimeZone): number {
+export function endOfYear(ts: number, tz: TimeZone | null): number {
 	if (!tz) {
 		const y = new Date(ts).getFullYear();
 		return new Date(y, 11, 31, 23, 59, 59, 999).getTime();
@@ -93,7 +93,11 @@ export function endOfYear(ts: number, tz?: TimeZone): number {
  * @returns New timestamp with years added
  * @see https://datezone.dev/docs/reference/year#addYears
  */
-export function addYears(ts: number, amount: number, tz?: TimeZone): number {
+export function addYears(
+	ts: number,
+	amount: number,
+	tz: TimeZone | null,
+): number {
 	if (!tz) {
 		const d = new Date(ts);
 		const originalMonth = d.getMonth();
@@ -155,7 +159,11 @@ export function addYears(ts: number, amount: number, tz?: TimeZone): number {
  * @returns New timestamp with years subtracted
  * @see https://datezone.dev/docs/reference/year#subYears
  */
-export function subYears(ts: number, amount: number, tz?: TimeZone): number {
+export function subYears(
+	ts: number,
+	amount: number,
+	tz: TimeZone | null,
+): number {
 	return addYears(ts, -amount, tz);
 }
 
@@ -167,7 +175,7 @@ export function subYears(ts: number, amount: number, tz?: TimeZone): number {
  * @returns 366 for leap years, 365 for non-leap years
  * @see https://datezone.dev/docs/reference/year#daysInYear
  */
-export function daysInYear(ts: number, tz?: TimeZone): number {
+export function daysInYear(ts: number, tz: TimeZone | null): number {
 	return isLeapYear(ts, tz) ? 366 : 365;
 }
 

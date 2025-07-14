@@ -4,6 +4,7 @@ import {
 	clearFixedOffsetCache,
 	getFixedOffsetCacheInfo,
 	getTimezoneOffsetMinutes,
+	getUTCtoLocalOffsetMinutes,
 	getUTCtoTimezoneOffsetMinutes,
 } from "./offset.pub.js";
 
@@ -54,7 +55,7 @@ describe("getLocalTimezoneOffsetMinutes", () => {
 	it("returns the opposite offset as native Date.getTimezoneOffset()", () => {
 		const now = Date.now();
 		const nativeOffset = new Date(now).getTimezoneOffset();
-		const localOffset = getUTCtoTimezoneOffsetMinutes(now, null);
+		const localOffset = getUTCtoLocalOffsetMinutes(now);
 		expect(localOffset).toBe(-nativeOffset);
 	});
 
@@ -64,11 +65,8 @@ describe("getLocalTimezoneOffsetMinutes", () => {
 			Math.floor(baseTime / (60 * 60 * 1000)) * (60 * 60 * 1000);
 
 		// Test within the same hour
-		const offset1 = getUTCtoTimezoneOffsetMinutes(hourStart, null);
-		const offset2 = getUTCtoTimezoneOffsetMinutes(
-			hourStart + 30 * 60 * 1000,
-			null,
-		); // 30 minutes later
+		const offset1 = getUTCtoLocalOffsetMinutes(hourStart);
+		const offset2 = getUTCtoLocalOffsetMinutes(hourStart + 30 * 60 * 1000); // 30 minutes later
 
 		expect(offset1).toBe(offset2);
 	});
@@ -79,11 +77,8 @@ describe("getLocalTimezoneOffsetMinutes", () => {
 			Math.floor(baseTime / (60 * 60 * 1000)) * (60 * 60 * 1000);
 
 		// Test different hours (might be same offset, but should work)
-		const offset1 = getUTCtoTimezoneOffsetMinutes(hourStart, null);
-		const offset2 = getUTCtoTimezoneOffsetMinutes(
-			hourStart + 2 * 60 * 60 * 1000,
-			null,
-		); // 2 hours later
+		const offset1 = getUTCtoLocalOffsetMinutes(hourStart);
+		const offset2 = getUTCtoLocalOffsetMinutes(hourStart + 2 * 60 * 60 * 1000); // 2 hours later
 
 		// Both should be valid offsets (could be same if no DST change)
 		expect(typeof offset1).toBe("number");
@@ -166,7 +161,7 @@ describe("getUTCtoTimezoneOffsetMinutes", () => {
 		const localTz = Intl.DateTimeFormat().resolvedOptions()
 			.timeZone as import("./timezone.pub.js").TimeZone;
 		const localOffset = getUTCtoTimezoneOffsetMinutes(now, localTz);
-		const expectedOffset = getUTCtoTimezoneOffsetMinutes(now, null);
+		const expectedOffset = getUTCtoLocalOffsetMinutes(now);
 		// Accept both 0 and -0 as equivalent
 		expect(
 			Object.is(localOffset, expectedOffset) ||

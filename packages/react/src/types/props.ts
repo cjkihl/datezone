@@ -1,7 +1,6 @@
+import type { TimeZone } from "datezone";
 import type React from "react";
-import type { DateLib, Locale } from "../classes/DateLib.js";
-import type { DeprecatedUI } from "../UI.js";
-
+import type { DateLib } from "../classes/DateLib.js";
 import type {
 	ClassNames,
 	CustomComponents,
@@ -67,7 +66,7 @@ export interface PropsBase {
 	 *
 	 * @see https://daypicker.dev/docs/styling
 	 */
-	classNames?: Partial<ClassNames> & Partial<DeprecatedUI<string>>;
+	classNames?: Partial<ClassNames>;
 	/**
 	 * Change the class name for the day matching the `modifiers`.
 	 *
@@ -81,7 +80,7 @@ export interface PropsBase {
 	 *
 	 * @see https://daypicker.dev/docs/styling
 	 */
-	styles?: Partial<Styles> & Partial<DeprecatedUI<React.CSSProperties>>;
+	styles?: Partial<Styles>;
 	/**
 	 * Change the class name for the day matching the {@link modifiers}.
 	 *
@@ -124,52 +123,12 @@ export interface PropsBase {
 	 */
 	startMonth?: Date | undefined;
 	/**
-	 * @private
-	 * @deprecated This prop has been removed. Use `hidden={{ before: date }}`
-	 *   instead.
-	 * @see https://daypicker.dev/docs/navigation#start-and-end-dates
-	 */
-	fromDate?: Date | undefined;
-	/**
-	 * @private
-	 * @deprecated This prop has been renamed to `startMonth`.
-	 * @see https://daypicker.dev/docs/navigation#start-and-end-dates
-	 */
-	fromMonth?: Date | undefined;
-	/**
-	 * @private
-	 * @deprecated Use `startMonth` instead. E.g. `startMonth={new Date(year,
-	 *   0)}`.
-	 * @see https://daypicker.dev/docs/navigation#start-and-end-dates
-	 */
-	fromYear?: number | undefined;
-
-	/**
 	 * The latest month to end the month navigation.
 	 *
 	 * @since 9.0.0
 	 * @see https://daypicker.dev/docs/navigation#start-and-end-dates
 	 */
 	endMonth?: Date;
-	/**
-	 * @private
-	 * @deprecated This prop has been removed. Use `hidden={{ after: date }}`
-	 *   instead.
-	 * @see https://daypicker.dev/docs/navigation#start-and-end-dates
-	 */
-	toDate?: Date;
-	/**
-	 * @private
-	 * @deprecated This prop has been renamed to `endMonth`.
-	 * @see https://daypicker.dev/docs/navigation#start-and-end-dates
-	 */
-	toMonth?: Date;
-	/**
-	 * @private
-	 * @deprecated Use `endMonth` instead. E.g. `endMonth={new Date(year, 0)}`.
-	 * @see https://daypicker.dev/docs/navigation#start-and-end-dates
-	 */
-	toYear?: number;
 
 	/**
 	 * Paginate the month navigation displaying the `numberOfMonths` at a time.
@@ -295,7 +254,7 @@ export interface PropsBase {
 	 * @since 9.1.1
 	 * @see https://daypicker.dev/docs/time-zone
 	 */
-	timeZone?: string | undefined;
+	timeZone?: TimeZone | undefined;
 	/**
 	 * Change the components used for rendering the calendar elements.
 	 *
@@ -321,11 +280,6 @@ export interface PropsBase {
 	 * @see https://daypicker.dev/guides/accessibility#autofocus
 	 */
 	autoFocus?: boolean;
-	/**
-	 * @private
-	 * @deprecated This prop will be removed. Use {@link autoFocus} instead.
-	 */
-	initialFocus?: boolean;
 	/**
 	 * Apply the `disabled` modifier to the matching days. Disabled days cannot be
 	 * selected when in a selection mode is set.
@@ -412,11 +366,10 @@ export interface PropsBase {
 	 *   import { es } from "react-day-picker/locale";
 	 *   <DayPicker locale={es} />
 	 *
-	 * @defaultValue enUS - The English locale default of `date-fns`.
 	 * @see https://daypicker.dev/docs/localization
 	 * @see https://github.com/date-fns/date-fns/tree/main/src/locale for a list of the supported locales
 	 */
-	locale?: Partial<Locale> | undefined;
+	locale?: string;
 	/**
 	 * The numeral system to use when formatting dates.
 	 *

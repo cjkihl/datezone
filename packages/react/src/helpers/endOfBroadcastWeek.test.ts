@@ -1,5 +1,5 @@
-import { defaultDateLib } from "../classes";
-
+import { describe, expect, test } from "bun:test";
+import { defaultDateLib } from "../utils/testdatelib";
 import { endOfBroadcastWeek } from "./endOfBroadcastWeek";
 
 const testCases = [

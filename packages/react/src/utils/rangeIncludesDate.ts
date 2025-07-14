@@ -1,4 +1,4 @@
-import { defaultDateLib } from "../classes/index.js";
+import type { DateLib } from "../classes/index.jsx";
 import type { DateRange } from "../types/index.js";
 
 /**
@@ -15,8 +15,8 @@ import type { DateRange } from "../types/index.js";
 export function rangeIncludesDate(
 	range: DateRange,
 	date: Date,
-	excludeEnds = false,
-	dateLib = defaultDateLib,
+	excludeEnds: boolean,
+	dateLib: DateLib,
 ): boolean {
 	let { from, to } = range;
 	const { differenceInCalendarDays, isSameDay } = dateLib;
@@ -38,10 +38,3 @@ export function rangeIncludesDate(
 	}
 	return false;
 }
-
-/**
- * @private
- * @deprecated Use {@link rangeIncludesDate} instead.
- */
-export const isDateInRange = (range: DateRange, date: Date) =>
-	rangeIncludesDate(range, date, false, defaultDateLib);

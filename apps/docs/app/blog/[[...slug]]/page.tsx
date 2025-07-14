@@ -23,7 +23,6 @@ import { StarField } from "../_components/stat-field";
 
 const metaTitle = "Blogs";
 const metaDescription = "Latest changes , fixes and updates.";
-const ogImage = "https://better-auth.com/release-og/changelog-og.png";
 
 export default async function Page({
 	params,
@@ -89,22 +88,15 @@ export default async function Page({
 						</IconLink>
 						<IconLink
 							className="flex-none text-gray-600 dark:text-gray-300"
-							href="https://github.com/better-auth/better-auth"
+							href="https://github.com/cjkihl/datezone"
 							icon={GitHubIcon}
 						>
 							GitHub
 						</IconLink>
-						<IconLink
-							className="flex-none text-gray-600 dark:text-gray-300"
-							href="https://discord.com/better-auth"
-							icon={DiscordLogoIcon}
-						>
-							Community
-						</IconLink>
 					</div>
 					<p className="flex items-baseline absolute bottom-4 max-md:left-1/2 max-md:-translate-x-1/2 gap-x-2 text-[0.8125rem]/6 text-gray-500">
-						<IconLink compact href="https://x.com/better_auth" icon={XIcon}>
-							BETTER-AUTH.
+						<IconLink compact href="https://x.com/cjkihl" icon={XIcon}>
+							Datezone.dev
 						</IconLink>
 					</p>
 				</div>
@@ -159,22 +151,17 @@ export async function generateMetadata({
 	if (!slug) {
 		return {
 			description: metaDescription,
-			metadataBase: new URL("https://better-auth.com/blogs"),
+			metadataBase: new URL("https://datezone.dev/blogs"),
 			openGraph: {
 				description: metaDescription,
-				images: [
-					{
-						url: ogImage,
-					},
-				],
+
 				title: metaTitle,
-				url: "https://better-auth.com/blogs",
+				url: "https://datezone.dev/blogs",
 			},
 			title: metaTitle,
 			twitter: {
 				card: "summary_large_image",
 				description: metaDescription,
-				images: [ogImage],
 				title: metaTitle,
 			},
 		};

@@ -1,1 +1,3 @@
-// TODO: implement example code
+import { clearFixedOffsetCache } from "datezone";
+
+clearFixedOffsetCache();

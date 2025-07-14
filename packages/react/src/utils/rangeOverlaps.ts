@@ -1,5 +1,4 @@
-import { defaultDateLib } from "../classes/index.js";
-
+import type { DateLib } from "../classes/index.jsx";
 import { rangeIncludesDate } from "./rangeIncludesDate.js";
 
 /**
@@ -15,7 +14,7 @@ import { rangeIncludesDate } from "./rangeIncludesDate.js";
 export function rangeOverlaps(
 	rangeLeft: { from: Date; to: Date },
 	rangeRight: { from: Date; to: Date },
-	dateLib = defaultDateLib,
+	dateLib: DateLib,
 ): boolean {
 	return (
 		rangeIncludesDate(rangeLeft, rangeRight.from, false, dateLib) ||

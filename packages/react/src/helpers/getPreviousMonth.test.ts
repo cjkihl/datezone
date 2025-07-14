@@ -1,6 +1,5 @@
 import { expect, it } from "bun:test";
-import { defaultDateLib } from "../classes/DateLib";
-
+import { defaultDateLib } from "../utils/testdatelib";
 import { getPreviousMonth } from "./getPreviousMonth";
 
 it("should return undefined if navigation is disabled", () => {

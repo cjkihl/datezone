@@ -3,12 +3,10 @@ import type * as components from "../components/custom-components.js";
 import type {
 	formatCaption,
 	formatDay,
-	formatMonthCaption,
 	formatMonthDropdown,
 	formatWeekdayName,
 	formatWeekNumber,
 	formatWeekNumberHeader,
-	formatYearCaption,
 	formatYearDropdown,
 } from "../formatters/index.js";
 import type {
@@ -43,13 +41,6 @@ export type Mode = "single" | "multiple" | "range";
  * @see https://daypicker.dev/guides/custom-components
  */
 export type CustomComponents = {
-	/**
-	 * Render any button element in DayPicker.
-	 *
-	 * @deprecated Use {@link CustomComponents.NextMonthButton} or
-	 *   {@link CustomComponents.PreviousMonthButton} instead.
-	 */
-	Button: typeof components.Button;
 	/** Render the chevron icon used in the navigation buttons and dropdowns. */
 	Chevron: typeof components.Chevron;
 	/** Render the caption label of the month grid. */
@@ -110,13 +101,6 @@ export type Formatters = {
 	formatDay: typeof formatDay;
 	/** Format the label in the month dropdown. */
 	formatMonthDropdown: typeof formatMonthDropdown;
-	/**
-	 * @ignore
-	 * @deprecated Use {@link Formatters.formatCaption} instead.
-	 *
-	 *   **Note:** This formatter will be removed in version 10.0.0.
-	 */
-	formatMonthCaption: typeof formatMonthCaption;
 	/** Format the week number. */
 	formatWeekNumber: typeof formatWeekNumber;
 	/** Format the header of the week number column. */
@@ -125,11 +109,6 @@ export type Formatters = {
 	formatWeekdayName: typeof formatWeekdayName;
 	/** Format the label in the year dropdown. */
 	formatYearDropdown: typeof formatYearDropdown;
-	/**
-	 * @ignore
-	 * @deprecated Use {@link Formatters.formatYearDropdown} instead.
-	 */
-	formatYearCaption: typeof formatYearCaption;
 };
 
 /** A map of functions to translate ARIA labels for various elements. */
@@ -150,11 +129,6 @@ export type Labels = {
 	labelPrevious: typeof labelPrevious;
 	/** The label for the day button. */
 	labelDayButton: typeof labelDayButton;
-	/**
-	 * @ignore
-	 * @deprecated Use {@link labelDayButton} instead.
-	 */
-	labelDay: typeof labelDayButton;
 	/** The label for the weekday. */
 	labelWeekday: typeof labelWeekday;
 	/** The label for the week number. */

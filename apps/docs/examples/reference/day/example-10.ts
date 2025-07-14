@@ -1,1 +1,0 @@
-import { weekDayName } from "datezone";

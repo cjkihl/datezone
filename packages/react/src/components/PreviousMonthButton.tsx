@@ -12,7 +12,7 @@ export function PreviousMonthButton(
 	props: ButtonHTMLAttributes<HTMLButtonElement>,
 ) {
 	const { components } = useDayPicker();
-	return <components.Button {...props} />;
+	return <components.PreviousMonthButton {...props} />;
 }
 
 export type PreviousMonthButtonProps = Parameters<

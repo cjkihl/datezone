@@ -91,22 +91,15 @@ const ChangelogPage = async () => {
 						</IconLink>
 						<IconLink
 							className="flex-none text-gray-600 dark:text-gray-300"
-							href="https://github.com/better-auth/better-auth"
+							href="https://github.com/cjkihl/datezone"
 							icon={GitHubIcon}
 						>
 							GitHub
 						</IconLink>
-						<IconLink
-							className="flex-none text-gray-600 dark:text-gray-300"
-							href="https://discord.com/better-auth"
-							icon={DiscordLogoIcon}
-						>
-							Community
-						</IconLink>
 					</div>
 					<p className="flex items-baseline absolute bottom-4 max-md:left-1/2 max-md:-translate-x-1/2 gap-x-2 text-[0.8125rem]/6 text-gray-500">
-						<IconLink compact href="https://x.com/better_auth" icon={XIcon}>
-							BETTER-AUTH.
+						<IconLink compact href="https://x.com/cjkihl" icon={XIcon}>
+							cjkihl
 						</IconLink>
 					</p>
 				</div>

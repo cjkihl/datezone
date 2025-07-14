@@ -157,7 +157,7 @@ export function format(
 				...ctx,
 				len: token.length,
 				locale: ctx.locale ?? "en-US",
-				tz: ctx.timeZone,
+				timeZone: ctx.timeZone,
 			});
 			i += token.length;
 			continue;

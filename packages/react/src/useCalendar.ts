@@ -90,11 +90,6 @@ export function useCalendar(
 		| "defaultMonth"
 		| "timeZone"
 		| "broadcastCalendar"
-		// Deprecated:
-		| "fromMonth"
-		| "fromYear"
-		| "toMonth"
-		| "toYear"
 	>,
 	dateLib: DateLib,
 ): Calendar {

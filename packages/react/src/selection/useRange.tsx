@@ -28,7 +28,7 @@ export function useRange<T extends DayPickerProps>(
 		disabled,
 		excludeDisabled,
 		selected: initiallySelected,
-		required,
+		required = false,
 		onSelect,
 	} = props as PropsRange;
 
@@ -47,7 +47,7 @@ export function useRange<T extends DayPickerProps>(
 		modifiers: Modifiers,
 		e: React.MouseEvent | React.KeyboardEvent,
 	) => {
-		const { min, max } = props as PropsRange;
+		const { min = 0, max = 0 } = props as PropsRange;
 		const newRange = triggerDate
 			? addToRange(triggerDate, selected, min, max, required, dateLib)
 			: undefined;

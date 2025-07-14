@@ -1,4 +1,4 @@
-import { defaultDateLib } from "../classes/DateLib.js";
+import { expect, test } from "bun:test";
 import type {
 	DateAfter,
 	DateBefore,
@@ -6,7 +6,7 @@ import type {
 	DateRange,
 	DayOfWeek,
 } from "../types/index.js";
-
+import { defaultDateLib } from "./testdatelib.js";
 import {
 	isDateAfterType,
 	isDateBeforeType,

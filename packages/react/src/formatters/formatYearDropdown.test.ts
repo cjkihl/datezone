@@ -1,5 +1,5 @@
-import { defaultDateLib } from "../classes";
-
+import { expect, test } from "bun:test";
+import { defaultDateLib } from "../utils/testdatelib";
 import { formatYearDropdown } from "./formatYearDropdown";
 
 test("should return the formatted weekday name", () => {

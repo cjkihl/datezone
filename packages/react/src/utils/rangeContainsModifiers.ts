@@ -1,4 +1,4 @@
-import { type DateLib, defaultDateLib } from "../classes/DateLib.js";
+import type { DateLib } from "../classes/index.jsx";
 import type { Matcher } from "../types/index.js";
 
 import { dateMatchModifiers } from "./dateMatchModifiers.js";
@@ -27,7 +27,7 @@ import {
 export function rangeContainsModifiers(
 	range: { from: Date; to: Date },
 	modifiers: Matcher | Matcher[],
-	dateLib: DateLib = defaultDateLib,
+	dateLib: DateLib,
 ): boolean {
 	const matchers = Array.isArray(modifiers) ? modifiers : [modifiers];
 

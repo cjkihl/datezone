@@ -19,10 +19,3 @@ export function formatCaption(
 ) {
 	return (dateLib ?? new DateLib(options)).format(month, "LLLL y");
 }
-
-/**
- * @private
- * @deprecated Use {@link formatCaption} instead.
- * @group Formatters
- */
-export const formatMonthCaption = formatCaption;

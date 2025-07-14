@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { defaultDateLib } from "../classes";
+import { defaultDateLib } from "../utils/testdatelib";
 
 import { startOfBroadcastWeek } from "./startOfBroadcastWeek";
 

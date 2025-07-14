@@ -1,6 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { DateLib, defaultDateLib } from "../classes/DateLib";
-
+import { defaultDateLib } from "../utils/testdatelib";
 import { getDates } from "./getDates";
 
 describe("when the first month and the last month are the same", () => {
@@ -100,12 +99,7 @@ describe("when the first month and the last month are the same", () => {
 	describe("when using Monday as first day of the week", () => {
 		const month = new Date(2023, 4, 1);
 		it("the first day should be Monday", () => {
-			const dates = getDates(
-				[month],
-				undefined,
-				{},
-				new DateLib({ weekStartsOn: 1 }),
-			);
+			const dates = getDates([month], undefined, {}, defaultDateLib);
 			expect(dates[0]).toEqual(new Date(2023, 4, 1));
 			expect(dates[dates.length - 1]).toEqual(new Date(2023, 5, 4));
 		});
@@ -115,12 +109,7 @@ describe("when the first month and the last month are the same", () => {
 		const maxDate = new Date(2023, 4, 15);
 
 		it("the last day should be the max date", () => {
-			const dates = getDates(
-				[month],
-				maxDate,
-				{},
-				new DateLib({ weekStartsOn: 1 }),
-			);
+			const dates = getDates([month], maxDate, {}, defaultDateLib);
 			expect(dates).toHaveLength(15);
 			expect(dates[dates.length - 1]).toEqual(maxDate);
 		});
@@ -166,7 +155,7 @@ describe("when the first month and the last month are different", () => {
 				[firstMonth, lastMonth],
 				maxDate,
 				{},
-				new DateLib({ weekStartsOn: 1 }),
+				defaultDateLib,
 			);
 			expect(dates).toHaveLength(46);
 			expect(dates[dates.length - 1]).toEqual(maxDate);

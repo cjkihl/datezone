@@ -1,5 +1,5 @@
-import { format } from "datezone/format";
+import { format } from "datezone";
 
-const launch = 1710436800000; // timestamp
-console.log(format(launch, "yyyy-MM-dd HH:mm zzzz"));
-// → "2024-03-14 15:00 America/New_York"
+const timestamp = 1710436800000;
+const formatted = format(timestamp, "America/New_York", { timeZone: "America/New_York" });
+// formatted is "3/14/2024"

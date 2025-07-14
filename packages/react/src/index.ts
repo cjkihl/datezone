@@ -1,6 +1,5 @@
 export { TZDate } from "@date-fns/tz";
 export * from "./classes/index.js";
-export * from "./components/custom-components.js";
 export * from "./DayPicker.js";
 
 export * from "./formatters/index.js";

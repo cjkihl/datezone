@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { defaultDateLib } from "../classes/index.js";
+import { defaultDateLib } from "../utils/testdatelib";
 import { getBroadcastWeeksInMonth } from "./getBroadcastWeeksInMonth";
 
 describe("getBroadcastWeeksInMonth", () => {

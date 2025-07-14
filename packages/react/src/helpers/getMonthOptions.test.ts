@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { defaultDateLib } from "../classes/DateLib";
 import * as formatters from "../formatters/index.js";
+import { defaultDateLib } from "../utils/testdatelib";
 
 import { getMonthOptions } from "./getMonthOptions";
 

@@ -68,19 +68,15 @@ export function DayPicker(
 	},
 ) {
 	const dateLib = getDateLib({
-		firstWeekContainsDate: props.firstWeekContainsDate,
-		locale: props.locale,
+		locale: props.locale?.code,
 		timeZone: props.timeZone,
-		useAdditionalDayOfYearTokens: props.useAdditionalDayOfYearTokens,
-		useAdditionalWeekYearTokens: props.useAdditionalWeekYearTokens,
-		weekStartsOn: props.broadcastCalendar ? 1 : props.weekStartsOn,
 	});
 	return (
 		<DayPickerComponent
 			{...props}
 			dateLib={dateLib}
 			dir={props.dir ?? "rtl"}
-			locale={props.locale ?? faIR}
+			locale={props.locale ?? faIR.code}
 			numerals={props.numerals ?? "arabext"}
 		/>
 	);
