@@ -22,7 +22,17 @@ export function labelDayButton(
 	options?: DateLibOptions,
 	dateLib?: DateLib,
 ) {
-	let label = (dateLib ?? new DateLib(options)).format(date, "PPPP");
+	const dl = dateLib ?? new DateLib(options);
+	const localeCode =
+		typeof options?.locale === "string"
+			? options.locale
+			: (options?.locale as any)?.code;
+
+	let pattern = "PPPP";
+	if (localeCode?.startsWith("es")) {
+		pattern = "EEEE, d 'de' LLLL 'de' yyyy";
+	}
+	let label = dl.format(date, pattern);
 	if (modifiers.today) label = `Today, ${label}`;
 	if (modifiers.selected) label = `${label}, selected`;
 	return label;
