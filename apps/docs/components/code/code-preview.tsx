@@ -209,7 +209,7 @@ export function CodePreview({
 			<MotionConfig transition={{ bounce: 0, duration: 0.5, type: "spring" }}>
 				<motion.div
 					animate={{ height: height > 0 ? height : undefined }}
-					className="from-stone-100 to-stone-200 dark:to-black dark:via-stone-950 dark:from-stone-950 relative overflow-y-hidden overflow-x-hidden rounded-sm bg-gradient-to-tr ring-1 ring-white/10 backdrop-blur-lg"
+					className="from-stone-100 to-stone-200 dark:to-black dark:via-stone-950 dark:from-stone-950 relative overflow-y-hidden overflow-x-hidden rounded-sm bg-gradient-to-tr ring-1 ring-stone-300 dark:ring-stone-700"
 				>
 					<div ref={ref}>
 						<div className="absolute -top-px left-0 right-0 h-px" />
