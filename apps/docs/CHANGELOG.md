@@ -1,5 +1,13 @@
 # docs
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [87d5e7c]
+- Updated dependencies [786a257]
+  - datezone@1.0.5
+
 ## 0.0.3
 
 ### Patch Changes

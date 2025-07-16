@@ -1,5 +1,12 @@
 # datezone
 
+## 1.0.5
+
+### Patch Changes
+
+- 87d5e7c: update readme
+- 786a257: Fix readme
+
 ## 1.0.4
 
 ### Patch Changes
