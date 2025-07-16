@@ -1,5 +1,0 @@
----
-"datezone": patch
----
-
-Fix readme
