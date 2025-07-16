@@ -1,3 +1,20 @@
+<!-- Logo (centered) -->
+<p align="center">
+  <a href="https://datezone.dev">
+    <img src="https://datezone.dev/branding/datezone-logo-wordmark-light.svg" alt="Datezone Logo" width="320" />
+  </a>
+</p>
+
+<!-- Full Documentation Link -->
+<p align="center">
+  <a href="https://datezone.dev" style="font-size:1.2em; font-weight:bold; background:#f5f5f5; padding:0.5em 1.5em; border-radius:8px; display:inline-block; text-decoration:none; color:#222; margin-bottom:1em;">
+    📚 Full Documentation → datezone.dev
+  </a>
+</p>
+<p align="center">
+ A fast, fully-typed TypeScript library for working with dates and times, with explicit timeZone support and no unnecessary `Date` object creation. Designed for high-frequency usage, tree-shakeable builds, and maximum performance.
+</p>
+
 # datezone
 
 [![Coverage](https://img.shields.io/badge/Coverage-91%25-brightgreen?style=flat-square)](../../tools/coverage)
@@ -10,8 +27,6 @@
 
 [![Star on GitHub](https://img.shields.io/github/stars/cjkihl/datezone?style=flat-square&logo=github)](https://github.com/cjkihl/datezone/stargazers)
 [![Sponsor](https://img.shields.io/badge/Sponsor-❤-ff69b4?style=flat-square&logo=github-sponsors)](https://github.com/sponsors/cjkihl)
-
-A **blazingly fast**, fully-typed TypeScript library for working with dates and times, with explicit timeZone support and no unnecessary `Date` object creation. Designed for high-frequency usage, tree-shakeable builds, and maximum performance.
 
 ## 🚀 Why Datezone?
 
