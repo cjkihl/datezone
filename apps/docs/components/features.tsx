@@ -70,10 +70,6 @@ export default function Features({ stars }: { stars: string | null }) {
 		<div className="md:w-10/12 mt-10 mx-auto font-geist relative rounded-none -pr-2">
 			<div className="w-full md:mx-0">
 				<div className="grid grid-cols-1 relative md:grid-rows-2 md:grid-cols-3">
-					<div className="hidden md:grid top-1/2 left-0 -translate-y-1/2 w-full grid-cols-3 z-10 pointer-events-none select-none absolute">
-						<Plus className="w-8 h-8 text-neutral-300 translate-x-[16.5px] translate-y-[.5px] ml-auto dark:text-neutral-600" />
-						<Plus className="w-8 h-8 text-neutral-300 ml-auto translate-x-[16.5px] translate-y-[.5px] dark:text-neutral-600" />
-					</div>
 					{features.map((feature) => (
 						<div
 							className={cn(
@@ -121,7 +117,7 @@ export default function Features({ stars }: { stars: string | null }) {
 							<div className="flex items-center gap-2">
 								<Globe2Icon className="w-4 h-4" />
 								<p className="text-gray-600 dark:text-gray-400">
-									Control your timeZones
+									Control your time zones
 								</p>
 							</div>
 							<p className="max-w-md mx-auto mt-4 text-4xl font-normal tracking-tighter text-center md:text-4xl">
