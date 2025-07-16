@@ -16,3 +16,58 @@ datezone
 ## Usage Example
 
 <CodeExample tabs={[{ name: "Basic Usage", file: "basic/installation-example.ts" }]} />
+
+## ESM Compatibility & Module Resolution
+
+Datezone is a **modern ESM module** that may require configuration changes in older projects. If you encounter import errors, this section will help you resolve them.
+
+- **Pure ESM module** with `"type": "module"` in package.json
+- **Uses the `exports` field** instead of legacy `main`/`types` fields  
+- **Types are located** at `./dist/types/index.pub.d.ts` (not root-level `index.d.ts`)
+- **No legacy fallback** - relies entirely on the modern `exports` field
+
+### Common Installation Issues
+
+If you see errors like these, your project needs modern module resolution:
+
+```
+Cannot find module 'datezone' or its corresponding type declarations
+Module not found: Can't resolve 'datezone'
+```
+
+### Fix: Update Module Resolution
+
+Update your `tsconfig.json` to use modern module resolution:
+
+```json
+{
+  "compilerOptions": {
+    "moduleResolution": "bundler", // or "node16"/"nodenext"
+    "module": "ESNext",
+    "target": "ES2022"
+  }
+}
+```
+
+### Module Resolution Comparison
+
+| Resolution | Support | Notes |
+|------------|---------|-------|
+| `"node"` (Legacy) | ❌ **Won't work** | Only understands `main` field, not `exports` |
+| `"bundler"` (Modern) | ✅ **Recommended** | Full `exports` field support, works with all bundlers |
+| `"node16"`/`"nodenext"` | ✅ **Works** | Node.js native ESM support |
+
+### For Older Projects
+
+If you're working with a legacy codebase that cannot be upgraded:
+
+1. **Update TypeScript** to version 4.7+ for `"bundler"` support
+2. **Use a modern bundler** (Vite, Webpack 5+, or Bun)
+3. **Consider polyfill alternatives** if stuck with very old tooling
+
+### Framework-Specific Notes
+
+- **Next.js**: Requires version 13.1+ for proper ESM support
+- **Vite**: Works out of the box with default configuration
+- **Webpack**: Requires version 5+ with ESM support enabled
+- **Create React App**: May need ejecting or switching to Vite
