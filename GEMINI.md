@@ -73,7 +73,7 @@ The documentation references TypeScript code examples from `examples/` directory
 
 Example usage in MDX:
 ```mdx
-<CodeExample file="basic/formatting.ts" title="Basic Formatting" />
+<CodeExample file="basic/formatting.ts" name="Basic Formatting" />
 ```
 
 ## Development Workflow

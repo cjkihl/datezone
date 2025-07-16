@@ -361,7 +361,7 @@ describe("minute (edge cases & DST)", () => {
 		expect(minute(after, tz)).toBe(30);
 	});
 
-	it("handles historical time zone (Europe/Dublin, 1971-10-31 DST end)", () => {
+	it("handles historical time-zone (Europe/Dublin, 1971-10-31 DST end)", () => {
 		const tz: TimeZone = "Europe/Dublin";
 		const before = Date.UTC(1971, 9, 31, 1, 59, 0, 0);
 		expect(minute(before, tz)).toBe(59);

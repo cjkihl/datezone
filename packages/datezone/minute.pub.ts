@@ -51,7 +51,7 @@ export function subMinutes(ts: number, amount: number): number {
  * Get the minute of the day.
  *
  * @param ts - The timestamp in milliseconds
- * @param timeZone - The time zone to use (null for local)
+ * @param timeZone - The time-zone to use (null for local)
  * @returns The minute of the day
  * @see https://datezone.dev/docs/reference/minute#minute
  */

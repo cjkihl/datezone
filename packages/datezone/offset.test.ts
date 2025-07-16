@@ -1,5 +1,11 @@
 import { describe, expect, it } from "bun:test";
-
+import {
+	calcOffset,
+	getCachedOffsetDST,
+	getYearStartEnd,
+	offsetCache,
+	timeZoneOffsetPeriods,
+} from "./offset.internal.js";
 import {
 	clearFixedOffsetCache,
 	getFixedOffsetCacheInfo,
@@ -439,5 +445,95 @@ describe("Coverage: getTimezoneOffsetMinutes from coverage-tests", () => {
 			"UTC",
 		);
 		expect(typeof result).toBe("number");
+	});
+});
+
+describe("Coverage: offset.pub.ts uncovered lines", () => {
+	it("getCachedOffsetDST fallback: periods missing triggers recompute and returns null", () => {
+		const ts = new Date("2024-01-01T00:00:00.000Z").getTime();
+		const tz = "Antarctica/Troll";
+		timeZoneOffsetPeriods.delete(tz);
+
+		const originalSet = timeZoneOffsetPeriods.set;
+		timeZoneOffsetPeriods.set = function (k, v) {
+			if (k === tz) return this;
+			return originalSet.call(this, k, v);
+		};
+
+		const result = getCachedOffsetDST(ts, tz);
+		expect(result).toBeNull();
+
+		timeZoneOffsetPeriods.set = originalSet;
+		timeZoneOffsetPeriods.delete(tz);
+	});
+
+	it("getCachedOffsetDST: returns null if no period matches", () => {
+		const tz = "Pacific/Chatham";
+		const year = new Date().getUTCFullYear();
+		const [start, end] = getYearStartEnd(year);
+
+		const periods = [
+			{ end: start + 1000 * 60 * 60 * 24, offset: 45, start },
+			{ end, offset: 45, start: start + 2000 * 60 * 60 * 24 },
+		];
+		timeZoneOffsetPeriods.set(tz, periods);
+
+		const ts = start + 1500 * 60 * 60 * 24;
+		const result = getCachedOffsetDST(ts, tz);
+		expect(result).toBeNull();
+
+		timeZoneOffsetPeriods.delete(tz);
+	});
+
+	it("calcOffset: returns -getTimezoneOffset() when tz is null", () => {
+		const ts = Date.now();
+		const expected = -new Date(ts).getTimezoneOffset();
+		expect(calcOffset(ts, null)).toBe(expected);
+	});
+
+	it("getUTCtoTimezoneOffsetMinutes: returns cached value for fixed offset zone", () => {
+		const ts = new Date("2024-01-15T12:00:00.000Z").getTime();
+		const tz = "Asia/Kolkata";
+		// Prime the cache
+		getUTCtoTimezoneOffsetMinutes(ts, tz);
+		// Now should hit the cache
+		const result = getUTCtoTimezoneOffsetMinutes(ts, tz);
+		expect(result).toBe(330);
+	});
+
+	it("getUTCtoTimezoneOffsetMinutes: returns cached value for per-hour DST zone", () => {
+		const ts = new Date("2024-07-15T12:00:00.000Z").getTime();
+		const tz = "America/New_York";
+		// Prime the cache for this hour
+		getUTCtoTimezoneOffsetMinutes(ts, tz);
+		// Now should hit the per-hour cache
+		const result = getUTCtoTimezoneOffsetMinutes(ts, tz);
+		expect(typeof result).toBe("number");
+	});
+
+	it("getUTCtoLocalOffsetMinutes: covers fixed offset local timezone path", () => {
+		const originalGetTimezoneOffset = Date.prototype.getTimezoneOffset;
+
+		// Mock fixed offset
+		Date.prototype.getTimezoneOffset = () => {
+			return 300; // UTC-5 no DST
+		};
+
+		// Reset cache
+		offsetCache.checkedLocalDST = false;
+		offsetCache.localFixedOffset = null;
+		offsetCache.lastLocalHourStart = null;
+		offsetCache.lastLocalOffset = null;
+
+		const ts = Date.now();
+		const offset = getUTCtoLocalOffsetMinutes(ts);
+		expect(offset).toBe(-300);
+
+		// Subsequent call uses fixed path
+		const offset2 = getUTCtoLocalOffsetMinutes(ts + 1000);
+		expect(offset2).toBe(-300);
+
+		// Restore
+		Date.prototype.getTimezoneOffset = originalGetTimezoneOffset;
 	});
 });

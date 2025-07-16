@@ -27,7 +27,7 @@ group("🚀 Datezone Internal: Fast Path vs No Fast Path Benefits", () => {
 	);
 
 	bench("datezone: year (Local - No Timezone)", () =>
-		do_not_optimize(year(testTimestamp)),
+		do_not_optimize(year(testTimestamp, null)),
 	);
 	bench("datezone: year (UTC Fast Path)", () =>
 		do_not_optimize(year(testTimestamp, "UTC")),

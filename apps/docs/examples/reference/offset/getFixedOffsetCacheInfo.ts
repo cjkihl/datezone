@@ -1,4 +1,5 @@
 import { getFixedOffsetCacheInfo } from "datezone";
 
-const _info = getFixedOffsetCacheInfo();
-// info is { size: 0, cachedTimezones: [] }
+const info = getFixedOffsetCacheInfo();
+
+console.log(info); // { size: 0, cachedTimezones: [] }

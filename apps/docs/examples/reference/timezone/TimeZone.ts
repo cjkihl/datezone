@@ -1,5 +1,7 @@
-import { type TimeZone, format } from "datezone";
+import { format, type TimeZone } from "datezone";
 
 const timezone: TimeZone = "America/New_York";
-const formatted = format(Date.now(), timezone, { timeZone: "America/New_York" });
-// formatted is something like "7/11/2025"
+const formatted = format(Date.now(), timezone, {
+	timeZone: "America/New_York",
+});
+console.log(formatted);

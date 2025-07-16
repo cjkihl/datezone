@@ -1,4 +1,3 @@
-import { DiscordLogoIcon } from "@radix-ui/react-icons";
 import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
 import { Pre } from "fumadocs-ui/components/codeblock";
 import { File, Files, Folder } from "fumadocs-ui/components/files";

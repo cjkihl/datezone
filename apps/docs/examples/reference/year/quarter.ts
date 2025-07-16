@@ -1,4 +1,4 @@
 import { quarter } from "datezone";
 
 const quarterNumber = quarter(7);
-// quarterNumber is 3
+console.log(quarterNumber); // 3

@@ -65,11 +65,7 @@ export function toISOString(ts: number, timeZone: TimeZone | null): string {
 	} else {
 		// Path for DST timeZones (complex calculation required)
 		const parts = timestampToCalendar(ts, timeZone);
-		let year = parts.year;
-		if (ts < 0 && year > 0) {
-			year = 1 - year;
-		}
-
+		// Removed incorrect negative year adjustment
 		timeZoneOffsetMinutes = getUTCtoTimezoneOffsetMinutes(ts, timeZone);
 
 		dt = {
@@ -80,7 +76,7 @@ export function toISOString(ts: number, timeZone: TimeZone | null): string {
 			month: parts.month,
 			second: parts.second,
 			timeZoneOffsetMinutes,
-			year,
+			year: parts.year,
 		};
 	}
 

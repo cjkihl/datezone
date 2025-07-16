@@ -1,9 +1,9 @@
 import { WeekStartsOn, weeksInMonthBase } from "datezone";
 
-const _weeks = weeksInMonthBase(
+const weeks = weeksInMonthBase(
 	2024,
 	7,
 	WeekStartsOn.MONDAY,
 	"America/New_York",
 );
-// weeks is 5
+console.log(weeks); // 5

@@ -1,39 +1,11 @@
-import { subMilliseconds } from "datezone";
+import { subMilliseconds, toISOString } from "datezone";
 
-// Current timestamp
-const now = Date.now();
-
-// Subtract milliseconds from timestamp
-console.log("Subtracting milliseconds from timestamp:");
+const ts = 1700000000000; // 2023-11-14T22:13:20.000Z
 
 // Subtract positive milliseconds
-const threeHundredMsAgo = subMilliseconds(now, 300);
-console.log(`Now: ${new Date(now).toISOString()}`);
-console.log(`300ms ago: ${new Date(threeHundredMsAgo).toISOString()}`);
+const minus300 = subMilliseconds(ts, 300);
+console.log(minus300, toISOString(minus300, "UTC")); // 1699999999700 (2023-11-14T22:13:19.700Z)
 
 // Subtract negative milliseconds (adds)
-const inSevenHundredMs = subMilliseconds(now, -700);
-console.log(
-	`Subtracting -700ms (adds 700): ${new Date(inSevenHundredMs).toISOString()}`,
-);
-
-// Subtract many milliseconds
-const oneSecondAgo = subMilliseconds(now, 1000);
-console.log(`1000ms ago (1 second): ${new Date(oneSecondAgo).toISOString()}`);
-
-// Example with specific timestamp
-const specificTime = new Date("2023-12-25T15:30:00.500Z").getTime();
-console.log("\nSpecific time examples:");
-console.log(`Base: ${new Date(specificTime).toISOString()}`);
-console.log(
-	`-100ms: ${new Date(subMilliseconds(specificTime, 100)).toISOString()}`,
-);
-console.log(
-	`-750ms: ${new Date(subMilliseconds(specificTime, 750)).toISOString()}`,
-);
-
-// High precision example
-console.log("\nHigh precision example:");
-const precise = new Date("2023-12-25T14:27:38.542Z").getTime();
-console.log(`Original: ${new Date(precise).toISOString()}`);
-console.log(`-1ms: ${new Date(subMilliseconds(precise, 1)).toISOString()}`);
+const plus700 = subMilliseconds(ts, -700);
+console.log(plus700, toISOString(plus700, "UTC")); // 1700000000700 (2023-11-14T22:13:20.700Z)

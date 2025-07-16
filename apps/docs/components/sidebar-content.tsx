@@ -173,45 +173,6 @@ export const contents: Content[] = [
 		],
 		title: "Reference",
 	},
-	// {
-
-	// 	title: "Contribute",
-	// 	Icon: () => (
-	//
-	// 	),
-	// 	list: [
-	// 		{
-	// 			title: "Getting Started",
-	// 			href: "/docs/contribute/getting-started",
-	// 			icon: () => <BookOpenCheck className="text-current size-4" />,
-	// 		},
-	// 		{
-	// 			title: "Areas to Contribute",
-	// 			href: "/docs/contribute/areas-to-contribute",
-	// 			icon: () => <HandHelping className="w-4 h-4 text-current" />,
-	// 		},
-	// 		// {
-	// 		// 	title: "Database Adapters",
-	// 		// 	href: "/docs/contribute/database-adapters",
-	// 		// 	icon: () => <Plug className="w-4 h-4 text-current" />,
-	// 		// },
-	// 		{
-	// 			title: "Testing",
-	// 			href: "/docs/contribute/testing",
-	// 			icon: () => <FlaskConical className="w-4 h-4 text-current" />,
-	// 		},
-	// 		{
-	// 			title: "Documenting",
-	// 			href: "/docs/contribute/documenting",
-	// 			icon: () => <NotebookPen className="w-4 h-4 text-current" />,
-	// 		},
-	// 		{
-	// 			title: "Security Issues",
-	// 			href: "/docs/contribute/security-issues",
-	// 			icon: () => <ShieldCheck className="w-4 h-4 text-current" />,
-	// 		},
-	// 	],
-	// 	},
 	{
 		Icon: () => <ChartNoAxesColumn className="w-5 h-5" />,
 		list: [
@@ -221,9 +182,9 @@ export const contents: Content[] = [
 				title: "Performance Comparison",
 			},
 			{
-				href: "/benchmarks/comprehensive-output",
+				href: "/benchmarks/full-benchmarks",
 				icon: () => <Activity className="w-4 h-4 text-muted-foreground" />,
-				title: "Comprehensive Benchmarks",
+				title: "Full Benchmarks",
 			},
 		],
 		title: "Benchmarks",

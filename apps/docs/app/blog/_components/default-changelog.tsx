@@ -1,5 +1,4 @@
 import { betterFetch } from "@better-fetch/fetch";
-import { DiscordLogoIcon } from "@radix-ui/react-icons";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import Link from "next/link";
 import { useId } from "react";
@@ -23,7 +22,7 @@ const ChangelogPage = async () => {
 			prerelease: boolean;
 			published_at: string;
 		}[]
-	>("https://api.github.com/repos/better-auth/better-auth/releases");
+	>("https://api.github.com/repos/cjkihl/datezone/releases");
 
 	const messages = releases
 		?.filter((release) => !release.prerelease)

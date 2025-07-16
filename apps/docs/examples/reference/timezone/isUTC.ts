@@ -1,4 +1,5 @@
-import { isUTC } from "datezone";
+import { isUTC, type UTCTimeZone } from "datezone";
 
-const _result = isUTC("UTC");
-// result is true
+const timezone: UTCTimeZone = "Africa/Dakar";
+const result = isUTC(timezone);
+console.log(result); // true

@@ -41,7 +41,7 @@ export default async function Page({
 			editOnGithub={{
 				owner: "cjkihl",
 				path: `/docs/content/docs/${page.file.path}`,
-				repo: "datezoe",
+				repo: "datezone",
 				sha: "main",
 			}}
 			footer={{

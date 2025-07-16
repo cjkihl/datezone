@@ -1,33 +1,23 @@
-import { subSeconds } from "datezone";
+import { subSeconds, toISOString } from "datezone";
 
-// Current timestamp
-const now = Date.now();
-
-// Subtract seconds from timestamp
-console.log("Subtracting seconds from timestamp:");
+const ts = 1700000000000; // 2023-11-14T22:13:20.000Z
 
 // Subtract positive seconds
-const fortyFiveSecondsAgo = subSeconds(now, 45);
-console.log(`Now: ${new Date(now).toISOString()}`);
-console.log(`45 seconds ago: ${new Date(fortyFiveSecondsAgo).toISOString()}`);
+const fortyFiveSecondsAgo = subSeconds(ts, 45);
+console.log(fortyFiveSecondsAgo, toISOString(fortyFiveSecondsAgo, "UTC")); // 1699999955000 (2023-11-14T22:12:35.000Z)
 
 // Subtract negative seconds (adds)
-const inSixtySeconds = subSeconds(now, -60);
-console.log(
-	`Subtracting -60 seconds (adds 60): ${new Date(inSixtySeconds).toISOString()}`,
-);
+const inSixtySeconds = subSeconds(ts, -60);
+console.log(inSixtySeconds, toISOString(inSixtySeconds, "UTC")); // 1700000060000 (2023-11-14T22:14:20.000Z)
 
 // Subtract many seconds
-const oneHourAgo = subSeconds(now, 3600);
-console.log(`3600 seconds ago (1 hour): ${new Date(oneHourAgo).toISOString()}`);
+const oneHourAgo = subSeconds(ts, 3600);
+console.log(oneHourAgo, toISOString(oneHourAgo, "UTC")); // 1699996400000 (2023-11-14T21:13:20.000Z)
 
 // Example with specific timestamp
 const specificTime = new Date("2023-12-25T15:30:00Z").getTime();
-console.log("\nSpecific time examples:");
-console.log(`Base: ${new Date(specificTime).toISOString()}`);
-console.log(
-	`-15 seconds: ${new Date(subSeconds(specificTime, 15)).toISOString()}`,
-);
-console.log(
-	`-300 seconds: ${new Date(subSeconds(specificTime, 300)).toISOString()}`,
-);
+const minus15 = subSeconds(specificTime, 15);
+const minus300 = subSeconds(specificTime, 300);
+
+console.log(minus15, toISOString(minus15, "UTC")); // 1703518195000 (2023-12-25T15:29:45.000Z)
+console.log(minus300, toISOString(minus300, "UTC")); // 1703517910000 (2023-12-25T15:25:10.000Z)

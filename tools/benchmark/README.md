@@ -1,6 +1,6 @@
 # 🚀 Datezone Benchmark Suite
 
-Beautiful performance comparisons between Datezone and Date-fns with clean, readable reports.
+Comprehensive, fair, and readable performance comparisons between Datezone and Date-fns (with timezone support).
 
 ## Quick Start
 
@@ -8,37 +8,54 @@ Generate a beautiful comparison report:
 
 ```bash
 # From workspace root
-bun run bench:comprehensive   # Step 1: Run benchmarks (outputs JSON)
-bun run bench:report         # Step 2: Format report (outputs markdown)
+bun run bench:comprehensive --json   # Step 1: Run all benchmarks, output JSON
+bun run tools/benchmark/create-comparison-report.ts   # Step 2: Generate markdown report
+```
 
-# From tools/benchmark directory  
-bun run bench:comprehensive
-bun run bench:report
+## 🏃 Benchmark Runner (`run.ts`)
+
+- Finds all `*.bench.ts` files in `packages/datezone/`.
+- Runs each benchmark serially using Bun.
+- **Arguments:**
+  - `--json` — Output results as JSON (for report generation)
+  - `--filter <names>` or `-F <names>` — Run only specific benchmarks (comma-separated, e.g. `day,month`)
+
+**Examples:**
+```bash
+bun run bench:comprehensive --json
+bun run bench:comprehensive --filter day,month
 ```
 
 ## 🏆 Available Commands
 
-| Command | Description | Output Format |
-|---------|-------------|---------------|
-| `bun run bench:comprehensive` | Run all benchmarks, output JSON | `output/output.json` |
-| `bun run bench:report` | 🌟 **Recommended** - Format comparison | Beautiful markdown tables |
+| Command | Description | Output |
+|---------|-------------|--------|
+| `bun run bench:comprehensive [--json] [--filter <names>]` | Run all (or filtered) benchmarks, optionally outputting JSON | `output/output.json` (if `--json`)
+| `bun run bench:report` | Generate the main comparison report (pretty tables) | `reports/comparison-report.md` |
+| `bun run tools/benchmark/create-comparison-report.ts` | (Alternative) Generate the comparison report from JSON | `reports/comparison-report.md` |
+| `bun run tools/benchmark/create-full-report.ts` | Aggregate all raw markdown benchmark reports | `reports/full-benchmarks.md` |
 | `bun run bench:clean` | Clean all output and report files | - |
+| `bun run bench` | Datezone-only microbenchmarks (internal, not comparison) | - |
+| `bun run quick` | Quick comparison run (not comprehensive) | - |
 
 ## 📁 Output Files
 
-- `output/output.json` - Raw Mitata JSON output (from benchmarks)
-- `reports/comparison-report.md` - Formatted markdown report
+- `output/output.json` — Raw Mitata JSON output (from `--json` run)
+- `reports/comparison-report.md` — Formatted markdown comparison report
+- `reports/full-benchmarks.md` — All raw benchmark markdowns, consolidated
 
 ## 🛠️ How It Works
 
 1. **Run Benchmarks:**
-   - `bun run bench:comprehensive`
-   - This runs all benchmarks and writes the results as JSON to `output/output.json` using Mitata's `print` option.
-2. **Format the Report:**
-   - `bun run bench:report`
-   - This reads the JSON output and generates a markdown report in `reports/comparison-report.md`.
-3. **View the Report:**
-   - Open `reports/comparison-report.md` in your editor or markdown viewer.
+   - `bun run bench:comprehensive --json`
+   - Runs all benchmarks and writes results as JSON to `output/output.json` (using Mitata's `print` option).
+   - Use `--filter` to run a subset.
+2. **Generate Comparison Report:**
+   - `bun run tools/benchmark/create-comparison-report.ts`
+   - Reads the JSON output and generates a markdown report in `reports/comparison-report.md`.
+3. **Generate Full Raw Report:**
+   - `bun run tools/benchmark/create-full-report.ts`
+   - Aggregates all raw markdown benchmark reports from `packages/datezone/.bench/*.md` into `reports/full-benchmarks.md`.
 4. **Clean Outputs:**
    - `bun run bench:clean`
    - Removes all files in `output/` and `reports/`.
@@ -50,6 +67,7 @@ bun run bench:report
 - ✅ **Datezone leads** (10-25% faster)
 - 🤝 **Close match** (<10% difference)
 - ⚠️ **Date-fns leads** (10-25% faster)
+- 🐌 **Date-fns wins** (>25% faster)
 - 🔥 **Datezone only** (no equivalent)
 
 ## 🔧 Technical Details
@@ -58,22 +76,23 @@ bun run bench:report
 - **Month/day/time manipulations**
 - **Formatting and parsing**
 - **Unique Datezone utilities**
-- **Datezone**: Built-in timeZone support
-- **Date-fns v4**: With `@date-fns/tz` package
-- [Mitata](https://github.com/evanwashere/mitata) - High-precision JavaScript benchmarking
+- **Datezone:** Built-in timeZone support
+- **Date-fns v4:** With `@date-fns/tz` package
+- [Mitata](https://github.com/evanwashere/mitata) — High-precision JavaScript benchmarking
 
-## 🚧 Current Status
+## 🛠️ How to Regenerate Reports
 
-- The workflow now uses Mitata's `print` option to write JSON directly to `output/output.json`.
-- The formatter reads this file and generates a markdown report.
-- No more parsing stdout or filtering preamble text.
+### Comparison Report
+```bash
+bun run bench:comprehensive --json
+bun run tools/benchmark/create-comparison-report.ts
+```
 
-## Optional Scripts
-
-- `bun run bench` — Runs Datezone-only microbenchmarks (for internal performance testing, not comparison)
-- `bun run quick` — Runs a quick comparison benchmark (less comprehensive, for fast feedback)
-
-These are not required for the main workflow, but can be useful for development or profiling.
+### Full Raw Report
+```bash
+bun run bench:comprehensive
+bun run tools/benchmark/create-full-report.ts
+```
 
 ---
 

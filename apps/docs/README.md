@@ -78,7 +78,7 @@ Example usage in MDX:
 ```mdx
 import { CodeExample } from '@/components/code-example';
 
-<CodeExample file="basic/formatting.ts" title="Basic Formatting" />
+<CodeExample file="basic/formatting.ts" name="Basic Formatting" />
 ```
 
 ## 🚀 Development
@@ -165,11 +165,11 @@ Description of return value and type.
 
 ## Examples
 
-<CodeExample file="reference/function-name/basic-usage.ts" title="Basic Usage" />
+<CodeExample file="reference/function-name/basic-usage.ts" name="Basic Usage" />
 
 ## Edge Cases
 
-<CodeExample file="reference/function-name/edge-cases.ts" title="Edge Cases" />
+<CodeExample file="reference/function-name/edge-cases.ts" name="Edge Cases" />
 ```
 
 ## 🔧 Configuration

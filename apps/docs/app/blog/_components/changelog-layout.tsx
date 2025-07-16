@@ -1,4 +1,3 @@
-import { DiscordLogoIcon } from "@radix-ui/react-icons";
 import clsx from "clsx";
 import Link from "next/link";
 import { useId } from "react";
@@ -62,17 +61,10 @@ export function Intro() {
 				</IconLink>
 				<IconLink
 					className="flex-none text-gray-600 dark:text-gray-300"
-					href="https://github.com/better-auth/better-auth"
+					href="https://github.com/cjkihl/datezone"
 					icon={GitHubIcon}
 				>
 					GitHub
-				</IconLink>
-				<IconLink
-					className="flex-none text-gray-600 dark:text-gray-300"
-					href="https://discord.com/better-auth"
-					icon={DiscordLogoIcon}
-				>
-					Community
 				</IconLink>
 			</div>
 		</>

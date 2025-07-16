@@ -1,3 +1,15 @@
+// ------------------------------
+// 🛠️ How to Regenerate This Report
+//
+// To regenerate the comparison benchmark report, run:
+//
+// ```bash
+// bun run bench --json
+// bun run tools/benchmark/create-comparison-report.ts
+// ```
+//
+// This will update the markdown report in tools/benchmark/reports/comparison-report.md
+// ------------------------------
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -334,8 +346,14 @@ function generateCreativeMarkdown(rows: ComparisonRow[]): string {
 	md +=
 		"### Test Categories\n- **Local:** Standard local time operations\n- **UTC:** Optimized UTC timeZone operations\n- **Non-DST:** Fixed offset timeZones (fastest timeZone path)\n- **DST:** Complex DST-aware timeZone operations\n\n";
 	md +=
-		"### Notes\n- Results may vary based on system specifications and load\n- Benchmarks focus on equivalent functionality where available\n- Some operations are unique to Datezone (timeZone utilities)\n- All operations tested with timeZone awareness for fair comparison\n- Non-DST timeZones should show the best performance for timeZone-aware operations\n\n---\n\n*To regenerate:*\n```bash\nbun run bench --json && bun run bench-report\n```\n\n";
-
+		"### Notes\n- Results may vary based on system specifications and load\n- Benchmarks focus on equivalent functionality where available\n- Some operations are unique to Datezone (timeZone utilities)\n- All operations tested with timeZone awareness for fair comparison\n- Non-DST timeZones should show the best performance for timeZone-aware operations\n\n---\n\n";
+	md += "## 🛠️ How to Regenerate This Report\n\n";
+	md += "To regenerate this comparison report, run:\n\n";
+	md += "```bash\n";
+	md += "bun run bench --json\n";
+	md += "bun run tools/benchmark/create-comparison-report.ts\n";
+	md += "```\n\n";
+	md += "This will update \`tools/benchmark/reports/comparison-report.md\`.\n";
 	return md;
 }
 

@@ -64,7 +64,7 @@ export function startOfWeek(
  * @param month - The month (1-12).
  * @param day - The day (1-31).
  * @param weekStartsOn - The day of the week to start the week on.
- * @param timeZone - The time zone.
+ * @param timeZone - The time-zone.
  * @returns The timestamp for the start of the week.
  * @see https://datezone.dev/docs/reference/week#startOfWeekBase
  */
@@ -114,7 +114,7 @@ export function endOfWeek(
  * @param month - The month (1-12).
  * @param day - The day (1-31).
  * @param weekStartsOn - The day of the week to start the week on.
- * @param timeZone - The time zone.
+ * @param timeZone - The time-zone.
  * @returns The timestamp for the end of the week.
  * @see https://datezone.dev/docs/reference/week#endOfWeekBase
  */
@@ -162,7 +162,7 @@ export function addWeeks(
  * @param month - The month (1-12).
  * @param day - The day (1-31).
  * @param amount - The number of weeks to add.
- * @param timeZone: - The time zone.
+ * @param timeZone: - The time-zone.
  * @returns The timestamp for the given date plus the given number of weeks.
  * @see https://datezone.dev/docs/reference/week#addWeeksBase
  */
@@ -222,7 +222,7 @@ export function weeksInMonth(
  * @param year - The year.
  * @param month - The month (1-12).
  * @param weekStartsOn - The day of the week to start the week on.
- * @param tz - The time zone.
+ * @param tz - The time-zone.
  * @returns The number of weeks in the month.
  * @see https://datezone.dev/docs/reference/week#weeksInMonthBase
  */

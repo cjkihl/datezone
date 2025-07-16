@@ -21,13 +21,13 @@ Read more about this in [Why NOT to use Date](/docs/guides/why-not-to-use-date).
 <CodeExample tabs={[{ name: "Example 1", file: "guides/why-not-to-use-date/example-1.ts" }]} />
 
 <Callout type="info">
-**User experience tip**: If the user have not selected Country or Timezone in our app, default to the browsers local time zone, but never rely on it. This is how most calendar applications like Outlook handle time zone selection.
+**User experience tip**: If the user have not selected Country or Timezone in our app, default to the browsers local time-zone, but never rely on it. This is how most calendar applications like Outlook handle time-zone selection.
 </Callout>
 
 ### 2. Store as Timestamps but Display with Calendar Dates
 
 Timestamps are the perfect storage for date and time as they are timezone agnostic performant and serializable. 
-Use time zone aware calendar library like `Datezone` when you want to display and calculate calendar dates.
+Use time-zone aware calendar library like `Datezone` when you want to display and calculate calendar dates.
 
 Read more about why you should use timestamps in [Why use Timestamps](/docs/guides/why-use-timestamps).
 
@@ -113,11 +113,11 @@ When using an API, always use timestamps or ISO strings for dates.
 
 Following these best practices will help you build robust, maintainable applications with reliable date and time handling:
 
-1. **Always specify time zones explicitly**
-2. **Store timestamps, display with timeZone context**
+1. **Always specify time-zones explicitly**
+2. **Store timestamps, display with time-zone context**
 3. **Never use arithmetic for calendar operations**
 4. **Store as TIMESTAMP or BIGINT in Database**
 5. **In API's use Timestamps or ISO Strings**
 
-These practices, combined with `datezone`'s time zone-aware calendar functions, will eliminate the vast majority of date-related bugs in your applications.
+These practices, combined with `datezone`'s time-zone-aware calendar functions, will eliminate the vast majority of date-related bugs in your applications.
 

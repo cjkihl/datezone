@@ -1,5 +1,6 @@
-import { type DSTTimeZone, isDST } from "datezone";
+import type { DSTTimeZone } from "datezone";
 
-const timezone: DSTTimeZone = "America/New_York";
-const _result = isDST(timezone);
-// result is true
+const _timezone: DSTTimeZone = "America/New_York";
+
+// @ts-expect-error
+const _nonDstTimeZone: DSTTimeZone = "Asia/Tokyo";

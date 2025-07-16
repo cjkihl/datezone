@@ -6,35 +6,35 @@ title: Timezone
 
 Union type listing all IANA zone names that have a fixed **UTC±00:00** offset (no DST).
 
-<CodeExample file="reference/timezone/UTCTimeZone.ts" title="UTCTimeZone" />
+<CodeExample file="reference/timezone/UTCTimeZone.ts" name="UTCTimeZone" />
 
 ## `DSTTimeZone`
 
 Union type listing IANA zones that observe **Daylight Saving Time** and therefore change their offset during the year.
 
-<CodeExample file="reference/timezone/DSTTimeZone.ts" title="DSTTimeZone" />
+<CodeExample file="reference/timezone/DSTTimeZone.ts" name="DSTTimeZone" />
 
-## `OtherTimeZone`
+## `NoDSTTimeZone`
 
-Union type for every IANA zone that is neither purely UTC nor uses DST (fixed non-zero offset).
+Union type for every IANA zone that is not a DST time-zone.
 
-<CodeExample file="reference/timezone/OtherTimeZone.ts" title="OtherTimeZone" />
+<CodeExample file="reference/timezone/NoDSTTimeZone.ts" name="NoDSTTimeZone" />
 
 ## `TimeZone`
 
-Combined union of `UTCTimeZone | DSTTimeZone | OtherTimeZone`; represents **any** valid time-zone string accepted by Datezone.
+All IANA time-zones; represents **any** valid time-zone string accepted by Datezone.
 
-<CodeExample file="reference/timezone/TimeZone.ts" title="TimeZone" />
+<CodeExample file="reference/timezone/TimeZone.ts" name="TimeZone" />
 
 ## `isUTC`
 
-Checks if a timeZone is UTC.
+Checks if a time-zone is UTC.
 
-<CodeExample file="reference/timezone/isUTC.ts" title="isUTC" />
+<CodeExample file="reference/timezone/isUTC.ts" name="isUTC" />
 
 ## `isDST`
 
-Checks if a timeZone is a DST timeZone. (DST = Daylight Saving Time)
-If the timeZone do not have DST we can do simple arithmetic to get the correct time.
+Checks if a time-zone is a DST time-zone. (DST = Daylight Saving Time)
+If the time-zone do not have DST we can do simple arithmetic to get the correct time.
 
-<CodeExample file="reference/timezone/isDST.ts" title="isDST" />
+<CodeExample file="reference/timezone/isDST.ts" name="isDST" />

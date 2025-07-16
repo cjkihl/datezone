@@ -1,5 +1,5 @@
-import { startOfWeek, WeekStartsOn } from "datezone";
+import { startOfWeek, toISOString, WeekStartsOn } from "datezone";
 
-const timestamp = 1720612800000; // 2024-07-10T12:00:00.000Z
-const _start = startOfWeek(timestamp, "America/New_York", WeekStartsOn.MONDAY);
-// start is 1720411200000 which is 2024-07-08T04:00:00.000Z
+const timestamp = Date.UTC(2024, 6, 10, 12, 0, 0); // 2024-07-10T12:00:00.000Z
+const start = startOfWeek(timestamp, "America/New_York", WeekStartsOn.MONDAY);
+console.log(start, toISOString(start, "UTC")); // 1720411200000 (2024-07-08T04:00:00.000Z)

@@ -4,10 +4,10 @@ import { addDays, format } from "date-fns";
 
 const date = Date.UTC(2024, 5, 1, 8, 0, 0, 0); // 2024-06-01 08:00:00 UTC
 
-// Creates a Date Fns TZDate instance for the Tokio time zone
+// Creates a Date Fns TZDate instance for the Tokio time-zone
 const tzDate = new TZDate(date, "Asia/Tokyo");
 
-// Adds 5 days in the Tokio time zone
+// Adds 5 days in the Tokio time-zone
 const addedDays = addDays(tzDate, 5);
 
 // Formats the future date in the Europe/Stockholm timeZone

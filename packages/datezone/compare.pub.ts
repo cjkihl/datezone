@@ -2,29 +2,13 @@ import { timestampToCalendar } from "./calendar.pub.js";
 import type { TimeZone } from "./index.pub.js";
 import { dayOfWeek, startOfDay } from "./index.pub.js";
 
-// Type and helper function for other modules that still use OptionsOrTimestamp
-export type OptionsOrTimestamp =
-	| { year: number; month: number; day: number }
-	| number;
-
-/**
- * Checks if today.
- *
- * @param timeZone - The time zone.
- * @returns The timestamp for the start of today.
- * @see https://datezone.dev/docs/reference/compare#isToday
- */
-function startOfToday(timeZone: TimeZone): number {
-	return startOfDay(Date.now(), timeZone);
-}
-
 /**
  * Checks if today.
  *
  * @see https://datezone.dev/docs/reference/compare#isToday
  */
 export function isToday(ts: number, timeZone: TimeZone): boolean {
-	const todayStart = startOfToday(timeZone);
+	const todayStart = startOfDay(Date.now(), timeZone);
 	return ts >= todayStart && ts < todayStart + 86_400_000;
 }
 
@@ -34,7 +18,7 @@ export function isToday(ts: number, timeZone: TimeZone): boolean {
  * @see https://datezone.dev/docs/reference/compare#isTomorrow
  */
 export function isTomorrow(ts: number, timeZone: TimeZone): boolean {
-	const todayStart = startOfToday(timeZone);
+	const todayStart = startOfDay(Date.now(), timeZone);
 	const tomorrowStart = todayStart + 86_400_000; // Add one day in milliseconds
 	const dateStart = startOfDay(ts, timeZone);
 	return tomorrowStart === dateStart;
@@ -46,7 +30,7 @@ export function isTomorrow(ts: number, timeZone: TimeZone): boolean {
  * @see https://datezone.dev/docs/reference/compare#isYesterday
  */
 export function isYesterday(ts: number, timeZone: TimeZone): boolean {
-	const todayStart = startOfToday(timeZone);
+	const todayStart = startOfDay(Date.now(), timeZone);
 	const yesterdayStart = todayStart - 86_400_000; // Subtract one day in milliseconds
 	const dateStart = startOfDay(ts, timeZone);
 	return yesterdayStart === dateStart;

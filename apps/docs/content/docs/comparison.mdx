@@ -7,37 +7,9 @@ description: Why Datezone outperforms other date libraries in speed, bundle size
 
 > **TL;DR:** Datezone dominates **85%** of all benchmark cases with **up to&nbsp;4,200,000% performance gains** in real-world scenarios, has **zero runtime dependencies**, and ships with **first-class, native time-zone support**.
 
-## 🏆 Performance Dominance
+See our [Comparison Benchmarks](/benchmarks/comparison-report) for more details.
 
-Based on comprehensive benchmarks against date-fns v4 with timeZone support:
-
-| **Metric** | **Result** |
-|------------|------------|
-| **Datezone wins** | **85.5%** of all comparisons |
-| **Performance gains** | Up to **+4,200,000%** faster |
-| **Bundle impact** | **Competitive but varies by use case** |
-| **Dependencies** | **Zero** vs competitors' dozens |
-
-## 📊 Head-to-Head Performance
-
-### Common Operations (ops/sec)
-
-| Operation | **Datezone** | date-fns | **Performance Gain** |
-|-----------|--------------|----------|---------------------|
-| `addHours` | **4,714,600,000** | 112,000 | 🚀 **+4,210,527%** |
-| `addDays` | **62,300,000** | 117,900 | 🚀 **+52,783%** |
-| `dayOfYear` | **8,600,000** | 22,400 | 🚀 **+38,548%** |
-| `format` | **513,000** | 67,400 | 🚀 **+661%** |
-| `startOfYear` | **7,300,000** | 2,700,000 | ⚡ **+170%** |
-
-### Timezone Operations (where others struggle)
-
-| Operation | **Datezone** | date-fns + tz | **Performance Gain** |
-|-----------|--------------|---------------|---------------------|
-| `addHours` (UTC) | **4,936,500,000** | 159,800 | 🚀 **+3,089,988%** |
-| `addDays` (UTC) | **3,078,100,000** | 141,200 | 🚀 **+2,180,245%** |
-| `startOfDay` (UTC) | **6,800,000** | 144,200 | 🚀 **+4,618%** |
-| `format` (DST)` | **513,000** | 67,400 | 🚀 **+661%** |
+For a full benchmark report, see our [Benchmarks](/benchmarks/comparison-report) page.
 
 ## 🆚 Library Comparison
 
@@ -45,7 +17,7 @@ Based on comprehensive benchmarks against date-fns v4 with timeZone support:
 
 | Feature | **Datezone** | date-fns | Luxon | Moment.js |
 |---------|--------------|----------|-------|-----------|
-| **Bundle Size** | 🟢 **33.76KB** (7.11KB gzipped) | 🟡 77.21KB + 9.26KB for timeZone = 86.47KB (20.73KB gzipped) | 🟡 80.3KB (23.56KB gzipped) | 🔴 294.89KB (73.13KB gzipped) |
+| **Bundle Size** | 🟢 **33.76KB** (7.11KB gzipped) | 🟡 77.21KB + 9.26KB for time-zone = 86.47KB (20.73KB gzipped) | 🟡 80.3KB (23.56KB gzipped) | 🔴 294.89KB (73.13KB gzipped) |
 | **Timezone Support** | 🟢 **Built-in** | 🟡 External package | 🟢 Built-in | 🟡 External package |
 | **TypeScript** | 🟢 **100% TypeScript** | 🟡 Great | 🟡 Good | 🟡 Community |
 | **Performance** | 🟢 **Fastest** | 🟡 Moderate | 🟡 Slower | 🔴 Slowest |
@@ -61,7 +33,7 @@ Based on comprehensive benchmarks against date-fns v4 with timeZone support:
 - **Easier to serialize and send over HTTP** with timestamp-based operations
 
 ### 🚀 **Blazing Fast Performance**
-- **18,000%+ faster** in timeZone operations
+- **18,000%+ faster** in time-zone operations
 - **45,000%+ faster** for date arithmetic  
 - **No performance regression** as your app scales
 
@@ -73,7 +45,7 @@ Based on comprehensive benchmarks against date-fns v4 with timeZone support:
 
 ### 🌍 **Native Timezone Excellence**
 - **Timezones built into every function** - no plugins required
-- **Native IANA timeZone support** with automatic DST handling
+- **Native IANA time-zone support** with automatic DST handling
 
 ## 📈 Real-World Impact
 
@@ -81,33 +53,17 @@ Based on comprehensive benchmarks against date-fns v4 with timeZone support:
 
 ## 🎁 Bonus Features
 
-- **Smart caching** - Automatic timeZone data optimization
+- **Smart caching** - Automatic time-zone data optimization
 - **DST transitions** - Handles edge cases automatically  
 - **Fast paths** - Ultra-optimized for common operations
-- **IANA compliance** - Always up-to-date timeZone data
+- **IANA compliance** - Always up-to-date time-zone data
 - **Battle-tested** - Used in production by thousands
 
 ## 🤔 When NOT to Choose Datezone
 
 We believe in honest comparisons. Consider alternatives if:
 
-- You need **i18n/localization** features (use date-fns)
-- You're working with **legacy code** that's deeply integrated with Moment.js
-- Your bundle size is **not a concern** and you prefer familiar APIs
-
----
-
-<div className="bg-blue-50 dark:bg-blue-950 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
-
-## 🚀 Ready to Switch?
-
-```bash
-bun add datezone    # or npm/yarn/pnpm
-```
-
-**Migration time:** ~15 minutes for most projects  
-**Performance boost:** Immediate  
-**Bundle savings:** Varies by alternative chosen  
-**Developer happiness:** Guaranteed ✨
-
-</div> 
+- You need specific **i18n/localization** features (use date-fns)
+- You prefer working with the `Date()` object
+- You don't have performance issues and prefer the API of other libraries
+- `datezone` is a new library. You prefer a more battle-tested alternative

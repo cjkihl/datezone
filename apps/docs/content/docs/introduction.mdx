@@ -5,7 +5,7 @@ description: Introduction to Datezone.
 
 
 
-Datezone is a lightweight, high-performance date and timeZone utility library for JavaScript and TypeScript. It provides a modern, ergonomic API for parsing, formatting, comparing, and manipulating dates and times, with full support for IANA timeZones and DST.
+Datezone is a lightweight, high-performance date and time-zone utility library for JavaScript and TypeScript. It provides a modern, ergonomic API for parsing, formatting, comparing, and manipulating dates and times, with full support for IANA time-zones and DST.
 
 <CodeExample tabs={[{ name: "datezone", file: "introduction/intro-datezone.ts" },{ name: "date-fns", file: "introduction/intro-date-fns.ts" }]} />
 
@@ -13,9 +13,9 @@ Datezone is a lightweight, high-performance date and timeZone utility library fo
 
 **Because Date & Time in Javascript is really hard!**
 
-JavaScript's native `Date` object has no timeZone support, and existing libraries require additional plugins like `@date-fns/tz` or `date-fns-tz` that add complexity with wrapper objects like `TZDate`.
+JavaScript's native `Date` object has no time-zone support, and existing libraries require additional plugins like `@date-fns/tz` or `date-fns-tz` that add complexity with wrapper objects like `TZDate`.
 
-Datezone is built from the ground up with timeZones and DST support natively integrated into every function, eliminating the need for plugins or special wrapper objects.
+Datezone is built from the ground up with time-zones and DST support natively integrated into every function, eliminating the need for plugins or special wrapper objects.
 
 ### 🏗️ **Modern Architecture**
 - **Built around the modern Intl API** and arithmetic calculations instead of relying on the Date object
@@ -24,8 +24,8 @@ Datezone is built from the ground up with timeZones and DST support natively int
 - **Easier to serialize and send over HTTP** with timestamp-based operations
 
 ### 🚀 **Blazing Fast Performance**
-- **18,000%+ faster** in timeZone operations
-- **45,000%+ faster** for date arithmetic  
+- **18,000%+ faster** in time-zone operations
+- **45,000%+ faster** for simple date arithmetic  
 - **No performance regression** as your app scales
 
 See [Comparison](/docs/comparison) and [Benchmarks](/benchmarks/comparison-report)
@@ -38,23 +38,23 @@ See [Comparison](/docs/comparison) and [Benchmarks](/benchmarks/comparison-repor
 
 ### 🌍 **Native Timezone Excellence**
 - **Timezones built into every function** - no plugins required
-- **Native IANA timeZone support** with automatic DST handling
+- **Native IANA time-zone support** with automatic DST handling
 
 <CodeExample tabs={[{ name: "Simple Timezone Usage", file: "basic/datezone-simple.ts" }]} />
 
 <Callout type="info">
-**Why do we need to specify a timeZone when adding days?**
+**Why do we need to specify a time-zone when adding days?**
 
 Isn't 1 day always 24 hours (86,400 seconds)?
 
 **Not always!** Due to Daylight Saving Time (DST) transitions, some days are 23 or 25 hours long.
 
-**Example:** In the `America/New_York` timeZone on March 11, 2023 at 1:00 PM EST:
+**Example:** In the `America/New_York` time-zone on March 11, 2023 at 1:00 PM EST:
 - Simply adding 24 hours would result in March 12, 2023 at 2:00 PM EDT
 - But the correct "1 day later" should be March 12, 2023 at 1:00 PM EDT
 - This is because March 12, 2023 was only 23 hours long due to the spring DST transition
 
-**Summary:** The length of a day varies depending on the timeZone and DST transitions, which is why timeZone-aware day arithmetic is essential for accurate date calculations.
+**Summary:** The length of a day varies depending on the time-zone and DST transitions, which is why time-zone-aware day arithmetic is essential for accurate date calculations.
 </Callout>
 
 ## Get Started

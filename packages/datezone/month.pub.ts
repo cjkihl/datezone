@@ -137,7 +137,7 @@ export function addMonths(
  * @param minute - The minute
  * @param second - The second
  * @param millisecond - The millisecond
- * @param months - Number of months to add (can be negative)
+ * @param monthsToAdd - Number of months to add (can be negative)
  * @param timeZone - The timeZone
  * @returns New timestamp with months added
  * @see https://datezone.dev/docs/reference/month#addMonthsBase
@@ -150,10 +150,10 @@ export function addMonthsBase(
 	minute: number,
 	second: number,
 	millisecond: number,
-	months: number,
+	monthsToAdd: number,
 	timeZone: TimeZone,
 ): number {
-	const [newYear, newMonth] = calculateYearMonth(year, month, months);
+	const [newYear, newMonth] = calculateYearMonth(year, month, monthsToAdd);
 	const maxDay = daysInMonthBase(newYear, newMonth);
 	const newDay = day > maxDay ? maxDay : day;
 

@@ -6,6 +6,7 @@ import { highlight } from "./shared";
 export type CodeExampleTab = {
 	name: string;
 	file: string;
+	runnable?: boolean;
 };
 
 type TabProps = {
@@ -15,23 +16,12 @@ type TabProps = {
 	tabs?: CodeExampleTab[];
 };
 
-type SingleFileProps = {
-	/**
-	 * Single file to display.
-	 */
-	file: string;
-	/**
-	 * Title for the single file tab.
-	 */
-	title?: string;
-};
-
 type CodeExampleProps = {
 	/**
 	 * Whether to show line numbers for the code block.
 	 */
 	showLineNumbers?: boolean;
-} & (TabProps | SingleFileProps);
+} & (TabProps | CodeExampleTab);
 
 export async function CodeExample({
 	showLineNumbers,
@@ -42,7 +32,13 @@ export async function CodeExample({
 		"tabs" in props
 			? props.tabs
 			: "file" in props
-				? [{ file: props.file, name: props.title ?? "Example" }]
+				? [
+						{
+							file: props.file,
+							name: props.name ?? "Example",
+							runnable: props.runnable ?? true,
+						},
+					]
 				: undefined;
 
 	if (!resolvedTabs || resolvedTabs.length === 0) {
@@ -76,6 +72,7 @@ export async function CodeExample({
 			return {
 				code,
 				name: tab.name,
+				title: tab.file,
 			};
 		}),
 	);

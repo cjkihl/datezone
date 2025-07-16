@@ -199,8 +199,10 @@ const DST_TIMEZONE_NAMES = [
 export type UTCTimeZone = (typeof UTC_TIMEZONE_NAMES)[number];
 export type DSTTimeZone = (typeof DST_TIMEZONE_NAMES)[number];
 
+export type NoDSTTimeZone = OtherTimeZone | UTCTimeZone;
+
 // Other timeZones (neither UTC nor DST) - defined as TypeScript union type only
-export type OtherTimeZone =
+type OtherTimeZone =
 	| "Africa/Addis_Ababa"
 	| "Africa/Algiers"
 	| "Africa/Asmara"

@@ -1,4 +1,14 @@
 import { addMonthsBase } from "datezone";
 
-const _newDate = addMonthsBase(2024, 7, 10, 12, 0, 0, 0, 2, "America/New_York");
-// newDate is 1725969600000 which is 2024-09-10T12:00:00.000Z
+const twoMonthsLater = addMonthsBase(
+	2024, // Year
+	7, // Month
+	10, // Day
+	12, // Hour
+	0, // Minute
+	0, // Second
+	0, // Millisecond
+	2, // Months to add
+	"America/New_York", // Time zone
+);
+console.log(twoMonthsLater); // 1725969600000 (2024-09-10T12:00:00.000Z)

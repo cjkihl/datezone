@@ -1,4 +1,3 @@
-import { DiscordLogoIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { formatBlogDate } from "@/lib/blog";
 import { blogs } from "@/lib/source";

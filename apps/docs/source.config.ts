@@ -13,7 +13,7 @@ export const docs = defineDocs({
 export const benchmarksCollection = defineCollections({
 	dir: "../../tools/benchmark/reports",
 	schema: z.object({
-		date: z.date().optional(),
+		date: z.string().optional(),
 		description: z.string().optional(),
 		title: z.string().optional(),
 	}),

@@ -1,10 +1,4 @@
-import { endOfWeekBase, WeekStartsOn } from "datezone";
+import { endOfWeekBase, toISOString, WeekStartsOn } from "datezone";
 
-const _end = endOfWeekBase(
-	2024,
-	7,
-	10,
-	WeekStartsOn.MONDAY,
-	"America/New_York",
-);
-// end is 1721015999999 which is 2024-07-15T03:59:59.999Z
+const end = endOfWeekBase(2024, 7, 10, WeekStartsOn.MONDAY, "America/New_York");
+console.log(end, toISOString(end, "UTC")); // 1721015999999 (2024-07-15T03:59:59.999Z)

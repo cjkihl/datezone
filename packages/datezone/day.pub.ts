@@ -10,7 +10,7 @@ import { isLeapYearBase } from "./year.pub.js";
  *
  * @param ts - The timestamp.
  * @param days - The number of days to add.
- * @param timeZone - The time zone.
+ * @param timeZone - The time-zone.
  * @returns The new timestamp.
  * @see https://datezone.dev/docs/reference/day#addDays
  */
@@ -58,7 +58,7 @@ export function addDays(
  *
  * @param ts - The timestamp.
  * @param days - The number of days to subtract.
- * @param timeZone - The time zone.
+ * @param timeZone - The time-zone.
  * @returns The new timestamp.
  * @see https://datezone.dev/docs/reference/day#subDays
  */
@@ -70,7 +70,7 @@ export function subDays(ts: number, days: number, timeZone: TimeZone | null) {
  * Start of day.
  *
  * @param ts - The timestamp.
- * @param timeZone - The time zone.
+ * @param timeZone - The time-zone.
  * @returns The timestamp for the start of the day.
  * @see https://datezone.dev/docs/reference/day#startOfDay
  */
@@ -121,7 +121,7 @@ export function startOfDay(ts: number, timeZone: TimeZone | null): number {
  * End of day.
  *
  * @param ts - The timestamp.
- * @param timeZone - The time zone.
+ * @param timeZone - The time-zone.
  * @returns The timestamp for the end of the day.
  * @see https://datezone.dev/docs/reference/day#endOfDay
  */
@@ -176,7 +176,7 @@ export function endOfDay(ts: number, timeZone: TimeZone | null): number {
  * Day of month.
  *
  * @param ts - The timestamp.
- * @param timeZone - The time zone.
+ * @param timeZone - The time-zone.
  * @returns The day of the month.
  * @see https://datezone.dev/docs/reference/day#dayOfMonth
  */
@@ -188,7 +188,7 @@ export function dayOfMonth(ts: number, timeZone: TimeZone | null): number {
  * Day of week.
  *
  * @param ts - The timestamp.
- * @param timeZone - The time zone.
+ * @param timeZone - The time-zone.
  * @returns The ISO day of the week.
  * @see https://datezone.dev/docs/reference/day#dayOfWeek
  */
@@ -269,7 +269,7 @@ export function dayOfWeekBase(
  * Day of year.
  *
  * @param ts - The timestamp.
- * @param timeZone - The time zone.
+ * @param timeZone - The time-zone.
  * @returns The day of the year.
  * @see https://datezone.dev/docs/reference/day#dayOfYear
  */

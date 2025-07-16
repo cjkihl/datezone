@@ -61,13 +61,13 @@ Humans think in calendar units: "March&nbsp;14 at 3 PM", not `1710436800000`. Wh
 
 Simple timestamp math works for seconds, minutes and hours, but beyond that you will run into issues with Daylight Saving Time (DST). Adding *24 × 60 × 60 × 1000* milliseconds will **usually** move you one day forward, but not across a DST transitions.
 
-<CodeExample title="Breaks during DST" file="guides/how-dst-works/at-200-am-est-clocks-spring-forward-to-300-am-edt.ts" />
+<CodeExample name="Breaks during DST" file="guides/how-dst-works/at-200-am-est-clocks-spring-forward-to-300-am-edt.ts" />
 
 Learn more about why DST makes date math tricky in: [How DST Works](/docs/guides/how-dst-works).
 
 ### 3. Higher-Level Calendar Operations
 
-Operations such as "add one month", "start of week", or "is the date a weekend" are **calendar concepts** and subjective to where the user is located. `datezone` offers a *time zone-aware* API on top of timestamps to cover all of these cases without sacrificing the benefits you gained from using numbers.
+Operations such as "add one month", "start of week", or "is the date a weekend" are **calendar concepts** and subjective to where the user is located. `datezone` offers a *time-zone-aware* API on top of timestamps to cover all of these cases without sacrificing the benefits you gained from using numbers.
 
 <Callout type="info">
 Datezone is designed as a *thin layer* above timestamps: use raw numbers for and performance, then use datezone whenever you have to think 'Calendar' like a human.
@@ -78,8 +78,8 @@ Datezone is designed as a *thin layer* above timestamps: use raw numbers for and
 Timestamps are the ideal way to handle dates and times in JavaScript applications. They're simple, efficient, predictable, and work seamlessly across environments.
 
 <Callout type="info">
-**Key benefits**: Timestamps eliminate timeZone ambiguity, serialization issues, mutation bugs, and testing problems while providing better performance and simpler code.
+**Key benefits**: Timestamps eliminate time-zone ambiguity, serialization issues, mutation bugs, and testing problems while providing better performance and simpler code.
 </Callout>
 
-Next, learn about [how DST affects your applications](/docs/guides/how-dst-works) and why time zone-aware date arithmetic is needed.
+Next, learn about [how DST affects your applications](/docs/guides/how-dst-works) and why time-zone-aware date arithmetic is needed.
 

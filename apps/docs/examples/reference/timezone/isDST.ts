@@ -1,4 +1,5 @@
-import { isDST } from "datezone";
+import { type DSTTimeZone, isDST } from "datezone";
 
-const _result = isDST("America/New_York");
-// result is true
+const timezone: DSTTimeZone = "Europe/Berlin";
+const result = isDST(timezone);
+console.log(result); // true

@@ -1,12 +1,7 @@
-import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
-import { File, Files, Folder } from "fumadocs-ui/components/files";
-import { Step, Steps } from "fumadocs-ui/components/steps";
-import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import defaultMdxComponents from "fumadocs-ui/mdx";
-import { DocsBody, DocsPage, DocsTitle } from "fumadocs-ui/page";
+import { DocsBody, DocsPage } from "fumadocs-ui/page";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AnimatePresence } from "@/components/ui/fade-in";
 import { benchmarks } from "@/lib/source";
 import { cn } from "@/lib/utils";
 
@@ -26,12 +21,6 @@ export default async function Page({
 
 	return (
 		<DocsPage
-			editOnGithub={{
-				owner: "cjkihl",
-				path: `/tools/benchmark/reports/${page.file.path}`,
-				repo: "datezoe",
-				sha: "main",
-			}}
 			footer={{
 				component: <div className="w-10 h-4" />,
 				enabled: true,
@@ -43,34 +32,10 @@ export default async function Page({
 			}}
 			toc={page.data.toc}
 		>
-			<DocsTitle>{page.data.title || "Benchmark Report"}</DocsTitle>
 			<DocsBody>
 				<MDX
 					components={{
 						...defaultMdxComponents,
-						Accordion,
-						Accordions,
-						AnimatePresence,
-						Callout: ({ children, ...props }) => (
-							<defaultMdxComponents.Callout
-								{...props}
-								className={cn(
-									props,
-									"bg-none rounded-none border-dashed border-border",
-									props.type === "info" && "border-l-blue-500/50",
-									props.type === "warn" && "border-l-amber-700/50",
-									props.type === "error" && "border-l-red-500/50",
-								)}
-							>
-								{children}
-							</defaultMdxComponents.Callout>
-						),
-						File,
-						Files,
-						Folder,
-						iframe: (props: React.ComponentProps<"iframe">) => (
-							<iframe {...props} className="w-full h-[500px]" />
-						),
 						Link: ({
 							className,
 							...props
@@ -83,10 +48,6 @@ export default async function Page({
 								{...props}
 							/>
 						),
-						Step,
-						Steps,
-						Tab,
-						Tabs,
 					}}
 				/>
 			</DocsBody>

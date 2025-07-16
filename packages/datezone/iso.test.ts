@@ -46,9 +46,16 @@ describe("toISOString", () => {
 		// Pre-1970 timestamp (1965-01-01T00:00:00Z)
 		const tsNegative = Date.UTC(1965, 0, 1, 0, 0, 0, 0);
 		const iso = toISOString(tsNegative, "America/New_York");
-		// The function should still return a valid ISO string and include the negative year prefix
-		expect(iso.startsWith("-")).toBe(true);
-		expect(iso.includes("T")).toBe(true);
+		// The function should return a valid ISO string with a positive year (AD)
+		expect(iso.startsWith("1964-")).toBe(true); // 1965-01-01 UTC is 1964-12-31 in NY
+		expect(iso).toMatch(/1964-12-31T.*/);
+	});
+
+	it("handles negative timestamps in DST zone (e.g., 1939, America/New_York)", () => {
+		const ts = new Date("1939-09-01T00:00:00Z").getTime();
+		const iso = toISOString(ts, "America/New_York");
+		expect(iso.startsWith("1939-")).toBe(true);
+		expect(iso).toMatch(/1939-08-31T.*/);
 	});
 });
 
