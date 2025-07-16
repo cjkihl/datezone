@@ -180,7 +180,7 @@ export function CodePreview({
 			return (
 				<motion.pre
 					animate={{ opacity: 1 }}
-					className="mt-4 w-full rounded-sm bg-stone-950 p-1 pb-4 font-mono text-xs text-stone-300 flex items-start gap-2"
+					className="mt-4 w-full text-stone-900 dark:text-stone-300 p-1 pb-4 font-mono text-xs flex items-start gap-2"
 					initial={{ opacity: 0 }}
 					layout
 				>
@@ -192,7 +192,7 @@ export function CodePreview({
 			return (
 				<motion.pre
 					animate={{ opacity: 1 }}
-					className="mt-4 w-full rounded-sm bg-stone-950 p-1 pb-4 font-mono text-xs text-stone-300 flex items-start gap-2"
+					className="mt-4 w-ful text-stone-900 dark:text-stone-300 p-1 pb-4 font-mono text-xs flex items-start gap-2"
 					initial={{ opacity: 0 }}
 					layout
 				>
