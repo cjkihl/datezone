@@ -1,5 +1,11 @@
 # datezone
 
+## 1.0.4
+
+### Patch Changes
+
+- a9aa0ab: bugfixes
+
 ## 1.0.3
 
 ### Patch Changes
