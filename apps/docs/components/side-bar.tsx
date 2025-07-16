@@ -3,36 +3,16 @@
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import { useSearchContext } from "fumadocs-ui/provider";
 import { ChevronDownIcon, Search } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import { AsideLink } from "@/components/ui/aside-link";
 import { cn } from "@/lib/utils";
-import { contents, examples } from "./sidebar-content";
+import { contents } from "./sidebar-content";
 import { Badge } from "./ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
 
 export default function ArticleLayout() {
 	const [currentOpen, setCurrentOpen] = useState<number>(0);
 
 	const { setOpenSearch } = useSearchContext();
-	const pathname = usePathname();
-
-	const getDefaultValue = useCallback(() => {
-		const defaultValue = contents.findIndex((item) =>
-			item.list.some((listItem) => listItem.href === pathname),
-		);
-		return defaultValue === -1 ? 0 : defaultValue;
-	}, [pathname]);
-
-	const [group, setGroup] = useState("docs");
-
-	useEffect(() => {
-		const grp = pathname.includes("examples") ? "examples" : "docs";
-		setGroup(grp);
-		setCurrentOpen(getDefaultValue());
-	}, [pathname, getDefaultValue]);
-
-	const cts = group === "docs" ? contents : examples;
 
 	return (
 		<div className={cn("fixed top-0")}>
@@ -43,7 +23,6 @@ export default function ArticleLayout() {
 				)}
 			>
 				<div>
-					<SidebarTab group={group} setGroup={setGroup} />
 					<button
 						className="flex w-full items-center gap-2 px-5 py-2.5 text-muted-foreground dark:bg-zinc-950"
 						onClick={() => {
@@ -58,7 +37,7 @@ export default function ArticleLayout() {
 						transition={{ bounce: 0, duration: 0.4, type: "spring" }}
 					>
 						<div className="flex flex-col">
-							{cts.map((item, index) => (
+							{contents.map((item, index) => (
 								<div key={item.title}>
 									<button
 										className="w-full hover:underline text-sm px-5 py-2.5 text-left flex items-center gap-2"
@@ -147,117 +126,5 @@ function NewBadge({ isSelected }: { isSelected?: boolean }) {
 				New
 			</Badge>
 		</div>
-	);
-}
-
-const tabs = [
-	{
-		description: "get started, concepts, and plugins",
-		icon: (
-			<svg
-				height="1.4em"
-				viewBox="0 0 24 24"
-				width="1.4em"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path
-					d="M4.727 2.733c.306-.308.734-.508 1.544-.618C7.105 2.002 8.209 2 9.793 2h4.414c1.584 0 2.688.002 3.522.115c.81.11 1.238.31 1.544.618c.305.308.504.74.613 1.557c.112.84.114 1.955.114 3.552V18H7.426c-1.084 0-1.462.006-1.753.068c-.513.11-.96.347-1.285.667c-.11.108-.164.161-.291.505A1.3 1.3 0 0 0 4 19.7V7.842c0-1.597.002-2.711.114-3.552c.109-.816.308-1.249.613-1.557"
-					fill="currentColor"
-					opacity=".5"
-				/>
-				<path
-					d="M20 18H7.426c-1.084 0-1.462.006-1.753.068c-.513.11-.96.347-1.285.667c-.11.108-.164.161-.291.505s-.107.489-.066.78l.022.15c.11.653.31.998.616 1.244c.307.246.737.407 1.55.494c.837.09 1.946.092 3.536.092h4.43c1.59 0 2.7-.001 3.536-.092c.813-.087 1.243-.248 1.55-.494c.2-.16.354-.362.467-.664H8a.75.75 0 0 1 0-1.5h11.975c.018-.363.023-.776.025-1.25M7.25 7A.75.75 0 0 1 8 6.25h8a.75.75 0 0 1 0 1.5H8A.75.75 0 0 1 7.25 7M8 9.75a.75.75 0 0 0 0 1.5h5a.75.75 0 0 0 0-1.5z"
-					fill="currentColor"
-				/>
-			</svg>
-		),
-		title: "Docs",
-		value: "docs",
-	},
-	{
-		description: "examples and guides",
-		icon: (
-			<svg
-				height="1.4em"
-				viewBox="0 0 24 24"
-				width="1.4em"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path
-					d="M12 2c4.714 0 7.071 0 8.535 1.464c1.08 1.08 1.364 2.647 1.439 5.286L22 9.5H2.026v-.75c.075-2.64.358-4.205 1.438-5.286C4.93 2 7.286 2 12 2"
-					fill="currentColor"
-					opacity=".5"
-				/>
-				<path
-					d="M13 6a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-3 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0M7 6a1 1 0 1 1-2 0a1 1 0 0 1 2 0"
-					fill="currentColor"
-				/>
-				<path
-					d="M2 12c0 4.714 0 7.071 1.464 8.535c1.01 1.01 2.446 1.324 4.786 1.421L9 22V9.5H2.026l-.023.75Q2 11.066 2 12"
-					fill="currentColor"
-					opacity=".7"
-				/>
-				<path
-					d="M22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22c-.819 0-2.316 0-3-.008V9.5h13l-.003.75Q22 11.066 22 12"
-					fill="currentColor"
-				/>
-			</svg>
-		),
-		title: "Examples",
-		value: "examples",
-	},
-];
-
-function SidebarTab({
-	group,
-	setGroup,
-}: {
-	group: string;
-	setGroup: (group: string) => void;
-}) {
-	const router = useRouter();
-	const selected = tabs.find((tab) => tab.value === group);
-
-	return (
-		<Select
-			onValueChange={(val) => {
-				setGroup(val);
-				if (val === "docs") {
-					router.push("/docs");
-				} else {
-					router.push("/docs/examples");
-				}
-			}}
-			value={group}
-		>
-			<SelectTrigger className="h-16 rounded-none px-5">
-				{selected ? (
-					<div className="flex flex-col gap-1 items-start">
-						<div className="flex items-center gap-1 -ml-0.5">
-							{selected.icon}
-							{selected.title}
-						</div>
-						<p className="text-xs text-muted-foreground">
-							{selected.description}
-						</p>
-					</div>
-				) : null}
-			</SelectTrigger>
-			<SelectContent>
-				{tabs.map((tab) => (
-					<SelectItem
-						className="h-12 flex flex-col items-start gap-1"
-						key={tab.value}
-						value={tab.value}
-					>
-						<div className="flex items-center gap-1">
-							{tab.icon}
-							{tab.title}
-						</div>
-						<p className="text-xs text-muted-foreground">{tab.description}</p>
-					</SelectItem>
-				))}
-			</SelectContent>
-		</Select>
 	);
 }

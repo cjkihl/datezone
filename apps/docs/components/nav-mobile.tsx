@@ -10,7 +10,7 @@ import {
 	AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import { contents, examples } from "./sidebar-content";
+import { contents } from "./sidebar-content";
 
 interface NavbarMobileContextProps {
 	isOpen: boolean;
@@ -146,12 +146,9 @@ function DocsNavBarContent() {
 	const pathname = usePathname();
 	const { toggleNavbar } = useNavbarMobile();
 	if (!pathname.startsWith("/docs")) return null;
-
-	const content = pathname.startsWith("/docs/examples") ? examples : contents;
-
 	return (
 		<>
-			{content.map((menu) => (
+			{contents.map((menu) => (
 				<Accordion collapsible key={menu.title} type="single">
 					<AccordionItem value={menu.title}>
 						<AccordionTrigger className="font-normal text-foreground">

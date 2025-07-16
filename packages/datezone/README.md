@@ -30,7 +30,7 @@
 
 ## 🚀 Why Datezone?
 
-- **Extreme Performance**: Up to **1,000x faster** than date-fns for timeZone operations ([see benchmarks](https://github.com/cjkihl/datezone/blob/main/tools/benchmark/reports/comparison-report.md))
+- **Extreme Performance**: Up to **1,000x faster** than date-fns for timeZone operations ([see benchmarks](https://datezone.dev/benchmarks/comparison-report))
 - **Faster by Design**: Uses timestamp math instead of creating `Date` objects, minimizing allocations and saving work for the garbage collector
 - **Timezone-First**: All functions accept an optional `timeZone` parameter
 - **Zero Unnecessary Objects**: Avoids creating `Date` objects unless needed
@@ -63,22 +63,28 @@ const formatted = format(now, "yyyy-MM-dd HH:mm:ss zzzz", { locale: "en", timeZo
 
 ## API Reference
 
-See [API docs](./README.md) for all exports and usage.
+See [Docs](https://datezone.dev/docs/introduction) for all exports and usage.
 
 ## Performance
 
-Latest benchmarks vs. date-fns:
-
 | Operation | Datezone | date-fns | Improvement |
 |-----------|----------|----------|-------------|
-| addDays (non-tz) | **170 ns** | 196 µs | **+115,033%** |
-| addDays (tz) | **3.95 ms** | 9.80 ms | **+148%** |
-| startOfMonth (tz) | **2.78 ms** | 12.65 ms | **+356%** |
-| endOfMonth (tz) | **2.38 ms** | 12.77 ms | **+436%** |
-| dayOfYear (tz) | **2.94 ms** | 13.31 ms | **+352%** |
-| format (tz) | **6.97 ms** | 14.82 ms | **+113%** |
+| addDays (DST) | **3.9M ops/sec** | 174.0K ops/sec | **+2150%** |
+| startOfDay (DST) | **2.3M ops/sec** | 186.5K ops/sec | **+1150%** |
+| endOfDay (DST) | **2.4M ops/sec** | 188.7K ops/sec | **+1158%** |
+| dayOfYear (DST) | **16.4M ops/sec** | 40.2K ops/sec | **+40630%** |
+| format (DST) | **911.4K ops/sec** | 114.6K ops/sec | **+695%** |
+| addMonths (DST) | **2.1M ops/sec** | 106.7K ops/sec | **+1833%** |
+| addWeeks (DST) | **2.0M ops/sec** | 178.0K ops/sec | **+1001%** |
+| addYears (DST) | **8.5M ops/sec** | 106.5K ops/sec | **+7868%** |
+| intervalToDuration (DST) | **2.5M ops/sec** | 11.5K ops/sec | **+21971%** |
 
-**[Full performance report →](https://github.com/cjkihl/datezone/blob/main/tools/benchmark/reports/comparison-report.md)**
+**Summary:**
+- Datezone wins: **77** operations (**87.5%**)  
+- date-fns wins: **5** operations (**5.7%**)  
+- Close matches: **6** operations (**6.8%**)
+
+See the [full performance report →](https://datezone.dev/benchmarks/comparison-report) for all details and methodology.
 
 ## Why Choose Datezone?
 
