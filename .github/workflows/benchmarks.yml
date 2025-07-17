@@ -57,8 +57,7 @@ jobs:
 
       - name: Commit Benchmark Results
         run: |
-          git add tools/benchmark/reports/
-          git add tools/benchmark/output/
+          git add -A
           if ! git diff --staged --quiet; then
             git commit -m "chore: update benchmark reports [skip ci]"
             git push origin bench
