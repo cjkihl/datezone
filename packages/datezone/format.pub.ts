@@ -1,7 +1,7 @@
-import { timestampToCalendar } from "../calendar.pub.js";
-import { getUTCtoTimezoneOffsetMinutes } from "../offset.pub.js";
-import { isDST, isUTC, type TimeZone } from "../timezone.pub.js";
-import { type DT, formatters } from "./formatters.js";
+import { timestampToCalendar } from "./calendar.pub.js";
+import { type DT, formatters } from "./formatters.pub.js";
+import { getUTCtoTimezoneOffsetMinutes } from "./offset.pub.js";
+import { isDST, isUTC, type TimeZone } from "./timezone.pub.js";
 
 type FormatOptions = {
 	locale?: string;
@@ -102,7 +102,7 @@ export function format(
 
 	const ctx = {
 		dt,
-		locale: options.locale,
+		locale: options.locale ?? "en-US",
 		timeZone: options.timeZone,
 	};
 
@@ -156,8 +156,6 @@ export function format(
 			result += formatter({
 				...ctx,
 				len: token.length,
-				locale: ctx.locale ?? "en-US",
-				timeZone: ctx.timeZone,
 			});
 			i += token.length;
 			continue;
@@ -177,5 +175,3 @@ export function format(
 
 	return result;
 }
-
-export { toISOString } from "../iso.pub.js";

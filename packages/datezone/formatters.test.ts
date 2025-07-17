@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
-import { formatters } from "../format/formatters";
-import type { TimeZone } from "../timezone.pub.js";
+import { formatters } from "./formatters.pub.js";
+import type { TimeZone } from "./timezone.pub.js";
 
 const baseDT = {
 	day: 1,

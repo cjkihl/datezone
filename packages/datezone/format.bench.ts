@@ -2,7 +2,7 @@ import { TZDate } from "@date-fns/tz";
 import * as fns from "date-fns";
 import { bench, do_not_optimize, group } from "mitata";
 import { runBenchmarks } from "./bench-util.js";
-import * as dz from "./format/index.pub.js";
+import * as dz from "./format.pub.js";
 import type { TimeZone } from "./timezone.pub.js";
 
 const testTimestamp = new Date("2024-06-15T15:45:30.123Z").getTime();

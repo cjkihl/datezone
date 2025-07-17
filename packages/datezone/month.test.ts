@@ -472,13 +472,15 @@ describe("getQuarter edge cases", () => {
 		const expected = [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4];
 		for (let m = 1; m <= 12; m++) {
 			const ts = new Date(2024, m - 1, 1).getTime();
-			expect(getQuarter(ts, null)).toBe(expected[m - 1]);
+			const exp = expected[m - 1] ?? 1;
+			expect(getQuarter(ts, null)).toBe(exp);
 		}
 	});
 	it("returns correct quarter for all months (base function)", () => {
 		const expected = [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4];
 		for (let m = 1; m <= 12; m++) {
-			expect(getQuarterBase(m)).toBe(expected[m - 1]);
+			const exp = expected[m - 1] ?? 1;
+			expect(getQuarterBase(m)).toBe(exp);
 		}
 	});
 

@@ -7,7 +7,6 @@ import {
 	Globe2Icon,
 	GlobeIcon,
 	LeafIcon,
-	Plus,
 	ZapIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";

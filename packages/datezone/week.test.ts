@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { formatToParts } from "./format-parts.pub.js";
-import type { TimeZone } from "./index.pub";
+import type { TimeZone } from "./timezone.pub.js";
 import {
 	addWeeks,
 	addWeeksBase,
@@ -32,9 +32,9 @@ describe("Week functions", () => {
 	describe("week", () => {
 		it("should return correct ISO week number for various dates", () => {
 			// Test with known ISO week numbers using base function
-			expect(weekBase(2023, 1, 1, "UTC")).toBe(52); // 2023-01-01 is week 52 of 2022
-			expect(weekBase(2023, 1, 2, "UTC")).toBe(1); // 2023-01-02 is week 1 of 2023
-			expect(weekBase(2023, 12, 31, "UTC")).toBe(52); // 2023-12-31 is week 52 of 2023
+			expect(weekBase(2023, 1, 1)).toBe(52); // 2023-01-01 is week 52 of 2022
+			expect(weekBase(2023, 1, 2)).toBe(1); // 2023-01-02 is week 1 of 2023
+			expect(weekBase(2023, 12, 31)).toBe(52); // 2023-12-31 is week 52 of 2023
 
 			// Test with timestamp input
 			const timestamp = Date.UTC(2023, 5, 15); // June 15, 2023
@@ -43,15 +43,15 @@ describe("Week functions", () => {
 
 		it("should handle timeZone-specific dates correctly", () => {
 			// Test DST transition dates using base function
-			expect(weekBase(2023, 3, 12, "America/New_York")).toBe(10); // DST starts in US
-			expect(weekBase(2023, 3, 12, "UTC")).toBe(10);
+			expect(weekBase(2023, 3, 12)).toBe(10); // DST starts in US
+			expect(weekBase(2023, 3, 12)).toBe(10);
 		});
 
 		it("should handle edge cases around year boundaries", () => {
 			// January 1st that belongs to previous year's week using base function
-			expect(weekBase(2018, 1, 1, "UTC")).toBe(1);
-			expect(weekBase(2019, 1, 1, "UTC")).toBe(1);
-			expect(weekBase(2021, 1, 1, "UTC")).toBe(53); // 2021-01-01 is week 53 of 2020
+			expect(weekBase(2018, 1, 1)).toBe(1);
+			expect(weekBase(2019, 1, 1)).toBe(1);
+			expect(weekBase(2021, 1, 1)).toBe(53); // 2021-01-01 is week 53 of 2020
 		});
 
 		it("defaults to local timeZone when timeZone is undefined", () => {
@@ -76,9 +76,9 @@ describe("Week functions", () => {
 	describe("getISOWeekYear", () => {
 		it("should return correct ISO week year", () => {
 			// Use base function for calendar parameters
-			expect(getISOWeekYearBase(2023, 1, 1, "UTC")).toBe(2022); // Belongs to 2022 ISO year
-			expect(getISOWeekYearBase(2023, 1, 2, "UTC")).toBe(2023); // Belongs to 2023 ISO year
-			expect(getISOWeekYearBase(2023, 12, 31, "UTC")).toBe(2023);
+			expect(getISOWeekYearBase(2023, 1, 1)).toBe(2022); // Belongs to 2022 ISO year
+			expect(getISOWeekYearBase(2023, 1, 2)).toBe(2023); // Belongs to 2023 ISO year
+			expect(getISOWeekYearBase(2023, 12, 31)).toBe(2023);
 		});
 
 		it("should handle timestamp input", () => {
@@ -88,9 +88,8 @@ describe("Week functions", () => {
 
 		it("should work with different timeZones", () => {
 			// Use base function for calendar parameters
-			expect(getISOWeekYearBase(2023, 1, 1, "UTC")).toBe(2022);
-			expect(getISOWeekYearBase(2023, 1, 1, "America/New_York")).toBe(2022);
-			expect(getISOWeekYearBase(2023, 1, 1, "Asia/Tokyo")).toBe(2022);
+			expect(getISOWeekYearBase(2023, 1, 1)).toBe(2022);
+			expect(getISOWeekYearBase(2023, 1, 1)).toBe(2022);
 		});
 
 		it("defaults to local timeZone when timeZone is undefined", () => {
@@ -881,16 +880,16 @@ describe("Week functions", () => {
 	describe("Base functions direct testing", () => {
 		it("should test weekBase directly", () => {
 			// Test specific edge cases with weekBase
-			expect(weekBase(2023, 1, 1, "UTC")).toBe(52); // Week 52 of 2022
-			expect(weekBase(2021, 1, 1, "UTC")).toBe(53); // Week 53 of 2020
-			expect(weekBase(2024, 12, 30, "UTC")).toBe(1); // Week 1 of 2025
+			expect(weekBase(2023, 1, 1)).toBe(52); // Week 52 of 2022
+			expect(weekBase(2021, 1, 1)).toBe(53); // Week 53 of 2020
+			expect(weekBase(2024, 12, 30)).toBe(1); // Week 1 of 2025
 		});
 
 		it("should test getISOWeekYearBase directly", () => {
 			// Test ISO week year edge cases
-			expect(getISOWeekYearBase(2023, 1, 1, "UTC")).toBe(2022);
-			expect(getISOWeekYearBase(2021, 1, 1, "UTC")).toBe(2020);
-			expect(getISOWeekYearBase(2024, 12, 30, "UTC")).toBe(2025);
+			expect(getISOWeekYearBase(2023, 1, 1)).toBe(2022);
+			expect(getISOWeekYearBase(2021, 1, 1)).toBe(2020);
+			expect(getISOWeekYearBase(2024, 12, 30)).toBe(2025);
 		});
 
 		it("should test startOfWeekBase with all WeekStartsOn values", () => {

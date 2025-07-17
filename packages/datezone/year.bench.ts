@@ -12,28 +12,28 @@ const dstTimezone: TimeZone = "America/New_York";
 
 group("Year - Local Time", () => {
 	bench("datezone: addYears (local)", () =>
-		do_not_optimize(dz.addYears(testTimestamp, 2, undefined)),
+		do_not_optimize(dz.addYears(testTimestamp, 2, null)),
 	);
 	bench("date-fns: addYears (local)", () =>
 		do_not_optimize(fns.addYears(testTimestamp, 2)),
 	);
 
 	bench("datezone: startOfYear (local)", () =>
-		do_not_optimize(dz.startOfYear(testTimestamp, undefined)),
+		do_not_optimize(dz.startOfYear(testTimestamp, null)),
 	);
 	bench("date-fns: startOfYear (local)", () =>
 		do_not_optimize(fns.startOfYear(testTimestamp)),
 	);
 
 	bench("datezone: endOfYear (local)", () =>
-		do_not_optimize(dz.endOfYear(testTimestamp, undefined)),
+		do_not_optimize(dz.endOfYear(testTimestamp, null)),
 	);
 	bench("date-fns: endOfYear (local)", () =>
 		do_not_optimize(fns.endOfYear(testTimestamp)),
 	);
 
 	bench("datezone: year (local)", () =>
-		do_not_optimize(dz.year(testTimestamp, undefined)),
+		do_not_optimize(dz.year(testTimestamp, null)),
 	);
 	bench("date-fns: year (local)", () => {
 		const d = new Date(testTimestamp);

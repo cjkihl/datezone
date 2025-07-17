@@ -627,3 +627,11 @@ export function isUTC(timeZone: TimeZone): boolean {
 export function isDST(timeZone: TimeZone): boolean {
 	return DST_TIMEZONES.has(timeZone as DSTTimeZone);
 }
+
+/**
+ * Get local timezone.
+ *
+ * @see https://datezone.dev/docs/reference/timezone#getlocaltimezone
+ */
+export const getLocalTimezone = () =>
+	Intl.DateTimeFormat().resolvedOptions().timeZone as TimeZone;

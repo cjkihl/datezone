@@ -51,12 +51,20 @@
       "types": "./dist/types/duration.pub.d.ts"
     },
     "./format": {
-      "default": "./dist/output/format/index.pub.js",
-      "types": "./dist/types/format/index.pub.d.ts"
+      "default": "./dist/output/format.pub.js",
+      "types": "./dist/types/format.pub.d.ts"
+    },
+    "./format-duration": {
+      "default": "./dist/output/format-duration.pub.js",
+      "types": "./dist/types/format-duration.pub.d.ts"
     },
     "./format-parts": {
       "default": "./dist/output/format-parts.pub.js",
       "types": "./dist/types/format-parts.pub.d.ts"
+    },
+    "./formatters": {
+      "default": "./dist/output/formatters.pub.js",
+      "types": "./dist/types/formatters.pub.d.ts"
     },
     "./hour": {
       "default": "./dist/output/hour.pub.js",
@@ -108,7 +116,7 @@
   ],
   "scripts": {
     "build": "tsc && create-exports",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc -p tsconfig.typecheck.json"
   },
   "devDependencies": {
     "@cjkihl/tsconfig": "^1.0.2"

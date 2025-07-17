@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { calendarToTimestamp } from "./calendar.pub";
+import { calendarToTimestamp } from "./calendar.pub.js";
 import {
 	isAfter,
 	isBefore,
@@ -14,8 +14,8 @@ import {
 	isTomorrow,
 	isWeekend,
 	isYesterday,
-} from "./compare.pub";
-import type { TimeZone } from "./index.pub";
+} from "./compare.pub.js";
+import type { TimeZone } from "./index.pub.js";
 
 const NY_TZ: TimeZone = "America/New_York";
 const UTC_TZ: TimeZone = "UTC";
@@ -699,9 +699,13 @@ describe("Performance edge cases", () => {
 		const timestamps = Array.from({ length: 10 }, (_, i) => base + i);
 
 		for (let i = 0; i < timestamps.length - 1; i++) {
-			expect(isBefore(timestamps[i], timestamps[i + 1])).toBe(true);
-			expect(isAfter(timestamps[i + 1], timestamps[i])).toBe(true);
-			expect(isEqual(timestamps[i], timestamps[i])).toBe(true);
+			const a = timestamps[i];
+			const b = timestamps[i + 1];
+			if (typeof a === "number" && typeof b === "number") {
+				expect(isBefore(a, b)).toBe(true);
+				expect(isAfter(b, a)).toBe(true);
+				expect(isEqual(a, a)).toBe(true);
+			}
 		}
 	});
 

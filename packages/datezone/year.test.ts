@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { TimeZone } from "./index.pub";
+import type { TimeZone } from "./timezone.pub.js";
 import {
 	addYears,
 	daysInYear,
@@ -47,9 +47,9 @@ describe("year functions", () => {
 			expect(year(timestamp2000, UTC_TIMEZONE)).toBe(2000);
 		});
 
-		test("defaults to local timeZone when timeZone is undefined", () => {
+		test("defaults to local time-zone when time-zone is null", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const y = year(d.getTime(), undefined);
+			const y = year(d.getTime(), null);
 
 			// Get the local timeZone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -99,9 +99,9 @@ describe("year functions", () => {
 			expect(isLeapYear(nonLeapYearTs, UTC_TIMEZONE)).toBe(false);
 		});
 
-		test("defaults to local timeZone when timeZone is undefined", () => {
+		test("defaults to local time-zone when time-zone is null", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const isLeap = isLeapYear(d.getTime(), undefined);
+			const isLeap = isLeapYear(d.getTime(), null);
 
 			// Get the local timeZone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -212,9 +212,9 @@ describe("year functions", () => {
 			expect(result).toBe(2024);
 		});
 
-		test("defaults to local timeZone when timeZone is undefined", () => {
+		test("defaults to local time-zone when time-zone is null", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const start = startOfYear(d.getTime(), undefined);
+			const start = startOfYear(d.getTime(), null);
 
 			// Get the local timeZone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -269,9 +269,9 @@ describe("year functions", () => {
 			expect(date.getUTCMilliseconds()).toBe(999);
 		});
 
-		test("defaults to local timeZone when timeZone is undefined", () => {
+		test("defaults to local time-zone when time-zone is null", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const end = endOfYear(d.getTime(), undefined);
+			const end = endOfYear(d.getTime(), null);
 
 			// Get the local timeZone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -339,9 +339,9 @@ describe("year functions", () => {
 			expect(date.getUTCDate()).toBe(28);
 		});
 
-		test("defaults to local timeZone when timeZone is undefined", () => {
+		test("defaults to local time-zone when time-zone is null", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const added = addYears(d.getTime(), 1, undefined);
+			const added = addYears(d.getTime(), 1, null);
 
 			// Get the local timeZone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -383,9 +383,9 @@ describe("year functions", () => {
 			expect(date.getUTCFullYear()).toBe(2023);
 		});
 
-		test("defaults to local timeZone when timeZone is undefined", () => {
+		test("defaults to local time-zone when time-zone is null", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const subbed = subYears(d.getTime(), 1, undefined);
+			const subbed = subYears(d.getTime(), 1, null);
 
 			// Get the local timeZone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -440,9 +440,9 @@ describe("year functions", () => {
 			expect(daysInYear(ts2021, TEST_TIMEZONE)).toBe(365);
 		});
 
-		test("defaults to local timeZone when timeZone is undefined", () => {
+		test("defaults to local time-zone when time-zone is null", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
-			const days = daysInYear(d.getTime(), undefined);
+			const days = daysInYear(d.getTime(), null);
 
 			// Get the local timeZone
 			const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;

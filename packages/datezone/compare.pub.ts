@@ -1,6 +1,6 @@
 import { timestampToCalendar } from "./calendar.pub.js";
-import type { TimeZone } from "./index.pub.js";
-import { dayOfWeek, startOfDay } from "./index.pub.js";
+import { dayOfWeek, startOfDay } from "./day.pub.js";
+import type { TimeZone } from "./timezone.pub.js";
 
 /**
  * Checks if today.

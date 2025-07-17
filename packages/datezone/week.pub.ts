@@ -1,6 +1,6 @@
 import { calendarToTimestamp, timestampToCalendar } from "./calendar.pub.js";
 import { dayOfWeekBase } from "./day.pub.js";
-import type { TimeZone } from "./index.pub.js";
+import type { TimeZone } from "./timezone.pub.js";
 
 export enum WeekStartsOn {
 	SUNDAY = 0,

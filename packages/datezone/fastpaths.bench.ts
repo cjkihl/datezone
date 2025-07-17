@@ -1,7 +1,7 @@
 import { bench, do_not_optimize, group } from "mitata";
 import { runBenchmarks } from "./bench-util.js";
 import { addDays, startOfDay } from "./day.pub.js";
-import { format } from "./format/index.pub.js";
+import { format } from "./format.pub.js";
 import { addHours, hour, startOfHour } from "./hour.pub.js";
 import { startOfMonth } from "./month.pub.js";
 import { addWeeks } from "./week.pub.js";

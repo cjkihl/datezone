@@ -1,6 +1,7 @@
 import { describe, expect, it } from "bun:test";
-import type { TimeZone } from "../timezone.pub.js";
-import { format, toISOString } from "./index.pub.js";
+import { format } from "./format.pub.js";
+import { toISOString } from "./iso.pub.js";
+import type { TimeZone } from "./timezone.pub.js";
 
 describe("format", () => {
 	const UTC: TimeZone = "UTC" as TimeZone;

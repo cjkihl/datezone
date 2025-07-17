@@ -23,5 +23,6 @@
     },
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "biomejs.biome",
-    "explorer.autoReveal": false
+    "explorer.autoReveal": false,
+    "typescript.tsdk": "node_modules/typescript/lib"
 }

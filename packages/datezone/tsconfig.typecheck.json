@@ -1,0 +1,7 @@
+{
+	"compilerOptions": {
+		"noEmit": true
+	},
+	"exclude": ["node_modules", "dist", "${configDir}/dist"],
+	"extends": "./tsconfig.json"
+}

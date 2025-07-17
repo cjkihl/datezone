@@ -1,6 +1,6 @@
 import { calendarToTimestamp } from "./calendar.pub.js";
-import type { TimeZone } from "./index.pub.js";
 import { getUTCtoTimezoneOffsetMinutes } from "./offset.pub.js";
+import type { TimeZone } from "./timezone.pub.js";
 import { isDST, isUTC } from "./timezone.pub.js";
 
 /**

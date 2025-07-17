@@ -1,5 +1,5 @@
 import { timestampToCalendar } from "./calendar.pub.js";
-import type { DT } from "./format/formatters.js";
+import type { DT } from "./formatters.pub.js";
 import { getUTCtoTimezoneOffsetMinutes } from "./offset.pub.js";
 import { isDST, isUTC, type TimeZone } from "./timezone.pub.js";
 
@@ -103,6 +103,20 @@ export function toISOString(ts: number, timeZone: TimeZone | null): string {
 	return `${year}-${month}-${day}T${hour}:${minute}:${second}.${ms}${offsetString}`;
 }
 
+/**
+ * @deprecated Use {@link fromISOString} instead.
+ */
+export function parseISO(isoString: string): number {
+	return fromISOString(isoString);
+}
+
+/**
+ * Parse ISO string.
+ *
+ * @param isoString - The ISO string to parse.
+ * @returns The timestamp.
+ * @see https://datezone.dev/docs/reference/iso#fromisostring
+ */
 export function fromISOString(isoString: string): number {
 	// Fast-path 1: explicit UTC (trailing 'Z') → rely on native parser which is highly optimized
 	if (isoString.endsWith("Z")) {

@@ -1,3 +1,5 @@
+import { getCachedNumberFormat } from "./number-format-cache.js";
+
 type OrdinalSuffixes = Record<string, string>;
 
 const ordinalSuffixes: Record<string, OrdinalSuffixes> = {
@@ -12,7 +14,6 @@ const ordinalSuffixes: Record<string, OrdinalSuffixes> = {
 };
 
 const pluralRulesCache = new Map<string, Intl.PluralRules>();
-const numberFormatCache = new Map<string, Intl.NumberFormat>();
 
 function getPluralRules(locale: string): Intl.PluralRules {
 	if (!pluralRulesCache.has(locale)) {
@@ -30,25 +31,6 @@ function getPluralRules(locale: string): Intl.PluralRules {
 		}
 	}
 	return pluralRulesCache.get(locale)!;
-}
-
-function getNumberFormat(locale: string): Intl.NumberFormat {
-	if (!numberFormatCache.has(locale)) {
-		try {
-			// For unsupported locales, use Western numerals
-			const numberingSystem = ["ar", "fa", "ur"].includes(locale)
-				? "latn"
-				: undefined;
-			numberFormatCache.set(
-				locale,
-				new Intl.NumberFormat(locale, { numberingSystem }),
-			);
-		} catch {
-			// Fall back to English for invalid locales
-			numberFormatCache.set(locale, new Intl.NumberFormat("en"));
-		}
-	}
-	return numberFormatCache.get(locale)!;
 }
 
 function getOrdinalSuffix(locale: string, rule: string): string {
@@ -77,7 +59,13 @@ function getOrdinalSuffix(locale: string, rule: string): string {
  */
 export function formatOrdinal(number: number, locale = "en"): string {
 	const pr = getPluralRules(locale);
-	const nf = getNumberFormat(locale);
+
+	// For unsupported locales, use Western numerals
+	const numberingSystem = ["ar", "fa", "ur"].includes(locale)
+		? "latn"
+		: undefined;
+	const nf = getCachedNumberFormat(locale, { numberingSystem });
+
 	const rule = pr.select(number);
 	const suffix = getOrdinalSuffix(locale, rule);
 	return `${nf.format(number)}${suffix}`;

@@ -361,7 +361,7 @@ describe("Edge cases and performance", () => {
 		}
 
 		// All results in the same hour should be identical (cache hit)
-		const firstResult = results[0];
+		const firstResult = results[0] ?? 0; // Ensure firstResult is always a number
 		results.forEach((result) => {
 			expect(result).toBe(firstResult);
 		});

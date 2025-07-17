@@ -23,7 +23,6 @@ import {
 	Type,
 } from "lucide-react";
 import type { ReactNode, SVGProps } from "react";
-import { Icons } from "./icons";
 
 interface Content {
 	title: string;

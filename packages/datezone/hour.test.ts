@@ -1,5 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { DateTime } from "luxon";
+import { HOUR } from "./constants.pub.js";
 import {
 	addHours,
 	endOfHour,
@@ -9,7 +10,6 @@ import {
 	to12Hour,
 	to24Hour,
 } from "./hour.pub.js";
-import { HOUR } from "./index.pub.js";
 
 describe("Hour Functions", () => {
 	describe("to12Hour", () => {

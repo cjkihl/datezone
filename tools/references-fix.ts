@@ -3,19 +3,21 @@
 
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { findRoot } from "@cjkihl/find-root";
 
-const ROOT = path.resolve(__dirname, "..");
-const PKG_DIR = path.join(ROOT, "packages", "datezone");
+const { root } = await findRoot();
+const PKG_DIR = path.join(root, "packages", "datezone");
 const DOCS_REF_DIR = path.join(
-	ROOT,
+	root,
 	"apps",
 	"docs",
 	"content",
 	"docs",
 	"reference",
 );
+
 const EXAMPLES_REF_DIR = path.join(
-	ROOT,
+	root,
 	"apps",
 	"docs",
 	"examples",
@@ -85,12 +87,14 @@ async function main() {
 	let hasError = false;
 	for (const file of pubFiles) {
 		const moduleName = file.replace(".pub.ts", "");
-		if (file === "format") continue; // handled below
+
 		const filePath = path.join(PKG_DIR, file);
 		const exports = await getExportsFromFile(filePath);
 		const docFile = await checkReferenceDoc(moduleName);
 		if (!docFile) {
-			console.error(`❌ Missing reference doc for module: ${moduleName}`);
+			console.error(
+				`❌ Missing reference doc for module: ${moduleName} File: ${filePath}`,
+			);
 			hasError = true;
 			continue;
 		}
@@ -111,32 +115,6 @@ async function main() {
 			}
 		}
 	}
-	// Special handling for format/index.pub.ts
-	const formatDir = path.join(PKG_DIR, "format");
-	try {
-		const formatPub = path.join(formatDir, "index.pub.ts");
-		const exports = await getExportsFromFile(formatPub);
-		const docFile = await checkReferenceDoc("format");
-		if (!docFile) {
-			console.error("❌ Missing reference doc for module: format");
-			hasError = true;
-		} else {
-			for (const exp of exports) {
-				const hasSection = await checkReferenceSection(docFile, exp);
-				if (!hasSection) {
-					console.error(`❌ Missing section for export '${exp}' in format.mdx`);
-					hasError = true;
-				}
-				const hasExample = await checkExampleFile("format", exp);
-				if (!hasExample) {
-					console.error(
-						`❌ Missing example for export '${exp}' in examples/reference/format/${exp}.ts`,
-					);
-					hasError = true;
-				}
-			}
-		}
-	} catch {}
 
 	if (hasError) {
 		process.exit(1);
