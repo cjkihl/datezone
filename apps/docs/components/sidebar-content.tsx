@@ -169,6 +169,21 @@ export const contents: Content[] = [
 				icon: () => <Type className="w-4 h-4 text-muted-foreground" />,
 				title: "Format",
 			},
+			{
+				href: "/docs/reference/format-parts",
+				icon: () => <Type className="w-4 h-4 text-muted-foreground" />,
+				title: "Format Parts",
+			},
+			{
+				href: "/docs/reference/formatters",
+				icon: () => <Type className="w-4 h-4 text-muted-foreground" />,
+				title: "Formatters",
+			},
+			{
+				href: "/docs/reference/format-duration",
+				icon: () => <Clock className="w-4 h-4 text-muted-foreground" />,
+				title: "Format Duration",
+			},
 		],
 		title: "Reference",
 	},

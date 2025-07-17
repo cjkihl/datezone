@@ -36,6 +36,10 @@ Returns the day of the month (1-31) in the given time-zone.
 
 Returns the ISO day of week (1=Monday, 7=Sunday) in the given time-zone.
 
+<Callout title="Compability">
+For Compability with Javascript Date more details, see [getDay](#getday).
+</Callout>
+
 <CodeExample file="reference/day/dayOfWeek.ts" name="dayOfWeek" />
 
 ## `dayOfWeekBase`
@@ -67,3 +71,15 @@ Returns the localized weekday name.
 Returns the localized day period (AM/PM) string for the given hour.
 
 <CodeExample file="reference/day/getDayPeriod.ts" name="getDayPeriod" />
+
+## `getDay`
+
+Returns the day of the week for a given date (0 = Sunday, 6 = Saturday).
+This is a compability shortcut for `dayOfWeek` to be consistent with other date libraries. and is using Javascript standard instad of ISO 8601.
+Sunday is 0 and Saturday is 6.
+
+<CodeExample file="reference/day/getDay.ts" name="getDay" />
+
+<Callout title="Compability">
+ For ISO 8601 standard, use [`dayOfWeek`](#dayofweek) instead.
+</Callout>
