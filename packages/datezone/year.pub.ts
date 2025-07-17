@@ -32,7 +32,7 @@ export function year(ts: number, tz: TimeZone | null): number {
  * @param ts - The timestamp to check
  * @param tz - Optional timeZone (defaults to local time)
  * @returns True if the year is a leap year, false otherwise
- * @see https://datezone.dev/docs/reference/year#isLeapYear
+ * @see https://datezone.dev/docs/reference/year#isleapyear
  */
 export function isLeapYear(ts: number, tz: TimeZone | null): boolean {
 	const y = year(ts, tz);
@@ -44,7 +44,7 @@ export function isLeapYear(ts: number, tz: TimeZone | null): boolean {
  *
  * @param year - The year to check
  * @returns True if the year is a leap year, false otherwise
- * @see https://datezone.dev/docs/reference/year#isLeapYearBase
+ * @see https://datezone.dev/docs/reference/year#isleapyearbase
  */
 export function isLeapYearBase(year: number): boolean {
 	return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
@@ -56,7 +56,7 @@ export function isLeapYearBase(year: number): boolean {
  * @param ts - The timestamp to get the start of year for
  * @param tz - Optional timeZone (defaults to local time)
  * @returns Timestamp for the start of the year (January 1st, 00:00:00.000)
- * @see https://datezone.dev/docs/reference/year#startOfYear
+ * @see https://datezone.dev/docs/reference/year#startofyear
  */
 export function startOfYear(ts: number, tz: TimeZone | null): number {
 	if (!tz) {
@@ -73,7 +73,7 @@ export function startOfYear(ts: number, tz: TimeZone | null): number {
  * @param ts - The timestamp to get the end of year for
  * @param tz - Optional timeZone (defaults to local time)
  * @returns Timestamp for the end of the year (December 31st, 23:59:59.999)
- * @see https://datezone.dev/docs/reference/year#endOfYear
+ * @see https://datezone.dev/docs/reference/year#endofyear
  */
 export function endOfYear(ts: number, tz: TimeZone | null): number {
 	if (!tz) {
@@ -91,7 +91,7 @@ export function endOfYear(ts: number, tz: TimeZone | null): number {
  * @param amount - Number of years to add (can be negative)
  * @param tz - Optional timeZone (defaults to local time)
  * @returns New timestamp with years added
- * @see https://datezone.dev/docs/reference/year#addYears
+ * @see https://datezone.dev/docs/reference/year#addyears
  */
 export function addYears(
 	ts: number,
@@ -157,7 +157,7 @@ export function addYears(
  * @param amount - Number of years to subtract
  * @param tz - Optional timeZone (defaults to local time)
  * @returns New timestamp with years subtracted
- * @see https://datezone.dev/docs/reference/year#subYears
+ * @see https://datezone.dev/docs/reference/year#subyears
  */
 export function subYears(
 	ts: number,
@@ -173,7 +173,7 @@ export function subYears(
  * @param ts - The timestamp to check
  * @param tz - Optional timeZone (defaults to local time)
  * @returns 366 for leap years, 365 for non-leap years
- * @see https://datezone.dev/docs/reference/year#daysInYear
+ * @see https://datezone.dev/docs/reference/year#daysinyear
  */
 export function daysInYear(ts: number, tz: TimeZone | null): number {
 	return isLeapYear(ts, tz) ? 366 : 365;
@@ -184,7 +184,7 @@ export function daysInYear(ts: number, tz: TimeZone | null): number {
  *
  * @param year - The year to check
  * @returns 366 for leap years, 365 for non-leap years
- * @see https://datezone.dev/docs/reference/year#daysInYearBase
+ * @see https://datezone.dev/docs/reference/year#daysinyearbase
  */
 export function daysInYearBase(year: number): number {
 	return isLeapYearBase(year) ? 366 : 365;

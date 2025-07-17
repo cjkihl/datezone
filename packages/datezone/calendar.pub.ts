@@ -48,7 +48,7 @@ export type Calendar = {
  * @param millisecond - The milliseconds (0-999)
  * @param timeZone - The IANA timeZone identifier (e.g., 'America/New_York').
  * @returns The UTC timestamp in milliseconds
- * @see https://datezone.dev/docs/reference/calendar#calendarToTimestamp
+ * @see https://datezone.dev/docs/reference/calendar#calendartotimestamp
  */
 // ---------------------------------------------------------------------------
 // Overloads
@@ -159,7 +159,7 @@ export function calendarToTimestamp(
  * @param ts - The timestamp in UTC milliseconds
  * @param tz - The IANA timeZone identifier (e.g., 'America/New_York').
  * @returns The calendar in the specified timeZone
- * @see https://datezone.dev/docs/reference/calendar#timestampToCalendar
+ * @see https://datezone.dev/docs/reference/calendar#timestamptocalendar
  */
 export function timestampToCalendar(ts: number, tz: TimeZone | null): Calendar {
 	if (!tz) {

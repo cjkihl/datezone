@@ -5,12 +5,10 @@ import { isDST, isUTC, type TimeZone } from "./timezone.pub.js";
 /**
  * Get UTC to timezone offset minutes.
  *
- * If tz is null or undefined, uses the system's local time-zone (optimized for fixed-offset local zones).
- *
  * @param ts - Timestamp in milliseconds
  * @param tz - Target time-zone (null/undefined for local)
  * @returns Offset in minutes (positive if ahead of UTC, negative if behind)
- * @see https://datezone.dev/docs/reference/offset#getUTCtoTimezoneOffsetMinutes
+ * @see https://datezone.dev/docs/reference/offset#getutctotimezoneoffsetminutes
  */
 export function getUTCtoTimezoneOffsetMinutes(
 	ts: number,
@@ -36,12 +34,9 @@ export function getUTCtoTimezoneOffsetMinutes(
 /**
  * Get UTC to local timezone offset minutes.
  *
- * Returns the offset in minutes between UTC and the system's local time-zone for the given timestamp.
- * Optimized for local time-zone only, with direct cache access.
- *
  * @param ts - Timestamp in milliseconds
  * @returns Offset in minutes (positive if ahead of UTC, negative if behind)
- * @see https://datezone.dev/docs/reference/offset#getUTCtoLocalOffsetMinutes
+ * @see https://datezone.dev/docs/reference/offset#getutctolocaloffsetminutes
  */
 export function getUTCtoLocalOffsetMinutes(ts: number): number {
 	// Fast path for fixed offset local zone
@@ -77,7 +72,7 @@ export function getUTCtoLocalOffsetMinutes(ts: number): number {
 /**
  * Get timezone offset minutes.
  *
- * @see https://datezone.dev/docs/reference/offset#getTimezoneOffsetMinutes
+ * @see https://datezone.dev/docs/reference/offset#gettimezoneoffsetminutes
  */
 export function getTimezoneOffsetMinutes(
 	ts: number,
@@ -133,7 +128,7 @@ export function getTimezoneOffsetMinutes(
  * Get fixed offset cache info.
  *
  * @returns Object containing cache size and cached timeZones
- * @see https://datezone.dev/docs/reference/offset#getFixedOffsetCacheInfo
+ * @see https://datezone.dev/docs/reference/offset#getfixedoffsetcacheinfo
  */
 export function getFixedOffsetCacheInfo(): {
 	size: number;
@@ -150,7 +145,7 @@ export function getFixedOffsetCacheInfo(): {
 /**
  * Clear fixed offset cache.
  *
- * @see https://datezone.dev/docs/reference/offset#clearFixedOffsetCache
+ * @see https://datezone.dev/docs/reference/offset#clearfixedoffsetcache
  */
 export function clearFixedOffsetCache(): void {
 	offsetCache.fixedOffset.clear();

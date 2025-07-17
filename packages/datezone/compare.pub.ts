@@ -5,7 +5,7 @@ import { dayOfWeek, startOfDay } from "./index.pub.js";
 /**
  * Checks if today.
  *
- * @see https://datezone.dev/docs/reference/compare#isToday
+ * @see https://datezone.dev/docs/reference/compare#istoday
  */
 export function isToday(ts: number, timeZone: TimeZone): boolean {
 	const todayStart = startOfDay(Date.now(), timeZone);
@@ -15,7 +15,7 @@ export function isToday(ts: number, timeZone: TimeZone): boolean {
 /**
  * Checks if tomorrow.
  *
- * @see https://datezone.dev/docs/reference/compare#isTomorrow
+ * @see https://datezone.dev/docs/reference/compare#istomorrow
  */
 export function isTomorrow(ts: number, timeZone: TimeZone): boolean {
 	const todayStart = startOfDay(Date.now(), timeZone);
@@ -27,7 +27,7 @@ export function isTomorrow(ts: number, timeZone: TimeZone): boolean {
 /**
  * Checks if yesterday.
  *
- * @see https://datezone.dev/docs/reference/compare#isYesterday
+ * @see https://datezone.dev/docs/reference/compare#isyesterday
  */
 export function isYesterday(ts: number, timeZone: TimeZone): boolean {
 	const todayStart = startOfDay(Date.now(), timeZone);
@@ -39,7 +39,7 @@ export function isYesterday(ts: number, timeZone: TimeZone): boolean {
 /**
  * Checks if past.
  *
- * @see https://datezone.dev/docs/reference/compare#isPast
+ * @see https://datezone.dev/docs/reference/compare#ispast
  */
 export function isPast(ts: number): boolean {
 	const now = Date.now();
@@ -49,7 +49,7 @@ export function isPast(ts: number): boolean {
 /**
  * Checks if future.
  *
- * @see https://datezone.dev/docs/reference/compare#isFuture
+ * @see https://datezone.dev/docs/reference/compare#isfuture
  */
 export function isFuture(ts: number): boolean {
 	const now = Date.now();
@@ -59,7 +59,7 @@ export function isFuture(ts: number): boolean {
 /**
  * Checks if weekend.
  *
- * @see https://datezone.dev/docs/reference/compare#isWeekend
+ * @see https://datezone.dev/docs/reference/compare#isweekend
  */
 export function isWeekend(ts: number, timeZone: TimeZone): boolean {
 	const dow = dayOfWeek(ts, timeZone);
@@ -69,7 +69,7 @@ export function isWeekend(ts: number, timeZone: TimeZone): boolean {
 /**
  * Checks if before.
  *
- * @see https://datezone.dev/docs/reference/compare#isBefore
+ * @see https://datezone.dev/docs/reference/compare#isbefore
  */
 export function isBefore(ts1: number, ts2: number): boolean {
 	return ts1 < ts2;
@@ -78,7 +78,7 @@ export function isBefore(ts1: number, ts2: number): boolean {
 /**
  * Checks if after.
  *
- * @see https://datezone.dev/docs/reference/compare#isAfter
+ * @see https://datezone.dev/docs/reference/compare#isafter
  */
 export function isAfter(ts1: number, ts2: number): boolean {
 	return ts1 > ts2;
@@ -87,7 +87,7 @@ export function isAfter(ts1: number, ts2: number): boolean {
 /**
  * Checks if equal.
  *
- * @see https://datezone.dev/docs/reference/compare#isEqual
+ * @see https://datezone.dev/docs/reference/compare#isequal
  */
 export function isEqual(ts1: number, ts2: number): boolean {
 	return ts1 === ts2;
@@ -96,7 +96,7 @@ export function isEqual(ts1: number, ts2: number): boolean {
 /**
  * Checks if same day.
  *
- * @see https://datezone.dev/docs/reference/compare#isSameDay
+ * @see https://datezone.dev/docs/reference/compare#issameday
  */
 export function isSameDay(
 	ts1: number,
@@ -111,7 +111,7 @@ export function isSameDay(
 /**
  * Checks if same week.
  *
- * @see https://datezone.dev/docs/reference/compare#isSameWeek
+ * @see https://datezone.dev/docs/reference/compare#issameweek
  */
 export function isSameWeek(
 	ts1: number,
@@ -130,7 +130,7 @@ export function isSameWeek(
 /**
  * Checks if same month.
  *
- * @see https://datezone.dev/docs/reference/compare#isSameMonth
+ * @see https://datezone.dev/docs/reference/compare#issamemonth
  */
 export function isSameMonth(
 	ts1: number,
@@ -154,7 +154,7 @@ export function isSameMonth(
 /**
  * Checks if same year.
  *
- * @see https://datezone.dev/docs/reference/compare#isSameYear
+ * @see https://datezone.dev/docs/reference/compare#issameyear
  */
 export function isSameYear(
 	ts1: number,

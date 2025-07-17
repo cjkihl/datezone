@@ -119,9 +119,9 @@ function processFile(filePath: string) {
 		}
 		newDoc +=
 			"\n * @see https://datezone.dev/docs/reference/" +
-			fileBase +
+			fileBase.toLowerCase() +
 			"#" +
-			fnName +
+			fnName.toLowerCase() +
 			"\n */";
 
 		// Replace in modified content (taking offset into account)

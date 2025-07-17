@@ -22,7 +22,7 @@ export * from "./year.pub.js";
 /**
  * Get local timezone.
  *
- * @see https://datezone.dev/docs/reference/index#getLocalTimezone
+ * @see https://datezone.dev/docs/reference/index#getlocaltimezone
  */
 export const getLocalTimezone = () =>
 	Intl.DateTimeFormat().resolvedOptions().timeZone as TimeZone;

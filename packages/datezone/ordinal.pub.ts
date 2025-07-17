@@ -73,7 +73,7 @@ function getOrdinalSuffix(locale: string, rule: string): string {
  * @param number - The number to format.
  * @param locale - The locale to use.
  * @returns The ordinal suffix.
- * @see https://datezone.dev/docs/reference/ordinal#formatOrdinal
+ * @see https://datezone.dev/docs/reference/ordinal#formatordinal
  */
 export function formatOrdinal(number: number, locale = "en"): string {
 	const pr = getPluralRules(locale);

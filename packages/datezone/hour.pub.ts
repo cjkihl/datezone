@@ -7,7 +7,7 @@ import type { TimeZone } from "./timezone.pub.js";
  *
  * @param hour - The hour in 24-hour format (0-23)
  * @returns The hour in 12-hour format (1-12)
- * @see https://datezone.dev/docs/reference/hour#to12Hour
+ * @see https://datezone.dev/docs/reference/hour#to12hour
  */
 export function to12Hour(hour: number): number {
 	return hour % 12 === 0 ? 12 : hour % 12;
@@ -18,7 +18,7 @@ export function to12Hour(hour: number): number {
  *
  * @param hour - The hour value to normalize
  * @returns The hour in 24-hour format (0-23)
- * @see https://datezone.dev/docs/reference/hour#to24Hour
+ * @see https://datezone.dev/docs/reference/hour#to24hour
  */
 export function to24Hour(hour: number): number {
 	return hour % 24;
@@ -64,7 +64,7 @@ function getUTCHour(ts: number): number {
  * @param ts - The timestamp in milliseconds
  * @param hours - The number of hours to add (can be negative)
  * @returns A new timestamp with the hours added
- * @see https://datezone.dev/docs/reference/hour#addHours
+ * @see https://datezone.dev/docs/reference/hour#addhours
  */
 export function addHours(ts: number, hours: number): number {
 	return ts + hours * HOUR;
@@ -76,7 +76,7 @@ export function addHours(ts: number, hours: number): number {
  * @param ts - The timestamp in milliseconds
  * @param hours - The number of hours to subtract
  * @returns A new timestamp with the hours subtracted
- * @see https://datezone.dev/docs/reference/hour#subHours
+ * @see https://datezone.dev/docs/reference/hour#subhours
  */
 export function subHours(ts: number, hours: number): number {
 	return addHours(ts, -hours);
@@ -87,7 +87,7 @@ export function subHours(ts: number, hours: number): number {
  *
  * @param ts - The timestamp in milliseconds
  * @returns A new timestamp representing the start of the hour
- * @see https://datezone.dev/docs/reference/hour#startOfHour
+ * @see https://datezone.dev/docs/reference/hour#startofhour
  */
 export function startOfHour(ts: number): number {
 	return ts - (ts % HOUR);
@@ -98,7 +98,7 @@ export function startOfHour(ts: number): number {
  *
  * @param ts - The timestamp in milliseconds
  * @returns A new timestamp representing the end of the hour
- * @see https://datezone.dev/docs/reference/hour#endOfHour
+ * @see https://datezone.dev/docs/reference/hour#endofhour
  */
 export function endOfHour(ts: number): number {
 	return ts - (ts % HOUR) + HOUR - 1;

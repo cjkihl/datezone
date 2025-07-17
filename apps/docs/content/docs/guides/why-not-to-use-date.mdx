@@ -29,7 +29,22 @@ The `Date` object's constructor string parser have strange behavours. These migh
 
 <CodeExample tabs={[{ name: "Example 2", file: "guides/why-not-to-use-date/example-2.ts" }]} />
 
-### 3. Mutable State = Bugs
+### 3. Confusing API Method Names
+
+The `Date` object has poorly named methods that don't match what you'd expect, making code hard to read and prone to errors.
+
+<CodeExample tabs={[{ name: "Confusing API", file: "guides/why-not-to-use-date/confusing-api.ts" }]} />
+
+You would expect `getDate()` to also use a 0-based index for the day of the month just like `getDay()`, but it doesn't.
+
+<Callout type="warning">
+**Counter-intuitive naming**: 
+- `getDay()` returns day of **week** (0-6), not day of month
+- `getDate()` returns day of **month** (1-31), not the full date
+- Day of week uses 0=Sunday instead of ISO 8601 standard where Monday=1
+</Callout>
+
+### 4. Mutable State = Bugs
 
 `Date` objects are mutable, which might lead to unexpected side effects and hard-to-track bugs.
 
@@ -41,7 +56,7 @@ The `Date` object's constructor string parser have strange behavours. These migh
 - **Confusing return values**: `setDate()` returns a timestamp, making it appear like an immutable function when it also mutates the original object.
 </Callout>
 
-### 4. Unpredictable Results
+### 5. Unpredictable Results
 
 The same code returns different results depending on the system timezone, making unit testing unreliable.
 

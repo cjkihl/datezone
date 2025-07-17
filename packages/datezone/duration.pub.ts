@@ -10,7 +10,7 @@ import type { TimeZone } from "./timezone.pub.js";
  * @param end     The second timestamp (Unix epoch ms).
  * @param timeZone The IANA timeZone identifier or `null`/`undefined` to use
  * @returns A partial {@link Calendar} where each defined field represents the
- * @see https://datezone.dev/docs/reference/duration#intervalToDuration
+ * @see https://datezone.dev/docs/reference/duration#intervaltoduration
  */
 export function intervalToDuration(
 	start: number,
@@ -34,7 +34,7 @@ export function intervalToDuration(
  * @param startCal Calendar representation of the **earlier** instant.
  * @param endCal   Calendar representation of the **later** instant.
  * @returns Calendar-like object containing the differences of each field.
- * @see https://datezone.dev/docs/reference/duration#intervalToDurationBase
+ * @see https://datezone.dev/docs/reference/duration#intervaltodurationbase
  */
 export function intervalToDurationBase(
 	startCal: Calendar,
@@ -105,7 +105,7 @@ export function intervalToDurationBase(
  * @param start2 Second interval start (inclusive).
  * @param end2   Second interval end   (exclusive).
  * @returns `true` if the intervals share at least one point.
- * @see https://datezone.dev/docs/reference/duration#areIntervalsOverlapping
+ * @see https://datezone.dev/docs/reference/duration#areintervalsoverlapping
  */
 export function areIntervalsOverlapping(
 	start1: number,

@@ -12,7 +12,7 @@ import { isLeapYearBase } from "./year.pub.js";
  * @param days - The number of days to add.
  * @param timeZone - The time-zone.
  * @returns The new timestamp.
- * @see https://datezone.dev/docs/reference/day#addDays
+ * @see https://datezone.dev/docs/reference/day#adddays
  */
 export function addDays(
 	ts: number,
@@ -60,7 +60,7 @@ export function addDays(
  * @param days - The number of days to subtract.
  * @param timeZone - The time-zone.
  * @returns The new timestamp.
- * @see https://datezone.dev/docs/reference/day#subDays
+ * @see https://datezone.dev/docs/reference/day#subdays
  */
 export function subDays(ts: number, days: number, timeZone: TimeZone | null) {
 	return addDays(ts, -days, timeZone);
@@ -72,7 +72,7 @@ export function subDays(ts: number, days: number, timeZone: TimeZone | null) {
  * @param ts - The timestamp.
  * @param timeZone - The time-zone.
  * @returns The timestamp for the start of the day.
- * @see https://datezone.dev/docs/reference/day#startOfDay
+ * @see https://datezone.dev/docs/reference/day#startofday
  */
 export function startOfDay(ts: number, timeZone: TimeZone | null): number {
 	if (timeZone === null) {
@@ -123,7 +123,7 @@ export function startOfDay(ts: number, timeZone: TimeZone | null): number {
  * @param ts - The timestamp.
  * @param timeZone - The time-zone.
  * @returns The timestamp for the end of the day.
- * @see https://datezone.dev/docs/reference/day#endOfDay
+ * @see https://datezone.dev/docs/reference/day#endofday
  */
 export function endOfDay(ts: number, timeZone: TimeZone | null): number {
 	// Fast path: local time
@@ -178,10 +178,25 @@ export function endOfDay(ts: number, timeZone: TimeZone | null): number {
  * @param ts - The timestamp.
  * @param timeZone - The time-zone.
  * @returns The day of the month.
- * @see https://datezone.dev/docs/reference/day#dayOfMonth
+ * @see https://datezone.dev/docs/reference/day#dayofmonth
  */
 export function dayOfMonth(ts: number, timeZone: TimeZone | null): number {
 	return timestampToCalendar(ts, timeZone).day;
+}
+
+/**
+ * Get day of week using Javascript Standard  0 = Sunday, 6 = Saturday
+ *
+ * @deprecated Use {@link dayOfWeek} instead that follows ISO standard.
+ * @param ts - The timestamp.
+ * @param timeZone - The time-zone.
+ * @returns The JavaScript day of the week (0=Sunday, 6=Saturday).
+ * @see https://datezone.dev/docs/reference/day#getday
+ */
+export function getDay(ts: number, timeZone: TimeZone | null): number {
+	const isoDay = dayOfWeek(ts, timeZone);
+	// Convert ISO day (1=Monday, 7=Sunday) to JS day (0=Sunday, 6=Saturday)
+	return isoDay % 7;
 }
 
 /**
@@ -190,7 +205,7 @@ export function dayOfMonth(ts: number, timeZone: TimeZone | null): number {
  * @param ts - The timestamp.
  * @param timeZone - The time-zone.
  * @returns The ISO day of the week.
- * @see https://datezone.dev/docs/reference/day#dayOfWeek
+ * @see https://datezone.dev/docs/reference/day#dayofweek
  */
 export function dayOfWeek(ts: number, timeZone: TimeZone | null): number {
 	// Fast path: local time
@@ -236,7 +251,7 @@ export function dayOfWeek(ts: number, timeZone: TimeZone | null): number {
  * @param month - The month (1-12).
  * @param day - The day (1-31).
  * @returns The ISO day of the week.
- * @see https://datezone.dev/docs/reference/day#dayOfWeekBase
+ * @see https://datezone.dev/docs/reference/day#dayofweekbase
  */
 export function dayOfWeekBase(
 	year: number,
@@ -271,7 +286,7 @@ export function dayOfWeekBase(
  * @param ts - The timestamp.
  * @param timeZone - The time-zone.
  * @returns The day of the year.
- * @see https://datezone.dev/docs/reference/day#dayOfYear
+ * @see https://datezone.dev/docs/reference/day#dayofyear
  */
 export function dayOfYear(ts: number, timeZone: TimeZone | null): number {
 	// Fast path: local time
@@ -319,7 +334,7 @@ export function dayOfYearBase(
  * @param type - The format of the name ("long", "short", or "narrow").
  * @param day - The ISO day of the week (1=Monday, 7=Sunday).
  * @returns The localized weekday name.
- * @see https://datezone.dev/docs/reference/day#weekDayName
+ * @see https://datezone.dev/docs/reference/day#weekdayname
  */
 export function weekDayName(
 	locale: string,
@@ -341,7 +356,7 @@ export function weekDayName(
  * @param locale The locale string.
  * @param hour The hour (0-23).
  * @returns The localized day period string.
- * @see https://datezone.dev/docs/reference/day#getDayPeriod
+ * @see https://datezone.dev/docs/reference/day#getdayperiod
  */
 export function getDayPeriod(locale: string, hour: number): string {
 	const fmt = getCachedFormatterLocale(locale, {

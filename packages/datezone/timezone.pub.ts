@@ -611,7 +611,7 @@ const DST_TIMEZONES = new Set(DST_TIMEZONE_NAMES);
  *
  * @param timeZone - The IANA timeZone identifier to check
  * @returns `true` if the timeZone is UTC, `false` otherwise
- * @see https://datezone.dev/docs/reference/timezone#isUTC
+ * @see https://datezone.dev/docs/reference/timezone#isutc
  */
 export function isUTC(timeZone: TimeZone): boolean {
 	return UTC_TIMEZONES.has(timeZone as UTCTimeZone);
@@ -622,7 +622,7 @@ export function isUTC(timeZone: TimeZone): boolean {
  *
  * @param timeZone - The IANA timeZone identifier to check
  * @returns `true` if the timeZone is a DST timeZone, `false` otherwise.
- * @see https://datezone.dev/docs/reference/timezone#isDST
+ * @see https://datezone.dev/docs/reference/timezone#isdst
  */
 export function isDST(timeZone: TimeZone): boolean {
 	return DST_TIMEZONES.has(timeZone as DSTTimeZone);

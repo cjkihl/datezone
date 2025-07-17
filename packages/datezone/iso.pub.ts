@@ -9,7 +9,7 @@ import { isDST, isUTC, type TimeZone } from "./timezone.pub.js";
  * @param ts - The timestamp to format
  * @param timeZone - Optional timeZone. If not provided, uses the system's local timeZone.
  * @returns The ISO formatted date string
- * @see https://datezone.dev/docs/reference/iso#toISOString
+ * @see https://datezone.dev/docs/reference/iso#toisostring
  */
 export function toISOString(ts: number, timeZone: TimeZone | null): string {
 	let dt: DT;

@@ -25,7 +25,7 @@ export function month(ts: number, timeZone: TimeZone | null): number {
  * @param ts - The timestamp to get the start of month for
  * @param timeZone - Optional timeZone (defaults to local time)
  * @returns Timestamp for the start of the month
- * @see https://datezone.dev/docs/reference/month#startOfMonth
+ * @see https://datezone.dev/docs/reference/month#startofmonth
  */
 export function startOfMonth(ts: number, timeZone: TimeZone | null): number {
 	if (!timeZone) {
@@ -45,7 +45,7 @@ export function startOfMonth(ts: number, timeZone: TimeZone | null): number {
  * @param month - The month (1-12)
  * @param timeZone - The timeZone
  * @returns Timestamp for the start of the month
- * @see https://datezone.dev/docs/reference/month#startOfMonthBase
+ * @see https://datezone.dev/docs/reference/month#startofmonthbase
  */
 export function startOfMonthBase(
 	year: number,
@@ -61,7 +61,7 @@ export function startOfMonthBase(
  * @param ts - The timestamp to get the end of month for
  * @param timeZone - Optional timeZone (defaults to local time)
  * @returns Timestamp for the end of the month (last millisecond)
- * @see https://datezone.dev/docs/reference/month#endOfMonth
+ * @see https://datezone.dev/docs/reference/month#endofmonth
  */
 export function endOfMonth(ts: number, timeZone: TimeZone | null): number {
 	if (!timeZone) {
@@ -80,7 +80,7 @@ export function endOfMonth(ts: number, timeZone: TimeZone | null): number {
  * @param month - The month (1-12)
  * @param timeZone - The timeZone
  * @returns Timestamp for the end of the month (last millisecond)
- * @see https://datezone.dev/docs/reference/month#endOfMonthBase
+ * @see https://datezone.dev/docs/reference/month#endofmonthbase
  */
 export function endOfMonthBase(
 	year: number,
@@ -97,7 +97,7 @@ export function endOfMonthBase(
  * @param months - Number of months to add (can be negative)
  * @param timeZone - Optional timeZone (defaults to local time)
  * @returns New timestamp with months added
- * @see https://datezone.dev/docs/reference/month#addMonths
+ * @see https://datezone.dev/docs/reference/month#addmonths
  */
 export function addMonths(
 	ts: number,
@@ -140,7 +140,7 @@ export function addMonths(
  * @param monthsToAdd - Number of months to add (can be negative)
  * @param timeZone - The timeZone
  * @returns New timestamp with months added
- * @see https://datezone.dev/docs/reference/month#addMonthsBase
+ * @see https://datezone.dev/docs/reference/month#addmonthsbase
  */
 export function addMonthsBase(
 	year: number,
@@ -176,7 +176,7 @@ export function addMonthsBase(
  * @param months - Number of months to subtract
  * @param timeZone - Optional timeZone (defaults to local time)
  * @returns New timestamp with months subtracted
- * @see https://datezone.dev/docs/reference/month#subMonths
+ * @see https://datezone.dev/docs/reference/month#submonths
  */
 export function subMonths(
 	ts: number,
@@ -193,7 +193,7 @@ export function subMonths(
  * @param n - Number of months to offset (0 = current month, 1 = next month, -1 = previous month)
  * @param timeZone - Optional timeZone (defaults to local time)
  * @returns Timestamp for the start of the nth month
- * @see https://datezone.dev/docs/reference/month#startOfNthMonth
+ * @see https://datezone.dev/docs/reference/month#startofnthmonth
  */
 export function startOfNthMonth(
 	ts: number,
@@ -250,7 +250,7 @@ function startOfNextMonthBase(
  * @param n - Number of months to offset (0 = current month, 1 = next month, -1 = previous month)
  * @param timeZone - Optional timeZone (defaults to local time)
  * @returns Timestamp for the end of the nth month (last millisecond)
- * @see https://datezone.dev/docs/reference/month#endOfNthMonth
+ * @see https://datezone.dev/docs/reference/month#endofnthmonth
  */
 export function endOfNthMonth(
 	ts: number,
@@ -266,7 +266,7 @@ export function endOfNthMonth(
  * @param ts - The reference timestamp
  * @param timeZone - Optional timeZone (defaults to local time)
  * @returns Timestamp for the start of the next month
- * @see https://datezone.dev/docs/reference/month#startOfNextMonth
+ * @see https://datezone.dev/docs/reference/month#startofnextmonth
  */
 export function startOfNextMonth(
 	ts: number,
@@ -281,7 +281,7 @@ export function startOfNextMonth(
  * @param ts - The reference timestamp
  * @param timeZone - Optional timeZone (defaults to local time)
  * @returns Timestamp for the end of the next month (last millisecond)
- * @see https://datezone.dev/docs/reference/month#endOfNextMonth
+ * @see https://datezone.dev/docs/reference/month#endofnextmonth
  */
 export function endOfNextMonth(ts: number, timeZone: TimeZone | null): number {
 	return startOfNthMonth(ts, 2, timeZone) - 1;
@@ -293,7 +293,7 @@ export function endOfNextMonth(ts: number, timeZone: TimeZone | null): number {
  * @param ts - The reference timestamp
  * @param timeZone - Optional timeZone (defaults to local time)
  * @returns Timestamp for the start of the previous month
- * @see https://datezone.dev/docs/reference/month#startOfPrevMonth
+ * @see https://datezone.dev/docs/reference/month#startofprevmonth
  */
 export function startOfPrevMonth(
 	ts: number,
@@ -308,7 +308,7 @@ export function startOfPrevMonth(
  * @param ts - The reference timestamp
  * @param timeZone - Optional timeZone (defaults to local time)
  * @returns Timestamp for the end of the previous month (last millisecond)
- * @see https://datezone.dev/docs/reference/month#endOfPrevMonth
+ * @see https://datezone.dev/docs/reference/month#endofprevmonth
  */
 export function endOfPrevMonth(ts: number, timeZone: TimeZone | null): number {
 	return startOfNthMonth(ts, 0, timeZone) - 1;
@@ -322,7 +322,7 @@ const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
  * @param ts - The timestamp
  * @param timeZone - Optional timeZone (defaults to local time)
  * @returns Number of days in the month
- * @see https://datezone.dev/docs/reference/month#daysInMonth
+ * @see https://datezone.dev/docs/reference/month#daysinmonth
  */
 export function daysInMonth(ts: number, timeZone: TimeZone | null): number {
 	let year: number;
@@ -345,7 +345,7 @@ export function daysInMonth(ts: number, timeZone: TimeZone | null): number {
  * @param year - The year
  * @param month - The month (1-12)
  * @returns Number of days in the month
- * @see https://datezone.dev/docs/reference/month#daysInMonthBase
+ * @see https://datezone.dev/docs/reference/month#daysinmonthbase
  */
 export function daysInMonthBase(year: number, month: number): number {
 	const maxDay = DAYS_IN_MONTH[month - 1];
@@ -365,7 +365,7 @@ export function daysInMonthBase(year: number, month: number): number {
  * @param month - The starting month (1-12)
  * @param monthsToAdd - Number of months to add (can be negative)
  * @returns Tuple with the new year and month [year, month]
- * @see https://datezone.dev/docs/reference/month#calculateYearMonth
+ * @see https://datezone.dev/docs/reference/month#calculateyearmonth
  */
 export function calculateYearMonth(
 	year: number,
@@ -399,7 +399,7 @@ export function calculateYearMonth(
  * @param type - The format type: 'long' (January), 'short' (Jan), or 'narrow' (J)
  * @param month - The month number (1-12)
  * @returns The localized month name
- * @see https://datezone.dev/docs/reference/month#getMonthName
+ * @see https://datezone.dev/docs/reference/month#getmonthname
  */
 export function getMonthName(
 	locale: string,
@@ -419,7 +419,7 @@ export function getMonthName(
  * @param ts - The timestamp
  * @param timeZone - Optional timeZone (defaults to local time)
  * @returns The quarter number (1-4)
- * @see https://datezone.dev/docs/reference/month#getQuarter
+ * @see https://datezone.dev/docs/reference/month#getquarter
  */
 export function getQuarter(ts: number, timeZone: TimeZone | null): number {
 	let month: number;
@@ -439,7 +439,7 @@ export function getQuarter(ts: number, timeZone: TimeZone | null): number {
  *
  * @param month - The month (1-12)
  * @returns The quarter number (1-4)
- * @see https://datezone.dev/docs/reference/month#getQuarterBase
+ * @see https://datezone.dev/docs/reference/month#getquarterbase
  */
 export function getQuarterBase(month: number): number {
 	return Math.floor((month - 1) / 3) + 1;
