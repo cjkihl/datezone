@@ -1,9 +1,7 @@
 name: Benchmarks
 
 on:
-  push:
-    branches:
-      - bench
+  workflow_dispatch:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -55,12 +53,16 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
+      - name: Create and switch to benchmark-updates branch
+        run: |
+          git checkout -b benchmark-updates || git checkout benchmark-updates
+
       - name: Commit Benchmark Results
         run: |
           git add -A
           if ! git diff --staged --quiet; then
             git commit -m "chore: update benchmark reports [skip ci]"
-            git push origin bench
+            git push origin benchmark-updates
           else
             echo "No changes to commit"
           fi
@@ -69,13 +71,13 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.PAT_TOKEN }}
-          branch: bench
+          branch: benchmark-updates
           base: main
           title: "📊 Update Benchmark Reports"
           body: |
             ## 📊 Benchmark Results Update
             
-            This PR contains updated benchmark reports generated from the latest `bench` branch.
+            This PR contains updated benchmark reports generated from the latest `main` branch.
             
             ### Changes
             - Updated full benchmark report
