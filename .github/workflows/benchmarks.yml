@@ -37,13 +37,13 @@ jobs:
         run: bun run build
 
       - name: Run Benchmarks
-        run: bun bench -F day
+        run: bun bench
 
       - name: Generate Full Report
         run: bun run tools/benchmark/create-full-report.ts
 
       - name: Run Benchmarks with JSON Output
-        run: bun bench --json -F day
+        run: bun bench --json
 
       - name: Generate Comparison Report
         run: bun run tools/benchmark/create-comparison-report.ts
