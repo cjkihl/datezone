@@ -34,7 +34,7 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Build
-        run: bun run build
+        run: bun run build -F day
 
       - name: Run Benchmarks
         run: bun bench
@@ -43,7 +43,7 @@ jobs:
         run: bun run tools/benchmark/create-full-report.ts
 
       - name: Run Benchmarks with JSON Output
-        run: bun bench --json
+        run: bun bench --json -F day
 
       - name: Generate Comparison Report
         run: bun run tools/benchmark/create-comparison-report.ts
@@ -53,26 +53,13 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
-      - name: Create and switch to benchmark-updates branch
-        run: |
-          git checkout -b benchmark-updates || git checkout benchmark-updates
-
-      - name: Commit Benchmark Results
-        run: |
-          git add -A
-          if ! git diff --staged --quiet; then
-            git commit -m "chore: update benchmark reports [skip ci]"
-            git push origin benchmark-updates
-          else
-            echo "No changes to commit"
-          fi
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.PAT_TOKEN }}
           branch: benchmark-updates
           base: main
+          commit-message: "chore: update benchmark reports [skip ci]"
           title: "📊 Update Benchmark Reports"
           body: |
             ## 📊 Benchmark Results Update
