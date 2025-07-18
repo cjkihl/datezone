@@ -2,14 +2,14 @@ import { Navbar } from "@/components/nav-bar";
 import "./global.css";
 import { Analytics } from "@vercel/analytics/react";
 import { RootProvider } from "fumadocs-ui/provider";
-import { Fira_Mono, Fira_Sans } from "next/font/google";
+import { Fira_Mono, Inter } from "next/font/google";
 import type { ReactNode } from "react";
 import { NavbarProvider } from "@/components/nav-mobile";
 
-const firaSans = Fira_Sans({
+const inter = Inter({
+	display: "swap",
 	subsets: ["latin"],
 	variable: "--font-sans",
-	weight: ["400", "500", "600", "700"],
 });
 
 const firaMono = Fira_Mono({
@@ -50,7 +50,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 				/>
 			</head>
 			<body
-				className={`${firaSans.variable} ${firaMono.variable} bg-background font-sans relative `}
+				className={`${inter.variable} ${firaMono.variable} bg-background font-sans relative `}
 			>
 				<ThemeProvider
 					attribute="class"

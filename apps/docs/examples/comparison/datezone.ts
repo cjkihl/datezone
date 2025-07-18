@@ -3,10 +3,10 @@ import { addDays, format } from "datezone";
 
 const date = Date.UTC(2024, 5, 1, 8, 0, 0, 0); // 2024-06-01 08:00:00 UTC
 
-// Adds 5 days in the Tokio time-zone
+// Adds 5 days in the Tokio timezone
 const future = addDays(date, 5, "Asia/Tokyo");
 
-// Formats the date in the Europe/Stockholm time-zone
+// Formats the date in the Europe/Stockholm timezone
 const result = format(future, "yyyy-MM-dd HH:mm:ss", {
 	timeZone: "Europe/Stockholm",
 });

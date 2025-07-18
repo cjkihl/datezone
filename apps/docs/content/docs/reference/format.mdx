@@ -2,14 +2,20 @@
 title: Format
 ---
 
-## Format Tokens
-
-> **Note:** The format tokens in `datezone` are inspired by [Unicode Technical Standard #35](https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table) with some additions and differences. They are not always compatible with Moment.js or other libraries. See the table below for details.
-
 **Return the formatted date string in the given format. The result may vary by locale.**
 
 - Characters wrapped between two single quotes (`'`) are escaped.
 - Two single quotes in a row, whether inside or outside a quoted sequence, represent a real single quote.
+
+<Callout title="Format Tokens" type="info">
+ The format tokens in `datezone` are inspired by [Unicode Technical Standard #35](https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table) with some additions and differences. They are not always compatible with Moment.js or other libraries. See the table below for details.
+</Callout>
+
+<Callout title="Language support" type="info">
+ Datezone uses the Intl API under the hood, so it supports the same locales as [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl).
+</Callout>
+
+
 
 ### Common Patterns
 
@@ -197,8 +203,6 @@ title: Format
 
 <CodeExample tabs={[{ name: "Example 1", file: "reference/format/example-1.ts" }]} />
 
-## `format`
-
-**Formats a timestamp into a locale-aware date/time string with optional time-zone handling.**
+Another example:
 
 <CodeExample file="reference/format/format.ts" name="format" />

@@ -14,7 +14,7 @@ Not All Days Are 24 Hours!
 </Callout>
  
 
-The fundamental assumption that "a day is always 24 hours" is **wrong** in most time-zones that observe DST.
+The fundamental assumption that "a day is always 24 hours" is **wrong** in most timezones that observe DST.
 
 <CodeExample tabs={[{ name: "Example 1", file: "guides/how-dst-works/this-assumption-is-dangerous.ts" }]} />
 
@@ -38,7 +38,7 @@ DST bugs are particularly insidious because they only happen during the two DST 
 
 ### Spring Forward (Losing an Hour)
 
-On March 10, 2024, in the `America/New_York` time-zone:
+On March 10, 2024, in the `America/New_York` timezone:
 
 <CodeExample tabs={[{ name: "Example 2", file: "guides/how-dst-works/at-200-am-est-clocks-spring-forward-to-300-am-edt.ts" }]} />
 
@@ -51,7 +51,7 @@ On March 10, 2024, in the `America/New_York` time-zone:
 
 ### Fall Back (Gaining an Hour)
 
-On November 3, 2024, in the `America/New_York` time-zone:
+On November 3, 2024, in the `America/New_York` timezone:
 
 <CodeExample tabs={[{ name: "Example 3", file: "guides/how-dst-works/at-200-am-edt-clocks-fall-back-to-100-am-est.ts" }]} />
 
@@ -62,9 +62,9 @@ On November 3, 2024, in the `America/New_York` time-zone:
 🐞 Bug: The calculations ignores the DST “fall-back” hour silently introducing a ­one-hour error.
 </Callout>
 
-### Different time-zones on browser and server
+### Different timezones on browser and server
 
-It get's worse when your server and users are in different time-zones.
+It get's worse when your server and users are in different timezones.
 
 <CodeExample tabs={[{ name: "Example 4", file: "guides/how-dst-works/this-breaks-during-dst-transitions.ts" }]} />
 
@@ -74,14 +74,14 @@ It get's worse when your server and users are in different time-zones.
 2. addDays adds exactly 24 hours, so the wall-clock time shifts forward by +1 hour.
 3. The client expected 18:00 SGT on the next day, but would see 19:00 when the server response is converted back.
 
-🐞 Bug summary: Even with an explicit time-zone offset in the input, server-side date math that relies on
-   the server's local time-zone can silently drift during DST transitions.
+🐞 Bug summary: Even with an explicit timezone offset in the input, server-side date math that relies on
+   the server's local timezone can silently drift during DST transitions.
 </Callout>
 
 ## How Datezone Handles DST
 
-Datezone is always explicit about the time-zone when you are doing Date & Time operations. 
-Every operation that is prone to DST bugs have a `time-zone` parameter that is **required**.
+Datezone is always explicit about the timezone when you are doing Date & Time operations. 
+Every operation that is prone to DST bugs have a `timezone` parameter that is **required**.
 This might feel overkill at first but it sets you as a developer up for success and hels you avoid DST bugs.
 Always ask yourself: In which **Timezone** am I doing this calendar calculation?:
 
@@ -160,15 +160,15 @@ DST rules vary significantly by country and region:
 - **Different Rules**: Some countries have unique DST schedules
 
 <Callout type="info">
-**IANA Timezone Database**: Datezone uses the IANA time-zone database, which contains the complete history and future predictions of DST rules for all time-zones worldwide.
+**IANA Timezone Database**: Datezone uses the IANA timezone database, which contains the complete history and future predictions of DST rules for all timezones worldwide.
 </Callout>
 
 ## Summary
 
-DST transitions are a major source of bugs in date-handling code. By understanding how DST works and using time-zone-aware functions like those provided by datezone, you can avoid these pitfalls entirely.
+DST transitions are a major source of bugs in date-handling code. By understanding how DST works and using timezone-aware functions like those provided by datezone, you can avoid these pitfalls entirely.
 
 <Callout type="success">
-**Key takeaway**: Never assume a day is 24 hours. Always use calendar-based arithmetic with explicit time-zone handling for reliable date operations.
+**Key takeaway**: Never assume a day is 24 hours. Always use calendar-based arithmetic with explicit timezone handling for reliable date operations.
 </Callout>
 
 Next, learn about [best practices](/docs/guides/best-practices) for building robust date and time handling in your applications.

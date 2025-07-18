@@ -340,7 +340,7 @@ function generateCreativeMarkdown(rows: ComparisonRow[]): string {
 	md += "## 🔬 Methodology\n\n";
 	md += `### Benchmark Setup\n- **Tool:** [Mitata](https://github.com/evanwashere/mitata) - High-precision JavaScript benchmarking\n- **Iterations:** Multiple samples with statistical significance testing\n- **Environment:** Node.js \`${node}\` on \`${platform}\`\n\n`;
 	md +=
-		"### Comparison Approach\n- **Datezone:** Built-in timeZone support with UTC timestamps\n- **Date-fns:** v4.x with @date-fns/tz package for timeZone operations\n- **Test Data:** Realistic timestamps across different times and time-zones\n- **Fairness:** Both libraries tested with equivalent timeZone-aware operations\n\n";
+		"### Comparison Approach\n- **Datezone:** Built-in timeZone support with UTC timestamps\n- **Date-fns:** v4.x with @date-fns/tz package for timeZone operations\n- **Test Data:** Realistic timestamps across different times and timezones\n- **Fairness:** Both libraries tested with equivalent timeZone-aware operations\n\n";
 	md +=
 		"### Performance Metrics\n- **Time (avg):** Average execution time per operation\n- **Operations/sec:** Throughput (higher = better)\n- **Comparison:** Based on operations per second difference\n\n";
 	md +=

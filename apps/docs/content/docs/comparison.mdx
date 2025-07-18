@@ -1,69 +1,81 @@
 ---
 title: Comparison
-description: Why Datezone outperforms other date libraries in speed, bundle size, and developer experience.
+description: How Datezone compares to other date libraries and when you might choose each one.
 ---
 
-# Why Choose Datezone?
+# Library Comparison
 
-> **TL;DR:** Datezone dominates **85%** of all benchmark cases with **up to&nbsp;4,200,000% performance gains** in real-world scenarios, has **zero runtime dependencies**, and ships with **first-class, native time-zone support**.
+Datezone is the new kid on the block, joining popular libraries like date-fns, Luxon, and Moment.js.
 
-See our [Comparison Benchmarks](/benchmarks/comparison-report) for more details.
+Check out our [performance benchmarks](/benchmarks/comparison-report) to see how fast it really is.
 
-For a full benchmark report, see our [Benchmarks](/benchmarks/comparison-report) page.
-
-## 🆚 Library Comparison
+## 📊 Quick Comparison
 
 <div className="overflow-x-auto">
 
 | Feature | **Datezone** | date-fns | Luxon | Moment.js |
 |---------|--------------|----------|-------|-----------|
-| **Bundle Size** | 🟢 **33.76KB** (7.11KB gzipped) | 🟡 77.21KB + 9.26KB for time-zone = 86.47KB (20.73KB gzipped) | 🟡 80.3KB (23.56KB gzipped) | 🔴 294.89KB (73.13KB gzipped) |
-| **Timezone Support** | 🟢 **Built-in** | 🟡 External package | 🟢 Built-in | 🟡 External package |
-| **TypeScript** | 🟢 **100% TypeScript** | 🟡 Great | 🟡 Good | 🟡 Community |
-| **Performance** | 🟢 **Fastest** | 🟡 Moderate | 🟡 Slower | 🔴 Slowest |
-| **Immutability** | 🟢 **Immutable** | 🔴 Mutable | 🔴 Mutable | 🔴 Mutable |
+| **Size** | 33KB (7KB zipped) | 86KB (21KB zipped) | 80KB (24KB zipped) | 295KB (73KB zipped) |
+| **Timezones** | Built-in ✅ | Need extra package | Built-in ✅ | Need extra package |
+| **TypeScript** | Perfect ✅ | Great ✅ | Good ✅ | OK |
+| **Speed** | Fast ✅ | Good | Good | Slow |
+| **Safe** | Can't break things ✅ | Easy to break | Easy to break | Easy to break |
+| **Age** | New (2024) | Battle-tested | Stable | Very old |
 </div>
 
-## 🎯 Why Datezone
+## ⚡ Why Datezone is Fast
 
-### 🏗️ **Modern Architecture**
-- **Built around the modern Intl API** and arithmetic calculations instead of relying on the Date object
-- **Performance first** - works in timestamps to be friendly for the garbage collector
-- **Made to run 1000 times a second** without performance degradation
-- **Easier to serialize and send over HTTP** with timestamp-based operations
+Our [benchmarks](/benchmarks/comparison-report) show Datezone wins **86% of the time** against date-fns:
 
-### 🚀 **Blazing Fast Performance**
-- **18,000%+ faster** in time-zone operations
-- **45,000%+ faster** for date arithmetic  
-- **No performance regression** as your app scales
+### 🎯 **What's Faster**
+- **Timezone stuff**: 10-100x faster than other libraries
+- **Adding days/months**: Much quicker math
+- **Formatting dates**: Faster text output
+- **Parsing dates**: Quicker text-to-date conversion
 
-### 📦 **Developer Experience**
-- **ESM only** tree-shaking - only import what you use
-- **100% TypeScript** with strict types that catch errors at compile time
-- **Zero dependencies** - no supply chain bloat
-- **33.76KB** total size, competitive with major alternatives
+### 📈 **Notable Performance Areas**
+- **Day operations**: Significant improvements in timezone-aware date calculations
+- **Format operations**: Faster date formatting across all timezone contexts  
+- **ISO operations**: Enhanced parsing and serialization performance
+- **Month/Year calculations**: Optimized calendar arithmetic
 
-### 🌍 **Native Timezone Excellence**
-- **Timezones built into every function** - no plugins required
-- **Native IANA time-zone support** with automatic DST handling
+### 🔬 **Benchmark Methodology**
+Our benchmarks compare equivalent timezone-aware operations using:
+- **Datezone**: Built-in timezone support
+- **date-fns**: v4.x with @date-fns/tz package
+- **Realistic test scenarios** across different timezone contexts
+- **Statistical significance** testing with multiple iterations
 
-## 📈 Real-World Impact
+*Your results might be different depending on what you're building.*
 
-<CodeExample tabs={[{ name: "Simple Datezone Usage", file: "comparison/datezone.ts" },{ name: "Complex date-fns Setup", file: "comparison/date-fns.ts" }]} />
+## 🎯 Should You Use Datezone?
 
-## 🎁 Bonus Features
+Datezone might be a good fit for your project if:
 
-- **Smart caching** - Automatic time-zone data optimization
-- **DST transitions** - Handles edge cases automatically  
-- **Fast paths** - Ultra-optimized for common operations
-- **IANA compliance** - Always up-to-date time-zone data
-- **Battle-tested** - Used in production by thousands
+### 🏗️ **Modern Architecture Needs**
+- You want built-in timezone support without additional dependencies
+- You prefer working with timestamps for performance-critical applications
+- You need immutable date operations by default
 
-## 🤔 When NOT to Choose Datezone
+### 🚀 **Performance Requirements**
+- You're doing frequent date calculations in performance-sensitive code
+- You need consistent performance when handling many date operations
+- You want to minimize garbage collection pressure
 
-We believe in honest comparisons. Consider alternatives if:
+### 📦 **Modern Experience**
+- Built for today's JavaScript
+- Tree-shaking to keep bundles small
+- No old baggage from 2010
 
-- You need specific **i18n/localization** features (use date-fns)
-- You prefer working with the `Date()` object
-- You don't have performance issues and prefer the API of other libraries
-- `datezone` is a new library. You prefer a more battle-tested alternative
+## 📈 Code Comparison
+
+<CodeExample tabs={[{ name: "Datezone Approach", file: "comparison/datezone.ts" },{ name: "date-fns Approach", file: "comparison/date-fns.ts" }]} />
+
+## 🎁 What Makes Datezone Different
+
+- **Timestamp-first design** - Built around performance-friendly timestamps
+- **Integrated timezone support** - No separate packages needed
+- **Immutable by default** - Prevents common mutation bugs
+- **TypeScript native** - Designed in TypeScript from day one
+- **Modern Intl API usage** - Leverages browser-native capabilities and built-in localization
+- **Smart caching** - Optimizes timezone operations automatically

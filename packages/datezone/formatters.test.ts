@@ -91,7 +91,7 @@ describe("formatters direct unit tests", () => {
 	});
 });
 
-describe("formatters - month, week, day, time, and time-zone", () => {
+describe("formatters - month, week, day, time, and timezone", () => {
 	const dt = { ...baseDT };
 	const opts = { dt, len: 2, locale: "en" };
 

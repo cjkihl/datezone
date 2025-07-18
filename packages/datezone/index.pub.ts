@@ -5,6 +5,7 @@ export * from "./constants.pub.js";
 export * from "./day.pub.js";
 export * from "./duration.pub.js";
 export * from "./format.pub.js";
+export * from "./format-duration.pub.js";
 export * from "./format-parts.pub.js";
 export * from "./hour.pub.js";
 export * from "./iso.pub.js";

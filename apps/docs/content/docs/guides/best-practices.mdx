@@ -5,7 +5,9 @@ description: Essential best practices for building robust date and time handling
 
 
 
-Building reliable applications that handle dates and times correctly is not easy! It works on your machine, but you run into issues when you deploy it to machines in different timezones and with users all around the world. 
+Building reliable applications that handle dates and times correctly is not easy! 
+
+It works on your machine, but you run into issues when you deploy it to machines in different timezones and with users all around the world. 
 These guidelines will help you avoid common pitfalls and build maintainable calendar applications.
 
 ## Core Principles
@@ -13,7 +15,7 @@ These guidelines will help you avoid common pitfalls and build maintainable cale
 ### 1. Always Specify Timezones Explicitly
 
 I can not stress this enough. Always set timezone explicitly!
-Never rely on the system timezone for any date operations. This creates unpredictable behavior that varies between environments.
+Never rely on the system timezone for any date operations as it creates unpredictable behavior between environments.
 The `Date()` object is not your friend as it's not timezone aware. 
 
 Read more about this in [Why NOT to use Date](/docs/guides/why-not-to-use-date).
@@ -21,13 +23,13 @@ Read more about this in [Why NOT to use Date](/docs/guides/why-not-to-use-date).
 <CodeExample tabs={[{ name: "Example 1", file: "guides/why-not-to-use-date/example-1.ts" }]} />
 
 <Callout type="info">
-**User experience tip**: If the user have not selected Country or Timezone in our app, default to the browsers local time-zone, but never rely on it. This is how most calendar applications like Outlook handle time-zone selection.
+**User experience tip**: If the user have not selected Country or Timezone in our app, default to the browsers local timezone, but never rely on it. This is how most calendar applications like Outlook handle timezone selection.
 </Callout>
 
-### 2. Store as Timestamps but Display with Calendar Dates
+### 2. Store as Timestamps, Display with Calendar Dates
 
 Timestamps are the perfect storage for date and time as they are timezone agnostic performant and serializable. 
-Use time-zone aware calendar library like `Datezone` when you want to display and calculate calendar dates.
+Use timezone aware calendar library like `Datezone` when you want to display and do calendar math.
 
 Read more about why you should use timestamps in [Why use Timestamps](/docs/guides/why-use-timestamps).
 
@@ -35,7 +37,7 @@ Read more about why you should use timestamps in [Why use Timestamps](/docs/guid
 
 ### 3. Never Use simple arithmetic for Calendar Operations
 
-Don't add milliseconds directly to timestamps for date operations. Daylight Savings Time (DST) transitions make this unreliable.
+Don't use simple math on timestamps for date operations. Daylight Savings Time (DST) transitions make this unreliable.
 
 <CodeExample tabs={[{ name: "Example 2", file: "guides/how-dst-works/at-200-am-est-clocks-spring-forward-to-300-am-edt.ts" }]} />
 
@@ -52,7 +54,14 @@ Read more about DST and common pitfalls in [how DST works](/docs/guides/how-dst-
 **PostgreSQL:**
 - Store timestamps as either `TIMESTAMP` or as a `BIGINT` (milliseconds since epoch, UTC).
 - **Do not use** `TIMESTAMP WITH TIME ZONE` (`TIMESTAMPTZ`) for storage. Always store dates in UTC, regardless of user location. This makes it easy to compare dates and run statistical queries across users.
-- The popular `pg` npm package will return an ISO string for `TIMESTAMP` columns and a `number` for `BIGINT` columns. Use `datezone`'s `fromIsoString()` to convert ISO strings to timestamps—it's faster and more reliable than `Date.parse().getTime()`.
+
+<Callout type="info">
+**Note:** Using `TIMESTAMP` (without time zone) for storage is a strongly opinionated choice. I believe Timezone handling should always be managed in your business logic layer, not in the database. This keeps your data unambiguous and avoids subtle bugs caused by implicit timezone conversions in SQL engines. Let your application code handle all timezone conversions and calendar math.
+</Callout>
+
+- The popular `pg` npm package will return an ISO string for `TIMESTAMP` columns and a `number` for `BIGINT` columns. Use `datezone`'s `fromIsoString()` or `Date.parse().getTime()` to convert ISO strings to timestamps.
+
+
 
 ```sql
 -- ✅ PostgreSQL example
@@ -90,7 +99,7 @@ CREATE TABLE events (
 </Callout>
 
 
-### In API's use Timestamps or ISO Strings
+### In API's, use Timestamps or ISO Strings
 
 When using an API, always use timestamps or ISO strings for dates.
 
@@ -105,19 +114,20 @@ When using an API, always use timestamps or ISO strings for dates.
 ```
 
 <Callout type="error">
-- Date object is not supported in JSON. Don't use it in API's. 
-- Read more about this in [Why NOT to use Date](/docs/guides/why-not-to-use-date).
+Date object is not supported in JSON. Don't use it in API's. 
+
+Read more about this in [Why NOT to use Date](/docs/guides/why-not-to-use-date).
 </Callout>
 
 ## Summary
 
 Following these best practices will help you build robust, maintainable applications with reliable date and time handling:
 
-1. **Always specify time-zones explicitly**
-2. **Store timestamps, display with time-zone context**
+1. **Always specify timezones explicitly**
+2. **Store timestamps, display with timezone context**
 3. **Never use arithmetic for calendar operations**
 4. **Store as TIMESTAMP or BIGINT in Database**
 5. **In API's use Timestamps or ISO Strings**
 
-These practices, combined with `datezone`'s time-zone-aware calendar functions, will eliminate the vast majority of date-related bugs in your applications.
+These practices, combined with `datezone`'s timezone-aware calendar functions, will eliminate the vast majority of date-related bugs in your applications.
 

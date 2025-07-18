@@ -1,6 +1,6 @@
 # DateZone Monorepo
 
-A lightweight and comprehensive date and time-zone utility library for JavaScript and TypeScript.
+A lightweight and comprehensive date and timezone utility library for JavaScript and TypeScript.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

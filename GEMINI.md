@@ -1,7 +1,7 @@
 # Datezone Monorepo - Cursor Rules
 
 ## Project Overview
-This is a monorepo for the datezone library - a lightweight and comprehensive date and time-zone utility library for JavaScript/TypeScript. The project uses modern tooling and follows strict development practices.
+This is a monorepo for the datezone library - a lightweight and comprehensive date and timezone utility library for JavaScript/TypeScript. The project uses modern tooling and follows strict development practices.
 
 ## Package Manager & Build Tools
 - **Always use Bun** as the package manager (version 1.2.17)

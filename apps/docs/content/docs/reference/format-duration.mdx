@@ -4,6 +4,18 @@ title: Format Duration
 
 # format-duration
 
-Utilities for formatting durations in a human-readable way.
+Format a duration of time into a human-readable string.
+
+You can use the `locale` option to specify the locale of the output string.
+
+You can use the `delimiter` option to specify the delimiter between the parts of the duration.
+
+You can use the `formatOptions` option to specify the format of the output string.
+
+<Callout title="Language support" type="info">
+ Datezone uses the Intl API under the hood, so it supports the same locales as [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl).
+</Callout>
+
+For duration calculations, see [duration](/reference/duration).
 
 <CodeExample file="reference/format-duration/formatDuration.ts" name="formatDuration" />

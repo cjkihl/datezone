@@ -6,7 +6,7 @@ title: Duration
 
 Calculates a human-readable duration between two UTC timestamps, expressed
 as calendar components (years, months, days … milliseconds) in the
-specified time-zone.
+specified timezone.
 
 Internally the function converts both instants to `Calendar` structures in
 the target zone and then delegates the heavy-lifting to
@@ -20,7 +20,7 @@ the arguments are swapped so the returned duration is always positive.
 ## `intervalToDurationBase`
 
 Low-level counterpart to . Both arguments MUST be
-in the **same time-zone context** – normally produced with
+in the **same timezone context** – normally produced with
 `timestampToCalendar`.
 
 It performs a calendar subtraction using a classic borrow-chain so that the

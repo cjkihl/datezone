@@ -10,7 +10,7 @@ import { isLeapYearBase } from "./year.pub.js";
  *
  * @param ts - The timestamp.
  * @param days - The number of days to add.
- * @param timeZone - The time-zone.
+ * @param timeZone - The timezone.
  * @returns The new timestamp.
  * @see https://datezone.dev/docs/reference/day#adddays
  */
@@ -58,7 +58,7 @@ export function addDays(
  *
  * @param ts - The timestamp.
  * @param days - The number of days to subtract.
- * @param timeZone - The time-zone.
+ * @param timeZone - The timezone.
  * @returns The new timestamp.
  * @see https://datezone.dev/docs/reference/day#subdays
  */
@@ -70,7 +70,7 @@ export function subDays(ts: number, days: number, timeZone: TimeZone | null) {
  * Start of day.
  *
  * @param ts - The timestamp.
- * @param timeZone - The time-zone.
+ * @param timeZone - The timezone.
  * @returns The timestamp for the start of the day.
  * @see https://datezone.dev/docs/reference/day#startofday
  */
@@ -121,7 +121,7 @@ export function startOfDay(ts: number, timeZone: TimeZone | null): number {
  * End of day.
  *
  * @param ts - The timestamp.
- * @param timeZone - The time-zone.
+ * @param timeZone - The timezone.
  * @returns The timestamp for the end of the day.
  * @see https://datezone.dev/docs/reference/day#endofday
  */
@@ -176,7 +176,7 @@ export function endOfDay(ts: number, timeZone: TimeZone | null): number {
  * Day of month.
  *
  * @param ts - The timestamp.
- * @param timeZone - The time-zone.
+ * @param timeZone - The timezone.
  * @returns The day of the month.
  * @see https://datezone.dev/docs/reference/day#dayofmonth
  */
@@ -189,7 +189,7 @@ export function dayOfMonth(ts: number, timeZone: TimeZone | null): number {
  *
  * @deprecated Use {@link dayOfWeek} instead that follows ISO standard.
  * @param ts - The timestamp.
- * @param timeZone - The time-zone.
+ * @param timeZone - The timezone.
  * @returns The JavaScript day of the week (0=Sunday, 6=Saturday).
  * @see https://datezone.dev/docs/reference/day#getday
  */
@@ -203,7 +203,7 @@ export function getDay(ts: number, timeZone: TimeZone | null): number {
  * Day of week.
  *
  * @param ts - The timestamp.
- * @param timeZone - The time-zone.
+ * @param timeZone - The timezone.
  * @returns The ISO day of the week.
  * @see https://datezone.dev/docs/reference/day#dayofweek
  */
@@ -284,7 +284,7 @@ export function dayOfWeekBase(
  * Day of year.
  *
  * @param ts - The timestamp.
- * @param timeZone - The time-zone.
+ * @param timeZone - The timezone.
  * @returns The day of the year.
  * @see https://datezone.dev/docs/reference/day#dayofyear
  */

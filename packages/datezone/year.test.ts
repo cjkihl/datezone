@@ -47,7 +47,7 @@ describe("year functions", () => {
 			expect(year(timestamp2000, UTC_TIMEZONE)).toBe(2000);
 		});
 
-		test("defaults to local time-zone when time-zone is null", () => {
+		test("defaults to local timezone when timezone is null", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 			const y = year(d.getTime(), null);
 
@@ -99,7 +99,7 @@ describe("year functions", () => {
 			expect(isLeapYear(nonLeapYearTs, UTC_TIMEZONE)).toBe(false);
 		});
 
-		test("defaults to local time-zone when time-zone is null", () => {
+		test("defaults to local timezone when timezone is null", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 			const isLeap = isLeapYear(d.getTime(), null);
 
@@ -212,7 +212,7 @@ describe("year functions", () => {
 			expect(result).toBe(2024);
 		});
 
-		test("defaults to local time-zone when time-zone is null", () => {
+		test("defaults to local timezone when timezone is null", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 			const start = startOfYear(d.getTime(), null);
 
@@ -269,7 +269,7 @@ describe("year functions", () => {
 			expect(date.getUTCMilliseconds()).toBe(999);
 		});
 
-		test("defaults to local time-zone when time-zone is null", () => {
+		test("defaults to local timezone when timezone is null", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 			const end = endOfYear(d.getTime(), null);
 
@@ -339,7 +339,7 @@ describe("year functions", () => {
 			expect(date.getUTCDate()).toBe(28);
 		});
 
-		test("defaults to local time-zone when time-zone is null", () => {
+		test("defaults to local timezone when timezone is null", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 			const added = addYears(d.getTime(), 1, null);
 
@@ -383,7 +383,7 @@ describe("year functions", () => {
 			expect(date.getUTCFullYear()).toBe(2023);
 		});
 
-		test("defaults to local time-zone when time-zone is null", () => {
+		test("defaults to local timezone when timezone is null", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 			const subbed = subYears(d.getTime(), 1, null);
 
@@ -440,7 +440,7 @@ describe("year functions", () => {
 			expect(daysInYear(ts2021, TEST_TIMEZONE)).toBe(365);
 		});
 
-		test("defaults to local time-zone when time-zone is null", () => {
+		test("defaults to local timezone when timezone is null", () => {
 			const d = new Date(Date.UTC(2024, 0, 15, 12, 30, 45, 123));
 			const days = daysInYear(d.getTime(), null);
 

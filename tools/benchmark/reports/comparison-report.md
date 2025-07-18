@@ -315,7 +315,7 @@ This report compares **Datezone** against **Date-fns v4** with timeZone support 
 ### Comparison Approach
 - **Datezone:** Built-in timeZone support with UTC timestamps
 - **Date-fns:** v4.x with @date-fns/tz package for timeZone operations
-- **Test Data:** Realistic timestamps across different times and time-zones
+- **Test Data:** Realistic timestamps across different times and timezones
 - **Fairness:** Both libraries tested with equivalent timeZone-aware operations
 
 ### Performance Metrics

@@ -26,7 +26,7 @@ export default function Hero() {
 
 						<p className="text-zinc-800 dark:text-zinc-300 mt-3 tracking-tight text-3xl md:text-4xl ">
 							The fastest TypeScript library for working with dates, times and
-							time-zones.
+							timezones.
 						</p>
 						<div className="relative mt-2 md:flex items-center gap-2 w-10/12 hidden">
 							<GradientBG className="w-full flex items-center justify-between">

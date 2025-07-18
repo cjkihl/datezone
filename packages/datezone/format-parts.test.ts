@@ -84,7 +84,7 @@ describe("formatToParts", () => {
 		expect(nyParts.millisecond).toBe(789);
 	});
 
-	it("handles time-zones with positive offset", () => {
+	it("handles timezones with positive offset", () => {
 		const d = new Date(Date.UTC(2023, 5, 1, 0, 0, 0));
 		const parts = formatToParts(d.getTime(), "Asia/Tokyo", {
 			day: "2-digit",
@@ -98,7 +98,7 @@ describe("formatToParts", () => {
 		expect(parts.hour).toBe(9); // Tokyo is UTC+9
 	});
 
-	it("handles time-zones with negative offset", () => {
+	it("handles timezones with negative offset", () => {
 		const d = new Date(Date.UTC(2023, 5, 1, 6, 0, 0));
 		const parts = formatToParts(d.getTime(), "America/New_York", {
 			day: "2-digit",

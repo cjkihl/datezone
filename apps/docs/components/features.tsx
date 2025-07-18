@@ -15,10 +15,11 @@ import { GithubStat } from "./github-stat";
 
 const features = [
 	{
-		description: "Up to 1,000x faster than date-fns for timeZone operations.",
+		description: "Up to 1,000x faster than date-fns for timezone operations.",
 		icon: ZapIcon,
 		id: 1,
 		label: "Extreme Performance",
+		link: "/benchmarks/comparison-report",
 		title: "<strong>Blazing fast</strong> performance.",
 	},
 	{
@@ -27,16 +28,18 @@ const features = [
 		icon: FastForwardIcon,
 		id: 2,
 		label: "Faster by Design",
+		link: "/docs/guides/why-use-timestamps",
 		title:
 			"<strong>Faster by design</strong>, with no unnecessary object creation.",
 	},
 	{
 		description:
-			"All functions accept an optional timeZone parameter for explicit timeZone handling.",
+			"All functions accept an optional time zone parameter for explicit timezone handling.",
 		icon: GlobeIcon,
 		id: 3,
-		label: "Timezone-First",
-		title: "<strong>Timezone-first</strong> API design.",
+		label: "Time-Zone-First",
+		link: "/docs/introduction",
+		title: "<strong>Time-Zone First</strong> API design.",
 	},
 	{
 		description:
@@ -44,6 +47,7 @@ const features = [
 		icon: BoxIcon,
 		id: 4,
 		label: "Zero Unnecessary Objects",
+		link: "/docs/guides/why-not-to-use-date",
 		title: "<strong>Zero unnecessary objects</strong> for maximum efficiency.",
 	},
 	{
@@ -51,15 +55,16 @@ const features = [
 		icon: LeafIcon,
 		id: 5,
 		label: "Tree-Shakeable",
+		link: "/docs/comparison",
 		title: "<strong>Tree-shakeable</strong> for smaller bundle sizes.",
 	},
-
 	{
 		description:
 			"No side effects and strict TypeScript types for reliable code.",
 		icon: BadgeCheckIcon,
 		id: 6,
 		label: "Pure & Typed",
+		link: "/docs/installation",
 		title: "<strong>Pure and fully typed</strong> for robust applications.",
 	},
 ];
@@ -98,7 +103,7 @@ export default function Features({ stars }: { stars: string | null }) {
 									{feature.description}
 									<a
 										className="ml-2 underline"
-										href="/docs"
+										href={feature.link}
 										rel="noopener"
 										target="_blank"
 									>

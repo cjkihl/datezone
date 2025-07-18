@@ -6,7 +6,7 @@ import { isDST, isUTC, type TimeZone } from "./timezone.pub.js";
  * Get UTC to timezone offset minutes.
  *
  * @param ts - Timestamp in milliseconds
- * @param tz - Target time-zone (null/undefined for local)
+ * @param tz - Target timezone (null/undefined for local)
  * @returns Offset in minutes (positive if ahead of UTC, negative if behind)
  * @see https://datezone.dev/docs/reference/offset#getutctotimezoneoffsetminutes
  */

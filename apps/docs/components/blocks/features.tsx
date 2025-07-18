@@ -33,7 +33,7 @@ const grid = [
 		title: "TypeScript Native",
 	},
 	{
-		description: "Comprehensive time-zone support with IANA database",
+		description: "Comprehensive timezone support with IANA database",
 		title: "Timezone Aware",
 	},
 	{
