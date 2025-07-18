@@ -1,5 +1,11 @@
 # datezone
 
+## 1.0.7
+
+### Patch Changes
+
+- 7e3734b: add format duration
+
 ## 1.0.6
 
 ### Patch Changes
