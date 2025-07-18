@@ -1,7 +1,73 @@
 import type { Calendar } from "./calendar.pub.js";
 import { timestampToCalendar } from "./calendar.pub.js";
 import { daysInMonthBase } from "./month.pub.js";
-import type { TimeZone } from "./timezone.pub.js";
+import { getUTCtoTimezoneOffsetMinutes } from "./offset.pub.js";
+import { isDST, isUTC, type TimeZone } from "./timezone.pub.js";
+
+/**
+ * Cache for recent interval calculations to avoid repeated timezone lookups
+ */
+const intervalCache = new Map<string, Calendar>();
+const INTERVAL_CACHE_MAX_SIZE = 100;
+const intervalCacheKeys: string[] = [];
+
+/**
+ * Create cache key for interval calculations
+ */
+function createIntervalCacheKey(
+	start: number,
+	end: number,
+	timeZone: TimeZone | null,
+): string {
+	return `${start}-${end}-${timeZone || "local"}`;
+}
+
+/**
+ * Optimized interval to duration for DST timezones
+ */
+function intervalToDurationDST(
+	start: number,
+	end: number,
+	timeZone: TimeZone,
+): Calendar {
+	const cacheKey = createIntervalCacheKey(start, end, timeZone);
+	const cached = intervalCache.get(cacheKey);
+	if (cached) {
+		return cached;
+	}
+
+	// Check if we can use a fast approximation
+	const duration = end - start;
+	const hours = Math.abs(duration) / (1000 * 60 * 60);
+
+	// For short durations (< 25 hours), offset changes are unlikely
+	if (hours < 25) {
+		const offsetStart = getUTCtoTimezoneOffsetMinutes(start, timeZone);
+		const offsetEnd = getUTCtoTimezoneOffsetMinutes(end, timeZone);
+
+		// If offsets are the same, we can use a faster calculation
+		if (offsetStart === offsetEnd) {
+			const startCal = timestampToCalendar(start, timeZone);
+			const endCal = timestampToCalendar(end, timeZone);
+			const result = intervalToDurationBase(startCal, endCal);
+
+			// Cache the result
+			if (intervalCache.size >= INTERVAL_CACHE_MAX_SIZE) {
+				const oldestKey = intervalCacheKeys.shift();
+				if (oldestKey) intervalCache.delete(oldestKey);
+			}
+			intervalCache.set(cacheKey, result);
+			intervalCacheKeys.push(cacheKey);
+
+			return result;
+		}
+	}
+
+	// Fallback to full calculation for complex cases
+	const startCal = timestampToCalendar(start, timeZone);
+	const endCal = timestampToCalendar(end, timeZone);
+	return intervalToDurationBase(startCal, endCal);
+}
 
 /**
  * Interval to duration.
@@ -23,6 +89,20 @@ export function intervalToDuration(
 	if (_end < _start) {
 		[_start, _end] = [_end, _start];
 	}
+
+	// Fast paths
+	if (!timeZone || isUTC(timeZone)) {
+		const startCal = timestampToCalendar(_start, timeZone);
+		const endCal = timestampToCalendar(_end, timeZone);
+		return intervalToDurationBase(startCal, endCal);
+	}
+
+	// Optimized DST calculation
+	if (isDST(timeZone)) {
+		return intervalToDurationDST(_start, _end, timeZone);
+	}
+
+	// Non-DST timezone (fixed offset)
 	const startCal = timestampToCalendar(_start, timeZone);
 	const endCal = timestampToCalendar(_end, timeZone);
 	return intervalToDurationBase(startCal, endCal);

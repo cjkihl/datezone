@@ -1,8 +1,8 @@
 # 🏁 Datezone vs Date-fns Performance Comparison
 
-**Generated:** `2025-07-17T13:14:06.487Z`  
+**Generated:** `2025-07-18T11:30:21.757Z`  
 **Node.js:** `v24.3.0`  
-**Platform:** `linux x64`
+**Platform:** `darwin arm64`
 
 ## 📊 Performance Overview
 
@@ -22,295 +22,295 @@ This report compares **Datezone** against **Date-fns v4** with timeZone support 
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `addDays` | **addDays**<br/>**<sub>`1.3M ops/sec`</sub>** | addDays<br/><sub>`93.6K ops/sec`</sub> | 🚀 <sub>`+1247%`</sub> |
-| `startOfDay` | **startOfDay**<br/>**<sub>`1.1M ops/sec`</sub>** | startOfDay<br/><sub>`112.0K ops/sec`</sub> | 🚀 <sub>`+842%`</sub> |
-| `endOfDay` | **endOfDay**<br/>**<sub>`1.1M ops/sec`</sub>** | endOfDay<br/><sub>`112.7K ops/sec`</sub> | 🚀 <sub>`+839%`</sub> |
-| `dayOfWeek` | **dayOfWeek**<br/>**<sub>`1.1M ops/sec`</sub>** | dayOfWeek<br/><sub>`175.9K ops/sec`</sub> | 🚀 <sub>`+502%`</sub> |
-| `dayOfYear` | **dayOfYear**<br/>**<sub>`8.6M ops/sec`</sub>** | dayOfYear<br/><sub>`24.1K ops/sec`</sub> | 🚀 <sub>`+35681%`</sub> |
+| `addDays` | **addDays**<br/>**<sub>`2.0M ops/sec`</sub>** | addDays<br/><sub>`100.0K ops/sec`</sub> | 🚀 <sub>`+1890%`</sub> |
+| `startOfDay` | **startOfDay**<br/>**<sub>`1.5M ops/sec`</sub>** | startOfDay<br/><sub>`106.6K ops/sec`</sub> | 🚀 <sub>`+1266%`</sub> |
+| `endOfDay` | **endOfDay**<br/>**<sub>`1.4M ops/sec`</sub>** | endOfDay<br/><sub>`108.1K ops/sec`</sub> | 🚀 <sub>`+1237%`</sub> |
+| `dayOfWeek` | **dayOfWeek**<br/>**<sub>`1.4M ops/sec`</sub>** | dayOfWeek<br/><sub>`169.2K ops/sec`</sub> | 🚀 <sub>`+751%`</sub> |
+| `dayOfYear` | **dayOfYear**<br/>**<sub>`9.5M ops/sec`</sub>** | dayOfYear<br/><sub>`22.5K ops/sec`</sub> | 🚀 <sub>`+42010%`</sub> |
 
 ## Day (Local)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `addDays` | addDays<br/><sub>`6.1M ops/sec`</sub> | **addDays**<br/>**<sub>`12.7M ops/sec`</sub>** | 🐌 <sub>`-52%`</sub> |
-| `startOfDay` | **startOfDay**<br/>**<sub>`12.1M ops/sec`</sub>** | startOfDay<br/><sub>`12.1M ops/sec`</sub> | 🤝 |
-| `endOfDay` | **endOfDay**<br/>**<sub>`11.7M ops/sec`</sub>** | endOfDay<br/><sub>`11.7M ops/sec`</sub> | 🤝 |
-| `dayOfWeek` | **dayOfWeek**<br/>**<sub>`26.6M ops/sec`</sub>** | dayOfWeek<br/><sub>`25.3M ops/sec`</sub> | 🤝 |
-| `dayOfYear` | **dayOfYear**<br/>**<sub>`8.6M ops/sec`</sub>** | dayOfYear<br/><sub>`443.2K ops/sec`</sub> | 🚀 <sub>`+1829%`</sub> |
+| `addDays` | addDays<br/><sub>`7.2M ops/sec`</sub> | **addDays**<br/>**<sub>`15.4M ops/sec`</sub>** | 🐌 <sub>`-53%`</sub> |
+| `startOfDay` | **startOfDay**<br/>**<sub>`14.9M ops/sec`</sub>** | startOfDay<br/><sub>`14.8M ops/sec`</sub> | 🤝 |
+| `endOfDay` | endOfDay<br/><sub>`13.9M ops/sec`</sub> | **endOfDay**<br/>**<sub>`14.5M ops/sec`</sub>** | 🤝 |
+| `dayOfWeek` | **dayOfWeek**<br/>**<sub>`27.6M ops/sec`</sub>** | dayOfWeek<br/><sub>`26.5M ops/sec`</sub> | 🤝 |
+| `dayOfYear` | **dayOfYear**<br/>**<sub>`8.4M ops/sec`</sub>** | dayOfYear<br/><sub>`559.5K ops/sec`</sub> | 🚀 <sub>`+1410%`</sub> |
 
 ## Day (Non-DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `addDays` | **addDays**<br/>**<sub>`72.0M ops/sec`</sub>** | addDays<br/><sub>`125.8K ops/sec`</sub> | 🚀 <sub>`+57122%`</sub> |
-| `startOfDay` | **startOfDay**<br/>**<sub>`3.7M ops/sec`</sub>** | startOfDay<br/><sub>`128.0K ops/sec`</sub> | 🚀 <sub>`+2798%`</sub> |
-| `endOfDay` | **endOfDay**<br/>**<sub>`8.7M ops/sec`</sub>** | endOfDay<br/><sub>`126.6K ops/sec`</sub> | 🚀 <sub>`+6781%`</sub> |
-| `dayOfWeek` | **dayOfWeek**<br/>**<sub>`23.8M ops/sec`</sub>** | dayOfWeek<br/><sub>`205.4K ops/sec`</sub> | 🚀 <sub>`+11500%`</sub> |
-| `dayOfYear` | **dayOfYear**<br/>**<sub>`12.5M ops/sec`</sub>** | dayOfYear<br/><sub>`26.8K ops/sec`</sub> | 🚀 <sub>`+46542%`</sub> |
+| `addDays` | **addDays**<br/>**<sub>`77.8M ops/sec`</sub>** | addDays<br/><sub>`117.5K ops/sec`</sub> | 🚀 <sub>`+66105%`</sub> |
+| `startOfDay` | **startOfDay**<br/>**<sub>`5.4M ops/sec`</sub>** | startOfDay<br/><sub>`127.1K ops/sec`</sub> | 🚀 <sub>`+4115%`</sub> |
+| `endOfDay` | **endOfDay**<br/>**<sub>`10.9M ops/sec`</sub>** | endOfDay<br/><sub>`127.0K ops/sec`</sub> | 🚀 <sub>`+8487%`</sub> |
+| `dayOfWeek` | **dayOfWeek**<br/>**<sub>`23.7M ops/sec`</sub>** | dayOfWeek<br/><sub>`203.6K ops/sec`</sub> | 🚀 <sub>`+11542%`</sub> |
+| `dayOfYear` | **dayOfYear**<br/>**<sub>`12.8M ops/sec`</sub>** | dayOfYear<br/><sub>`26.9K ops/sec`</sub> | 🚀 <sub>`+47665%`</sub> |
 
 ## Day (UTC)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `addDays` | **addDays**<br/>**<sub>`2711.0M ops/sec`</sub>** | addDays<br/><sub>`134.7K ops/sec`</sub> | 🚀 <sub>`+2012822%`</sub> |
-| `startOfDay` | **startOfDay**<br/>**<sub>`8.5M ops/sec`</sub>** | startOfDay<br/><sub>`160.0K ops/sec`</sub> | 🚀 <sub>`+5197%`</sub> |
-| `endOfDay` | **endOfDay**<br/>**<sub>`7.9M ops/sec`</sub>** | endOfDay<br/><sub>`159.5K ops/sec`</sub> | 🚀 <sub>`+4878%`</sub> |
-| `dayOfWeek` | **dayOfWeek**<br/>**<sub>`18.1M ops/sec`</sub>** | dayOfWeek<br/><sub>`260.6K ops/sec`</sub> | 🚀 <sub>`+6851%`</sub> |
-| `dayOfYear` | **dayOfYear**<br/>**<sub>`9.8M ops/sec`</sub>** | dayOfYear<br/><sub>`34.0K ops/sec`</sub> | 🚀 <sub>`+28838%`</sub> |
+| `addDays` | **addDays**<br/>**<sub>`36.3M ops/sec`</sub>** | addDays<br/><sub>`141.1K ops/sec`</sub> | 🚀 <sub>`+25659%`</sub> |
+| `startOfDay` | **startOfDay**<br/>**<sub>`9.6M ops/sec`</sub>** | startOfDay<br/><sub>`155.6K ops/sec`</sub> | 🚀 <sub>`+6096%`</sub> |
+| `endOfDay` | **endOfDay**<br/>**<sub>`9.0M ops/sec`</sub>** | endOfDay<br/><sub>`155.7K ops/sec`</sub> | 🚀 <sub>`+5685%`</sub> |
+| `dayOfWeek` | **dayOfWeek**<br/>**<sub>`19.0M ops/sec`</sub>** | dayOfWeek<br/><sub>`253.5K ops/sec`</sub> | 🚀 <sub>`+7404%`</sub> |
+| `dayOfYear` | **dayOfYear**<br/>**<sub>`9.8M ops/sec`</sub>** | dayOfYear<br/><sub>`32.8K ops/sec`</sub> | 🚀 <sub>`+29679%`</sub> |
 
 ## Duration (DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `intervalToDuration` | **intervalToDuration**<br/>**<sub>`950.3K ops/sec`</sub>** | intervalToDuration<br/><sub>`31.4K ops/sec`</sub> | 🚀 <sub>`+2928%`</sub> |
+| `intervalToDuration` | **intervalToDuration**<br/>**<sub>`1.2M ops/sec`</sub>** | intervalToDuration<br/><sub>`30.3K ops/sec`</sub> | 🚀 <sub>`+3807%`</sub> |
 
 ## Duration (Local)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `intervalToDuration` | **intervalToDuration**<br/>**<sub>`3.3M ops/sec`</sub>** | intervalToDuration<br/><sub>`771.7K ops/sec`</sub> | 🚀 <sub>`+333%`</sub> |
+| `intervalToDuration` | **intervalToDuration**<br/>**<sub>`5.6M ops/sec`</sub>** | intervalToDuration<br/><sub>`693.3K ops/sec`</sub> | 🚀 <sub>`+708%`</sub> |
 
 ## Duration (Non-DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `intervalToDuration` | **intervalToDuration**<br/>**<sub>`2.5M ops/sec`</sub>** | intervalToDuration<br/><sub>`34.1K ops/sec`</sub> | 🚀 <sub>`+7168%`</sub> |
+| `intervalToDuration` | **intervalToDuration**<br/>**<sub>`3.7M ops/sec`</sub>** | intervalToDuration<br/><sub>`35.8K ops/sec`</sub> | 🚀 <sub>`+10147%`</sub> |
 
 ## Duration (UTC)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `intervalToDuration` | **intervalToDuration**<br/>**<sub>`6.0M ops/sec`</sub>** | intervalToDuration<br/><sub>`43.6K ops/sec`</sub> | 🚀 <sub>`+13747%`</sub> |
+| `intervalToDuration` | **intervalToDuration**<br/>**<sub>`5.2M ops/sec`</sub>** | intervalToDuration<br/><sub>`43.1K ops/sec`</sub> | 🚀 <sub>`+12039%`</sub> |
 
 ## Format (DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `format` | **format**<br/>**<sub>`366.9K ops/sec`</sub>** | format<br/><sub>`63.9K ops/sec`</sub> | 🚀 <sub>`+475%`</sub> |
+| `format` | **format**<br/>**<sub>`513.8K ops/sec`</sub>** | format<br/><sub>`71.4K ops/sec`</sub> | 🚀 <sub>`+620%`</sub> |
 
 ## Format (Local)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `format` | **format**<br/>**<sub>`508.5K ops/sec`</sub>** | format<br/><sub>`174.0K ops/sec`</sub> | 🚀 <sub>`+192%`</sub> |
+| `format` | **format**<br/>**<sub>`614.9K ops/sec`</sub>** | format<br/><sub>`210.0K ops/sec`</sub> | 🚀 <sub>`+193%`</sub> |
 
 ## Format (Non-DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `format` | **format**<br/>**<sub>`436.2K ops/sec`</sub>** | format<br/><sub>`64.8K ops/sec`</sub> | 🚀 <sub>`+573%`</sub> |
+| `format` | **format**<br/>**<sub>`561.5K ops/sec`</sub>** | format<br/><sub>`77.4K ops/sec`</sub> | 🚀 <sub>`+625%`</sub> |
 
 ## Format (UTC)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `format` | **format**<br/>**<sub>`712.0K ops/sec`</sub>** | format<br/><sub>`74.1K ops/sec`</sub> | 🚀 <sub>`+861%`</sub> |
+| `format` | **format**<br/>**<sub>`701.0K ops/sec`</sub>** | format<br/><sub>`86.7K ops/sec`</sub> | 🚀 <sub>`+709%`</sub> |
 
 ## Format-duration (DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `formatDuration` | formatDuration<br/><sub>`252.8K ops/sec`</sub> | **formatDuration**<br/>**<sub>`410.8K ops/sec`</sub>** | 🐌 <sub>`-38%`</sub> |
-| `formatDuration complex` | formatDuration complex<br/><sub>`79.9K ops/sec`</sub> | **formatDuration complex**<br/>**<sub>`302.0K ops/sec`</sub>** | 🐌 <sub>`-74%`</sub> |
-| `formatDuration zero values` | formatDuration zero values<br/><sub>`249.4K ops/sec`</sub> | **formatDuration zero values**<br/>**<sub>`410.4K ops/sec`</sub>** | 🐌 <sub>`-39%`</sub> |
+| `formatDuration` | formatDuration<br/><sub>`411.4K ops/sec`</sub> | **formatDuration**<br/>**<sub>`516.3K ops/sec`</sub>** | ⚠️ <sub>`-20%`</sub> |
+| `formatDuration complex` | formatDuration complex<br/><sub>`184.6K ops/sec`</sub> | **formatDuration complex**<br/>**<sub>`380.3K ops/sec`</sub>** | 🐌 <sub>`-51%`</sub> |
+| `formatDuration zero values` | **formatDuration zero values**<br/>**<sub>`500.5K ops/sec`</sub>** | formatDuration zero values<br/><sub>`497.8K ops/sec`</sub> | 🤝 |
 
 ## Format-duration (Local)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `formatDuration` | formatDuration<br/><sub>`211.8K ops/sec`</sub> | **formatDuration**<br/>**<sub>`403.0K ops/sec`</sub>** | 🐌 <sub>`-47%`</sub> |
-| `formatDuration complex` | formatDuration complex<br/><sub>`86.6K ops/sec`</sub> | **formatDuration complex**<br/>**<sub>`322.9K ops/sec`</sub>** | 🐌 <sub>`-73%`</sub> |
-| `formatDuration with locale` | formatDuration with locale<br/><sub>`266.2K ops/sec`</sub> | **formatDuration with locale**<br/>**<sub>`415.4K ops/sec`</sub>** | 🐌 <sub>`-36%`</sub> |
+| `formatDuration` | **formatDuration**<br/>**<sub>`9.4M ops/sec`</sub>** | formatDuration<br/><sub>`498.6K ops/sec`</sub> | 🚀 <sub>`+1787%`</sub> |
+| `formatDuration complex` | **formatDuration complex**<br/>**<sub>`4.0M ops/sec`</sub>** | formatDuration complex<br/><sub>`402.6K ops/sec`</sub> | 🚀 <sub>`+884%`</sub> |
+| `formatDuration with locale` | **formatDuration with locale**<br/>**<sub>`9.1M ops/sec`</sub>** | formatDuration with locale<br/><sub>`507.3K ops/sec`</sub> | 🚀 <sub>`+1684%`</sub> |
 
 ## Format-duration (Non-DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `formatDuration` | formatDuration<br/><sub>`276.1K ops/sec`</sub> | **formatDuration**<br/>**<sub>`412.4K ops/sec`</sub>** | 🐌 <sub>`-33%`</sub> |
-| `formatDuration complex` | formatDuration complex<br/><sub>`88.4K ops/sec`</sub> | **formatDuration complex**<br/>**<sub>`296.2K ops/sec`</sub>** | 🐌 <sub>`-70%`</sub> |
-| `formatDuration with delimiter` | formatDuration with delimiter<br/><sub>`274.8K ops/sec`</sub> | **formatDuration with delimiter**<br/>**<sub>`411.2K ops/sec`</sub>** | 🐌 <sub>`-33%`</sub> |
+| `formatDuration` | **formatDuration**<br/>**<sub>`523.1K ops/sec`</sub>** | formatDuration<br/><sub>`499.1K ops/sec`</sub> | 🤝 |
+| `formatDuration complex` | formatDuration complex<br/><sub>`222.8K ops/sec`</sub> | **formatDuration complex**<br/>**<sub>`375.7K ops/sec`</sub>** | 🐌 <sub>`-41%`</sub> |
+| `formatDuration with delimiter` | **formatDuration with delimiter**<br/>**<sub>`613.2K ops/sec`</sub>** | formatDuration with delimiter<br/><sub>`512.2K ops/sec`</sub> | ✅ <sub>`+20%`</sub> |
 
 ## Format-duration (UTC)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `formatDuration` | formatDuration<br/><sub>`269.8K ops/sec`</sub> | **formatDuration**<br/>**<sub>`416.3K ops/sec`</sub>** | 🐌 <sub>`-35%`</sub> |
-| `formatDuration complex` | formatDuration complex<br/><sub>`101.1K ops/sec`</sub> | **formatDuration complex**<br/>**<sub>`324.5K ops/sec`</sub>** | 🐌 <sub>`-69%`</sub> |
-| `formatDuration custom format` | formatDuration custom format<br/><sub>`268.0K ops/sec`</sub> | **formatDuration custom format**<br/>**<sub>`673.6K ops/sec`</sub>** | 🐌 <sub>`-60%`</sub> |
+| `formatDuration` | **formatDuration**<br/>**<sub>`8.5M ops/sec`</sub>** | formatDuration<br/><sub>`506.3K ops/sec`</sub> | 🚀 <sub>`+1585%`</sub> |
+| `formatDuration complex` | **formatDuration complex**<br/>**<sub>`3.8M ops/sec`</sub>** | formatDuration complex<br/><sub>`407.6K ops/sec`</sub> | 🚀 <sub>`+840%`</sub> |
+| `formatDuration custom format` | **formatDuration custom format**<br/>**<sub>`9.2M ops/sec`</sub>** | formatDuration custom format<br/><sub>`856.6K ops/sec`</sub> | 🚀 <sub>`+974%`</sub> |
 
 ## Hour (DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `hour` | **hour**<br/>**<sub>`6.3M ops/sec`</sub>** | hour<br/><sub>`278.2K ops/sec`</sub> | 🚀 <sub>`+2178%`</sub> |
-| `addHours` | **addHours**<br/>**<sub>`5073.3M ops/sec`</sub>** | addHours<br/><sub>`123.2K ops/sec`</sub> | 🚀 <sub>`+4117750%`</sub> |
+| `hour` | **hour**<br/>**<sub>`8.0M ops/sec`</sub>** | hour<br/><sub>`280.5K ops/sec`</sub> | 🚀 <sub>`+2757%`</sub> |
+| `addHours` | **addHours**<br/>**<sub>`5081.9M ops/sec`</sub>** | addHours<br/><sub>`108.3K ops/sec`</sub> | 🚀 <sub>`+4690406%`</sub> |
 
 ## Hour (Local)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `hour` | hour<br/><sub>`9.3M ops/sec`</sub> | **hour**<br/>**<sub>`31.8M ops/sec`</sub>** | 🐌 <sub>`-71%`</sub> |
-| `addHours` | **addHours**<br/>**<sub>`3249.1M ops/sec`</sub>** | addHours<br/><sub>`7.9M ops/sec`</sub> | 🚀 <sub>`+41275%`</sub> |
+| `hour` | hour<br/><sub>`12.1M ops/sec`</sub> | **hour**<br/>**<sub>`36.3M ops/sec`</sub>** | 🐌 <sub>`-67%`</sub> |
+| `addHours` | **addHours**<br/>**<sub>`2727.8M ops/sec`</sub>** | addHours<br/><sub>`8.0M ops/sec`</sub> | 🚀 <sub>`+34191%`</sub> |
 
 ## Hour (Non-DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `hour` | **hour**<br/>**<sub>`7.8M ops/sec`</sub>** | hour<br/><sub>`306.0K ops/sec`</sub> | 🚀 <sub>`+2434%`</sub> |
-| `addHours` | **addHours**<br/>**<sub>`5109.0M ops/sec`</sub>** | addHours<br/><sub>`135.9K ops/sec`</sub> | 🚀 <sub>`+3760498%`</sub> |
+| `hour` | **hour**<br/>**<sub>`9.3M ops/sec`</sub>** | hour<br/><sub>`372.9K ops/sec`</sub> | 🚀 <sub>`+2381%`</sub> |
+| `addHours` | **addHours**<br/>**<sub>`5088.1M ops/sec`</sub>** | addHours<br/><sub>`135.6K ops/sec`</sub> | 🚀 <sub>`+3752980%`</sub> |
 
 ## Hour (UTC)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `hour` | **hour**<br/>**<sub>`339.0M ops/sec`</sub>** | hour<br/><sub>`390.1K ops/sec`</sub> | 🚀 <sub>`+86807%`</sub> |
-| `addHours` | **addHours**<br/>**<sub>`8136.9M ops/sec`</sub>** | addHours<br/><sub>`169.7K ops/sec`</sub> | 🚀 <sub>`+4794494%`</sub> |
+| `hour` | **hour**<br/>**<sub>`220.8M ops/sec`</sub>** | hour<br/><sub>`373.4K ops/sec`</sub> | 🚀 <sub>`+59029%`</sub> |
+| `addHours` | **addHours**<br/>**<sub>`5115.9M ops/sec`</sub>** | addHours<br/><sub>`163.3K ops/sec`</sub> | 🚀 <sub>`+3133484%`</sub> |
 
 ## Iso (DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `toISOString` | **toISOString**<br/>**<sub>`1.1M ops/sec`</sub>** | toISOString<br/><sub>`113.4K ops/sec`</sub> | 🚀 <sub>`+840%`</sub> |
-| `fromISOString` | **fromISOString**<br/>**<sub>`39.0M ops/sec`</sub>** | fromISOString<br/><sub>`669.4K ops/sec`</sub> | 🚀 <sub>`+5728%`</sub> |
+| `toISOString` | **toISOString**<br/>**<sub>`1.6M ops/sec`</sub>** | toISOString<br/><sub>`118.9K ops/sec`</sub> | 🚀 <sub>`+1282%`</sub> |
+| `fromISOString` | **fromISOString**<br/>**<sub>`32.1M ops/sec`</sub>** | fromISOString<br/><sub>`844.9K ops/sec`</sub> | 🚀 <sub>`+3699%`</sub> |
 
 ## Iso (Local)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `toISOString` | **toISOString**<br/>**<sub>`2.6M ops/sec`</sub>** | toISOString<br/><sub>`2.2M ops/sec`</sub> | ✅ <sub>`+17%`</sub> |
-| `fromISOString` | **fromISOString**<br/>**<sub>`38.5M ops/sec`</sub>** | fromISOString<br/><sub>`405.6K ops/sec`</sub> | 🚀 <sub>`+9382%`</sub> |
+| `toISOString` | **toISOString**<br/>**<sub>`2.6M ops/sec`</sub>** | toISOString<br/><sub>`1.7M ops/sec`</sub> | ⚡ <sub>`+47%`</sub> |
+| `fromISOString` | **fromISOString**<br/>**<sub>`32.3M ops/sec`</sub>** | fromISOString<br/><sub>`694.0K ops/sec`</sub> | 🚀 <sub>`+4559%`</sub> |
 
 ## Iso (Non-DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `toISOString` | **toISOString**<br/>**<sub>`1.2M ops/sec`</sub>** | toISOString<br/><sub>`114.3K ops/sec`</sub> | 🚀 <sub>`+964%`</sub> |
-| `fromISOString` | **fromISOString**<br/>**<sub>`38.3M ops/sec`</sub>** | fromISOString<br/><sub>`675.8K ops/sec`</sub> | 🚀 <sub>`+5571%`</sub> |
+| `toISOString` | **toISOString**<br/>**<sub>`2.0M ops/sec`</sub>** | toISOString<br/><sub>`129.8K ops/sec`</sub> | 🚀 <sub>`+1412%`</sub> |
+| `fromISOString` | **fromISOString**<br/>**<sub>`33.3M ops/sec`</sub>** | fromISOString<br/><sub>`858.0K ops/sec`</sub> | 🚀 <sub>`+3779%`</sub> |
 
 ## Iso (UTC)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `toISOString` | **toISOString**<br/>**<sub>`7.1M ops/sec`</sub>** | toISOString<br/><sub>`150.6K ops/sec`</sub> | 🚀 <sub>`+4632%`</sub> |
-| `fromISOString` | **fromISOString**<br/>**<sub>`39.8M ops/sec`</sub>** | fromISOString<br/><sub>`675.2K ops/sec`</sub> | 🚀 <sub>`+5797%`</sub> |
+| `toISOString` | **toISOString**<br/>**<sub>`7.1M ops/sec`</sub>** | toISOString<br/><sub>`175.9K ops/sec`</sub> | 🚀 <sub>`+3926%`</sub> |
+| `fromISOString` | **fromISOString**<br/>**<sub>`34.2M ops/sec`</sub>** | fromISOString<br/><sub>`858.9K ops/sec`</sub> | 🚀 <sub>`+3877%`</sub> |
 
 ## Month (DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `addMonths` | **addMonths**<br/>**<sub>`647.6K ops/sec`</sub>** | addMonths<br/><sub>`58.1K ops/sec`</sub> | 🚀 <sub>`+1014%`</sub> |
-| `startOfMonth` | **startOfMonth**<br/>**<sub>`1.2M ops/sec`</sub>** | startOfMonth<br/><sub>`84.9K ops/sec`</sub> | 🚀 <sub>`+1262%`</sub> |
-| `endOfMonth` | **endOfMonth**<br/>**<sub>`1.2M ops/sec`</sub>** | endOfMonth<br/><sub>`82.4K ops/sec`</sub> | 🚀 <sub>`+1297%`</sub> |
-| `daysInMonth` | **daysInMonth**<br/>**<sub>`10.1M ops/sec`</sub>** | daysInMonth<br/><sub>`65.9K ops/sec`</sub> | 🚀 <sub>`+15272%`</sub> |
+| `addMonths` | **addMonths**<br/>**<sub>`1.0M ops/sec`</sub>** | addMonths<br/><sub>`60.2K ops/sec`</sub> | 🚀 <sub>`+1581%`</sub> |
+| `startOfMonth` | **startOfMonth**<br/>**<sub>`1.6M ops/sec`</sub>** | startOfMonth<br/><sub>`77.8K ops/sec`</sub> | 🚀 <sub>`+1980%`</sub> |
+| `endOfMonth` | **endOfMonth**<br/>**<sub>`1.6M ops/sec`</sub>** | endOfMonth<br/><sub>`77.0K ops/sec`</sub> | 🚀 <sub>`+1914%`</sub> |
+| `daysInMonth` | **daysInMonth**<br/>**<sub>`10.8M ops/sec`</sub>** | daysInMonth<br/><sub>`60.4K ops/sec`</sub> | 🚀 <sub>`+17837%`</sub> |
 
 ## Month (Local)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `addMonths` | addMonths<br/><sub>`3.0M ops/sec`</sub> | **addMonths**<br/>**<sub>`3.2M ops/sec`</sub>** | 🤝 |
-| `startOfMonth` | startOfMonth<br/><sub>`3.8M ops/sec`</sub> | **startOfMonth**<br/>**<sub>`3.9M ops/sec`</sub>** | 🤝 |
-| `endOfMonth` | endOfMonth<br/><sub>`4.9M ops/sec`</sub> | **endOfMonth**<br/>**<sub>`5.1M ops/sec`</sub>** | 🤝 |
-| `daysInMonth` | **daysInMonth**<br/>**<sub>`29.7M ops/sec`</sub>** | daysInMonth<br/><sub>`3.2M ops/sec`</sub> | 🚀 <sub>`+826%`</sub> |
+| `addMonths` | **addMonths**<br/>**<sub>`3.1M ops/sec`</sub>** | addMonths<br/><sub>`2.7M ops/sec`</sub> | ✅ <sub>`+16%`</sub> |
+| `startOfMonth` | startOfMonth<br/><sub>`3.7M ops/sec`</sub> | **startOfMonth**<br/>**<sub>`3.7M ops/sec`</sub>** | 🤝 |
+| `endOfMonth` | **endOfMonth**<br/>**<sub>`5.2M ops/sec`</sub>** | endOfMonth<br/><sub>`5.0M ops/sec`</sub> | 🤝 |
+| `daysInMonth` | **daysInMonth**<br/>**<sub>`29.5M ops/sec`</sub>** | daysInMonth<br/><sub>`2.6M ops/sec`</sub> | 🚀 <sub>`+1013%`</sub> |
 
 ## Month (Non-DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `addMonths` | **addMonths**<br/>**<sub>`2.3M ops/sec`</sub>** | addMonths<br/><sub>`62.9K ops/sec`</sub> | 🚀 <sub>`+3559%`</sub> |
-| `startOfMonth` | **startOfMonth**<br/>**<sub>`6.2M ops/sec`</sub>** | startOfMonth<br/><sub>`93.0K ops/sec`</sub> | 🚀 <sub>`+6583%`</sub> |
-| `endOfMonth` | **endOfMonth**<br/>**<sub>`4.5M ops/sec`</sub>** | endOfMonth<br/><sub>`90.6K ops/sec`</sub> | 🚀 <sub>`+4902%`</sub> |
-| `daysInMonth` | **daysInMonth**<br/>**<sub>`16.0M ops/sec`</sub>** | daysInMonth<br/><sub>`73.5K ops/sec`</sub> | 🚀 <sub>`+21646%`</sub> |
+| `addMonths` | **addMonths**<br/>**<sub>`4.2M ops/sec`</sub>** | addMonths<br/><sub>`69.5K ops/sec`</sub> | 🚀 <sub>`+5889%`</sub> |
+| `startOfMonth` | **startOfMonth**<br/>**<sub>`7.1M ops/sec`</sub>** | startOfMonth<br/><sub>`89.8K ops/sec`</sub> | 🚀 <sub>`+7781%`</sub> |
+| `endOfMonth` | **endOfMonth**<br/>**<sub>`6.8M ops/sec`</sub>** | endOfMonth<br/><sub>`91.7K ops/sec`</sub> | 🚀 <sub>`+7274%`</sub> |
+| `daysInMonth` | **daysInMonth**<br/>**<sub>`15.2M ops/sec`</sub>** | daysInMonth<br/><sub>`73.1K ops/sec`</sub> | 🚀 <sub>`+20744%`</sub> |
 
 ## Month (UTC)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `addMonths` | **addMonths**<br/>**<sub>`2.6M ops/sec`</sub>** | addMonths<br/><sub>`81.9K ops/sec`</sub> | 🚀 <sub>`+3109%`</sub> |
-| `startOfMonth` | **startOfMonth**<br/>**<sub>`6.4M ops/sec`</sub>** | startOfMonth<br/><sub>`116.8K ops/sec`</sub> | 🚀 <sub>`+5404%`</sub> |
-| `endOfMonth` | **endOfMonth**<br/>**<sub>`5.8M ops/sec`</sub>** | endOfMonth<br/><sub>`117.3K ops/sec`</sub> | 🚀 <sub>`+4809%`</sub> |
-| `daysInMonth` | **daysInMonth**<br/>**<sub>`13.1M ops/sec`</sub>** | daysInMonth<br/><sub>`96.2K ops/sec`</sub> | 🚀 <sub>`+13486%`</sub> |
+| `addMonths` | **addMonths**<br/>**<sub>`5.4M ops/sec`</sub>** | addMonths<br/><sub>`82.1K ops/sec`</sub> | 🚀 <sub>`+6434%`</sub> |
+| `startOfMonth` | **startOfMonth**<br/>**<sub>`6.5M ops/sec`</sub>** | startOfMonth<br/><sub>`108.9K ops/sec`</sub> | 🚀 <sub>`+5835%`</sub> |
+| `endOfMonth` | **endOfMonth**<br/>**<sub>`6.2M ops/sec`</sub>** | endOfMonth<br/><sub>`107.0K ops/sec`</sub> | 🚀 <sub>`+5657%`</sub> |
+| `daysInMonth` | **daysInMonth**<br/>**<sub>`12.7M ops/sec`</sub>** | daysInMonth<br/><sub>`87.1K ops/sec`</sub> | 🚀 <sub>`+14510%`</sub> |
 
 ## Week (DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `addWeeks` | **addWeeks**<br/>**<sub>`667.4K ops/sec`</sub>** | addWeeks<br/><sub>`97.8K ops/sec`</sub> | 🚀 <sub>`+582%`</sub> |
-| `startOfWeek` | **startOfWeek**<br/>**<sub>`979.4K ops/sec`</sub>** | startOfWeek<br/><sub>`83.3K ops/sec`</sub> | 🚀 <sub>`+1076%`</sub> |
-| `endOfWeek` | **endOfWeek**<br/>**<sub>`1.1M ops/sec`</sub>** | endOfWeek<br/><sub>`83.0K ops/sec`</sub> | 🚀 <sub>`+1235%`</sub> |
+| `addWeeks` | **addWeeks**<br/>**<sub>`1.2M ops/sec`</sub>** | addWeeks<br/><sub>`101.4K ops/sec`</sub> | 🚀 <sub>`+1061%`</sub> |
+| `startOfWeek` | **startOfWeek**<br/>**<sub>`1.5M ops/sec`</sub>** | startOfWeek<br/><sub>`77.0K ops/sec`</sub> | 🚀 <sub>`+1823%`</sub> |
+| `endOfWeek` | **endOfWeek**<br/>**<sub>`1.6M ops/sec`</sub>** | endOfWeek<br/><sub>`78.8K ops/sec`</sub> | 🚀 <sub>`+1944%`</sub> |
 
 ## Week (Local)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `addWeeks` | **addWeeks**<br/>**<sub>`8027.2M ops/sec`</sub>** | addWeeks<br/><sub>`5.3M ops/sec`</sub> | 🚀 <sub>`+150785%`</sub> |
-| `startOfWeek` | **startOfWeek**<br/>**<sub>`3.5M ops/sec`</sub>** | startOfWeek<br/><sub>`3.4M ops/sec`</sub> | 🤝 |
-| `endOfWeek` | **endOfWeek**<br/>**<sub>`5.7M ops/sec`</sub>** | endOfWeek<br/><sub>`5.4M ops/sec`</sub> | 🤝 |
+| `addWeeks` | **addWeeks**<br/>**<sub>`6636.4M ops/sec`</sub>** | addWeeks<br/><sub>`6.0M ops/sec`</sub> | 🚀 <sub>`+110831%`</sub> |
+| `startOfWeek` | **startOfWeek**<br/>**<sub>`3.2M ops/sec`</sub>** | startOfWeek<br/><sub>`3.0M ops/sec`</sub> | 🤝 |
+| `endOfWeek` | **endOfWeek**<br/>**<sub>`6.5M ops/sec`</sub>** | endOfWeek<br/><sub>`5.5M ops/sec`</sub> | ✅ <sub>`+18%`</sub> |
 
 ## Week (Non-DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `addWeeks` | **addWeeks**<br/>**<sub>`2.6M ops/sec`</sub>** | addWeeks<br/><sub>`106.0K ops/sec`</sub> | 🚀 <sub>`+2378%`</sub> |
-| `startOfWeek` | **startOfWeek**<br/>**<sub>`5.8M ops/sec`</sub>** | startOfWeek<br/><sub>`85.2K ops/sec`</sub> | 🚀 <sub>`+6735%`</sub> |
-| `endOfWeek` | **endOfWeek**<br/>**<sub>`5.5M ops/sec`</sub>** | endOfWeek<br/><sub>`81.9K ops/sec`</sub> | 🚀 <sub>`+6622%`</sub> |
+| `addWeeks` | **addWeeks**<br/>**<sub>`4.9M ops/sec`</sub>** | addWeeks<br/><sub>`116.6K ops/sec`</sub> | 🚀 <sub>`+4139%`</sub> |
+| `startOfWeek` | **startOfWeek**<br/>**<sub>`7.8M ops/sec`</sub>** | startOfWeek<br/><sub>`89.8K ops/sec`</sub> | 🚀 <sub>`+8539%`</sub> |
+| `endOfWeek` | **endOfWeek**<br/>**<sub>`7.5M ops/sec`</sub>** | endOfWeek<br/><sub>`92.1K ops/sec`</sub> | 🚀 <sub>`+8081%`</sub> |
 
 ## Week (UTC)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `addWeeks` | **addWeeks**<br/>**<sub>`5.6M ops/sec`</sub>** | addWeeks<br/><sub>`137.7K ops/sec`</sub> | 🚀 <sub>`+3976%`</sub> |
-| `startOfWeek` | **startOfWeek**<br/>**<sub>`5.6M ops/sec`</sub>** | startOfWeek<br/><sub>`115.8K ops/sec`</sub> | 🚀 <sub>`+4776%`</sub> |
-| `endOfWeek` | **endOfWeek**<br/>**<sub>`5.6M ops/sec`</sub>** | endOfWeek<br/><sub>`118.1K ops/sec`</sub> | 🚀 <sub>`+4626%`</sub> |
+| `addWeeks` | **addWeeks**<br/>**<sub>`6.1M ops/sec`</sub>** | addWeeks<br/><sub>`136.5K ops/sec`</sub> | 🚀 <sub>`+4384%`</sub> |
+| `startOfWeek` | **startOfWeek**<br/>**<sub>`6.1M ops/sec`</sub>** | startOfWeek<br/><sub>`105.3K ops/sec`</sub> | 🚀 <sub>`+5691%`</sub> |
+| `endOfWeek` | **endOfWeek**<br/>**<sub>`5.9M ops/sec`</sub>** | endOfWeek<br/><sub>`110.0K ops/sec`</sub> | 🚀 <sub>`+5301%`</sub> |
 
 ## Year (DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `addYears` | **addYears**<br/>**<sub>`3.2M ops/sec`</sub>** | addYears<br/><sub>`56.8K ops/sec`</sub> | 🚀 <sub>`+5529%`</sub> |
-| `startOfYear` | **startOfYear**<br/>**<sub>`163.1K ops/sec`</sub>** | startOfYear<br/><sub>`81.5K ops/sec`</sub> | 🚀 <sub>`+100%`</sub> |
-| `endOfYear` | endOfYear<br/><sub>`264 ops/sec`</sub> | **endOfYear**<br/>**<sub>`81.0K ops/sec`</sub>** | 🐌 <sub>`-100%`</sub> |
-| `year` | **year**<br/>**<sub>`6.1M ops/sec`</sub>** | year<br/><sub>`372.9K ops/sec`</sub> | 🚀 <sub>`+1529%`</sub> |
+| `addYears` | **addYears**<br/>**<sub>`4.6M ops/sec`</sub>** | addYears<br/><sub>`59.9K ops/sec`</sub> | 🚀 <sub>`+7526%`</sub> |
+| `startOfYear` | **startOfYear**<br/>**<sub>`1.5M ops/sec`</sub>** | startOfYear<br/><sub>`74.7K ops/sec`</sub> | 🚀 <sub>`+1944%`</sub> |
+| `endOfYear` | **endOfYear**<br/>**<sub>`1.2M ops/sec`</sub>** | endOfYear<br/><sub>`74.3K ops/sec`</sub> | 🚀 <sub>`+1515%`</sub> |
+| `year` | **year**<br/>**<sub>`17.4M ops/sec`</sub>** | year<br/><sub>`353.3K ops/sec`</sub> | 🚀 <sub>`+4825%`</sub> |
 
 ## Year (Local)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `addYears` | addYears<br/><sub>`3.0M ops/sec`</sub> | **addYears**<br/>**<sub>`3.1M ops/sec`</sub>** | 🤝 |
-| `startOfYear` | **startOfYear**<br/>**<sub>`9.4M ops/sec`</sub>** | startOfYear<br/><sub>`4.0M ops/sec`</sub> | 🚀 <sub>`+134%`</sub> |
-| `endOfYear` | **endOfYear**<br/>**<sub>`8.6M ops/sec`</sub>** | endOfYear<br/><sub>`3.9M ops/sec`</sub> | 🚀 <sub>`+122%`</sub> |
-| `year` | year<br/><sub>`28.4M ops/sec`</sub> | **year**<br/>**<sub>`28.4M ops/sec`</sub>** | 🤝 |
+| `addYears` | **addYears**<br/>**<sub>`3.1M ops/sec`</sub>** | addYears<br/><sub>`2.8M ops/sec`</sub> | ✅ <sub>`+12%`</sub> |
+| `startOfYear` | **startOfYear**<br/>**<sub>`9.5M ops/sec`</sub>** | startOfYear<br/><sub>`3.5M ops/sec`</sub> | 🚀 <sub>`+168%`</sub> |
+| `endOfYear` | **endOfYear**<br/>**<sub>`9.3M ops/sec`</sub>** | endOfYear<br/><sub>`3.6M ops/sec`</sub> | 🚀 <sub>`+160%`</sub> |
+| `year` | year<br/><sub>`28.0M ops/sec`</sub> | **year**<br/>**<sub>`29.1M ops/sec`</sub>** | 🤝 |
 
 ## Year (Non-DST)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `addYears` | **addYears**<br/>**<sub>`4.0M ops/sec`</sub>** | addYears<br/><sub>`62.0K ops/sec`</sub> | 🚀 <sub>`+6279%`</sub> |
-| `startOfYear` | **startOfYear**<br/>**<sub>`6.8M ops/sec`</sub>** | startOfYear<br/><sub>`88.1K ops/sec`</sub> | 🚀 <sub>`+7583%`</sub> |
-| `endOfYear` | **endOfYear**<br/>**<sub>`6.9M ops/sec`</sub>** | endOfYear<br/><sub>`88.0K ops/sec`</sub> | 🚀 <sub>`+7739%`</sub> |
-| `year` | **year**<br/>**<sub>`22.7M ops/sec`</sub>** | year<br/><sub>`417.6K ops/sec`</sub> | 🚀 <sub>`+5340%`</sub> |
+| `addYears` | **addYears**<br/>**<sub>`5.1M ops/sec`</sub>** | addYears<br/><sub>`69.5K ops/sec`</sub> | 🚀 <sub>`+7204%`</sub> |
+| `startOfYear` | **startOfYear**<br/>**<sub>`8.0M ops/sec`</sub>** | startOfYear<br/><sub>`90.2K ops/sec`</sub> | 🚀 <sub>`+8772%`</sub> |
+| `endOfYear` | **endOfYear**<br/>**<sub>`7.9M ops/sec`</sub>** | endOfYear<br/><sub>`89.6K ops/sec`</sub> | 🚀 <sub>`+8726%`</sub> |
+| `year` | **year**<br/>**<sub>`23.7M ops/sec`</sub>** | year<br/><sub>`423.0K ops/sec`</sub> | 🚀 <sub>`+5497%`</sub> |
 
 ## Year (UTC)
 
 | Operation | Datezone | Date-fns | Performance |
 |-----------|----------|----------|-------------|
-| `addYears` | **addYears**<br/>**<sub>`7.6M ops/sec`</sub>** | addYears<br/><sub>`78.4K ops/sec`</sub> | 🚀 <sub>`+9650%`</sub> |
-| `startOfYear` | **startOfYear**<br/>**<sub>`7.4M ops/sec`</sub>** | startOfYear<br/><sub>`109.0K ops/sec`</sub> | 🚀 <sub>`+6662%`</sub> |
-| `endOfYear` | **endOfYear**<br/>**<sub>`7.3M ops/sec`</sub>** | endOfYear<br/><sub>`108.6K ops/sec`</sub> | 🚀 <sub>`+6636%`</sub> |
-| `year` | **year**<br/>**<sub>`20.0M ops/sec`</sub>** | year<br/><sub>`521.9K ops/sec`</sub> | 🚀 <sub>`+3729%`</sub> |
+| `addYears` | **addYears**<br/>**<sub>`8.3M ops/sec`</sub>** | addYears<br/><sub>`81.0K ops/sec`</sub> | 🚀 <sub>`+10094%`</sub> |
+| `startOfYear` | **startOfYear**<br/>**<sub>`7.8M ops/sec`</sub>** | startOfYear<br/><sub>`107.1K ops/sec`</sub> | 🚀 <sub>`+7218%`</sub> |
+| `endOfYear` | **endOfYear**<br/>**<sub>`7.8M ops/sec`</sub>** | endOfYear<br/><sub>`107.5K ops/sec`</sub> | 🚀 <sub>`+7140%`</sub> |
+| `year` | **year**<br/>**<sub>`19.3M ops/sec`</sub>** | year<br/><sub>`530.5K ops/sec`</sub> | 🚀 <sub>`+3537%`</sub> |
 
 ## 📈 Summary
 
 | Metric | Count | Percentage |
 |--------|-------|------------|
-| **Datezone wins** | `75` | `75.0%` |
-| **Date-fns wins** | `15` | `15.0%` |
-| **Close matches** | `10` | `10.0%` |
+| **Datezone wins** | `86` | `86.0%` |
+| **Date-fns wins** | `5` | `5.0%` |
+| **Close matches** | `9` | `9.0%` |
 ## 🔬 Methodology
 
 ### Benchmark Setup
 - **Tool:** [Mitata](https://github.com/evanwashere/mitata) - High-precision JavaScript benchmarking
 - **Iterations:** Multiple samples with statistical significance testing
-- **Environment:** Node.js `v24.3.0` on `linux x64`
+- **Environment:** Node.js `v24.3.0` on `darwin arm64`
 
 ### Comparison Approach
 - **Datezone:** Built-in timeZone support with UTC timestamps

@@ -15,7 +15,7 @@
 		"release": "bun run resolve && bun run build && changeset publish",
 		"clean": "git clean -fxd -e .env.local",
 		"lint": "biome check . && manypkg check",
-		"lint-fix": "biome check --write --unsafe --verbose . && manypkg fix",
+		"lint-fix": "biome check --write --unsafe . && manypkg fix",
 		"format": "biome format .",
 		"type-check": "turbo type-check",
 		"up": "bunx npm-check-updates -ws --root --format group -u",
@@ -41,7 +41,7 @@
 		"mysql2": "^3.14.2",
 		"semver": "^7.7.2",
 		"turbo": "^2.5.4",
-		"typescript": "^5",
+		"typescript": "^5.8.3",
 		"zod": "^3.25.76"
 	},
 	"peerDependencies": {
