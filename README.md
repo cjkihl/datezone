@@ -1,147 +1,107 @@
-# DateZone Monorepo
+<!-- Logo (centered) -->
+<p align="center">
+  <a href="https://datezone.dev">
+    <img src="https://datezone.dev/branding/datezone-logo-wordmark-light.svg" alt="Datezone Logo" width="320" />
+  </a>
+</p>
 
-A lightweight and comprehensive date and timezone utility library for JavaScript and TypeScript.
+<!-- Full Documentation Link -->
+<p align="center">
+  <a href="https://datezone.dev" style="font-size:1.2em; font-weight:bold; background:#f5f5f5; padding:0.5em 1.5em; border-radius:8px; display:inline-block; text-decoration:none; color:#222; margin-bottom:1em;">
+    📚 Full Documentation → datezone.dev
+  </a>
+</p>
+<p align="center">
+ A fast, fully-typed TypeScript library for working with dates and times, with explicit timeZone support and no unnecessary `Date` object creation. Designed for high-frequency usage, tree-shakeable builds, and maximum performance.
+</p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# datezone
 
+[![Coverage](https://img.shields.io/badge/Coverage-91%25-brightgreen?style=flat-square)](../../tools/coverage)
+[![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen?style=flat-square&logo=testing-library)](../../tools/coverage)
+[![Performance](https://img.shields.io/badge/Performance-1000x%20faster%20than%20date--fns-success?style=flat-square)](https://github.com/cjkihl/datezone/blob/main/tools/benchmark/reports/comparison-report.md)
+
+[![Bun](https://img.shields.io/badge/Bun-000?logo=bun&logoColor=fff&style=flat-square)](https://bun.sh)
+[![TypeScript](https://img.shields.io/badge/TypeScript-First-blue?style=flat-square)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+
+[![Star on GitHub](https://img.shields.io/github/stars/cjkihl/datezone?style=flat-square&logo=github)](https://github.com/cjkihl/datezone/stargazers)
+[![Sponsor](https://img.shields.io/badge/Sponsor-❤-ff69b4?style=flat-square&logo=github-sponsors)](https://github.com/sponsors/cjkihl)
+
+## 🚀 Why Datezone?
+
+- **Extreme Performance**: Up to **1,000x faster** than date-fns for timeZone operations ([see benchmarks](https://datezone.dev/benchmarks/comparison-report))
+- **Faster by Design**: Uses timestamp math instead of creating `Date` objects, minimizing allocations and saving work for the garbage collector
+- **Timezone-First**: All functions accept an optional `timeZone` parameter
+- **Zero Unnecessary Objects**: Avoids creating `Date` objects unless needed
+- **Tree-Shakeable**: Import only what you need
+- **Pure & Typed**: No side effects, strict TypeScript types
+- **Modern**: Built on the Intl API for accuracy and speed
 
 ## Installation
 
-```bash
-# Install dependencies
-bun install
+```sh
+# Bun
+bun add datezone
 
-# Build the library
-bun run build
+# pnpm
+pnpm add datezone
+
+# npm
+npm install datezone
 ```
 
-### Prerequisites
+## Quick Start
 
-- [Bun](https://bun.sh/) 1.2.16+
-
-
-## Usage
-
-```typescript
-import { /* your imports */ } from 'datezone';
-
-// Example usage will be added as the API stabilizes
+```ts
+import { startOfDay, addDays, format } from "datezone";
+const now = Date.now();
+const startNY = startOfDay(now, "America/New_York");
+const tomorrow = addDays(now, 1, "Europe/London");
+const formatted = format(now, "yyyy-MM-dd HH:mm:ss zzzz", { locale: "en", timeZone: "America/New_York" });
 ```
 
-## Development
+## API Reference
 
-### Quick Start
+See [Docs](https://datezone.dev/docs/introduction) for all exports and usage.
 
-```bash
-# Run tests
-bun test
+## Performance
 
-# Type checking and linting
-bun run type-check
-bun run lint
+| Operation | Datezone | date-fns | Improvement |
+|-----------|----------|----------|-------------|
+| addDays (DST) | **3.9M ops/sec** | 174.0K ops/sec | **+2150%** |
+| startOfDay (DST) | **2.3M ops/sec** | 186.5K ops/sec | **+1150%** |
+| endOfDay (DST) | **2.4M ops/sec** | 188.7K ops/sec | **+1158%** |
+| dayOfYear (DST) | **16.4M ops/sec** | 40.2K ops/sec | **+40630%** |
+| format (DST) | **911.4K ops/sec** | 114.6K ops/sec | **+695%** |
+| addMonths (DST) | **2.1M ops/sec** | 106.7K ops/sec | **+1833%** |
+| addWeeks (DST) | **2.0M ops/sec** | 178.0K ops/sec | **+1001%** |
+| addYears (DST) | **8.5M ops/sec** | 106.5K ops/sec | **+7868%** |
+| intervalToDuration (DST) | **2.5M ops/sec** | 11.5K ops/sec | **+21971%** |
 
-# Format code
-bun run format
-```
+**Summary:**
+- Datezone wins: **77** operations (**87.5%**)  
+- date-fns wins: **5** operations (**5.7%**)  
+- Close matches: **6** operations (**6.8%**)
 
-### Benchmarking
+See the [full performance report →](https://datezone.dev/benchmarks/comparison-report) for all details and methodology.
 
-```bash
-# Run performance benchmarks
-bun run bench
+## Why Choose Datezone?
 
-# Generate detailed reports
-bun run bench:report
-```
-
-### Available Scripts
-
-| Script | Description |
-|--------|-------------|
-| `bun test` | Run all tests |
-| `bun run build` | Build all packages |
-| `bun run build-pkg` | Build only library packages |
-| `bun run lint` | Check code style and quality |
-| `bun run lint-fix` | Fix linting issues automatically |
-| `bun run format` | Format code with Biome |
-| `bun run type-check` | Run TypeScript type checking |
-| `bun run bench` | Run performance benchmarks |
-| `bun run clean` | Clean build artifacts |
-
-## Project Structure
-
-This monorepo contains:
-
-```
-datezone/
-├── packages/datezone/     # Main library with core modules:
-│   ├── format/           # Date formatting utilities
-│   ├── year.ts          # Year operations
-│   ├── month.ts         # Month manipulation  
-│   ├── day.ts           # Day operations
-│   ├── hour.ts          # Time utilities
-│   ├── week.ts          # Week calculations
-│   ├── ordinal.ts       # Ordinal dates
-│   ├── compare.ts       # Date comparisons
-│   ├── offset.ts        # Timezone offsets
-│   └── iana.ts          # IANA timeZone database
-├── tools/               # Development utilities
-│   ├── benchmark/       # Performance tools
-│   ├── coverage/        # Test coverage
-│   └── mono/           # Monorepo management
-└── shared/config/       # Shared configurations
-```
+| vs. date-fns | vs. Luxon/Day.js | vs. Temporal |
+|--------------|------------------|-------------|
+| ✅ Much faster timeZone ops | ✅ No object wrappers | ✅ Available today |
+| ✅ Explicit timeZone handling | ✅ Tree-shakeable | ✅ Proven performance |
+| ✅ Modern Intl API | ✅ Smaller bundle size | |
 
 ## Contributing
 
-We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
-
-**Quick workflow:**
-1. Fork and create a feature branch
-2. Make changes and add tests
-3. Run `bun test` and `bun run bench`
-4. Submit a pull request
+See our [Contributing Guide](https://github.com/cjkihl/datezone/blob/main/packages/datezone/CONTRIBUTING.md).
 
 ## License
 
-MIT License - see [LICENSE](./LICENSE) for details.
-
-## Author
-
-**CJ Kihl** - [GitHub](https://github.com/cjkihl)
+MIT
 
 ---
 
-*Built with ❤️ using [Bun](https://bun.sh/), [Turbo](https://turbo.build/), and [Biome](https://biomejs.dev/)*
-
-## 🚀 CI/CD & Publishing
-
-This monorepo uses a **hybrid approach** for optimal release management:
-
-- **📦 Changesets** - Version management & dependency coordination
-- **⚡ Bun** - Fast publishing with workspace protocol resolution  
-- **🤖 GitHub Actions** - Automated testing & releasing
-
-### Quick Start
-
-```bash
-# 1. Make your changes
-# 2. Document the change
-bunx changeset
-
-# 3. Commit and push (CI handles the rest!)
-git add . && git commit -m "feat: new feature" && git push
-```
-
-When merged to `main`, GitHub Actions will:
-1. ✅ Run tests, lint, type-check, build
-2. 🔄 Create a "Version Packages" PR with updated versions & changelog  
-3. 📦 Auto-publish to npm when the Version PR is merged
-
-### Manual Publishing
-
-```bash
-bun run release          # Build + publish
-bun run release:bun      # Publish only
-bun run release:bun --dry-run  # Test without publishing
-```
+**⭐ Star us on GitHub if Datezone makes your app faster!**
