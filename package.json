@@ -3,6 +3,10 @@
 	"module": "index.ts",
 	"type": "module",
 	"private": true,
+	"funding": {
+		"type": "github",
+		"url": "https://github.com/sponsors/cjkihl"
+	},
 	"scripts": {
 		"test": "bun test",
 		"dev": "bun run -F docs dev",

@@ -129,21 +129,6 @@ export default function Features({ stars }: { stars: string | null }) {
 									Take control of your date and time with confidence!
 								</strong>
 							</p>
-							<div className="flex mt-[10px] z-20 justify-center items-start">
-								<TechStackDisplay
-									skills={[
-										"nextJs",
-										"nuxt",
-										"svelteKit",
-										"astro",
-										"solidStart",
-										// "react",
-										// "hono",
-										"expo",
-										"tanstack",
-									]}
-								/>
-							</div>
 							<div className="flex items-center gap-2">
 								<GithubStat stars={stars} />
 							</div>

@@ -23,6 +23,10 @@
   },
   "license": "MIT",
   "author": "CJ Kihl",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/cjkihl"
+  },
   "sideEffects": false,
   "type": "module",
   "exports": {
